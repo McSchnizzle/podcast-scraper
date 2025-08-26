@@ -1,0 +1,57 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+MANIFEST
+
+# Audio cache and transcripts
+audio_cache/*.mp3
+audio_cache/*.wav
+transcripts/*.txt
+
+# Database (keep for development, exclude in production)
+# podcast_monitor.db
+
+# macOS
+.DS_Store
+.AppleDouble
+.LSOverride
+
+# Temporary files
+tmp*
+*.tmp
+*.log
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Environment variables
+.env
+.env.local
+.env.production
+
+# Models cache (MLX/Parakeet models are downloaded on first run)
+.cache/
+*.model
+*.bin
+*.pth

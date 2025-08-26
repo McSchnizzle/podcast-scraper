@@ -1,0 +1,27 @@
+# Core dependencies
+requests>=2.32.0
+feedparser>=6.0.0
+youtube-transcript-api>=0.6.0
+sqlite3  # Built into Python
+
+# Audio processing
+parakeet-mlx>=0.3.6
+mlx>=0.22.1
+librosa>=0.10.1
+soundfile>=0.12.1
+
+# Fallback ASR
+openai-whisper>=20231117
+
+# Data processing
+numpy>=1.22.0
+scipy>=1.6.0
+scikit-learn>=1.1.0
+
+# Utilities
+tqdm>=4.41.0
+python-dateutil>=2.8.0
+pathlib  # Built into Python 3.4+
+
+# Development/testing
+pytest>=6.0.0  # Optional for testing
