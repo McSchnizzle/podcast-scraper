@@ -66,8 +66,8 @@ class PodcastRSSAPI:
                                 episode_date = datetime.now(timezone.utc)
                         
                         episodes.append({
-                            "title": f"Daily Tech Digest - {episode_date.strftime('%B %d, %Y')}",
-                            "description": f"AI-generated daily digest of tech news and insights from leading podcasts and creators, covering AI tools, creative applications, and industry developments. Generated on {episode_date.strftime('%B %d, %Y')} from multiple verified sources.",
+                            "title": release.get('name', f"Daily Tech Digest - {episode_date.strftime('%B %d, %Y')}"),
+                            "description": release.get('body', f"AI-generated daily digest of tech news and insights from leading podcasts and creators. Generated on {episode_date.strftime('%B %d, %Y')} from multiple verified sources."),
                             "date": episode_date,
                             "filename": filename,
                             "size": asset['size'],
