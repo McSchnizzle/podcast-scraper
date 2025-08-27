@@ -335,7 +335,7 @@ class ContentAnalyzer:
                    f.title as feed_title, f.topic_category
             FROM episodes e
             JOIN feeds f ON e.feed_id = f.id
-            WHERE e.processed = 1 AND e.priority_score >= ?
+            WHERE e.status IN ('transcribed', 'digested') AND e.priority_score >= ?
             ORDER BY e.published_date DESC
         ''', (min_priority,))
         
@@ -462,7 +462,7 @@ class ContentAnalyzer:
                    f.title as feed_title, f.topic_category
             FROM episodes e
             JOIN feeds f ON e.feed_id = f.id
-            WHERE e.processed = 1 
+            WHERE e.status IN ('transcribed', 'digested') 
             AND e.priority_score >= ?
             AND date(e.published_date) >= date('now', '-1 day')
             ORDER BY e.priority_score DESC

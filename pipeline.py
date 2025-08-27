@@ -13,6 +13,7 @@ from datetime import datetime
 from feed_monitor import FeedMonitor
 from content_processor import ContentProcessor
 from content_analyzer import ContentAnalyzer
+from manual_digest_generator import ManualDigestGenerator
 
 class PipelineOrchestrator:
     def __init__(self, db_path="podcast_monitor.db"):
@@ -20,6 +21,7 @@ class PipelineOrchestrator:
         self.feed_monitor = FeedMonitor(db_path)
         self.processor = ContentProcessor(db_path)
         self.analyzer = ContentAnalyzer(db_path)
+        self.digest_generator = ManualDigestGenerator(db_path)
     
     def run_daily_pipeline(self, hours_back=24, min_priority=0.4):
         """Run the complete daily content processing pipeline"""
@@ -50,10 +52,31 @@ class PipelineOrchestrator:
         print("\n📊 Analyzing content for daily digest...")
         digest_content = self.analyzer.get_daily_digest_content(min_priority)
         
-        # Step 4: Show results summary
+        # Step 4: Generate comprehensive digest document
+        print("\n📝 Generating comprehensive daily digest...")
+        digest_file = self.digest_generator.generate_daily_digest()
+        
+        if digest_file:
+            print(f"✅ Daily digest saved to: {digest_file}")
+            
+            # Read and display digest statistics
+            try:
+                with open(digest_file, 'r', encoding='utf-8') as f:
+                    content = f.read()
+                print(f"📊 Digest length: {len(content)} characters")
+                print(f"📄 Word count: ~{len(content.split())} words")
+            except Exception as e:
+                print(f"❌ Error reading digest stats: {e}")
+        else:
+            print("❌ Failed to generate daily digest")
+        
+        # Step 5: Show results summary
         self._print_pipeline_summary(digest_content)
         
-        return digest_content
+        return {
+            'digest_content': digest_content,
+            'digest_file': digest_file
+        }
     
     def _print_pipeline_summary(self, digest_content):
         """Print summary of pipeline results"""
@@ -162,6 +185,35 @@ def main():
             for ref in cross_refs[:5]:
                 print(f"  🔗 {ref['topic']} (strength: {ref['strength']:.2f})")
             return
+        elif command == "digest":
+            print("🎙️  Generating Daily Digest from Completed Transcripts")
+            print("=" * 55)
+            
+            digest_generator = ManualDigestGenerator()
+            digest_file = digest_generator.generate_daily_digest()
+            
+            if digest_file:
+                print(f"\n✅ Daily digest generated: {digest_file}")
+                
+                # Show digest preview
+                try:
+                    with open(digest_file, 'r', encoding='utf-8') as f:
+                        content = f.read()
+                    
+                    print(f"📊 Statistics:")
+                    print(f"  - Length: {len(content)} characters")
+                    print(f"  - Word count: ~{len(content.split())} words")
+                    print(f"  - Lines: {len(content.splitlines())} lines")
+                    
+                    print(f"\n📖 Preview (first 500 characters):")
+                    print("-" * 50)
+                    print(content[:500] + "..." if len(content) > 500 else content)
+                    
+                except Exception as e:
+                    print(f"❌ Error reading digest: {e}")
+            else:
+                print("❌ Failed to generate digest")
+            return
     
     # Default: show help
     print("Daily Podcast Digest - Pipeline Orchestrator")
@@ -171,10 +223,12 @@ def main():
     print("  setup   - Configure test feeds")
     print("  run     - Execute daily pipeline")
     print("  analyze - Show cross-reference analysis")
+    print("  digest  - Generate daily digest from completed transcripts")
     print()
     print("Example usage:")
     print("  python pipeline.py setup")
     print("  python pipeline.py run")
+    print("  python pipeline.py digest")
 
 if __name__ == "__main__":
     main()

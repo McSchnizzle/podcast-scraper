@@ -1,0 +1,19 @@
+{
+  "start_time": "2025-08-27 07:56:10.638561",
+  "episodes_processed": 34,
+  "topics_identified": 3,
+  "audio_segments_generated": 0,
+  "final_audio_created": false,
+  "errors": [],
+  "execution_time_seconds": 0.442756,
+  "system_info": {
+    "python_version": "3.13.2 (v3.13.2:4f8bb3947cf, Feb  4 2025, 11:51:10) [Clang 15.0.0 (clang-1500.3.9.4)]",
+    "pipeline_version": "3.0",
+    "components": [
+      "TopicCompiler",
+      "TTSScriptGenerator",
+      "TTSGenerator",
+      "AudioPostProcessor"
+    ]
+  }
+}

@@ -22,11 +22,12 @@ try:
     import mlx.core as mx
     from parakeet_mlx.audio import get_logmel, load_audio
     PARAKEET_MLX_AVAILABLE = True
-    print("✅ Parakeet MLX available - using Apple Silicon optimized ASR for RSS transcription")
+    print("✅ Parakeet MLX available - using Apple Silicon optimized ASR")
 except ImportError:
     PARAKEET_MLX_AVAILABLE = False
-    print("⚠️ Parakeet MLX not available - falling back to Whisper for RSS transcription")
+    print("❌ Parakeet MLX not available - cannot process audio")
     print("Install with: pip install parakeet-mlx")
+    raise ImportError("Parakeet MLX is required for audio processing")
 
 class ContentProcessor:
     def __init__(self, db_path="podcast_monitor.db", audio_dir="audio_cache", min_youtube_minutes=3.0):
@@ -35,12 +36,10 @@ class ContentProcessor:
         self.audio_dir.mkdir(exist_ok=True)
         self.min_youtube_minutes = min_youtube_minutes
         
-        # Initialize Parakeet ASR models if available
+        # Initialize Parakeet ASR models
         self.asr_model = None
         self.speaker_model = None
-        
-        if PARAKEET_MLX_AVAILABLE:
-            self._initialize_parakeet_mlx_models()
+        self._initialize_parakeet_mlx_models()
     
     def _initialize_parakeet_mlx_models(self):
         """Initialize Parakeet MLX ASR models for Apple Silicon optimized podcast transcription"""
@@ -63,9 +62,9 @@ class ContentProcessor:
             self.speaker_model = None  # Will implement basic speaker detection
             
         except Exception as e:
-            print(f"⚠️ Error loading Parakeet MLX models: {e}")
-            print("Falling back to Whisper for RSS transcription")
-            self.asr_model = None
+            print(f"❌ Error loading Parakeet MLX models: {e}")
+            print("Cannot proceed without Parakeet MLX ASR")
+            raise RuntimeError(f"Failed to initialize Parakeet MLX: {e}")
     
     def process_episode(self, episode_id):
         """Process a single episode: download audio, extract transcript, analyze content"""
@@ -77,12 +76,12 @@ class ContentProcessor:
             SELECT e.id, e.episode_id, e.title, e.audio_url, f.type, f.topic_category
             FROM episodes e
             JOIN feeds f ON e.feed_id = f.id
-            WHERE e.id = ? AND e.processed = 0
+            WHERE e.id = ? AND e.status = 'pending'
         ''', (episode_id,))
         
         episode = cursor.fetchone()
         if not episode:
-            print(f"Episode {episode_id} not found or already processed")
+            print(f"Episode {episode_id} not found or already transcribed")
             conn.close()
             return None
         
@@ -105,7 +104,7 @@ class ContentProcessor:
                 # Update database
                 cursor.execute('''
                     UPDATE episodes 
-                    SET transcript_path = ?, processed = 1, 
+                    SET transcript_path = ?, status = 'transcribed', 
                         priority_score = ?, content_type = ?
                     WHERE id = ?
                 ''', (transcript_path, analysis['priority_score'], analysis['content_type'], ep_id))
@@ -121,7 +120,7 @@ class ContentProcessor:
             else:
                 # Check if this was a YouTube video that was skipped due to length
                 if feed_type == 'youtube' and transcript is None:
-                    cursor.execute('UPDATE episodes SET processed = -1 WHERE id = ?', (ep_id,))  # -1 = skipped
+                    cursor.execute('UPDATE episodes SET status = ? WHERE id = ?', ('failed', ep_id))
                     conn.commit()
                     print("⏭️ Skipped (too short)")
                 else:
@@ -158,7 +157,11 @@ class ContentProcessor:
             
             # Skip videos shorter than minimum threshold
             if duration_minutes < self.min_youtube_minutes:
-                print(f"Skipping short video ({duration_minutes:.1f} minutes) - only processing videos >{self.min_youtube_minutes} minutes")
+                reason = f"Skipped: Video too short ({duration_minutes:.1f} minutes, minimum: {self.min_youtube_minutes} minutes)"
+                print(reason)
+                
+                # Log skip reason to database
+                self._log_episode_failure(video_url, reason)
                 return None
             
             print(f"Processing video ({duration_minutes:.1f} minutes)")
@@ -175,11 +178,15 @@ class ContentProcessor:
             return "\n".join(transcript_lines)
             
         except Exception as e:
-            print(f"Error extracting YouTube transcript: {e}")
+            error_msg = str(e)
+            print(f"Error extracting YouTube transcript: {error_msg}")
+            
+            # Log failure reason to database
+            self._log_episode_failure(video_url, f"YouTube: {error_msg}")
             return None
     
     def _process_rss_episode(self, audio_url, episode_id):
-        """Download RSS audio and convert to transcript using ffmpeg + Whisper"""
+        """Download RSS audio and convert to transcript using Parakeet MLX ASR"""
         if not audio_url:
             print("No audio URL provided")
             return None
@@ -190,21 +197,20 @@ class ContentProcessor:
             if not audio_file:
                 return None
             
-            # Convert to transcript using Parakeet/Whisper
+            # Convert to transcript using Parakeet MLX
             transcript = self._audio_to_transcript(audio_file)
             
-            # Delete audio file after successful transcription to free disk space
-            if transcript and os.path.exists(audio_file):
-                try:
-                    os.remove(audio_file)
-                    print(f"🗑️ Deleted audio file after transcription: {audio_file}")
-                except Exception as e:
-                    print(f"⚠️ Could not delete audio file {audio_file}: {e}")
+            # Note: Audio file cleanup now handled by workflow after database update
+            # This ensures we only delete files after successful processing and DB update
             
             return transcript
             
         except Exception as e:
-            print(f"Error processing RSS audio: {e}")
+            error_msg = str(e)
+            print(f"Error processing RSS audio: {error_msg}")
+            
+            # Log failure reason to database
+            self._log_episode_failure(episode_id, f"RSS: {error_msg}")
             return None
     
     def _download_audio(self, audio_url, episode_id):
@@ -248,71 +254,68 @@ class ContentProcessor:
             return None
     
     def _audio_to_transcript(self, audio_file):
-        """Convert audio to transcript using Parakeet MLX ASR or fallback to Whisper"""
-        # Try Parakeet MLX first if available
-        if PARAKEET_MLX_AVAILABLE and self.asr_model is not None:
-            return self._parakeet_mlx_transcribe(audio_file)
-        else:
-            # Fallback to original Whisper method
-            return self._whisper_transcribe(audio_file)
+        """Convert audio to transcript using Parakeet MLX ASR"""
+        if self.asr_model is None:
+            raise RuntimeError("Parakeet ASR model not initialized")
+        return self._parakeet_mlx_transcribe(audio_file)
     
     def _parakeet_mlx_transcribe(self, audio_file):
-        """High-quality podcast transcription using Parakeet MLX for Apple Silicon"""
+        """High-quality podcast transcription using robust workflow with progress monitoring"""
         try:
-            print("🎯 Transcribing with Parakeet MLX (Apple Silicon optimized)...")
+            # Import the robust transcriber
+            from robust_transcriber import RobustTranscriber
             
-            # Get audio file info for progress estimation
-            probe_cmd = ['ffprobe', '-v', 'quiet', '-show_entries', 'format=duration', '-of', 'csv=p=0', audio_file]
-            probe_result = subprocess.run(probe_cmd, capture_output=True, text=True)
-            duration_seconds = 0
-            if probe_result.returncode == 0 and probe_result.stdout.strip():
-                try:
-                    duration_seconds = float(probe_result.stdout.strip())
-                    print(f"📊 Audio duration: {duration_seconds/60:.1f} minutes")
-                except:
-                    pass
+            # Create transcriber instance (reuse existing model if possible)
+            transcriber = RobustTranscriber()
+            if self.asr_model:
+                transcriber.asr_model = self.asr_model
             
-            print("Running Parakeet MLX ASR inference...")
-            if duration_seconds > 300:  # > 5 minutes
-                print("⏳ Large audio file detected - this may take several minutes...")
-                print("💡 Progress: Parakeet processes ~2min chunks with Apple Silicon acceleration")
+            # Use the robust transcription workflow
+            transcript_text = transcriber.transcribe_file(audio_file)
             
-            # Perform transcription using the MLX model with chunking for long audio
-            import time
-            start_time = time.time()
-            
-            result = self.asr_model.transcribe(
-                audio_file,
-                chunk_duration=60 * 2.0,  # 2 minutes per chunk
-                overlap_duration=15.0     # 15 seconds overlap
-            )
-            
-            processing_time = time.time() - start_time
-            transcription = result.text
-            
-            if duration_seconds > 0:
-                rtf = processing_time / duration_seconds  # Real-time factor
-                print(f"⚡ Processing: {processing_time:.1f}s for {duration_seconds:.1f}s audio (RTF: {rtf:.2f}x)")
-            else:
-                print(f"⚡ Processing completed in {processing_time:.1f}s")
-            
-            if not transcription or not transcription.strip():
-                print("❌ Parakeet MLX transcription failed - no output")
+            if not transcript_text:
+                print("❌ Robust transcription workflow failed")
                 return None
             
-            transcript_text = transcription.strip()
-            print(f"✅ Parakeet MLX transcription complete ({len(transcript_text)} chars)")
-            
-            # Add basic speaker detection based on audio characteristics
-            # (MLX speaker diarization would require additional implementation)
+            # Add basic speaker detection
             transcript_text = self._add_basic_speaker_detection(transcript_text, audio_file)
             
             return transcript_text
             
         except Exception as e:
-            print(f"⚠️ Parakeet MLX transcription error: {e}")
-            print("Falling back to Whisper...")
-            return self._whisper_transcribe(audio_file)
+            print(f"❌ Parakeet MLX transcription failed: {e}")
+            raise RuntimeError(f"Transcription failed: {e}")
+    
+    def _log_episode_failure(self, episode_id, failure_reason):
+        """Log episode failure or skip to database with reason and timestamp"""
+        try:
+            conn = sqlite3.connect(self.db_path)
+            cursor = conn.cursor()
+            
+            # Determine if this is a skip or failure
+            is_skip = failure_reason.startswith('Skipped:')
+            status = 'skipped' if is_skip else 'failed'
+            new_status = 'failed'
+            
+            # Update episode with failure/skip information
+            cursor.execute("""
+                UPDATE episodes 
+                SET status = ?,
+                    status = ?,
+                    failure_reason = ?,
+                    failure_timestamp = datetime('now'),
+                    retry_count = CASE WHEN ? THEN retry_count ELSE retry_count + 1 END
+                WHERE episode_id = ? OR audio_url = ?
+            """, (new_status, status, failure_reason, is_skip, episode_id, episode_id))
+            
+            conn.commit()
+            conn.close()
+            
+            action = "skip" if is_skip else "failure"
+            print(f"📝 Logged {action}: {failure_reason}")
+            
+        except Exception as log_error:
+            print(f"⚠️ Could not log {action} to database: {log_error}")
     
     def _add_basic_speaker_detection(self, transcript_text, audio_file):
         """Add basic speaker detection based on audio characteristics and transcript analysis"""
@@ -362,101 +365,6 @@ class ContentProcessor:
             return transcript_text
     
     
-    def _whisper_transcribe(self, audio_file):
-        """Fallback transcription using original Whisper method"""
-        try:
-            print("🔄 Using Whisper fallback...")
-            
-            # Handle WAV conversion - skip if already correct format
-            if audio_file.endswith('.wav'):
-                # Check if already in correct format (16kHz mono)
-                probe_cmd = ['ffprobe', '-v', 'quiet', '-show_entries', 'stream=sample_rate,channels', '-of', 'csv=p=0', audio_file]
-                probe_result = subprocess.run(probe_cmd, capture_output=True, text=True)
-                
-                if probe_result.returncode == 0:
-                    lines = probe_result.stdout.strip().split('\n')
-                    if lines and '16000,1' in lines[0]:
-                        # Already correct format - use directly
-                        wav_file = audio_file
-                        print("Audio already in correct format (16kHz mono)")
-                    else:
-                        # Need to convert existing WAV to correct format
-                        wav_file = audio_file.replace('.wav', '_converted.wav')
-                        ffmpeg_cmd = [
-                            'ffmpeg', '-i', audio_file, 
-                            '-ar', '16000',  # 16kHz sample rate
-                            '-ac', '1',      # mono
-                            '-y',            # overwrite
-                            wav_file
-                        ]
-                        print("Converting WAV to correct format...")
-                        result = subprocess.run(ffmpeg_cmd, capture_output=True, text=True)
-                        if result.returncode != 0:
-                            print(f"ffmpeg error: {result.stderr}")
-                            return None
-                else:
-                    # ffprobe failed, try conversion anyway
-                    wav_file = audio_file.replace('.wav', '_converted.wav')
-                    ffmpeg_cmd = [
-                        'ffmpeg', '-i', audio_file, 
-                        '-ar', '16000',  # 16kHz sample rate
-                        '-ac', '1',      # mono
-                        '-y',            # overwrite
-                        wav_file
-                    ]
-                    print("Converting audio format...")
-                    result = subprocess.run(ffmpeg_cmd, capture_output=True, text=True)
-                    if result.returncode != 0:
-                        print(f"ffmpeg error: {result.stderr}")
-                        return None
-            else:
-                # Convert MP3 to WAV
-                wav_file = audio_file.replace('.mp3', '.wav')
-                ffmpeg_cmd = [
-                    'ffmpeg', '-i', audio_file, 
-                    '-ar', '16000',  # 16kHz sample rate
-                    '-ac', '1',      # mono
-                    '-y',            # overwrite
-                    wav_file
-                ]
-                print("Converting audio format...")
-                result = subprocess.run(ffmpeg_cmd, capture_output=True, text=True)
-                if result.returncode != 0:
-                    print(f"ffmpeg error: {result.stderr}")
-                    return None
-            
-            # Use Whisper for transcription (requires whisper installation)
-            print("Transcribing audio...")
-            whisper_cmd = ['whisper', wav_file, '--model', 'base', '--output_format', 'txt']
-            
-            result = subprocess.run(whisper_cmd, capture_output=True, text=True)
-            if result.returncode != 0:
-                print(f"Whisper error: {result.stderr}")
-                # Fallback: try with different model
-                whisper_cmd = ['whisper', wav_file, '--model', 'tiny', '--output_format', 'txt']
-                result = subprocess.run(whisper_cmd, capture_output=True, text=True)
-                if result.returncode != 0:
-                    print(f"Whisper fallback failed: {result.stderr}")
-                    return None
-            
-            # Read transcript file
-            transcript_file = wav_file.replace('.wav', '.txt')
-            if os.path.exists(transcript_file):
-                with open(transcript_file, 'r', encoding='utf-8') as f:
-                    transcript = f.read().strip()
-                
-                # Clean up temporary files
-                os.remove(wav_file)
-                os.remove(transcript_file)
-                
-                return transcript
-            else:
-                print("Transcript file not found")
-                return None
-                
-        except Exception as e:
-            print(f"Error transcribing audio: {e}")
-            return None
     
     def _extract_youtube_video_id(self, video_url):
         """Extract YouTube video ID from URL"""
@@ -540,11 +448,11 @@ class ContentProcessor:
         return analysis
     
     def process_all_pending(self):
-        """Process all unprocessed episodes"""
+        """Process all pending episodes"""
         conn = sqlite3.connect(self.db_path)
         cursor = conn.cursor()
         
-        cursor.execute('SELECT id FROM episodes WHERE processed = 0')
+        cursor.execute('SELECT id FROM episodes WHERE status = \'pending\'')
         pending_episodes = cursor.fetchall()
         conn.close()
         
@@ -556,8 +464,8 @@ class ContentProcessor:
         
         return results
     
-    def get_processed_episodes(self, min_priority=0.3):
-        """Get processed episodes above minimum priority threshold"""
+    def get_transcribed_episodes(self, min_priority=0.3):
+        """Get transcribed episodes above minimum priority threshold"""
         conn = sqlite3.connect(self.db_path)
         cursor = conn.cursor()
         
@@ -566,7 +474,7 @@ class ContentProcessor:
                    e.priority_score, e.content_type, f.title as feed_title, f.topic_category
             FROM episodes e
             JOIN feeds f ON e.feed_id = f.id
-            WHERE e.processed = 1 AND e.priority_score >= ?
+            WHERE e.status IN ('transcribed', 'digested') AND e.priority_score >= ?
             ORDER BY e.priority_score DESC, e.published_date DESC
         ''', (min_priority,))
         
@@ -594,9 +502,9 @@ class ContentProcessor:
         # Count by processing status
         cursor.execute('''
             SELECT 
-                COUNT(CASE WHEN processed = 1 THEN 1 END) as processed,
-                COUNT(CASE WHEN processed = 0 THEN 1 END) as pending,
-                COUNT(CASE WHEN processed = -1 THEN 1 END) as skipped,
+                COUNT(CASE WHEN status IN ('transcribed', 'digested') THEN 1 END) as transcribed,
+                COUNT(CASE WHEN status = 'pending' THEN 1 END) as pending,
+                COUNT(CASE WHEN status = 'failed' THEN 1 END) as failed,
                 f.type,
                 f.topic_category
             FROM episodes e
@@ -640,18 +548,9 @@ def main():
             print("🍎 Apple Silicon Metal acceleration enabled")
         print("✅ Basic speaker detection available")
     else:
-        print("⚠️ Parakeet MLX not available - using Whisper fallback")
+        print("❌ Parakeet MLX not available - cannot process audio")
         print("   Install Parakeet MLX with: pip install parakeet-mlx")
-    
-    # Check Whisper (fallback)
-    try:
-        result = subprocess.run(['whisper', '--help'], capture_output=True, text=True)
-        if result.returncode == 0:
-            print("✅ Whisper available (fallback)")
-        else:
-            print("❌ Whisper not found - required for fallback transcription")
-    except FileNotFoundError:
-        print("❌ Whisper not installed - install with: pip install openai-whisper")
+        return
     
     # Process pending episodes
     print("\nProcessing all pending episodes...")

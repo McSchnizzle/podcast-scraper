@@ -228,3 +228,4 @@ __marimo__/
 # Project-specific temporary files
 tmp*
 *.tmp
+.vercel

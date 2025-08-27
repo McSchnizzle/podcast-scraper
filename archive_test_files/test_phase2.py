@@ -15,7 +15,6 @@ def test_dependencies():
     
     dependencies = [
         ('ffmpeg', ['ffmpeg', '-version']),
-        ('whisper', ['whisper', '--help']),
         ('youtube-transcript-api', ['python3', '-c', 'import youtube_transcript_api; print("OK")'])
     ]
     
@@ -95,8 +94,6 @@ def main():
         print("\n⚠️  Some dependencies missing. Install with:")
         if not deps['ffmpeg']:
             print("   brew install ffmpeg")
-        if not deps['whisper']:
-            print("   pip install openai-whisper")
         if not deps['youtube-transcript-api']:
             print("   pip install youtube-transcript-api")
     
