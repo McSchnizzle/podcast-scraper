@@ -33,7 +33,7 @@ The Daily Podcast Digest System continuously monitors podcast RSS feeds and YouT
 - **Apple Silicon Optimized**: Uses `parakeet-mlx` for native M-series chip acceleration
 - **Production Quality**: Superior podcast transcription vs. general speech models
 - **Speaker Detection**: Basic multi-speaker conversation identification
-- **Fallback Strategy**: Whisper backup for compatibility
+- **Apple Silicon Optimized**: Native MLX acceleration for fast transcription
 
 ### Phase 3: TTS Generation (Planned)
 - Text-to-speech generation for audio summaries
@@ -47,7 +47,7 @@ The Daily Podcast Digest System continuously monitors podcast RSS feeds and YouT
 - **SQLite**: Episode database and metadata storage
 - **ffmpeg**: Audio format conversion and processing
 - **Parakeet MLX**: Apple Silicon optimized ASR (primary)
-- **OpenAI Whisper**: Fallback ASR engine
+- **MLX Framework**: Apple Silicon native acceleration
 - **YouTube Transcript API**: Direct YouTube transcript access
 
 ### Audio Processing Pipeline
@@ -58,7 +58,7 @@ YouTube → Direct API → Transcript → Content Analysis
 
 ### ASR Engine Selection
 - **Primary**: Parakeet MLX (Apple Silicon native, 3380 RTFx performance)
-- **Fallback**: OpenAI Whisper (universal compatibility)
+- **Apple Silicon**: MLX framework for native M-series acceleration
 - **Auto-Detection**: Graceful fallback with capability detection
 
 ## Installation
@@ -74,8 +74,8 @@ pip install -r requirements.txt
 # Install Parakeet MLX for Apple Silicon optimization
 pip install parakeet-mlx
 
-# Install Whisper as fallback
-pip install openai-whisper
+# MLX framework for Apple Silicon acceleration
+# (Installed automatically with parakeet-mlx)
 ```
 
 ### Quick Setup
@@ -201,7 +201,7 @@ podcast-scraper/
 
 ### 🔄 Current Development
 - **Phase 2.5**: Parakeet ASR integration and RSS processing optimization
-- Quality validation of Parakeet vs. Whisper transcription accuracy
+- Quality validation of Parakeet transcription accuracy
 - Performance optimization for batch processing
 
 ### 📋 Planned Features
@@ -231,7 +231,7 @@ MIT License - See LICENSE file for details.
 - **Inspiration**: Tomasz Tunguz's podcast processing system
 - **ASR Technology**: NVIDIA Parakeet models via MLX framework
 - **Apple Silicon Optimization**: `parakeet-mlx` by senstella
-- **Fallback ASR**: OpenAI Whisper for universal compatibility
+- **ASR Engine**: Parakeet MLX with Apple Silicon optimization
 
 ---
 

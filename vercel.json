@@ -1,0 +1,19 @@
+{
+  "version": 2,
+  "name": "daily-digest-rss",
+  "routes": [
+    {
+      "src": "/daily-digest.xml",
+      "dest": "/api/rss"
+    },
+    {
+      "src": "/audio/(.*)",
+      "dest": "/api/audio/$1"
+    }
+  ],
+  "build": {
+    "env": {
+      "PYTHON_VERSION": "3.9"
+    }
+  }
+}

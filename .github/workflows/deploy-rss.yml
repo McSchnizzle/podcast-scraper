@@ -1,0 +1,56 @@
+name: Deploy RSS Feed to Vercel
+
+on:
+  schedule:
+    # Run daily at 6 AM UTC (adjust for your timezone)
+    - cron: '0 6 * * *'
+  workflow_dispatch:  # Allow manual triggers
+  push:
+    branches: [main]
+    paths: ['daily_digests/complete_topic_digest_*.mp3']
+
+jobs:
+  deploy-rss:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v4
+      
+    - name: Setup Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: '3.9'
+        
+    - name: Install dependencies
+      run: |
+        pip install -r requirements-vercel.txt
+        
+    - name: Generate episode metadata
+      run: |
+        python3 generate_episode_metadata.py
+        
+    - name: Upload audio files to Vercel blob storage
+      env:
+        VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
+      run: |
+        # Install Vercel CLI
+        npm i -g vercel
+        
+        # Upload audio files to blob storage
+        for file in daily_digests/complete_topic_digest_*.mp3; do
+          if [ -f "$file" ]; then
+            vercel blob put "$file" --token="$VERCEL_TOKEN"
+          fi
+        done
+        
+    - name: Deploy to Vercel
+      env:
+        VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
+        VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID }}
+      run: |
+        vercel --token="$VERCEL_TOKEN" --prod
+        
+    - name: Cleanup old episodes (7-day retention)
+      run: |
+        python3 cleanup_old_episodes.py
