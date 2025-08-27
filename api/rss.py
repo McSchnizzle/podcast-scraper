@@ -32,22 +32,59 @@ class PodcastRSSAPI:
         }
     
     def get_episode_metadata(self):
-        """Get episode metadata - this would be populated by GitHub Actions"""
-        # In production, this would read from a JSON file uploaded by GitHub Actions
-        # For now, return sample episode
-        episodes = [
-            {
-                "title": "Daily Tech Digest - August 27, 2024",
-                "description": "Today's digest covers AI tool launches, creative applications, and social commentary from leading tech podcasts.",
-                "date": datetime.now(timezone.utc),
-                "filename": "complete_topic_digest_20250827_112404.mp3",
-                "size": 10485760,  # ~10MB
-                "duration": 3600,  # 1 hour
-                "guid": hashlib.md5("complete_topic_digest_20250827_112404.mp3".encode()).hexdigest(),
-                "url": f"{self.base_url}/audio/complete_topic_digest_20250827_112404.mp3"
-            }
-        ]
-        return episodes
+        """Get episode metadata from GitHub releases API"""
+        import requests
+        
+        try:
+            # Fetch releases from GitHub API
+            api_url = "https://api.github.com/repos/McSchnizzle/podcast-scraper/releases"
+            response = requests.get(api_url, timeout=10)
+            response.raise_for_status()
+            
+            releases = response.json()
+            episodes = []
+            
+            for release in releases[:7]:  # Last 7 releases (7-day retention)
+                if not release.get('assets'):
+                    continue
+                    
+                # Look for MP3 assets in this release
+                for asset in release['assets']:
+                    if asset['name'].endswith('.mp3') and 'complete_topic_digest' in asset['name']:
+                        # Extract date from filename
+                        filename = asset['name']
+                        date_str = filename.split('_')[-2] + '_' + filename.split('_')[-1].replace('.mp3', '')
+                        
+                        try:
+                            episode_date = datetime.strptime(date_str, '%Y%m%d_%H%M%S')
+                            episode_date = episode_date.replace(tzinfo=timezone.utc)
+                        except:
+                            episode_date = datetime.fromisoformat(release['published_at'].replace('Z', '+00:00'))
+                        
+                        episodes.append({
+                            "title": f"Daily Tech Digest - {episode_date.strftime('%B %d, %Y')}",
+                            "description": f"AI-generated daily digest of tech news and insights from leading podcasts and creators, covering AI tools, creative applications, and industry developments. Generated on {episode_date.strftime('%B %d, %Y')} from multiple verified sources.",
+                            "date": episode_date,
+                            "filename": filename,
+                            "size": asset['size'],
+                            "duration": max(300, asset['size'] // 15000),  # Estimate ~15KB per second
+                            "guid": hashlib.md5(filename.encode()).hexdigest(),
+                            "url": asset['browser_download_url']  # Direct GitHub download URL
+                        })
+            
+            # Sort by date (newest first)
+            episodes.sort(key=lambda x: x['date'], reverse=True)
+            return episodes[:10]  # Return max 10 episodes
+            
+        except Exception as e:
+            # Fallback to local metadata if GitHub API fails
+            try:
+                with open('episode_metadata.json', 'r') as f:
+                    metadata = json.load(f)
+                    return metadata.get('episodes', [])
+            except:
+                # Last resort: return empty list
+                return []
     
     def format_duration(self, seconds):
         """Format duration as HH:MM:SS for iTunes"""
