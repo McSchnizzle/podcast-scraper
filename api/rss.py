@@ -59,7 +59,11 @@ class PodcastRSSAPI:
                             episode_date = datetime.strptime(date_str, '%Y%m%d_%H%M%S')
                             episode_date = episode_date.replace(tzinfo=timezone.utc)
                         except:
-                            episode_date = datetime.fromisoformat(release['published_at'].replace('Z', '+00:00'))
+                            pub_date = release['published_at']
+                            if isinstance(pub_date, str):
+                                episode_date = datetime.fromisoformat(pub_date.replace('Z', '+00:00'))
+                            else:
+                                episode_date = datetime.now(timezone.utc)
                         
                         episodes.append({
                             "title": f"Daily Tech Digest - {episode_date.strftime('%B %d, %Y')}",
