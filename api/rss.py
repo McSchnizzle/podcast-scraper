@@ -14,10 +14,8 @@ from http.server import BaseHTTPRequestHandler
 
 class PodcastRSSAPI:
     def __init__(self):
-        # Use environment variable or default
-        self.base_url = os.environ.get('VERCEL_URL', 'https://paulrbrown.org')
-        if not self.base_url.startswith('http'):
-            self.base_url = f'https://{self.base_url}'
+        # Use stable podcast subdomain
+        self.base_url = 'https://podcast.paulrbrown.org'
             
         self.podcast_info = {
             "title": "Daily Tech Digest",
