@@ -154,7 +154,11 @@ class PodcastRSSAPI:
             item_description.text = episode["description"]
             
             item_pub_date = SubElement(item, "pubDate")
-            item_pub_date.text = episode["date"].strftime("%a, %d %b %Y %H:%M:%S +0000")
+            if isinstance(episode["date"], str):
+                episode_date = datetime.fromisoformat(episode["date"].replace('Z', '+00:00'))
+            else:
+                episode_date = episode["date"]
+            item_pub_date.text = episode_date.strftime("%a, %d %b %Y %H:%M:%S +0000")
             
             enclosure = SubElement(item, "enclosure")
             enclosure.set("url", episode["url"])
