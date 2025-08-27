@@ -13,7 +13,7 @@ from datetime import datetime
 from feed_monitor import FeedMonitor
 from content_processor import ContentProcessor
 from content_analyzer import ContentAnalyzer
-from manual_digest_generator import ManualDigestGenerator
+from digest_generator import DigestGenerator
 
 class PipelineOrchestrator:
     def __init__(self, db_path="podcast_monitor.db"):
@@ -21,7 +21,7 @@ class PipelineOrchestrator:
         self.feed_monitor = FeedMonitor(db_path)
         self.processor = ContentProcessor(db_path)
         self.analyzer = ContentAnalyzer(db_path)
-        self.digest_generator = ManualDigestGenerator(db_path)
+        self.digest_generator = DigestGenerator(db_path)
     
     def run_daily_pipeline(self, hours_back=24, min_priority=0.4):
         """Run the complete daily content processing pipeline"""
@@ -189,7 +189,7 @@ def main():
             print("🎙️  Generating Daily Digest from Completed Transcripts")
             print("=" * 55)
             
-            digest_generator = ManualDigestGenerator()
+            digest_generator = DigestGenerator()
             digest_file = digest_generator.generate_daily_digest()
             
             if digest_file:
