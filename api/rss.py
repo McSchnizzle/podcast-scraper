@@ -190,7 +190,7 @@ class handler(BaseHTTPRequestHandler):
             # Set headers
             self.send_response(200)
             self.send_header('Content-Type', 'application/rss+xml; charset=utf-8')
-            self.send_header('Cache-Control', 'public, max-age=3600')  # Cache for 1 hour
+            self.send_header('Cache-Control', 'public, max-age=300')  # Cache for 5 minutes
             self.end_headers()
             
             # Send XML
