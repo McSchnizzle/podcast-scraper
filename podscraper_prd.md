@@ -110,18 +110,63 @@ Automated system that monitors podcast RSS feeds and YouTube channels, processes
 - **Quality Transcripts**: 946+ lines from substantial videos, accurate timestamp preservation
 - **Cross-Reference Engine**: Topic overlap detection across multiple episodes
 
+### 🔄 PHASE 2.75: Pre-Phase 3 Validation & Gap Closure
+
+**Objective**: Validate and complete all Phase 2 components before TTS generation pipeline.
+
+**Critical Issues Identified**:
+- **RSS Processing Gap**: 26 pending RSS episodes need Parakeet processing validation
+- **Digest Generation Missing**: Pipeline stops at analysis, missing daily digest compilation
+- **Cross-Reference Validation**: Topic overlap detection needs testing with real data  
+- **Feed Coverage Issues**: 7 of 13 feeds show 0 episodes detected
+- **Topic Organization**: Missing topic-based grouping for digest structure
+
+**Phase 2.75 Implementation Strategy**:
+
+**Step 1: RSS Processing Validation (Incremental Testing)**
+- Process 1 pending episode → validate Parakeet integration
+- Process 1 more pending episode → confirm consistency  
+- Process 2 episodes consecutively → test batch processing
+- Background process remaining episodes while completing other tasks
+- Provide time estimates and progress tracking throughout
+- **Audio Cache Management**: Delete audio files after successful Parakeet transcription to free disk space
+
+**Step 2: Core Functionality Completion**
+- Implement cross-reference detection validation with processed episodes
+- Build daily digest content generation in pipeline orchestrator
+- Add topic-based organization for digest compilation structure  
+- Validate and repair feeds showing 0 episode detection
+- End-to-end pipeline test with sample digest generation
+
+**Expected Deliverables**:
+- ✅ All 26 RSS episodes processed and validated
+- ✅ Working cross-reference detection with metrics
+- ✅ Complete daily digest generation pipeline  
+- ✅ Topic-based content organization system
+- ✅ All feeds actively detecting episodes
+- ✅ Sample daily digest generated end-to-end
+
+**Success Criteria**: Full pipeline generates topic-organized daily digest from RSS + YouTube content
+
 ### 🔄 READY FOR PHASE 3: TTS Generation Pipeline
 
 **Phase 2.5 Complete** ✅ 
 - **Parakeet ASR Integration**: Production-quality podcast transcription with Apple Silicon optimization
-- **RSS Processing Ready**: 22 pending RSS episodes ready for high-quality processing with Parakeet
 - **Speaker Detection**: Basic multi-speaker conversation identification implemented
-- **Technical Foundation**: All components ready for TTS generation pipeline
+- **Technical Foundation**: Core transcription and analysis components ready
+
+**Phase 2.75 Prerequisites**: Must complete RSS processing validation and digest generation before Phase 3
 
 ### ⏳ TODO (Remaining Phases)
 
 **Phase 3: TTS Generation & Daily Compilation**
-- **Text-to-Speech Engine**: ElevenLabs or OpenAI TTS for natural voice synthesis
+- **Text-to-Speech Engine**: ElevenLabs TTS for natural voice synthesis with advanced features
+- **Claude Code Headless Integration**: Use Claude Code in headless mode for daily digest generation
+  - **Digest Generation Script**: Daily script kicks off Claude Code with clear instructions to review transcripts
+  - **ElevenLabs Features**: Provide instructions for vocal intonation, emphasis, pacing, and voice characteristics
+  - **Musical Cues**: Generate instructions for intro music and topic transition music selection
+  - **Local Processing**: Leverages existing Claude Code license for local, cost-effective processing
+  - **No Remote Setup Required**: Fully local processing without additional cloud services
 - **Topic-Based Daily Compilation**: Structure episodes by topic groups rather than individual episodes
   - **Single Episode per Topic**: Full discussion of that episode's key points
   - **Multiple Episodes per Topic**: Cross-episode synthesis highlighting:
@@ -165,9 +210,16 @@ Automated system that monitors podcast RSS feeds and YouTube channels, processes
 - **Deduplication**: Avoid processing same content twice
 
 ### 2. Content Extraction
-- **Audio Processing**: Download → ffmpeg conversion → Parakeet/Whisper transcription
-- **YouTube Processing**: Extract auto-captions → LLM cleanup for accuracy
-- **Quality Gate**: 95%+ accuracy requirement for quoted content
+
+**RSS Audio Processing Architecture (Download-First)**:
+- **Step 1**: Download RSS audio files to `audio_cache/` with redirect handling
+- **Step 2**: Cache files locally using episode ID hash for deduplication  
+- **Step 3**: Parakeet MLX transcription from cached local files
+- **Benefits**: Reliable caching, batch processing, debugging capability
+- **File Retention**: 7-day rolling retention for disk space management
+
+**YouTube Processing**: Extract auto-captions → LLM cleanup for accuracy
+**Quality Gate**: 95%+ accuracy requirement for quoted content
 
 ### 3. Content Analysis & Prioritization
 - **News Extraction**: Product launches, announcements, industry developments

@@ -190,11 +190,16 @@ class ContentProcessor:
             if not audio_file:
                 return None
             
-            # Convert to transcript using Whisper
+            # Convert to transcript using Parakeet/Whisper
             transcript = self._audio_to_transcript(audio_file)
             
-            # Clean up audio file (optional - keep for caching)
-            # os.remove(audio_file)
+            # Delete audio file after successful transcription to free disk space
+            if transcript and os.path.exists(audio_file):
+                try:
+                    os.remove(audio_file)
+                    print(f"🗑️ Deleted audio file after transcription: {audio_file}")
+                except Exception as e:
+                    print(f"⚠️ Could not delete audio file {audio_file}: {e}")
             
             return transcript
             
@@ -203,11 +208,22 @@ class ContentProcessor:
             return None
     
     def _download_audio(self, audio_url, episode_id):
-        """Download audio file from RSS feed"""
+        """Download audio file from RSS feed or use local file if path provided"""
         try:
-            # Create filename based on episode ID
+            # Check if this is a local file path
+            if os.path.exists(audio_url):
+                print(f"Using local audio file: {audio_url}")
+                return audio_url
+            
+            # Create filename based on episode ID for downloaded files
             file_hash = hashlib.md5(episode_id.encode()).hexdigest()[:8]
-            audio_file = self.audio_dir / f"{file_hash}.mp3"
+            # Preserve original extension if possible
+            if audio_url.endswith('.wav'):
+                audio_file = self.audio_dir / f"{file_hash}.wav"
+            elif audio_url.endswith('.m4a'):
+                audio_file = self.audio_dir / f"{file_hash}.m4a"
+            else:
+                audio_file = self.audio_dir / f"{file_hash}.mp3"
             
             # Skip if already exists
             if audio_file.exists():
@@ -216,7 +232,8 @@ class ContentProcessor:
             
             print(f"Downloading audio from {audio_url}")
             headers = {'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36'}
-            response = requests.get(audio_url, headers=headers, stream=True, timeout=60)
+            # Follow redirects and increase timeout for large podcast files
+            response = requests.get(audio_url, headers=headers, stream=True, timeout=120, allow_redirects=True)
             response.raise_for_status()
             
             with open(audio_file, 'wb') as f:
