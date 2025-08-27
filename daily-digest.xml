@@ -18,7 +18,20 @@
     </itunes:category>
     <itunes:explicit>false</itunes:explicit>
     <atom:link href="https://paulrbrown.org/daily-digest.xml" rel="self" type="application/rss+xml"/>
-    <pubDate>Wed, 27 Aug 2025 19:00:44 +0000</pubDate>
+    <pubDate>Wed, 27 Aug 2025 20:06:24 +0000</pubDate>
+    <item>
+      <title>Daily Tech Digest - August 27, 2025</title>
+      <description>Daily digest of tech news and insights from leading podcasts and creators, covering AI tools, product launches, and industry developments. Generated on August 27, 2025 from multiple verified sources including The Vergecast, The AI Advantage, and How I AI.
+This episode features cross-episode synthesis with topic-based organization, multi-voice narration, and actionable insights curated by AI analysis.</description>
+      <pubDate>Wed, 27 Aug 2025 13:03:29 +0000</pubDate>
+      <enclosure url="https://paulrbrown.org/audio/complete_topic_digest_20250827_130329.mp3" type="audio/mpeg" length="11406985"/>
+      <guid isPermaLink="false">f9599e4972776900a94f05c18a95d0ee</guid>
+      <itunes:title>Daily Tech Digest - August 27, 2025</itunes:title>
+      <itunes:summary>Daily digest of tech news and insights from leading podcasts and creators, covering AI tools, product launches, and industry developments. Generated on August 27, 2025 from multiple verified sources including The Vergecast, The AI Advantage, and How I AI.
+This episode features cross-episode synthesis with topic-based organization, multi-voice narration, and actionable insights curated by AI analysis.</itunes:summary>
+      <itunes:duration>00:11:36</itunes:duration>
+      <itunes:episodeType>full</itunes:episodeType>
+    </item>
     <item>
       <title>Daily Tech Digest - August 27, 2025</title>
       <description>Daily digest of tech news and insights from leading podcasts and creators, covering AI tools, product launches, and industry developments. Generated on August 27, 2025 from multiple verified sources including The Vergecast, The AI Advantage, and How I AI.

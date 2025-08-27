@@ -1,7 +1,19 @@
 {
-  "generated_at": "2025-08-27T12:00:43.829837",
-  "episode_count": 2,
+  "generated_at": "2025-08-27T13:06:24.523932",
+  "episode_count": 3,
   "episodes": [
+    {
+      "filename": "complete_topic_digest_20250827_130329.mp3",
+      "title": "Daily Tech Digest - August 27, 2025",
+      "description": "AI-generated daily digest covering tech news, product launches, and industry insights from August 27, 2025. Features cross-episode synthesis with topic-based organization and actionable insights.",
+      "date": "2025-08-27T13:03:29",
+      "size": 11406985,
+      "duration": 696,
+      "guid": "f9599e4972776900a94f05c18a95d0ee",
+      "url": "https://paulrbrown.org/audio/complete_topic_digest_20250827_130329.mp3",
+      "storage_url": "https://paulrbrown.org/api/audio/complete_topic_digest_20250827_130329.mp3",
+      "local_path": "/Users/paulbrown/Desktop/podcast-scraper/daily_digests/complete_topic_digest_20250827_130329.mp3"
+    },
     {
       "filename": "complete_topic_digest_20250827_112404.mp3",
       "title": "Daily Tech Digest - August 27, 2025",
