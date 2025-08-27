@@ -1,56 +1,61 @@
-name: Deploy RSS Feed to Vercel
+name: Deploy Daily Digest Episode
 
 on:
-  schedule:
-    # Run daily at 6 AM UTC (adjust for your timezone)
-    - cron: '0 6 * * *'
-  workflow_dispatch:  # Allow manual triggers
   push:
     branches: [main]
     paths: ['daily_digests/complete_topic_digest_*.mp3']
+  workflow_dispatch:  # Allow manual triggering
 
 jobs:
-  deploy-rss:
+  deploy-episode:
     runs-on: ubuntu-latest
     
     steps:
     - name: Checkout repository
       uses: actions/checkout@v4
-      
-    - name: Setup Python
-      uses: actions/setup-python@v4
+        
+    - name: Find latest episode
+      id: episode
+      run: |
+        LATEST_MP3=$(ls -t daily_digests/complete_topic_digest_*.mp3 2>/dev/null | head -1)
+        if [ -z "$LATEST_MP3" ]; then
+          echo "No complete digest files found"
+          exit 1
+        fi
+        
+        FILENAME=$(basename "$LATEST_MP3")
+        DATE_STR=$(echo "$FILENAME" | sed 's/complete_topic_digest_\([0-9]\{8\}\)_[0-9]\{6\}\.mp3/\1/')
+        RELEASE_TAG="daily-$(echo $DATE_STR | sed 's/\([0-9]\{4\}\)\([0-9]\{2\}\)\([0-9]\{2\}\)/\1-\2-\3/')"
+        
+        echo "filename=$FILENAME" >> $GITHUB_OUTPUT
+        echo "filepath=$LATEST_MP3" >> $GITHUB_OUTPUT
+        echo "release_tag=$RELEASE_TAG" >> $GITHUB_OUTPUT
+        
+        echo "Found episode: $FILENAME"
+        echo "Release tag: $RELEASE_TAG"
+        
+    - name: Create GitHub Release with Episode
+      uses: softprops/action-gh-release@v1
       with:
-        python-version: '3.9'
-        
-    - name: Install dependencies
-      run: |
-        pip install -r requirements-vercel.txt
-        
-    - name: Generate episode metadata
-      run: |
-        python3 generate_episode_metadata.py
-        
-    - name: Upload audio files to Vercel blob storage
+        tag_name: ${{ steps.episode.outputs.release_tag }}
+        name: "Daily Tech Digest - ${{ steps.episode.outputs.release_tag }}"
+        body: |
+          Daily Tech Digest episode featuring AI-generated content from leading podcasts and creators.
+          
+          **Episode Details:**
+          - File: ${{ steps.episode.outputs.filename }}
+          - Generated: ${{ github.event.head_commit.timestamp }}
+          - Topics: AI Tools, Creative Applications, Social Commentary
+          
+          **RSS Feed**: https://podcast-scraper-kxxvl6bnx-paul-browns-projects-cf5d21b4.vercel.app/daily-digest.xml
+          
+          Generated automatically from podcast monitoring and AI synthesis.
+        files: ${{ steps.episode.outputs.filepath }}
+        latest: true
+        prerelease: false
       env:
-        VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
-      run: |
-        # Install Vercel CLI
-        npm i -g vercel
-        
-        # Upload audio files to blob storage
-        for file in daily_digests/complete_topic_digest_*.mp3; do
-          if [ -f "$file" ]; then
-            vercel blob put "$file" --token="$VERCEL_TOKEN"
-          fi
-        done
-        
-    - name: Deploy to Vercel
-      env:
-        VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
-        VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID }}
-      run: |
-        vercel --token="$VERCEL_TOKEN" --prod
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         
     - name: Cleanup old episodes (7-day retention)
       run: |
-        python3 cleanup_old_episodes.py
+        python3 cleanup_old_episodes.py || echo "Cleanup script not found, skipping"
