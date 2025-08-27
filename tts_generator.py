@@ -89,7 +89,7 @@ class TTSGenerator:
             }
         }
         
-        # Topic categories aligned with manual_digest_generator.py
+        # Topic categories for automated digest generation
         self.topic_categories = {
             "ai_tools": {
                 "keywords": ["chatgpt", "claude", "gemini", "ai tool", "artificial intelligence", 
