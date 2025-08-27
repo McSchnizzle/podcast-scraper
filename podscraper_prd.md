@@ -122,9 +122,16 @@ Automated system that monitors podcast RSS feeds and YouTube channels, processes
 
 **Phase 3: TTS Generation & Daily Compilation**
 - **Text-to-Speech Engine**: ElevenLabs or OpenAI TTS for natural voice synthesis
-- **Daily Digest Compilation**: Structured daily episode creation with intro/outro
-- **Content Summarization**: High-priority content distillation with key insights  
-- **Audio Post-Processing**: Normalization, intro music, chapter markers
+- **Topic-Based Daily Compilation**: Structure episodes by topic groups rather than individual episodes
+  - **Single Episode per Topic**: Full discussion of that episode's key points
+  - **Multiple Episodes per Topic**: Cross-episode synthesis highlighting:
+    - Key messages and themes across all episodes in topic group
+    - Notable quotes and expert opinions  
+    - Product announcements and launches
+    - Organizing strategies and actionable insights
+    - Avoid per-episode summaries - focus on topic-level synthesis
+- **Content Summarization**: High-priority content distillation with cross-topic insights
+- **Audio Post-Processing**: Normalization, intro music, chapter markers, topic transitions
 - **Distribution Pipeline**: RSS feed generation for podcatcher compatibility
 
 **Phase 4: Distribution & RSS Hosting on Vercel**

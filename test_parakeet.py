@@ -1,54 +1,64 @@
 #!/usr/bin/env python3
 """
-Test script for Parakeet integration
+Test script to verify Parakeet MLX transcription with cached audio files
 """
 
+import os
+import sys
 from content_processor import ContentProcessor
 
-def test_parakeet_integration():
-    """Test the Parakeet ASR integration"""
-    print("Testing Parakeet ASR Integration")
-    print("=" * 40)
+def test_parakeet_transcription():
+    """Test Parakeet MLX transcription with an existing cached audio file"""
     
     # Initialize processor
     processor = ContentProcessor()
     
-    # Check what ASR engine is available
-    print(f"NeMo Available: {hasattr(processor, 'asr_model') and processor.asr_model is not None}")
+    # Find a test audio file
+    audio_cache_dir = "audio_cache"
+    if not os.path.exists(audio_cache_dir):
+        print("❌ No audio_cache directory found")
+        return False
     
-    # Try to process one RSS episode
-    print("\nAttempting to process RSS episode...")
+    # Get a smaller .wav file for testing (to avoid memory issues)
+    wav_files = []
+    for f in os.listdir(audio_cache_dir):
+        if f.endswith('.wav'):
+            file_path = os.path.join(audio_cache_dir, f)
+            size_mb = os.path.getsize(file_path) / 1024 / 1024
+            wav_files.append((f, size_mb))
     
-    # Get first pending RSS episode
-    import sqlite3
-    conn = sqlite3.connect('podcast_monitor.db')
-    cursor = conn.cursor()
-    cursor.execute('''
-        SELECT e.id, e.title, f.title as feed_title
-        FROM episodes e
-        JOIN feeds f ON e.feed_id = f.id
-        WHERE e.processed = 0 AND f.type = 'rss'
-        ORDER BY e.published_date DESC
-        LIMIT 1
-    ''')
-    episode = cursor.fetchone()
-    conn.close()
+    if not wav_files:
+        print("❌ No .wav files found in audio_cache")
+        return False
     
-    if episode:
-        episode_id, title, feed_title = episode
-        print(f"Processing episode: {title}")
-        print(f"From feed: {feed_title}")
+    # Sort by size and pick smallest for testing
+    wav_files.sort(key=lambda x: x[1])
+    test_file = os.path.join(audio_cache_dir, wav_files[0][0])
+    print(f"🎵 Testing Parakeet MLX with: {test_file}")
+    print(f"📏 File size: {os.path.getsize(test_file) / 1024 / 1024:.1f} MB")
+    
+    # Test transcription
+    try:
+        transcript = processor._parakeet_mlx_transcribe(test_file)
         
-        # Process the episode
-        result = processor.process_episode(episode_id)
-        
-        if result:
-            print(f"✅ Successfully processed episode {episode_id}")
-            print(f"Priority score: {result['analysis']['priority_score']:.2f}")
+        if transcript:
+            print(f"✅ Parakeet MLX transcription successful!")
+            print(f"📝 Transcript length: {len(transcript)} characters")
+            print(f"📄 Sample (first 200 chars): {transcript[:200]}...")
+            
+            # Save test transcript
+            with open("test_transcript.txt", "w", encoding="utf-8") as f:
+                f.write(transcript)
+            print(f"💾 Full transcript saved to test_transcript.txt")
+            return True
         else:
-            print("❌ Failed to process episode")
-    else:
-        print("No pending RSS episodes found")
+            print("❌ Parakeet MLX transcription returned empty result")
+            return False
+            
+    except Exception as e:
+        print(f"❌ Parakeet MLX test failed: {e}")
+        return False
 
 if __name__ == "__main__":
-    test_parakeet_integration()
+    success = test_parakeet_transcription()
+    sys.exit(0 if success else 1)

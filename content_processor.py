@@ -244,13 +244,40 @@ class ContentProcessor:
         try:
             print("🎯 Transcribing with Parakeet MLX (Apple Silicon optimized)...")
             
-            # Load and preprocess audio using MLX-optimized functions
-            print("Loading audio file...")
-            audio_data = load_audio(audio_file)
+            # Get audio file info for progress estimation
+            probe_cmd = ['ffprobe', '-v', 'quiet', '-show_entries', 'format=duration', '-of', 'csv=p=0', audio_file]
+            probe_result = subprocess.run(probe_cmd, capture_output=True, text=True)
+            duration_seconds = 0
+            if probe_result.returncode == 0 and probe_result.stdout.strip():
+                try:
+                    duration_seconds = float(probe_result.stdout.strip())
+                    print(f"📊 Audio duration: {duration_seconds/60:.1f} minutes")
+                except:
+                    pass
             
             print("Running Parakeet MLX ASR inference...")
-            # Perform transcription using the MLX model
-            transcription = self.asr_model.transcribe(audio_data)
+            if duration_seconds > 300:  # > 5 minutes
+                print("⏳ Large audio file detected - this may take several minutes...")
+                print("💡 Progress: Parakeet processes ~2min chunks with Apple Silicon acceleration")
+            
+            # Perform transcription using the MLX model with chunking for long audio
+            import time
+            start_time = time.time()
+            
+            result = self.asr_model.transcribe(
+                audio_file,
+                chunk_duration=60 * 2.0,  # 2 minutes per chunk
+                overlap_duration=15.0     # 15 seconds overlap
+            )
+            
+            processing_time = time.time() - start_time
+            transcription = result.text
+            
+            if duration_seconds > 0:
+                rtf = processing_time / duration_seconds  # Real-time factor
+                print(f"⚡ Processing: {processing_time:.1f}s for {duration_seconds:.1f}s audio (RTF: {rtf:.2f}x)")
+            else:
+                print(f"⚡ Processing completed in {processing_time:.1f}s")
             
             if not transcription or not transcription.strip():
                 print("❌ Parakeet MLX transcription failed - no output")
@@ -323,23 +350,63 @@ class ContentProcessor:
         try:
             print("🔄 Using Whisper fallback...")
             
-            # First convert to WAV format for Whisper
-            wav_file = audio_file.replace('.mp3', '.wav')
-            
-            # Use ffmpeg to convert to WAV
-            ffmpeg_cmd = [
-                'ffmpeg', '-i', audio_file, 
-                '-ar', '16000',  # 16kHz sample rate
-                '-ac', '1',      # mono
-                '-y',            # overwrite
-                wav_file
-            ]
-            
-            print("Converting audio format...")
-            result = subprocess.run(ffmpeg_cmd, capture_output=True, text=True)
-            if result.returncode != 0:
-                print(f"ffmpeg error: {result.stderr}")
-                return None
+            # Handle WAV conversion - skip if already correct format
+            if audio_file.endswith('.wav'):
+                # Check if already in correct format (16kHz mono)
+                probe_cmd = ['ffprobe', '-v', 'quiet', '-show_entries', 'stream=sample_rate,channels', '-of', 'csv=p=0', audio_file]
+                probe_result = subprocess.run(probe_cmd, capture_output=True, text=True)
+                
+                if probe_result.returncode == 0:
+                    lines = probe_result.stdout.strip().split('\n')
+                    if lines and '16000,1' in lines[0]:
+                        # Already correct format - use directly
+                        wav_file = audio_file
+                        print("Audio already in correct format (16kHz mono)")
+                    else:
+                        # Need to convert existing WAV to correct format
+                        wav_file = audio_file.replace('.wav', '_converted.wav')
+                        ffmpeg_cmd = [
+                            'ffmpeg', '-i', audio_file, 
+                            '-ar', '16000',  # 16kHz sample rate
+                            '-ac', '1',      # mono
+                            '-y',            # overwrite
+                            wav_file
+                        ]
+                        print("Converting WAV to correct format...")
+                        result = subprocess.run(ffmpeg_cmd, capture_output=True, text=True)
+                        if result.returncode != 0:
+                            print(f"ffmpeg error: {result.stderr}")
+                            return None
+                else:
+                    # ffprobe failed, try conversion anyway
+                    wav_file = audio_file.replace('.wav', '_converted.wav')
+                    ffmpeg_cmd = [
+                        'ffmpeg', '-i', audio_file, 
+                        '-ar', '16000',  # 16kHz sample rate
+                        '-ac', '1',      # mono
+                        '-y',            # overwrite
+                        wav_file
+                    ]
+                    print("Converting audio format...")
+                    result = subprocess.run(ffmpeg_cmd, capture_output=True, text=True)
+                    if result.returncode != 0:
+                        print(f"ffmpeg error: {result.stderr}")
+                        return None
+            else:
+                # Convert MP3 to WAV
+                wav_file = audio_file.replace('.mp3', '.wav')
+                ffmpeg_cmd = [
+                    'ffmpeg', '-i', audio_file, 
+                    '-ar', '16000',  # 16kHz sample rate
+                    '-ac', '1',      # mono
+                    '-y',            # overwrite
+                    wav_file
+                ]
+                print("Converting audio format...")
+                result = subprocess.run(ffmpeg_cmd, capture_output=True, text=True)
+                if result.returncode != 0:
+                    print(f"ffmpeg error: {result.stderr}")
+                    return None
             
             # Use Whisper for transcription (requires whisper installation)
             print("Transcribing audio...")
