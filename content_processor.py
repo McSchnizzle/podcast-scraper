@@ -94,11 +94,6 @@ class ContentProcessor:
             else:
                 transcript = self._process_rss_episode(audio_url, episode_guid)
             
-            # If audio was successfully obtained, mark as pending first
-            if audio_path:
-                cursor.execute('UPDATE episodes SET status = \'pending\' WHERE id = ?', (ep_id,))
-                conn.commit()
-            
             if transcript:
                 # Save transcript
                 transcript_path = self._save_transcript(episode_guid, transcript)

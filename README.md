@@ -1,44 +1,45 @@
 # Daily Podcast Digest System
 
-An automated system for monitoring, processing, and analyzing podcast content across multiple feeds with advanced AI-powered transcription and content analysis.
+An automated system for monitoring, processing, and analyzing podcast content with AI-powered transcription, Claude-based content analysis, and automated digest generation.
 
 ## Overview
 
-The Daily Podcast Digest System continuously monitors podcast RSS feeds and YouTube channels, automatically processes new episodes, and extracts high-priority content using advanced speech recognition and AI analysis.
+The Daily Podcast Digest System continuously monitors podcast RSS feeds and YouTube channels, automatically processes episodes using Apple Silicon optimized transcription, and generates comprehensive daily digests using Claude AI integration.
 
 ### Key Features
 
 - **Multi-Source Monitoring**: RSS feeds and YouTube channels with intelligent feed management
-- **Advanced Transcription**: NVIDIA Parakeet ASR with Apple Silicon optimization for superior podcast quality
-- **Content Analysis**: AI-powered priority scoring and content categorization
-- **Speaker Detection**: Basic multi-speaker conversation detection
+- **Advanced Transcription**: Parakeet MLX ASR with Apple Silicon optimization (10-minute chunking)
+- **Claude AI Integration**: Automated content analysis and digest generation via Claude Code
+- **Speaker Detection**: Multi-speaker conversation detection and analysis
 - **Smart Filtering**: Length-based filtering for YouTube content (>3 minutes)
-- **Cross-Reference Detection**: Automatic duplicate content identification across sources
+- **Automated Publishing**: RSS generation and GitHub deployment pipeline
+- **Web API**: Endpoints for audio streaming and RSS feed serving
 
 ## System Architecture
 
-### Phase 1: Feed Monitoring ✅
+### Phase 1: Feed Monitoring ✅ COMPLETE
 - RSS feed parsing and episode discovery
 - YouTube channel monitoring via RSS
 - SQLite database for episode tracking
 - Automated feed updates and new episode detection
 
-### Phase 2: Content Processing Pipeline ✅
+### Phase 2: Content Processing Pipeline ✅ COMPLETE
 - **YouTube**: Direct transcript API access with duration filtering
-- **RSS Audio**: Advanced transcription using NVIDIA Parakeet ASR
+- **RSS Audio**: Advanced transcription using Parakeet MLX (10-minute chunks)
 - **Content Analysis**: Priority scoring and content type classification
 - **Quality Gates**: Processing validation and error handling
 
-### Phase 2.5: Parakeet ASR Integration ✅ (Current)
-- **Apple Silicon Optimized**: Uses `parakeet-mlx` for native M-series chip acceleration
-- **Production Quality**: Superior podcast transcription vs. general speech models
-- **Speaker Detection**: Basic multi-speaker conversation identification
-- **Apple Silicon Optimized**: Native MLX acceleration for fast transcription
+### Phase 3: Claude AI Analysis ✅ COMPLETE
+- **Claude Code Integration**: Headless Claude integration for content analysis
+- **Daily Digest Generation**: Automated topic-based content summarization
+- **Cross-Reference Analysis**: Episode correlation and theme detection
+- **Topic Organization**: Intelligent content grouping and prioritization
 
-### Phase 3: TTS Generation (Planned)
-- Text-to-speech generation for audio summaries
-- Daily digest compilation
-- Distribution pipeline
+### Phase 4: Publishing Pipeline ✅ COMPLETE
+- **RSS Generation**: Automated podcast RSS feed creation
+- **GitHub Deployment**: Automated episode publishing and release management
+- **Web API**: Audio streaming and RSS serving endpoints
 
 ## Technical Stack
 
@@ -46,20 +47,16 @@ The Daily Podcast Digest System continuously monitors podcast RSS feeds and YouT
 - **Python 3.10+**: Core runtime environment
 - **SQLite**: Episode database and metadata storage
 - **ffmpeg**: Audio format conversion and processing
-- **Parakeet MLX**: Apple Silicon optimized ASR (primary)
+- **Parakeet MLX**: Apple Silicon optimized ASR
 - **MLX Framework**: Apple Silicon native acceleration
+- **Claude Code**: AI content analysis and digest generation
 - **YouTube Transcript API**: Direct YouTube transcript access
 
 ### Audio Processing Pipeline
 ```
-RSS Audio → Download → ffmpeg conversion → Parakeet MLX → Content Analysis
-YouTube → Direct API → Transcript → Content Analysis
+RSS Audio → Download → ffmpeg conversion → Parakeet MLX (10min chunks) → Claude Analysis
+YouTube → Direct API → Transcript → Claude Analysis
 ```
-
-### ASR Engine Selection
-- **Primary**: Parakeet MLX (Apple Silicon native, 3380 RTFx performance)
-- **Apple Silicon**: MLX framework for native M-series acceleration
-- **Auto-Detection**: Graceful fallback with capability detection
 
 ## Installation
 
@@ -74,8 +71,8 @@ pip install -r requirements.txt
 # Install Parakeet MLX for Apple Silicon optimization
 pip install parakeet-mlx
 
-# MLX framework for Apple Silicon acceleration
-# (Installed automatically with parakeet-mlx)
+# Fix Python malloc warnings (optional)
+./fix_malloc_warnings.sh
 ```
 
 ### Quick Setup
@@ -83,43 +80,36 @@ pip install parakeet-mlx
 git clone https://github.com/McSchnizzle/podcast-scraper.git
 cd podcast-scraper
 pip install -r requirements.txt
-python3 pipeline.py setup
+
+# Set environment variables
+export GITHUB_TOKEN="your_github_token"
+export ELEVENLABS_API_KEY="your_elevenlabs_key"  # Optional
 ```
 
 ## Usage
 
-### Basic Operation
+### Main Pipeline
 ```bash
-# Run complete pipeline (monitoring + processing)
-python3 pipeline.py run
+# Run complete daily pipeline
+python3 daily_podcast_pipeline.py
 
+# Available options
+python3 daily_podcast_pipeline.py --help
+```
+
+### Individual Components
+```bash
 # Monitor feeds only
 python3 feed_monitor.py
 
 # Process pending episodes
 python3 content_processor.py
 
-# Analyze existing content
-python3 content_analyzer.py
-```
+# Generate Claude digest
+python3 claude_headless_integration.py
 
-### Content Processing
-```bash
-# Process specific episode
-python3 -c "
-from content_processor import ContentProcessor
-processor = ContentProcessor()
-result = processor.process_episode(episode_id)
-"
-
-# Get high-priority content
-python3 -c "
-from content_processor import ContentProcessor
-processor = ContentProcessor()
-episodes = processor.get_processed_episodes(min_priority=0.5)
-for ep in episodes:
-    print(f'{ep['title']} - Priority: {ep['priority_score']:.2f}')
-"
+# Generate audio digest (if TTS configured)
+python3 claude_tts_generator.py
 ```
 
 ## Configuration
@@ -139,88 +129,110 @@ feeds = [
 
 ### Processing Parameters
 - **YouTube Minimum Duration**: 3.0 minutes (configurable)
+- **Audio Chunking**: 10 minutes per chunk (updated from 5 minutes)
 - **Content Priority Threshold**: 0.3 (adjustable)
 - **Audio Cache**: Persistent storage in `audio_cache/` directory
-- **Transcript Storage**: Text files in `transcripts/` directory
-
-## Current Status
-
-### Processed Content (As of Aug 26, 2024)
-- **Total Episodes Monitored**: 31
-- **YouTube Episodes Processed**: 3 (substantial content >3 min)
-- **RSS Episodes Pending**: 22 (ready for Parakeet processing)
-- **High-Priority Content**: Multiple episodes with >0.5 priority score
-
-### Feed Sources
-- **Technology**: THIS IS REVOLUTION podcast, tech-focused channels
-- **Business**: The Diary Of A CEO, business interview content
-- **News/Politics**: The Red Nation Podcast, The Malcolm Effect
-- **Multiple YouTube Channels**: Tech talks and interviews
+- **Transcript Storage**: Text files in `transcripts/` and `transcripts/digested/`
 
 ## Performance Metrics
 
-### Parakeet MLX Advantages
-- **Speed**: 3380 RTFx (transcribes 56 minutes in 1 second with batch processing)
-- **Quality**: Superior podcast-specific accuracy vs. general speech models
-- **Apple Silicon**: Native Metal acceleration, optimal for M-series chips
-- **Memory**: Efficient processing with 2GB+ RAM requirements
+### Parakeet MLX Performance
+- **Speed**: 3380 RTFx (transcribes 56 minutes in 1 second)
+- **Quality**: Superior podcast-specific accuracy
+- **Apple Silicon**: Native Metal acceleration
+- **Chunking**: 10-minute segments for optimal processing
 
 ### Processing Efficiency
 - **YouTube**: Instant transcript access via API
-- **RSS Audio**: High-quality transcription with Parakeet MLX
-- **Content Analysis**: Real-time priority scoring and categorization
-- **Database Operations**: Optimized SQLite queries and indexing
+- **RSS Audio**: High-quality transcription with 10-minute chunking
+- **Claude Analysis**: Automated content analysis and digest generation
+- **Database Operations**: Optimized SQLite queries with status tracking
 
 ## File Structure
 
 ```
 podcast-scraper/
 ├── README.md                   # This file
+├── podscraper_prd.md          # Product Requirements Document
 ├── requirements.txt            # Python dependencies
-├── pipeline.py                 # Main orchestration script
+├── fix_malloc_warnings.sh     # macOS malloc warning fix
+├── daily_podcast_pipeline.py  # Main orchestration script ⭐
 ├── feed_monitor.py            # RSS/YouTube feed monitoring
 ├── content_processor.py       # Audio transcription and processing
-├── content_analyzer.py        # Content analysis and insights
-├── podscraper_prd.md         # Product Requirements Document
-├── podcast_monitor.db         # SQLite database
-├── audio_cache/              # Downloaded audio files
-├── transcripts/              # Generated transcript files
-└── test_*.py                 # Testing utilities
+├── claude_headless_integration.py # Claude AI analysis
+├── robust_transcriber.py      # Advanced transcription engine
+├── claude_tts_generator.py    # TTS generation (optional)
+├── deploy_episode.py          # GitHub deployment
+├── rss_generator.py           # RSS feed generation
+├── api/
+│   ├── rss.py                 # RSS endpoint
+│   └── audio/[episode].py     # Audio streaming endpoint
+├── claude_digest_instructions.md # Claude AI digest generation instructions
+├── docs/                      # Documentation and guides
+│   ├── podcast-workflow.md
+│   ├── PHASE3_TTS_GUIDE.md
+│   ├── PHASE4_DEPLOYMENT_GUIDE.md
+│   └── refactor-complete-workflow.md
+├── podcast_monitor.db          # SQLite database
+├── audio_cache/               # Downloaded audio files
+├── transcripts/               # Active transcript files
+├── transcripts/digested/      # Processed transcript files
+└── daily_digests/            # Generated audio digests
 ```
 
-## Development Status
+## Current Status
 
 ### ✅ Completed Features
 - Multi-source feed monitoring (RSS + YouTube)
-- YouTube transcript processing with duration filtering  
-- Advanced content analysis pipeline
-- SQLite database with comprehensive episode tracking
-- Parakeet MLX ASR integration for Apple Silicon
-- Basic speaker detection and conversation analysis
-- Error handling and graceful fallbacks
+- Advanced audio transcription with 10-minute chunking
+- Claude AI integration for content analysis
+- Automated daily digest generation
+- GitHub deployment pipeline
+- RSS feed generation and serving
+- Web API endpoints for audio and RSS
+- Database status tracking (transcribed → digested workflow)
 
-### 🔄 Current Development
-- **Phase 2.5**: Parakeet ASR integration and RSS processing optimization
-- Quality validation of Parakeet transcription accuracy
-- Performance optimization for batch processing
+### 🔄 Recent Updates
+- **Streamlined Codebase**: Reduced from 28 to 10 Python files
+- **Fixed Database Sync**: Resolved transcript status mismatches
+- **Improved Chunking**: Updated to 10-minute audio segments
+- **macOS Compatibility**: Added malloc warning fix script
 
-### 📋 Planned Features
-- **Phase 3**: TTS generation for daily audio digests
-- Advanced speaker diarization with timestamps
-- Enhanced content categorization and topic extraction
+### 📋 Future Enhancements
+- Enhanced speaker diarization with timestamps
+- Advanced topic extraction and categorization
 - Web interface for content management
-- Distribution pipeline for generated digests
+- Multi-language support
+- Performance monitoring dashboard
 
-## Contributing
+## Development
 
-This project follows a phased development approach:
+### Core Files
+1. **`daily_podcast_pipeline.py`** - Main orchestration and automation
+2. **`feed_monitor.py`** - RSS/YouTube monitoring
+3. **`content_processor.py`** - Transcription pipeline
+4. **`claude_headless_integration.py`** - AI analysis
+5. **`robust_transcriber.py`** - Transcription engine
 
-1. **Fork the repository**
-2. **Create feature branch** for your phase/feature
-3. **Follow existing code patterns** and conventions
-4. **Update PRD documentation** with your changes
-5. **Test with existing episode database**
-6. **Submit pull request** with detailed description
+### Episode Processing Workflow
+```
+pending → transcribed → digested → published
+```
+
+## Troubleshooting
+
+### Common Issues
+
+**macOS Malloc Warnings**: Run `./fix_malloc_warnings.sh`
+
+**Missing Dependencies**: 
+```bash
+pip install parakeet-mlx feedparser youtube-transcript-api
+```
+
+**Database Issues**: Episodes are automatically tracked with proper status transitions
+
+**Audio Processing**: Ensure ffmpeg is installed and accessible
 
 ## License
 
@@ -228,11 +240,11 @@ MIT License - See LICENSE file for details.
 
 ## Acknowledgments
 
-- **Inspiration**: Tomasz Tunguz's podcast processing system
 - **ASR Technology**: NVIDIA Parakeet models via MLX framework
-- **Apple Silicon Optimization**: `parakeet-mlx` by senstella
-- **ASR Engine**: Parakeet MLX with Apple Silicon optimization
+- **AI Integration**: Claude Code for content analysis
+- **Apple Silicon Optimization**: `parakeet-mlx` framework
+- **Inspiration**: Modern podcast processing and AI content analysis
 
 ---
 
-**Built with Apple Silicon optimization for production-quality podcast transcription**
+**Production-ready podcast processing with Apple Silicon optimization and Claude AI integration**
