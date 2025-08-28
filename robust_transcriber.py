@@ -72,7 +72,7 @@ class RobustTranscriber:
                 base_processing_time *= 1.5
             
             # Determine chunking strategy
-            max_chunk_duration = 300  # 5 minutes per chunk (conservative)
+            max_chunk_duration = 600  # 10 minutes per chunk (conservative)
             num_chunks = math.ceil(duration / max_chunk_duration)
             
             # Add overhead for chunking
@@ -300,7 +300,7 @@ class RobustTranscriber:
             
             # Step 2: Split file if needed
             print(f"\n✂️ Step 2: File chunking...")
-            chunks = self.split_audio_file(audio_file, chunk_duration=300)  # 5-minute chunks
+            chunks = self.split_audio_file(audio_file, chunk_duration=600)  # 10-minute chunks
             
             if not chunks:
                 print("❌ Failed to prepare file for transcription")
