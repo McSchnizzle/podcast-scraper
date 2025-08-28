@@ -76,7 +76,7 @@ class ContentProcessor:
             SELECT e.id, e.episode_id, e.title, e.audio_url, f.type, f.topic_category
             FROM episodes e
             JOIN feeds f ON e.feed_id = f.id
-            WHERE e.id = ? AND e.status = 'pending'
+            WHERE e.id = ? AND e.status IN ('pending', 'pre-download')
         ''', (episode_id,))
         
         episode = cursor.fetchone()
@@ -93,6 +93,11 @@ class ContentProcessor:
                 transcript = self._process_youtube_episode(audio_url, episode_guid)
             else:
                 transcript = self._process_rss_episode(audio_url, episode_guid)
+            
+            # If audio was successfully obtained, mark as pending first
+            if audio_path:
+                cursor.execute('UPDATE episodes SET status = \'pending\' WHERE id = ?', (ep_id,))
+                conn.commit()
             
             if transcript:
                 # Save transcript
@@ -141,7 +146,7 @@ class ContentProcessor:
             return None
         
         try:
-            # Create API instance and fetch transcript
+            # Fetch transcript using instance method  
             api = YouTubeTranscriptApi()
             transcript_data = api.fetch(video_id, languages=['en'])
             
@@ -221,8 +226,8 @@ class ContentProcessor:
                 print(f"Using local audio file: {audio_url}")
                 return audio_url
             
-            # Create filename based on episode ID for downloaded files
-            file_hash = hashlib.md5(episode_id.encode()).hexdigest()[:8]
+            # Use episode_id directly as filename (should already be 8-char hash)
+            file_hash = episode_id
             # Preserve original extension if possible
             if audio_url.endswith('.wav'):
                 audio_file = self.audio_dir / f"{file_hash}.wav"
@@ -385,8 +390,8 @@ class ContentProcessor:
         transcript_dir = Path("transcripts")
         transcript_dir.mkdir(exist_ok=True)
         
-        file_hash = hashlib.md5(episode_id.encode()).hexdigest()[:8]
-        transcript_path = transcript_dir / f"{file_hash}.txt"
+        # Use episode_id directly as filename (should already be 8-char hash)
+        transcript_path = transcript_dir / f"{episode_id}.txt"
         
         with open(transcript_path, 'w', encoding='utf-8') as f:
             f.write(transcript)
@@ -452,7 +457,7 @@ class ContentProcessor:
         conn = sqlite3.connect(self.db_path)
         cursor = conn.cursor()
         
-        cursor.execute('SELECT id FROM episodes WHERE status = \'pending\'')
+        cursor.execute('SELECT id FROM episodes WHERE status IN (\'pending\', \'pre-download\')')
         pending_episodes = cursor.fetchall()
         conn.close()
         

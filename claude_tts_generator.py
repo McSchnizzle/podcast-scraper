@@ -572,9 +572,9 @@ Thanks for listening!"""
                 
                 # Clean up intermediate TTS files
                 try:
-                    for segment_file in segment_files:
+                    for segment_file in segments:
                         Path(segment_file).unlink(missing_ok=True)
-                    logger.info(f"🧹 Cleaned up {len(segment_files)} intermediate TTS files")
+                    logger.info(f"🧹 Cleaned up {len(segments)} intermediate TTS files")
                 except Exception as e:
                     logger.warning(f"⚠️ Cleanup warning: {e}")
                 
