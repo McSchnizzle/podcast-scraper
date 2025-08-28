@@ -1,0 +1,294 @@
+[00:00] Okay, so Google yesterday released their
+[00:02] nano banana model. So I went ahead today
+[00:04] and built my own app with this API and I
+[00:07] tell you it's so cool. You can do so
+[00:10] much cool stuff with this. So today I
+[00:12] just wanted to show you a few of the
+[00:14] things I have come up with so far. So we
+[00:16] can start with this Photoshop feature I
+[00:19] have. So I uploaded like a can of soda
+[00:22] here. This is Pepsi. So I have my brush.
+[00:25] I can do something like yeah I can brush
+[00:28] this logo here and I can just go to the
+[00:31] text box right and I can say something
+[00:34] like a CocaCola logo style. So let's see
+[00:37] what happens if we just edit this area.
+[00:40] So I can kind of mask this and I can
+[00:43] send in both images what's happening in
+[00:45] the back end. We compare them kind of
+[00:47] and we get a result back. So I'm just
+[00:49] going to show you how this turned out.
+[00:50] We can do a few more examples before I
+[00:52] show you the other features I have
+[00:55] generated here. Okay. So, I upload this
+[00:57] image here of uh Taylor Swift, right? I
+[00:59] can just take kind of her bangs here if
+[01:02] I wanted to. Right? Something like this.
+[01:04] I don't know. And I can say pink hair.
+[01:07] Let's try that. See what happens. So,
+[01:09] you can see I just selected kind of her
+[01:11] front hair here in her forehead. So,
+[01:14] let's see how that turns up uh when we
+[01:16] kind of do the masking part here in
+[01:18] photo edit mode. Okay. So, I wouldn't
+[01:21] say this was perfect, but it's not too
+[01:22] bad, right? It kind of blends in very
+[01:24] good. So, yeah, that is something we can
+[01:26] do. We can probably come back to this
+[01:28] Photoshop mode, but let's just some show
+[01:30] you a bit about the other stuff. Uh, of
+[01:32] course, we have the multi image. Uh,
+[01:33] here I can upload two images, right? So,
+[01:36] let's do this woman here. She's like,
+[01:38] uh, yeah, I don't know, doing some
+[01:40] marathon. We can do the Pepsi can. And
+[01:43] let's just merge these images. So let me
+[01:45] do like a female drinking a can of
+[01:50] Pepsi, right? So this is going to take
+[01:54] both images and kind of merge them into
+[01:56] one. This is something we can do with
+[01:58] the nano banana API. Uh we can of course
+[02:01] do single image, but that is kind of
+[02:03] standard. Uh but after we have done
+[02:05] this, I'm going to show you kind of the
+[02:07] uh the other feature I've done too that
+[02:09] is pretty cool. Okay, so we have the
+[02:11] result. That is just amazing, right?
+[02:13] Look how good that is. Look at the can
+[02:15] here. Uh I guess it's a bit strange it's
+[02:17] drinking with both hand, but it looks
+[02:19] pretty awesome. Uh some other thing you
+[02:21] can see we added a Pepsi ad in the
+[02:23] background here. It looks like that,
+[02:25] right? That's a bit strange. Uh but now
+[02:28] I can show you the video generation
+[02:30] feature. So every generated images kind
+[02:32] of is passed over here. So now we can
+[02:35] animate this. I can say something like
+[02:38] uh let me show you female drinking a can
+[02:43] of uh soda right
+[02:47] uh so yeah let's do 5 seconds this is
+[02:50] using the cling uh 2.1 pro model so now
+[02:54] we can take uh every image we edit with
+[02:56] nano banana and just uh turn it into a
+[02:59] video this is something super simple you
+[03:01] can do when you kind of uh get kind of
+[03:04] to know with the API And you can see
+[03:06] here 2.5 Pro video generation. Uh the
+[03:09] kind of the generation is just passed
+[03:11] over to the input image. So this is so
+[03:14] cool. I'm really looking forward to
+[03:15] building more stuff uh or building out
+[03:18] this app with more features. Uh I just
+[03:20] had so much fun this morning playing
+[03:22] around with this. So let's just wait for
+[03:24] the video and let's check it out. Okay.
+[03:26] So you can see we have it here now. So
+[03:28] let's play it. Right. There's no audio,
+[03:30] right? But that's something we can do if
+[03:31] you wanted to. So you can see she is now
+[03:34] drinking. Uh having a sip of the Pepsi,
+[03:37] right? Perfect. What can I say? We could
+[03:39] have done 10 seconds too, but that's
+[03:41] just really cool. Uh so that is
+[03:43] something we can do. We can come back to
+[03:45] this. Uh but I have another feature I
+[03:47] wanted to show you. This is the time
+[03:48] travel feature. So for this, I think I
+[03:51] want to do an image. Uh I just took a
+[03:53] screenshot of myself here, right? So
+[03:56] yeah, not the best. But uh here we can
+[03:59] select stages, right? So this is I call
+[04:02] this the time travel feature. All right.
+[04:05] So, upload an image. Describe how you
+[04:07] want it to evolve through time. So, I'm
+[04:10] going to do four stages. And here you
+[04:13] can describe uh evolve through the
+[04:15] different historical eras. We can try
+[04:17] that. Uh but let's do let's do show
+[04:21] image from 1970s to 2000s. I don't know
+[04:25] how this is going to turn out, but let's
+[04:26] try to do those four stages. Right. So
+[04:29] the way I did this like technically is I
+[04:32] just using uh GPD5 nano to rewrite the
+[04:37] prompts. So if we go all down here uh
+[04:39] let me see. Yeah, you can see we are
+[04:42] rewriting the prompts here. Transform
+[04:44] this scene into 1980s, 1990s, 2000s and
+[04:48] vibrant '7s. So we're just using
+[04:51] Nano to do this. So uh I'm going to take
+[04:54] you back when we have the four results
+[04:56] here. 1970s vibe, right? Okay. So, this
+[05:00] was Oh, this was kind of embarrassing.
+[05:03] So, okay. So, here's me. 1970s. This was
+[05:06] a bit strange, maybe. Uh, I don't even
+[05:09] want to see 80s. Look at this. Okay.
+[05:12] It's pretty good, right? It kind of
+[05:14] looks like me, but look at this outfit
+[05:16] and the hairstyle. So, something failed
+[05:19] here at 90s. I don't know. This doesn't
+[05:21] even look like me. I'm not quite sure.
+[05:23] But 2000s was pretty good, right? So,
+[05:27] oops. Uh, so let's take a look at this
+[05:29] one. Uh, okay. That's a slick back. So,
+[05:34] I'm pretty impressed, right? It looks
+[05:36] pretty good. So, let me do something
+[05:39] else here with the time travel feature.
+[05:40] That's pretty fun. So, do something like
+[05:43] um
+[05:45] I'm going to do historic uh leaders or
+[05:48] something. Okay. So, again, I think the
+[05:50] results were very good. So, this is
+[05:52] ancient. Is this me as Jesus? That's
+[05:55] pretty good. Uh, next one is medieval.
+[05:59] So, here I am a drawing, but I think
+[06:02] it's cool. Next up is modern.
+[06:05] Look at this style. That's pretty cool.
+[06:08] I don't know what the last one is.
+[06:09] Contemporary.
+[06:11] That's just me. Okay, pretty cool. Uh, I
+[06:15] need to come up with one more thing. I
+[06:17] just think this feature is so fun. So,
+[06:19] let me do me as magic cards or something
+[06:22] like this. So, this is pretty fast
+[06:24] because we're doing it in parallel. So,
+[06:26] you can see here is the heroic wizard.
+[06:28] This is me, right? That's pretty cool. I
+[06:31] like that. I even have my cap on. Let's
+[06:33] say the next one. This is a legendary
+[06:36] creature human wizard. Okay, I can see
+[06:39] that. Yurun. Okay. Uh, next up, we have
+[06:44] uh 3VU.
+[06:47] Again, looks like me. Pretty cool. Arch
+[06:50] Mage Terron. When an arcade terron
+[06:53] enters the battlefield, screw two. Okay,
+[06:57] not the most impressive. Maybe the text
+[06:59] isn't best here. Uh, again, that kind of
+[07:02] looks like me. His Ragnar whispered
+[07:04] secrets of ancient something something.
+[07:07] Uh, but again, pretty cool. Um, I want
+[07:10] to do one more a couple of more things.
+[07:13] Uh, I kind of want to do uh some merging
+[07:15] and turning into a video. I think this
+[07:18] is a great potential of things you can
+[07:20] do. So, let me take like a a model, a
+[07:22] product, and let's turn it into a video.
+[07:25] Okay. So, I found this image here of a
+[07:27] celebrity. I found a floor jack. And
+[07:29] let's see what happens if we do these
+[07:31] two and we do something like woman
+[07:33] changing her tires on her car with a new
+[07:36] floor jack. So, I'm going to send this.
+[07:39] Um, I don't even know. Do they have like
+[07:41] this celebrity? Uh, I haven't really
+[07:44] tried it out, but if this doesn't work,
+[07:46] I'm just going to take another person,
+[07:48] not a famous person. Let's just see what
+[07:50] happens here. Okay, so this was so good.
+[07:52] Look at this.
+[07:55] I'm going to download this. But look,
+[07:57] that is like Taylor Swift like changing
+[07:59] her tires. So now we can go to the video
+[08:02] generation, right? And we can say woman
+[08:07] changing her uh tires with the a new
+[08:13] floor jack.
+[08:15] Smiling.
+[08:17] Smiling. Right. So, let's send this.
+[08:20] Let's do 5 seconds and let's grab this
+[08:23] video. So, if I wanted to sell this card
+[08:26] jack, right, that's perfect. Okay, so
+[08:29] let's check it out here. I'm going to
+[08:31] blow this up like big screen. Uh, maybe
+[08:33] my head is in the way. Let's do
+[08:35] something like this, right? Let's see
+[08:38] this.
+[08:40] Okay. Uh, okay. So, the floor jack move
+[08:43] that maybe wasn't perfect.
+[08:46] I wouldn't say that was very good, but
+[08:47] the image is good. I don't know what's
+[08:50] happening here. Uh, but still it's
+[08:52] pretty fun, right? So, yeah, you can do
+[08:54] a lot of stuff with just this simple
+[08:56] pipeline here. Okay, so I want to do a
+[08:59] thumbnail with this image here. So,
+[09:01] let's see what I can do uh using kind of
+[09:03] the Photoshop tool. So, I can do I can
+[09:06] do the brush something like this. And I
+[09:09] can just kind of just brush all of this,
+[09:11] right? The full thing here. That should
+[09:14] be pretty good. Let's see if I can do
+[09:16] that. Yeah, that should cover it, right?
+[09:19] And I can just maybe try to fill in the
+[09:25] left side of image to fit with rest.
+[09:30] Let's see what happens. So, I'm going to
+[09:32] send this. Haven't tried this. So, I'm
+[09:35] going to take you back when we have the
+[09:36] result. Okay. So, I wouldn't say this
+[09:38] was perfect. You can see kind of the
+[09:40] reflection is a bit bug, but let's see.
+[09:41] Uh, I'm going to download it and I'm
+[09:43] going to try to use this as the
+[09:44] thumbnail. I'm going to add some text
+[09:46] here and stuff. Maybe it doesn't show
+[09:48] that well. Uh, one more thing. Uh, I
+[09:51] wanted to do multi-image. I want to
+[09:53] upload uh let's say I found this uh what
+[09:57] was this? Uh, yeah, this was my logo. I
+[10:00] was going to place that. So, this is
+[10:02] like some image I found of a girl. And
+[10:05] let's do my logo. Not that one. Uh, this
+[10:09] one. Not that one, but this one. Right.
+[10:12] And I'm going to say female model
+[10:15] hauling up a sign uh of the all about AI
+[10:17] YouTube channel banner. Insert like and
+[10:18] subscribe invite above 69 format.
+[10:22] Haven't tried this. Don't know what's
+[10:23] going to happen. I don't think we will
+[10:25] get the 69 format here. So, I don't
+[10:28] think this is going to work, but let's
+[10:30] give it a try. Uh so while we wait for
+[10:32] that if you want to try out this app
+[10:34] here uh if you're a member of the
+[10:36] channel or if you become a member of the
+[10:38] channel I have uploaded the app to
+[10:41] GitHub Nano Banana. So this is the M AI
+[10:45] image uh editor and video generator
+[10:47] right. So all the code should be up now
+[10:49] if you want to try it out if you are a
+[10:51] member of the channel. If not just
+[10:52] follow the link in description and I
+[10:54] will invite you to the GitHub repo. So
+[10:58] yeah, there's a lot of potential in this
+[10:59] web app here. You can kind of turn it
+[11:01] into whatever you want. Uh okay, we got
+[11:04] something here, right? Uh not perfect.
+[11:08] Uh let's do like and describe invite
+[11:12] above her uh dark movie set. Something
+[11:16] like this. Let's try that. Give it one
+[11:19] more chance. But yeah, like I said, if
+[11:21] you're a member, become a member. you
+[11:23] can get access to this app and you can
+[11:25] just uh plug and play and try it out for
+[11:27] yourself. So I did create this with the
+[11:30] model. So this is probably going to be
+[11:31] the thumbnail you are seeing on this
+[11:33] video, right? Uh so that was pretty
+[11:35] cool. Uh so we put in this model and my
+[11:38] uh YouTube thing. So we kind of ended up
+[11:40] with this. Uh it's not perfect, but uh
+[11:42] go ahead like and subscribe. Uh it looks
+[11:45] pretty cool. So I hope this gave you
+[11:47] some inspiration and this made you want
+[11:49] to go try out the new Nano Banana API.
+[11:52] Uh I'm running it to through fal uh but
+[11:57] you could do it through Google I think
+[11:58] too and you can also play around in
+[12:00] Google studio. This is where I kind of
+[12:02] created this. So that works also pretty
+[12:04] good. So yeah, superb interesting model.
+[12:07] I had a lot of fun playing around with
+[12:09] it and I'm definitely going to keep
+[12:10] adding features to this app here. So
+[12:13] yeah, thank you for tuning in. Have a
+[12:14] great day and I'll see you again
+[12:15] hopefully very
