@@ -507,11 +507,7 @@ Today we'll explore {len(topic_digests)} key topic areas from our latest podcast
             if self.tts_generator.generate_audio_segment(digest_content, topic_voice, str(topic_path)):
                 audio_segments.append(str(topic_path))
                 
-                # Add music transition between topics (but not after the last one)
-                if i < len(topic_keys) - 1:
-                    music_path = self.output_dir / f"music_transition_{i}_{timestamp}.mp3"
-                    if self.tts_generator.generate_audio_segment(transition_text, music_voice, str(music_path)):
-                        audio_segments.append(str(music_path))
+                # Skip music transitions - ElevenLabs doesn't generate music properly
         
         # Generate outro with joke
         outro_jokes = [
@@ -573,6 +569,15 @@ Thanks for listening!"""
             
             if result.returncode == 0:
                 logger.info("✅ Audio segments concatenated successfully")
+                
+                # Clean up intermediate TTS files
+                try:
+                    for segment_file in segment_files:
+                        Path(segment_file).unlink(missing_ok=True)
+                    logger.info(f"🧹 Cleaned up {len(segment_files)} intermediate TTS files")
+                except Exception as e:
+                    logger.warning(f"⚠️ Cleanup warning: {e}")
+                
                 return True
             else:
                 logger.error(f"❌ Concatenation failed: {result.stderr}")
