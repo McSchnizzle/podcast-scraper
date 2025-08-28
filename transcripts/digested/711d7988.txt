@@ -1,0 +1,946 @@
+[00:00] I have a list of 36 podcasts, but I
+[00:02] don't have 36 hours every week to listen
+[00:04] to 36 podcasts.
+[00:06] So, what I did is I created a system
+[00:08] that goes through each of those podcasts
+[00:10] every day and downloads the podcast
+[00:13] files and then transcribes them.
+[00:14] Can you show us how it's actually built?
+[00:16] Like where do you get this feed? It
+[00:18] sounds like you run it locally. How does
+[00:20] this all work?
+[00:20] I wrote this thing called the Parakeet
+[00:22] podcast processor. And this podcast
+[00:25] processor basically takes in a file and
+[00:28] what it'll do is it will read the file.
+[00:30] It'll download it and then it'll convert
+[00:33] it via ffmpeg. Then that will take the
+[00:36] audio and convert it to text. So here's
+[00:38] the podcast summaries for today. So
+[00:39] there's Lenny's podcast, the host, the
+[00:41] guests, a comprehensive summary. So
+[00:44] here's a conversation with Bob Baxley,
+[00:45] key topics, and then key themes. The
+[00:48] part that's most valuable for me are
+[00:49] these quotes. And those quotes, I'll
+[00:51] read them. It'll suggest a bunch of
+[00:53] actionable investment thesis for a
+[00:55] venture capital firm which is put into
+[00:57] the prompt like okay maybe we should be
+[00:58] looking at AI assisted design tools.
+[01:00] You've gotten not only the content you
+[01:02] want but the user experience you want
+[01:05] you control it end to end and you can
+[01:06] build this hyperpersonalized software
+[01:09] experience.
+[01:10] [Music]
+[01:13] Welcome back to how I AI. I'm Clarvo
+[01:16] product leader and AI obsessive here on
+[01:19] a mission to help you build better with
+[01:20] these new tools. Today I have Tom
+[01:23] Tungus, a legend in the enterprise
+[01:25] software business and founder of Theory
+[01:27] Ventures, which invests in early stage
+[01:30] enterprise AI, data, and blockchain
+[01:32] companies. Tom is followed by over a
+[01:35] half a million folks on his blog and
+[01:37] LinkedIn. And he's going to show us
+[01:39] today how he uses AI to keep up with all
+[01:41] the podcasts, including this one, and
+[01:44] draft blog posts that would be approved
+[01:46] by your AP English teacher. Let's get to
+[01:48] it. This episode is brought to you by
+[01:51] Notion. Notion is now your do everything
+[01:54] AI tool for work. With new AI meeting
+[01:58] notes, enterprise search, and research
+[02:00] mode, everyone on your team gets a
+[02:02] notetaker, researcher, doc, drafter,
+[02:05] brainstormer. Your new AI team is here
+[02:08] right where your team already works.
+[02:10] I've been a longtime Notion user and
+[02:13] have been using the new Notion AI
+[02:14] features for the last few weeks. I can't
+[02:17] imagine working without them. AI meeting
+[02:19] notes are a gamecher. The summaries are
+[02:22] accurate and extracting action items is
+[02:24] super useful for standups, team
+[02:27] meetings, one-on ones, customer
+[02:28] interviews, and yes, podcast prep.
+[02:31] Notion's AI meeting notes are now an
+[02:33] essential part of my team's workflow.
+[02:36] The fastest growing companies like
+[02:38] OpenAI, Ramp, Verscell, and Cursor all
+[02:41] use Notion to get more done. Try all of
+[02:45] Notion's new AI features for free by
+[02:48] signing up with your work email at
+[02:50] notion.com/
+[02:52] how I AI. To celebrate 25,000
+[02:57] YouTube followers on how I AAI, we're
+[03:00] doing a giveaway. You can win a free
+[03:03] year to my favorite AI products
+[03:05] including VZero, Replet, Lovable, Bolt,
+[03:09] Cursor, and of course, ChatPD by leaving
+[03:12] a rating and review on your favorite
+[03:14] podcast app and subscribing to YouTube.
+[03:17] To enter, simply go to how ai
+[03:21] pod.com/giveaway,
+[03:24] read the rules, and leave us a review,
+[03:26] and subscribe. Enter by the end of
+[03:28] August and we will announce our winners
+[03:31] in September. Thanks for listening.
+[03:33] Okay, Tom, I'm so happy to have you here
+[03:36] because you are going to show us how you
+[03:39] are solving a problem I'm creating for
+[03:41] you. And the problem the problem I'm
+[03:43] creating for you is I am creating yet
+[03:45] another piece of interesting content
+[03:49] that you have no time to consume.
+[03:51] certainly the format that we get it out
+[03:53] and I know TEU content is a really
+[03:56] interesting source of ideas of trends of
+[03:59] companies. So tell us what you built and
+[04:03] why.
+[04:05] Absolutely. Well, thanks for having me
+[04:06] on. So I I don't I prefer to read than
+[04:08] to listen uh because I can skip ahead
+[04:11] and I think there's a lot of information
+[04:13] inside of podcasts that people share
+[04:15] that I would love to know. And so I
+[04:18] built I guess what I call a podcast
+[04:20] ripper. And the idea is I have a list of
+[04:23] 36 podcasts, this one included, that I
+[04:26] really admire and I want I want to learn
+[04:29] from, but I don't have 36 hours every
+[04:33] week to listen to 36 podcasts, right? So
+[04:36] what I did is I created a system that
+[04:38] goes through each of those podcasts
+[04:40] every day and downloads the podcast uh
+[04:43] files and then transcribes them using
+[04:46] initially it was open source or open AAI
+[04:48] is open source whisper which takes audio
+[04:50] and converts it to text and then there's
+[04:52] a new version called parakeet which
+[04:55] Nvidia released that runs really well on
+[04:57] a Mac and so I'll take that text and
+[05:00] then I'll run it through a prompt and it
+[05:01] will spit out a whole bunch of different
+[05:02] things. uh it'll spit out high level
+[05:05] summary or whatever I ask it to.
+[05:07] Okay. Can you show us how it's actually
+[05:09] built? Like where do you get this feed?
+[05:11] Do you It sounds like you run it
+[05:12] locally. How does this all work?
+[05:14] So I initially downloaded the Whisper
+[05:16] app and what I did is I wrote this thing
+[05:17] called the Parakeet podcast processor.
+[05:20] And this podcast processor
+[05:23] basically takes in a file and what it'll
+[05:26] do is it will read the file. It'll
+[05:29] download it and then it'll convert it
+[05:32] via ffmpeg
+[05:34] which is a library that converts
+[05:35] different kinds of files and that will
+[05:37] take the audio and convert it to text.
+[05:40] And then I use uh Gemma 3 which is
+[05:43] really good at this to actually clean up
+[05:46] the transcript. So, if we search for
+[05:49] the Olama model,
+[05:52] basically what I'm doing is I'm just
+[05:53] cleaning up the file here. Your
+[05:56] transcript editor, clean up this podcast
+[05:58] while preserving all the content, keep
+[06:00] the same length, remove the ums and the
+[06:02] o's, preserve all technical
+[06:04] conversations. And that returns a clean
+[06:07] transcript. And so on a given day, there
+[06:10] might be five or six different
+[06:11] transcripts that need to be transcribed.
+[06:14] And then what I'll do is it runs through
+[06:17] the parakeet podcast orchestrator.
+[06:21] Actually, it's just a podcast
+[06:22] orchestrator
+[06:24] which is here. And so I'm storing each
+[06:27] of the files that I'm transcribing in a
+[06:29] local duct DB which is a little database
+[06:31] that says I process this particular
+[06:33] podcast on this particular day. And then
+[06:36] I save the transcripts and I take all
+[06:38] the transcripts on that particular day
+[06:42] from the database which is here. And
+[06:44] then I send them through a prompt
+[06:47] which see if we can find it.
+[06:51] Summarizes
+[06:53] here the daily summarizer. So it
+[06:55] generates a daily summary document um
+[06:57] which is here.
+[06:59] It'll produce a file that looks like
+[07:01] this. So here's the podcast summaries
+[07:02] for today June the 13th. So there's
+[07:04] Lenny's podcast, the host, the guest, a
+[07:07] comprehensive summary. So here's a
+[07:10] conversation with Bob Baxley.
+[07:12] uh key topics. So here he's talking
+[07:14] about his philosophy, company culture,
+[07:18] and then key themes. And the the key the
+[07:20] the part that's most valuable for me are
+[07:21] these quotes.
+[07:23] And those quotes are then, you know,
+[07:25] I'll read them. It'll suggest a bunch of
+[07:28] actionable investment thesis for a
+[07:30] venture capital firm, which is put into
+[07:32] the prompt like, okay, maybe you should
+[07:33] be we should be looking at AI assisted
+[07:35] design tools.
+[07:37] And then that might kick off a market
+[07:39] map. we're really thesis driven. So
+[07:40] maybe that starts a conversation on a
+[07:42] Monday and we decide to staff a market.
+[07:44] Then it'll produce these noteworthy
+[07:47] observations which are uh actually put
+[07:50] into tweets. So here are the Twitter
+[07:52] post suggestions. So I haven't done this
+[07:55] yet. I'm still working on the prompt,
+[07:56] but the idea is like could we actually
+[07:58] automate like linking back to people who
+[08:00] we really like? And then another part,
+[08:03] this is a little out of order, but
+[08:04] another part here is are there startups
+[08:06] that are mentioned within these podcasts
+[08:08] that we should know?
+[08:09] Right? So, here's Airbnb, Google,
+[08:12] Amazon, Stripe. We know all these guys.
+[08:14] I don't know what this company is. And
+[08:15] so, this might go into our CRM,
+[08:18] right, to be enriched. And and then the
+[08:20] last is we'll actually generate prompts
+[08:23] for blog posts in the style that I
+[08:25] write. And then this will go into a
+[08:27] Python pipeline to actually machine
+[08:29] generate uh blog posts. So before before
+[08:33] we get to the the um machine automated
+[08:36] AI blog post pipeline, I have a couple
+[08:38] questions about this process because I
+[08:40] think you did a couple interesting
+[08:42] things. One, I have a question if you
+[08:46] found higher quality by cleaning up the
+[08:48] transcripts like how much did that
+[08:50] incremental input quality
+[08:53] piece actually help your your output?
+[08:57] So it helped. So initially I was trying
+[08:59] to get the answer was initially a lot
+[09:02] and then over time less
+[09:05] because initially what I was trying to
+[09:06] do was to find these companies I was
+[09:08] using named entity extraction algorithms
+[09:10] from Stanford there's a Python library
+[09:13] and uh it was having a really hard time
+[09:17] uh and so I was cleaning up cleaning it
+[09:19] up to try to get the performance to
+[09:20] improve and then I just pushed it to a
+[09:23] really large large language model and it
+[09:25] spit it out much better and so the
+[09:28] cleaning is not that useful anymore.
+[09:29] Yeah, I was looking because I was
+[09:30] looking at it and you were focusing on
+[09:32] like proper nouns, company names, and so
+[09:34] I'm assuming if you want to extract
+[09:35] something like stripe, which has many
+[09:38] many meanings, um getting it into a
+[09:40] proper noun format, for example, would
+[09:42] help with that extraction. But you're
+[09:43] saying as you could just use as opposed
+[09:46] to these kind of package libraries for
+[09:49] specific machine learning use cases
+[09:51] instead just send it to an LLM that
+[09:54] ended up just meaning you could worry
+[09:55] less about the input quality of of your
+[09:58] transcripts and more about the kind of
+[10:00] prompting and structure here of the
+[10:02] output.
+[10:02] Yeah, that's exactly right. So my goal
+[10:04] initially was to do everything locally
+[10:07] and so I was using Olama. I was using
+[10:09] that Stanford library parakeet is run
+[10:12] locally.
+[10:12] And then what I realized is particularly
+[10:14] for the named entity extraction
+[10:17] more powerful machines are much better.
+[10:19] Yeah. And so and then I have to ask
+[10:22] another question which is everybody's
+[10:24] going to look at this and they're going
+[10:25] to go what the hell does he typing in?
+[10:27] Like we have a couple people that are
+[10:29] like why in the terminal? So I'm just
+[10:31] curious you know did you ever think
+[10:32] about putting a UI on top of this? Do
+[10:34] you just you seem very comfortable in
+[10:36] the terminal so it seems to work for
+[10:37] you. I'm just curious about where you
+[10:39] decided to focus your uh user experience
+[10:42] efforts on this personal
+[10:44] well I love the term I read this blog
+[10:46] post by Danlu with two U's where he was
+[10:49] talking about latency and the latency
+[10:52] between like the keyboard and the
+[10:53] computer and it turns out that the
+[10:54] terminal is actually the application
+[10:56] with the lowest latency and the lower
+[10:58] the latency the less frustration you
+[10:59] have using a computer. So during COVID,
+[11:01] I decided to learn how to use a terminal
+[11:03] and since then I've sort of lived in it
+[11:05] and so like my email client is a
+[11:07] terminal based email client and I you I
+[11:10] use that because it's really fast and
+[11:12] then I can also script different things.
+[11:13] So I can delete 10 messages at once or I
+[11:15] can call an AI to actually automatically
+[11:18] respond to an email or add a company to
+[11:21] a CRM. So that was really important. But
+[11:24] at a high level like I think it's um
+[11:27] I've just become really comfortable with
+[11:28] it. It's really fast. And then the last
+[11:30] thing I'll say is I think Cloud Code is
+[11:32] an amazing product. And the great part
+[11:35] about what Cloud Code does is I have
+[11:37] about 2,000 blog posts. I can just go
+[11:39] into Cloud Code and say modify the files
+[11:42] in this way or change the blog post
+[11:44] theme or recently I launched a blog post
+[11:47] generator which takes all of the content
+[11:50] that I have on the blog and you can ask
+[11:52] it a question. It will write a blog post
+[11:53] for you about your particular question.
+[11:56] And I did that all using cloud code.
+[11:59] Yeah, I mean I I have two sort of
+[12:01] thematic things that I think of while
+[12:03] observing this this workflow and your
+[12:05] love for the terminal. I agree. Claude
+[12:07] Claude Code is an amazing product and
+[12:10] it's a really welldesigned terminalbased
+[12:13] product. I love it. I love that you have
+[12:15] this constrained surface area in which
+[12:18] to like communicate progress and latency
+[12:21] and changes. And I think it's really
+[12:23] thoughtfully designed. So for anybody
+[12:25] out there building dev tools in
+[12:26] particular, learn how to design in the
+[12:28] terminal and it's so so important
+[12:30] because you make really fabulous
+[12:32] products for I guess people like you and
+[12:33] me that say things like I picked up the
+[12:35] terminal over co as as my hobby. The
+[12:38] second thing that I was thinking about
+[12:40] is since generative AI has become
+[12:43] mainstream, every single person has said
+[12:46] somebody make a podcast digest
+[12:49] application. Every single person I know
+[12:51] is like it was one of the first projects
+[12:52] I made. I made my kids a podcast digest,
+[12:55] their favorite podcast, and it made
+[12:57] little um
+[12:58] quizzes about the topics that they could
+[13:01] answer.
+[13:02] Super cute. So, I think it was a very
+[13:04] common use case. But what I was thinking
+[13:05] is no startup is going to be like, you
+[13:09] know, it's going to be huge TAM company,
+[13:10] a terminal based podcast transcript
+[13:14] processor and thematic extraction
+[13:17] generation engine. And I I think this is
+[13:20] such a perfect example of like, yeah,
+[13:23] there's probably something off the shelf
+[13:24] that could do something like this, but
+[13:26] you have gotten not only like the
+[13:28] content you want, but the user
+[13:30] experience you want. You control it end
+[13:32] to end and you can build this like
+[13:34] hyperpersonalized software experience,
+[13:37] which I just it was not possible um or
+[13:39] it wasn't um efficient to do I would say
+[13:43] uh until very recently. Yeah, it fits it
+[13:47] fits the workflow my workflow like a
+[13:48] glove, right? And anytime something
+[13:49] comes up and changes, like maybe there's
+[13:51] a section that's out of order like we
+[13:52] found, I can just go into cloud code and
+[13:54] update it and it'll be done in 15 to 30
+[13:56] seconds, right? And you know, I really
+[13:59] wanted an email of this every day and
+[14:00] that was straightforward. So, I agree
+[14:02] with you. But I think we're at a place
+[14:04] where
+[14:05] the marginal friction to achieving a
+[14:08] gloveike fit with little utilities that
+[14:10] maybe you wouldn't have paid for in the
+[14:12] past is now um it's just so it's so
+[14:17] quick, right? Like you you just
+[14:18] answering a couple of emails and it'll
+[14:20] be done.
+[14:21] Yep.
+[14:22] You've seen the doom and gloom
+[14:24] headlines. AI is coming for your job.
+[14:27] But the reality is a little bit
+[14:28] brighter. In Miro's latest survey, 76%
+[14:32] of people say AI can boost their work.
+[14:34] It's just that 54% still don't know when
+[14:37] to use it. As a product leader and a
+[14:40] solo founder, I live or die by how fast
+[14:42] I can turn fuzzy ideas into crisp value
+[14:46] propositions, road maps, and launch
+[14:48] plans. That's why I love Miro's
+[14:50] innovation workspace. It drops an AI
+[14:53] co-pilot inside the canvas so stickies,
+[14:56] screenshots, and brainstorm bullets can
+[14:58] become usable diagrams, product briefs,
+[15:01] and even prototypes in minutes. Your
+[15:04] team can dive in, riff, and iterate. And
+[15:07] because the board feels like a digital
+[15:09] playground, everyone has fun while you
+[15:11] cut cycle time by a third. Miro lets
+[15:14] humans and AI play to their strengths so
+[15:16] that great ideas ship faster and
+[15:19] happier. Help your teams get great done
+[15:23] with Miro. Check out miro.com
+[15:26] to find out how. That's mirror o.com.
+[15:32] Okay. So, you have taken all this
+[15:36] content um including amazing content
+[15:38] from the Lenny's Podcast Network and
+[15:40] you're processing it. You're extracting
+[15:42] themes. You're extracting quotes. You're
+[15:45] finding companies that may be
+[15:47] interesting to reach out to. You're at
+[15:50] least drafting Twitter posts. We will
+[15:53] see if those actually get posted um you
+[15:56] know in production. And then let's talk
+[15:57] about your second workflow which is you
+[16:00] extract insights that might be
+[16:01] interesting for you to write about or
+[16:03] add your perspective on and then you
+[16:05] actually turn those into drafts using
+[16:07] AI.
+[16:08] There's a lot of stuff that's happening
+[16:09] in the ecosystem and every once in a
+[16:10] while I like to write about what
+[16:11] somebody said in a in a podcast, right?
+[16:13] Um uh and I think today like there I was
+[16:17] looking the GitHub CEO is actually
+[16:19] interviewed and so Matt Turk interviews
+[16:22] who's at another venture firm interviews
+[16:24] Thomas and he talks about how AI and
+[16:28] coding is the future and so what I
+[16:30] really want to do here is let's suppose
+[16:31] I really wanted to have a blog post that
+[16:33] was tied to this. So what I can do is I
+[16:37] say like okay I have this podcast
+[16:39] generator and I'll show it to you in a
+[16:41] second and what I'll do is I'll take as
+[16:43] context the transcription of that
+[16:46] podcast which is here um and then I'll
+[16:49] define an output file and then I'll give
+[16:51] it a little prompt which is like you
+[16:54] know he said this quote which is
+[16:56] actually within the podcast summary
+[16:58] everything that I can easily replace
+[16:59] with a single prompt is not going to
+[17:01] have any value. it will have the value
+[17:03] of the prompt and the inference and the
+[17:05] tokens, but that's often a few dollars.
+[17:07] And I'll tell it, okay, go look for
+[17:09] podcasts that are related to this. And I
+[17:12] I've categorized them uh as AI. And then
+[17:16] here, actually, there's a bug. So, demo
+[17:19] fail. I was trying to fix it before I
+[17:20] got on the video, but the searching for
+[17:22] the relevant blog post is failing, and I
+[17:24] need to figure that out. It's it's run
+[17:26] through um Lance DB vector embed in this
+[17:28] database.
+[17:31] and then it'll generate a blog post. And
+[17:33] I'll show you the prompt in a second.
+[17:34] And the best well, one of the techniques
+[17:36] that I found the most effective when
+[17:38] generating blog posts is to ask it to
+[17:40] grade it like an AP English teacher. And
+[17:43] this goes back to my history. I remember
+[17:45] not really loving to write until I took
+[17:47] a class with um an army veteran and uh
+[17:52] he taught me to really love to write and
+[17:53] he was my AP English teacher. And so I
+[17:55] really like receiving feedback in that
+[17:57] way. grade it on a letter grade and then
+[18:00] tell me what I could improve and then
+[18:02] I'll iterate with the model until I get
+[18:04] to an A minus.
+[18:06] Got it. And so just before we go into
+[18:08] the actual writing and I'd love to see a
+[18:09] little bit of this AP English prompt.
+[18:13] Are these two pieces connected? Your
+[18:14] podcast summaries, do those go into this
+[18:17] vector DB that can then be searched
+[18:19] through for relevant other podcasts if
+[18:23] you're writing on a topic? Like how does
+[18:24] this all come together? Yeah. So, right
+[18:26] now it's just the blog posts that I've
+[18:28] written in the past, the 2,000 blog
+[18:30] posts or so that go in. And the major
+[18:32] reason I add those as context is I'm
+[18:36] trying to capture my style. And I have
+[18:38] to tell you like that's really hard.
+[18:40] Like I have fine-tuned OpenAI. I had
+[18:42] fine-tuned Gemma models. And getting the
+[18:46] voice and you'll see it in the output.
+[18:48] It sounds like a computer when it writes
+[18:50] even with that additional context. And
+[18:53] uh it doesn't the other thing that I I
+[18:55] have not been able to figure out is I
+[18:57] think it's really important in one blog
+[18:58] post to link to other blog posts that
+[19:00] I've written just because the knowledge
+[19:02] builds on itself and obviously outside
+[19:04] as well. But I haven't been able to
+[19:05] figure out how to get it to link
+[19:07] effectively.
+[19:08] Well, I I think this is a a common
+[19:10] feeling with AI generated writing. No
+[19:14] one is satisfied with style even when
+[19:16] style is exceptional. I think I've seen
+[19:19] examples, especially some of the newer
+[19:22] commercial models, actually writing
+[19:23] really lovely pros and really lovely
+[19:26] language.
+[19:28] It's just it's so personal what your
+[19:30] style is and how you would write
+[19:32] something, the rhythm in which you would
+[19:34] write it, how would you punctuate and
+[19:36] break line, all that kind of stuff is so
+[19:38] personal that I have, like you had a
+[19:40] very, very hard time getting it to write
+[19:43] like me. And I think even harder, which
+[19:46] is why I appreciate that you're not yet
+[19:48] posting this. It cannot it can't tweet
+[19:50] like me. I can't I cannot
+[19:51] No, the short ones the short ones are
+[19:54] the hardest, you know. Um I guess they
+[19:56] say that about about writing writing
+[19:58] generally. Um h have you felt like any
+[20:02] of the models have done better or worse
+[20:04] at writing like you or is it just like
+[20:06] they only get 70 80% there and I just
+[20:09] accept the fact that I'm going to have
+[20:10] to rewrite things?
+[20:11] Well, they have different voices. Um, I
+[20:13] don't think any of them are close. Uh,
+[20:16] like I think Gemini is more
+[20:19] clinical is the way that I put it.
+[20:22] I agree.
+[20:23] Claude is more warm and verbose, you
+[20:26] know, very very galous, like just wants
+[20:28] to keep talking and wants really long
+[20:30] sentences and really long paragraphs.
+[20:33] Um, and uh, OpenAI, I think the models
+[20:37] each have slightly different
+[20:38] personality. So there I don't think
+[20:40] there's like a single characterization.
+[20:43] So I I've been I think I've been
+[20:46] iterating to I used to use claude 35 a
+[20:49] ton and I uploaded all of my blog posts
+[20:51] in a project and I and then I'd have it
+[20:53] iterate there. Now I can kind of do it
+[20:55] with cloud code or using this prompt. So
+[20:57] that's a little less useful. But what I
+[21:00] found is um
+[21:04] you really need to add your own voice
+[21:05] and then you need to tell the AI to keep
+[21:08] the things that are wrong, right? Like
+[21:11] this it's kind of funny thing to say,
+[21:12] but as you were saying, Claire, before
+[21:14] the way that you punctuate, I really
+[21:15] like amperands, right? And I like adding
+[21:17] spaces before colons. And I like
+[21:20] starting certain sentences with or
+[21:22] having little incomplete clauses
+[21:25] um because I think they keep the reader
+[21:27] moving.
+[21:29] But an an AI won't do that. An AI will
+[21:31] only deliver you a grammatically perfect
+[21:36] specimen.
+[21:37] Yeah. We're gonna have one one very
+[21:39] nerdy uh English language moment, which
+[21:41] is I like to start paragraphs with a
+[21:43] conjunction. I love a and or a but. Oh,
+[21:46] it pulls you in.
+[21:49] So, okay, you and I are going to work
+[21:51] we'll we'll build like a an a and micro
+[21:53] sass on
+[21:56] good good writing models um and prompts
+[21:59] that that people can use. So, okay. So,
+[22:02] we accept that it's not going to write
+[22:03] exactly like you, but you've created
+[22:07] this grading process to say, well, is at
+[22:09] least good? And so I'm curious, can you
+[22:11] walk us through how it gets to an A min?
+[22:16] Yeah.
+[22:17] But as an A+ student, I don't know, a 91
+[22:20] would really stress me.
+[22:23] Tell me how you kind of wrote the prompt
+[22:25] and then why you picked like a minus as
+[22:28] as your bar.
+[22:29] Yeah, for sure. Okay, so uh the way I
+[22:31] broke the prompt, I told it what I
+[22:34] wanted. Um, and I asked an AI to
+[22:37] critique I think I asked Gemini to
+[22:38] create critique Claude's output. So,
+[22:41] it's kind of using a student teacher or
+[22:43] critique model. And then what it does is
+[22:45] we'll walk through the prompt in a
+[22:46] second, but it goes through three
+[22:48] grading attempts. So, it reads a file,
+[22:51] gives it a grade and a score, and then
+[22:53] it the things that are the most
+[22:54] important that I found particularly for
+[22:56] readers are the hook, which is the first
+[22:58] few sentences or the lead you might call
+[23:00] it. And then the last is the conclusion
+[23:01] and making sure it ties back because
+[23:03] then you have a complete um you have a
+[23:06] complete post. And so it goes through
+[23:08] this three times, right? And so you can
+[23:09] actually see like here it gave itself a
+[23:11] 90 and then a 91. Um and then at that
+[23:13] point it basically was good enough. It
+[23:15] was satisfied with the hook. So um if we
+[23:18] uh let's see if we read the blog post
+[23:22] generator
+[23:25] um you can see what it does at a high
+[23:27] level right so it finds the blog post it
+[23:29] generates an initial blog post grades it
+[23:31] like an AP English teacher improves
+[23:34] um and then autogenerates a URL friendly
+[23:36] slug so it actually writes it in the
+[23:37] right format and then it can use openAI
+[23:40] or
+[23:41] then the prompt is here uh you are an
+[23:44] expert blog writer specializ izing in
+[23:46] technology and business content. And
+[23:48] then here I add in the blog posts and it
+[23:51] kind of shows the patterns. What it also
+[23:54] does is um it dynamically calculates the
+[23:58] number of paragraphs from relevant posts
+[24:01] and uses lama to summarize the stylistic
+[24:04] patterns of those related posts. So, I
+[24:06] might write a little bit differently
+[24:08] when I'm targeting a web 3 or a crypto
+[24:10] audience than say I might when I'm
+[24:13] analyzing the public disclosures of a
+[24:16] company. Snowflake just announced
+[24:18] earnings, let's say. And so, it's
+[24:20] dynamically injecting that here. It
+[24:22] shows a bunch of different examples. And
+[24:24] then, you know, here's what I think
+[24:25] makes my blog post tick, right? 500
+[24:27] words or less. I have like 49 seconds
+[24:29] with a reader. No section headers. I ran
+[24:32] a an analysis of dwell time as a
+[24:36] function of how many headers there were
+[24:38] and it turns out headers were terrible
+[24:39] for dwell time. People just bailed. Uh
+[24:42] flowing paragraphs, each paragraph
+[24:43] transitions smoothly to the next.
+[24:45] Actually, the AI consistently critiques
+[24:48] my transitions and says they're too
+[24:50] harsh. And going back to the A minus
+[24:53] point that you made before, I think I
+[24:55] lose five or six points because of my
+[24:56] transitions because they're abrupt. and
+[24:59] then you know limit each paragraph to at
+[25:00] most two long sentences
+[25:03] and then the structure of the blog post.
+[25:05] I I think this is a really interesting
+[25:06] towards the top and I want to make sure
+[25:08] people don't miss it. I've seen this
+[25:10] before which is like take this example
+[25:12] and describe it back to me and use it.
+[25:14] And so you're saying I'm writing on this
+[25:16] topic go find the blog post like this
+[25:19] topic analyze them for format like what
+[25:22] is what is the structure? how am I
+[25:24] writing things and match stylistically
+[25:27] match this subset of of my blog posts
+[25:30] because I do vary style by topic.
+[25:34] Exactly right. Exactly right
+[25:36] thing. Okay. And then two sent I was not
+[25:38] expecting this two sentences per
+[25:40] paragraph thing. I I like it.
+[25:43] Yeah.
+[25:43] I have one more question for you as
+[25:45] somebody who did take AP English. So,
+[25:47] this is um perfect for you. Did you
+[25:49] actually do they publish the AP English
+[25:52] like grading standards for the tests?
+[25:54] Like, did you integrate any of that? Is
+[25:56] it just sufficient enough to say AP
+[25:58] English teacher? I'm just curious how
+[26:00] deep you went.
+[26:01] Yeah, I just said AP English teacher. I
+[26:02] figure there are enough people leaking
+[26:06] either like the scoring rubrics or
+[26:08] essays that scored fives or whatever it
+[26:10] was.
+[26:11] Got it.
+[26:12] That there's good underlying data.
+[26:14] Okay. So, this is for writing it. And
+[26:15] then what about for grading it? Do you
+[26:18] have that prompt?
+[26:20] Here's the grading prompt. So you're an
+[26:22] experienced English teacher. Here's a
+[26:24] letter grade, numerical score, and then
+[26:26] here are the evaluations, the hook,
+[26:29] which you know, argument clarity,
+[26:31] evidence and examples, paragraph
+[26:33] structure, conclusion strength, overall
+[26:35] engagement.
+[26:37] Got it. And have you ever gotten B's and
+[26:40] C's on
+[26:41] Yeah, for sure.
+[26:42] Consistently getting like 91%. I I
+[26:45] always wonder about this because I do
+[26:47] think these models are positively
+[26:49] inclined towards telling you you've done
+[26:52] good work. I found that consistently.
+[26:54] I've always had to say be more harsh, be
+[26:57] more critical, call out where I'm doing
+[26:59] things wrong. So I'm curious, do you
+[27:01] actually get high variability in this in
+[27:03] these gradings or you know what has been
+[27:04] your experience?
+[27:05] Yeah, absolutely. So another so this is
+[27:07] one pathway for I mean the podcast to
+[27:10] blog post data pipeline is one pathway
+[27:12] for generating blog post. Another one is
+[27:13] just an idea comes to me. And so then
+[27:15] what I'll do is I'll just literally
+[27:17] dictate. Um I'll dictate I'll put it in
+[27:19] and I'll pass it into the blog post
+[27:21] generator and then have it grade. And
+[27:23] there I've seen C minuses. Right.
+[27:25] Got it.
+[27:26] Um yeah.
+[27:27] So it's easier when it's grading itself
+[27:29] and a little harder when it's grading
+[27:31] you.
+[27:32] This is super interesting. And then in
+[27:34] the you do it three loops. Do you also
+[27:36] get high variability between the loops?
+[27:38] Do you find that that that threetime
+[27:40] process is actually additive to the
+[27:43] evaluation?
+[27:44] I do. I think I often see the first one
+[27:47] like a what like a 91 and then the
+[27:49] second one will dip into the BB+ range
+[27:52] and then it'll pop back up.
+[27:54] Yep.
+[27:54] So it's a little bit explore exploit
+[27:57] again most of the time for me it's
+[27:58] around those transitions and most of the
+[28:00] time the verbosity of those transitions
+[28:03] that the AI injects is just like
+[28:05] catastrophic. I mean it doubles the
+[28:07] length of the uh blog post. Um and then
+[28:11] the third the third iteration tends to
+[28:12] then kind of rein reinforce the brevity.
+[28:16] Got it. And um my kids are too small for
+[28:19] AP English to be something that I have
+[28:20] to worry about yet. But meta question,
+[28:23] you know, everybody's so worried about
+[28:25] students using AI to write. I'm This
+[28:28] seems like such a more fair way to
+[28:31] evaluate writing. I'm curious. Do you
+[28:34] think we're going to see more and more
+[28:35] of this site this type of evaluation in
+[28:38] academic setting? And do you think
+[28:40] teachers could benefit from, you know,
+[28:42] checking their own work when they're
+[28:44] grading these things that are a little
+[28:45] harder to put quantitative or
+[28:47] qualitative feedback against?
+[28:49] Yeah, I think it's a great first pass
+[28:50] filter. Like 80% of the work, what's
+[28:53] going on grammatically? Are you using
+[28:54] sentences and conjunctions and dangling
+[28:58] modifiers and all that stuff? Like I
+[29:00] think that um the wrote analysis of the
+[29:04] logic of that language should be handled
+[29:06] by an AI,
+[29:08] right?
+[29:08] And then I think there's this other part
+[29:11] which is the stylist. I mean you look at
+[29:13] I was reading EE Cummings poems last
+[29:16] week and you look at the creativity of
+[29:18] some of those poems. Um, and I, you
+[29:22] know, I think it only comes after you
+[29:24] have the mastery of the language, but
+[29:25] you'd want, you'd want teachers to be
+[29:28] free to
+[29:30] champion that or encourage it. I think
+[29:32] it's really just just just as important.
+[29:34] Yeah. So, for the students listening,
+[29:36] you know, I still think it's good to
+[29:38] learn to write, uh, to read a lot, to
+[29:41] learn to write, to write yourself. And
+[29:43] if you're looking for a place to
+[29:44] practically apply AI to your writing
+[29:46] work, maybe it's as a a first pass
+[29:49] grade. Say, if you were my teacher, how
+[29:51] would you grade this? And what feedback
+[29:53] would you give me? As opposed to, if you
+[29:56] were me, how would you write this? Maybe
+[29:57] that's the right way to get students
+[30:00] starting to use AI in a practical way
+[30:02] that still allows you to develop these
+[30:03] hard skills that I think are going to be
+[30:05] continue to be super relevant.
+[30:07] Could not agree with you more. I mean,
+[30:08] oftentimes, I don't know about you, but
+[30:10] I'll run into writer's block or I'll
+[30:11] have an idea that I really want to
+[30:13] convey, but it's just a soup in my mind.
+[30:15] And there an AI will help you iterate
+[30:18] and refine. And often it'll give you the
+[30:20] the germ of an idea and then you'll take
+[30:21] it and add your specific lens to it. But
+[30:24] um but yeah, I think it's a wonderful
+[30:26] learning tool because you have the
+[30:27] feedback so quickly.
+[30:28] Yep. Exactly. Okay. So, you have shown
+[30:31] us just taking Zoom back 30 something
+[30:34] podcasts you process on a daily basis.
+[30:37] You create summaries, you extract
+[30:38] themes, you extract tweets, you extract
+[30:40] topics. Those topics then go into
+[30:43] another um Python script that writes a
+[30:47] blog post based on some other relevant
+[30:50] blog posts in your own um blog writes
+[30:54] the blog post on demand AP English
+[30:57] teacher to grade you three times and
+[31:00] then you take the final pen and then is
+[31:03] AI post like do you have it just like an
+[31:05] agent going sender you
+[31:07] that I don't that would be awesome
+[31:11] But no, that that's still done the artal
+[31:13] way. Point and click.
+[31:15] You are still copying and pasting with
+[31:17] your human fingers.
+[31:19] Yeah.
+[31:19] Okay. This is a great super practical
+[31:22] process. Um I'm even thinking about ways
+[31:24] I can do this to identify future podcast
+[31:27] go guests or um topics that people might
+[31:30] want to see. So you've given me some
+[31:31] inspiration. I'm going to ask you two
+[31:33] wrap-up questions and then get you out
+[31:35] of here back into your terminal. First
+[31:37] question, I was reading your 2025
+[31:39] predictions and you said this is going
+[31:41] to be the year we see a 30 person
+[31:43] hundred million dollar company and I'm
+[31:46] curious when you in your mind's eye when
+[31:48] you imagine that company what is it
+[31:51] who's in it? Like what are they doing?
+[31:52] How are they operating? What do you
+[31:53] imagine that company looks like?
+[31:55] Yeah, I think it's probably there's a
+[31:57] CEO who's a product person. There's an
+[31:59] engineering team of 12 to 15 and then
+[32:02] there's probably a couple of customer
+[32:04] support rail people and maybe there's a
+[32:08] salesperson
+[32:09] maybe who's closing some of those bigger
+[32:11] contracts and then a solutions architect
+[32:14] as a function of the kind of company but
+[32:16] it will be predominantly software
+[32:18] engineering and then I think the go to
+[32:20] market motion is PLG bottoms up just
+[32:22] massive adoption
+[32:24] and do you think those software
+[32:25] engineers are largely still focused on
+[32:28] product building or do you imagine that
+[32:30] those software engineers are also
+[32:32] enabling the company with tooling and
+[32:34] automations and figuring out how one
+[32:36] salesperson can do the work of 20? I'm
+[32:38] just curious how you think that's going
+[32:40] to shake out.
+[32:40] Oh, absolutely. I think that's right. I
+[32:42] mean uh you we were we were kind of
+[32:46] talking about this but like the ability
+[32:47] of a person to come up with a demo and
+[32:50] then use AI to critique the demo and
+[32:52] test uh is now so fast and the ability
+[32:55] to take that code and basically move it
+[32:56] into production really quickly is also
+[32:58] incredibly fast. So I do think there
+[33:01] will be a pretty significant like
+[33:02] internal platforms enablement function
+[33:04] and whether that's kind of 20% time for
+[33:07] a bunch of engineers or a dedicated team
+[33:09] of two or three people huge amount of
+[33:11] leverage there.
+[33:12] Yeah, I I completely agree. Okay. And
+[33:14] then last question when your AI is
+[33:17] grading you unfairly or writing terribly
+[33:20] or making very long transitions that do
+[33:23] not um sound like you, what is your
+[33:25] prompting technique to get AI to listen?
+[33:29] I have two AIs duke it out.
+[33:32] And so I have like a little example of
+[33:34] like this is the input, this is the
+[33:36] output that you gave me, this is the
+[33:37] output that I want and then I have
+[33:39] Gemini and Claw duke it out and finally
+[33:41] kind of decide on um and I'll use a
+[33:43] little script to do that where they'll
+[33:45] finally polish a script. It doesn't work
+[33:47] all of the time, but I do think
+[33:48] switching models helps a ton. It it
+[33:51] creates a level of generalizability
+[33:54] that uh I haven't been able to replicate
+[33:55] as a human. I I agree and I will give
+[33:57] you a how I AI tip from a previous uh
+[34:00] previous guest Hillary who like negs the
+[34:03] models to each other. So they're like
+[34:05] Gemini look at this garbage.
+[34:08] No way.
+[34:08] How to And then they're like Claude look
+[34:10] at this trash open AI gave me like
+[34:13] surely you can do better than this.
+[34:15] That's what she calls it mean girls.
+[34:17] She's like I mean girls the models and
+[34:19] get them to compete with each other. And
+[34:21] maybe you can create a a a Python-based
+[34:24] terminal script to to do that and then
+[34:26] share it with with our audience, open
+[34:28] source that thing.
+[34:29] Uh great great idea for a weekend
+[34:31] project this Saturday.
+[34:32] Well, this is so helpful. Uh where can
+[34:35] we find you? How can we be helpful to
+[34:36] you?
+[34:37] Oh, I'm on totneous.com and uh if you're
+[34:40] starting a company within the AI
+[34:41] ecosystem, I'd love to hear from you.
+[34:42] Great. Well, thank you so much for being
+[34:44] here.
+[34:44] Thanks for having me, Clary.
+[34:46] Thanks so much for watching. If you
+[34:48] enjoyed this show, please like and
+[34:49] subscribe here on YouTube, or even
+[34:51] better, leave us a comment with your
+[34:53] thoughts. You can also find this podcast
+[34:55] on Apple Podcasts, Spotify, or your
+[34:58] favorite podcast app. Please consider
+[35:00] leaving us a rating and review, which
+[35:02] will help others find the show. You can
+[35:05] see all our episodes and learn more
+[35:07] about the show at howiipod.com.
+[35:11] See you next time.

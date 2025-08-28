@@ -1,0 +1,26 @@
+[00:00] Every big AI platform now remembers what
+[00:03] you said in other chats. And that's a
+[00:05] new development. This week, both Claude
+[00:07] and Google's Gemini shipped a memories
+[00:09] feature which looks into your previous
+[00:11] chats to inform the new ones. And that
+[00:13] can be super powerful. So, let's have a
+[00:14] look at how this works in practice. It's
+[00:16] enabled by default, but you can check it
+[00:18] if you go into your settings and this
+[00:19] function here, search and reference
+[00:20] chats. Allow Claude to search for
+[00:22] relevant details in past chats. And
+[00:24] there's this simple prompt that they
+[00:25] make you run when you log into Claude
+[00:27] for the first time. Hi, Claude. what
+[00:28] were some highlights from our recent
+[00:29] conversations? And as you can see, it
+[00:31] pulls up some of my recent conversations
+[00:34] here. I really like how it shows you
+[00:35] exactly what chats it references here.
+[00:37] That's wonderful. And then it summarizes
+[00:39] it back to you. So yeah, at the very
+[00:40] least, be aware that every platform
+[00:42] between Chat GPT Claude and Gemini do
+[00:44] this by default. Now,
