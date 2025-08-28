@@ -1,0 +1,47 @@
+Advertisement Examples for Filtering Reference
+==============================================
+
+These are real advertisement examples found in transcripts that should be filtered out.
+Use these patterns to improve advertisement detection and removal.
+
+1. PODBEAN ADS (Platform Advertisements)
+----------------------------------------
+"Podbean, your message amplified. Ready to share your message with the world? Start your podcast journey with Podbean. Podbean. Podbean. Podbean. Podbean. The AI-powered all-in-one podcast platform. Thousands of businesses and enterprises trust Podbean to launch their podcasts. Launch your podcast on Podbean today. My school uses Podbean. My church, too. I love it. I really do."
+
+"Podbean, your message amplified. Ready to share your message with the world? Start your podcast journey with Podbean. Podbean. AI-powered all-in-one podcast platform. Thousands of businesses and enterprises trust Podbean to launch their podcasts. Use Podbean to record your podcast. Use Podbean AI to optimize your podcast. Use Podbean AI to turn your blog into a podcast. Use Podbean to distribute your podcast everywhere. Launch your podcast on Podbean today."
+
+2. LOCAL BUSINESS ADS (Service Companies)
+-----------------------------------------
+"Tony Spezza here with AAA Heating Cooling. In the last five years, most of our competitors have become total sellouts, man. Literally, private equity has swept through Portland, gobbling up most of the locally owned heating and cooling companies, leaving corporate wreckage in their wake. At AAA Heating and Cooling, we're still family-owned and not going anywhere. We have Portland roots, not corporate suits. What do you say? AAA! AAAAA Heating and Cooling. CCP number 222."
+
+"At Golden Valley Brewery, we know good times come from time spent with friends along with great food. And that great food starts with fresh picked produce from our gardens, locally raised burgers and steaks, and our own hand-crafted beers. Come see why we're different. Golden Valley Brewery, farmed above since 1993."
+
+"Whether your furry friend needs emergency care or specialized treatment, Pacific Northwest Pet ER and Specialty Center's team of expert veterinarians is ready to provide exceptional patient care. With 24/7 emergency services, you can count on them anytime, day or night. From cardiology to oncology, they offer advanced care across a variety of specialties to keep your pets healthy and happy. That's PacificNWVets.com."
+
+3. PRODUCT PLACEMENT ADS (Host-Read Ads)
+---------------------------------------
+"Yo, this is an advertisement. Douglas Rushkoff has entered the world of commerce. Both because someone has finally seen fit to sponsor a cantankerous anti-establishment neo-hippie Gen Xer, and because I finally found a company worthy of the Team Human Oompa. Everyone's Earth, maker of Kobe Dryer Sheets, is as obsessed with environmental sustainability as we are and using less unfriendly energy consumption in a week of operations than we are in recording a single vodcast in this air-conditioned studio. They've thought of everything in their supply chain from labor and energy to biodegradability and marketing. That's why they're promoting us. So go to kobedryersheets.com and get yourself some of these puppies with a 10% discount by typing in the code Rush10. That's Rush10. End of advertisement."
+
+"These are Kobe Dryer Sheets. I never used a dryer sheet before in my life, so I have no basis of comparison. I once opened a box of bounce and got so sickened by the chemical odor, triggered even, that I just left them in the laundromat. And that's before I knew how those things ended up contaminating our landfill, rivers, and placentas with microplastic fibers and other forever shit. Then I met this guy, Tom, who was shooting a video in the studio downstairs, and it was for these dryer sheets that are part of a new movement to make 100% biodegradable cotton products that are good for people. He was interested in sponsoring Team Human, so I tried these things and they're actually good. Not just the essential oils that sent these things, but the sheets themselves. They smell good, they feel good. You won't find their residue polluting the placentas of women around the world, just biodegrading and growing into new life. Use the discount code rush10 at kobe dryersheets.com and get a 10% discount. It's all in the show notes."
+
+ADVERTISEMENT PATTERN ANALYSIS
+============================
+
+Common Characteristics:
+- Repetitive brand names (Podbean x5)
+- Website mentions with .com endings
+- Promo codes and discounts
+- Explicit ad markers ("this is an advertisement", "End of advertisement")
+- Call-to-action language ("visit", "use", "go to")
+- Company contact information
+- Testimonials within ads
+- Service area mentions (Portland, Pacific Northwest)
+- Long descriptive product pitches
+- Company taglines and slogans
+
+Filtering Strategy:
+- Detect explicit ad markers
+- Identify repetitive brand mentions
+- Look for website/discount patterns
+- Use Claude AI for context-aware filtering
+- Filter testimonial-heavy sections with commercial language
