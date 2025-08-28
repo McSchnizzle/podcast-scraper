@@ -12,7 +12,7 @@ from datetime import datetime
 # Import all pipeline components
 from pipeline import PipelineOrchestrator
 from claude_headless_integration import ClaudeHeadlessIntegration
-from simple_tts_pipeline import SimpleTTSPipeline
+from claude_tts_generator import ClaudeTTSGenerator
 
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
@@ -24,7 +24,7 @@ class EnhancedPipelineOrchestrator:
         # Initialize all components
         self.base_pipeline = PipelineOrchestrator(db_path)
         self.claude_integration = ClaudeHeadlessIntegration(db_path)
-        self.tts_pipeline = SimpleTTSPipeline(db_path)
+        self.tts_generator = ClaudeTTSGenerator()
 
     def run_complete_pipeline(self, include_claude: bool = True, include_tts: bool = True) -> dict:
         """Run complete enhanced pipeline with all phases"""
@@ -78,7 +78,7 @@ class EnhancedPipelineOrchestrator:
         if include_tts:
             print("\n🎙️ Phase 3: TTS Audio Generation")
             try:
-                audio_path = self.tts_pipeline.generate_simple_daily_audio()
+                success, audio_path = self.tts_generator.run_topic_based_workflow()
                 if audio_path:
                     file_size = Path(audio_path).stat().st_size / 1024 / 1024
                     print(f"✅ TTS audio generated: {Path(audio_path).name} ({file_size:.1f}MB)")
