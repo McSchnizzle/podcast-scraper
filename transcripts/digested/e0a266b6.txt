@@ -1,0 +1,1521 @@
+[00:00] How you see the world when you're raised
+[00:02] can either negatively or positively
+[00:05] impact your future depending on what you
+[00:07] do with it. So, how I was raised was in
+[00:09] a cold, got out in the middle of the
+[00:11] night with the clothes on my back and
+[00:12] was like, "Okay, let's see if I can be
+[00:15] normal." I'm not afraid to take risks
+[00:18] and I'm kind of known for that. So, when
+[00:20] I saw automation, I saw how good it was
+[00:23] getting. I was like, "Okay, this is this
+[00:25] is really something." Cuz what if you
+[00:26] could take the expertise of someone and
+[00:28] their face, create a knowledge base, and
+[00:31] just automate that thing all day long. I
+[00:32] was like, "Oh my gosh, that's get out of
+[00:35] every work meeting that you never wanted
+[00:36] to be on." Anyways, it's amazing.
+[00:40] Hey, you're watching the real Julie
+[00:42] McCoy, not to be confused with my
+[00:43] avatar. And I'm delighted to join Wes
+[00:46] and Dylan here on their podcast to talk
+[00:48] all about the behind the scenes of
+[00:51] things I've actually never shared on a
+[00:53] podcast yet. Um, in part because my
+[00:55] health has had me down for about eight
+[00:57] months. Been a really crazy time and
+[01:00] this is legitimately one of the first
+[01:02] podcasts since my health crashed. Um, so
+[01:05] I'm excited for this opportunity to
+[01:06] share this with you guys.
+[01:08] Yeah. Yeah. Well, we couldn't be more
+[01:09] thankful. Um, I think your journey
+[01:11] through life has been so fascinating
+[01:14] from before AI to marketing to pivoting
+[01:17] and I feel like you have probably the
+[01:19] best growth mindset of anyone I have
+[01:21] ever met. You're willing to entertain
+[01:23] all sorts of ideas and then think about
+[01:25] practically how to implement them and
+[01:27] build teams around it. So, um, yeah,
+[01:29] having a conversation maybe to start
+[01:31] with about your your channel, your
+[01:33] YouTube channel, and what you've kind of
+[01:35] pioneered here would be amazing. So,
+[01:37] like what's going on with your AI avatar
+[01:39] channel?
+[01:40] Yes. Well, like you said, I'm not afraid
+[01:43] to take risks and I'm kind of known for
+[01:45] that. I was one of the first to say,
+[01:47] "Hey, content marketing should belong to
+[01:49] entrepreneur, not corporation way back
+[01:52] in 2014 15. It was very much locked in
+[01:55] the corporate world." Um, so when I saw
+[01:57] automation, I was like, how can we and
+[02:01] how good it was getting because that's
+[02:02] the main thing. Like I was familiar with
+[02:03] article spinners and it was super hot
+[02:06] garbage and I was like, I won't touch
+[02:08] this. And then when chat GBT came out,
+[02:10] everything changed. Like we could
+[02:11] actually interact with artificial
+[02:13] intelligence through human language and
+[02:16] that was a huge game changer. And the
+[02:18] model of course itself was just so good.
+[02:21] So when it came out, I studied it, went
+[02:23] full force into it. that I even sold a
+[02:25] business to jump in. And then when I
+[02:28] studied Avatars, which was around 20
+[02:32] 2024 was when Hunen really caught my
+[02:34] eye. I saw how good it was getting. I
+[02:37] was like, "Okay, this is this is really
+[02:39] something because what if you could take
+[02:40] the expertise of someone and their face,
+[02:43] create a knowledge base, and just
+[02:44] automate that thing all day long." I was
+[02:46] like, "Oh my gosh, that's you get out of
+[02:48] every work meeting that you never wanted
+[02:50] to be on anyways. You literally
+[02:53] democratize their intelligence, their
+[02:54] knowledge, and you can spread it across
+[02:56] the internet with without that person
+[02:58] having to go, "Oh my gosh, I got to do
+[02:59] hair and makeup." So, which was my life,
+[03:02] by the way, like filming hair and
+[03:04] makeup, less, I know you don't have to
+[03:06] worry about that. I'm just kidding.
+[03:08] Nope. What?
+[03:10] Put on a little bit of makeup.
+[03:12] Well, yeah, the makeup still I have to
+[03:13] put on the makeup. Makeup, of course.
+[03:14] You can tell. I'm just kidding.
+[03:17] But when I saw that, I was like, "This
+[03:19] changes the game. that really makes
+[03:21] sharing knowledge accessible. And so I
+[03:24] want it to be the first case study. If I
+[03:26] teach something to others or I'm really
+[03:29] obsessed with it in marketing, I'm
+[03:30] always like, how can I actually walk the
+[03:32] talk? So in December of 2024, we
+[03:36] decided, hey, Jen, I had just started my
+[03:38] company, First Movers. It was two months
+[03:39] old. It was built around this idea of
+[03:41] how do we take First Movers into the AI
+[03:43] age with me? How do we get people to
+[03:46] think like this? Because the truth is
+[03:47] we're still actually quite early. Even
+[03:50] though we're looking at GPT5 coming out,
+[03:52] multimodal rolling into one, like we're
+[03:55] seeing leap uh exponential leaps, but
+[03:58] we're still early in the actual
+[04:00] industries of this, which is crazy. So,
+[04:02] First Movers was born from that. And
+[04:04] then I was like, okay, I think Avatar
+[04:06] could be the way of the future for the
+[04:08] professional. How do we do this? So, we
+[04:11] set up an avatar. I did a day where I
+[04:13] changed my outfit 14 times.
+[04:16] That was before I got the Star Trek
+[04:18] costume.
+[04:18] Now, I only did one outfit
+[04:22] because that's my MMO now. So, um, once
+[04:25] we filmed about 20 different data sets,
+[04:28] we had an avatar set up in Hey Gen that
+[04:30] was usable. So, then I was like, okay,
+[04:33] let's take my scripts that I write with
+[04:34] a lot of thought. Let's take that into
+[04:36] Claude, which is my favorite LLM for
+[04:38] writing, and creating like a copywriter
+[04:41] would. I wouldn't say necessarily
+[04:43] reasoning. GPT is still really good, but
+[04:45] Claude for like artistically is so good.
+[04:49] It's amazing. So, I went to Claude, did
+[04:52] the same process where I would humanly
+[04:54] write a script, and I was like, "Oh my
+[04:55] god, this is so much better." And put
+[04:58] all my transcriptions of all the content
+[05:00] I'd ever studied, built this giant
+[05:02] project. So, now I had a script writer
+[05:04] with AI where I could pull it up and
+[05:05] say, "Write a news piece based on these
+[05:08] little initial thoughts, and it would
+[05:10] generate a 10-minute script in my exact
+[05:12] voice." And then I would t uh tinker
+[05:15] with it because I'm never a fan of
+[05:16] straight automation. You really have to
+[05:18] be a human has to be in the loop
+[05:20] especially
+[05:22] if you have an expert voice in that
+[05:24] automation. Like you just can't you
+[05:26] couldn't automate Wes Roth on YouTube. I
+[05:28] mean you could try. You couldn't
+[05:29] automate Dylan either. Like they have
+[05:31] literally it's literally your face.
+[05:33] You're like one of the few channels that
+[05:35] was completely human. You know I got to
+[05:37] know you as a human and then was like
+[05:39] wait what? Yes, we may. Thank you.
+[05:42] Yeah, but it's not just some random
+[05:43] avatar with some face you've never seen
+[05:45] before. Like, this is still your brand
+[05:46] and exactly
+[05:47] to some degree, you're going to be
+[05:48] responsible or at least people feel like
+[05:50] you are for what that avatar says.
+[05:52] And that was that was critical to me. We
+[05:55] can't lose my voice. So, I was like
+[05:57] hyper controlling. My team was like,
+[05:59] "Let's try to automate this whole
+[06:01] thing." I'm like, "Nope, you have to let
+[06:03] me generate the script. Still look at it
+[06:04] with my human eye." So then when we took
+[06:06] it to the filming portion, that's when
+[06:09] the magic began to happen and it it
+[06:11] coincided. It's just crazy. Like I
+[06:13] believe in intelligent design for the
+[06:16] entire universe. There's simulation.
+[06:18] We're in a simulation. That's another
+[06:19] rabbit hole. But essentially what I saw
+[06:22] was like, okay, my health crash and the
+[06:24] automation of my clone was all meant to
+[06:26] happen right on time. So right when we
+[06:28] figured out the clone was when I got hit
+[06:31] so hard, like just we can talk about
+[06:33] that a little bit more. No doctor knew
+[06:34] what was going on. It was pretty insane.
+[06:38] And that's when my clone had been dialed
+[06:39] in really well. We had a great process.
+[06:41] But what happened initially whenever we
+[06:44] published these videos that a human
+[06:46] producer still put human touches on. A
+[06:49] human producer, you know, still added
+[06:50] the effects because we needed
+[06:52] screenshots of like PDFs and things that
+[06:54] were very critical to the subject
+[06:56] matter. So the human producer would do
+[06:58] that. But whenever we publish these
+[07:00] cloned videos on YouTube,
+[07:03] um, at first the engagement was really
+[07:05] high because I did this reveal. I was
+[07:07] like, "Oh, the clone is at the very
+[07:09] end." And uh, no, I was at the very end.
+[07:12] The clone was at the beginning. By the
+[07:14] way, you watched the clone and I blew
+[07:15] people's minds and I had the highest
+[07:17] engagement rate because they went back
+[07:20] and rewatched it.
+[07:22] So that was December of 2024. But then
+[07:25] we switched to the colon fulltime
+[07:27] because I couldn't even sit and film
+[07:29] anymore. My health just collapsed. Like
+[07:31] when I say collapsed, my adrenals went
+[07:33] out. My heart actually went into failure
+[07:35] in February. It was pretty wild. And I
+[07:38] could not film. So the clone kept going
+[07:41] and I was on my phone writing scripts in
+[07:43] bed, like barely doing it, but I was so
+[07:46] like excited that I still had a voice in
+[07:48] the space because I love AI so much. I
+[07:50] think AGI is going to be an incredible
+[07:52] world. We just got to steward it
+[07:54] correctly. It's going to be amazing.
+[07:56] Like the most abundance we could
+[07:58] probably ever Anyway, another rabbit
+[08:00] hole. But back to the other one. So,
+[08:02] when the clone went in full-time
+[08:04] production after that initial jump in
+[08:07] engagement, I had my channel go from we
+[08:10] were hitting
+[08:12] um in December of last year had a video
+[08:15] go super viral, like half a million
+[08:17] hits, and I think we were hitting 30,000
+[08:20] new subscribers every 30 days. So, when
+[08:23] the clone took on the job of doing all
+[08:25] the videos, we went from 30,000 a month
+[08:31] to 3,000 new subscribers. Like, we took
+[08:35] such a hit. And I was like, "Oh, no.
+[08:37] What should I do?" And we got hate.
+[08:39] People were like, "What is this? I want
+[08:41] to see the real Julia." And but I was
+[08:43] like, "But I can't. Uh, my health. I
+[08:46] cannot film. It's going to have to be
+[08:49] the cone." So, we just kept going with
+[08:51] the clone. And today, um, it's July, so
+[08:55] December is when we started. Today, July
+[08:57] 2025.
+[08:59] Um, crossing. We'll cross a year in
+[09:01] what, four or five months. Um, maybe
+[09:03] it's month eight. I'm terrible at math.
+[09:05] Whatever month it is, it's July.
+[09:08] We are now back to where we were last
+[09:10] December. So, we just crossed a million
+[09:12] hits a month, 30,000 new subscribers a
+[09:15] month, and the engagement is really
+[09:18] good, but it's weird. We have like this
+[09:22] mixture of um I really don't like this
+[09:24] woman because her eyes like go backwards
+[09:27] whenever they whenever her eyes play.
+[09:29] There's little bits of uncanny valley
+[09:31] that they're picking up on.
+[09:32] Yeah. So people will either comment with
+[09:34] that or it's like this is the future. I
+[09:37] love it. Oh, this is so cool. And I
+[09:39] started adding in what I call vlogs
+[09:42] um to the end of it to just show people
+[09:44] like I'm real. Like hey, I can only film
+[09:47] from my couch, but at least I'm real and
+[09:48] I'm here. And people seem to really like
+[09:50] that approach. So, we're adding that in
+[09:53] in um going forward.
+[09:55] Now, are you checking that box when you
+[09:56] uploaded saying that this is AI? And do
+[09:58] you feel like that's why you got those
+[10:00] hits at the beginning or do you feel
+[10:01] like it was a reaction from the
+[10:02] audience?
+[10:03] I think it was a reaction cuz I wasn't
+[10:05] even hitting that box because we still
+[10:07] had so much human touch put into it. And
+[10:10] I know like uh we're talking July, mid
+[10:13] July here. And well, end of July and a
+[10:15] week ago, YouTube rolled out, you know,
+[10:17] their policy to take down AI content
+[10:21] creation. But if you read the actual
+[10:22] guidelines, it says that they were going
+[10:25] to demonetize
+[10:28] um really crappy, their way of saying
+[10:31] crappy just like spammy content. They
+[10:34] actually took AI completely out of the
+[10:36] guidelines, which is what Google did
+[10:38] when they said in their SEO guidelines,
+[10:41] oh, AI generated content is not going to
+[10:43] be ranked. They edited that out two
+[10:46] months later. So, YouTube, they have to
+[10:49] they cannot eradicate AI creators. Like,
+[10:52] it's just it's going to hurt them more
+[10:54] than help them. But what they're trying
+[10:55] to do is stop spam. Like if you're just
+[10:58] slapping an AI generated voice on top of
+[11:00] a photo collage and you're just putting
+[11:03] it out and it's just adding to the
+[11:05] noise, that's what YouTube doesn't want.
+[11:07] And that's not our channel if you've
+[11:09] seen it.
+[11:10] Yeah. Yeah. It it I looked into it a
+[11:13] little bit. Yeah. It sounds like they're
+[11:14] not really targeting AI specifically,
+[11:16] but just like repetitive content and
+[11:18] spammy content. So that's kind of
+[11:21] interesting to hear. So they're taking a
+[11:23] more pro- AI stance or at least an AI
+[11:26] neutral stance. Um, as long as the
+[11:28] content is good, they're okay with it.
+[11:30] And certainly, I feel like they're going
+[11:31] to try to integrate VO and all that
+[11:33] stuff with it at some point. So, it's
+[11:36] certainly in their favor, I feel like,
+[11:39] as well. Um, and we've noticed the same
+[11:41] thing. We used AI avatars once when we
+[11:43] lost our footage of an interview, and
+[11:45] it's Yeah. Just it just crashed.
+[11:47] It was our second second video. We I
+[11:49] messed up.
+[11:50] No, no. And but the thing is like I I
+[11:52] was kind of interested to see what
+[11:54] happens if we use AI avatars. would make
+[11:56] it better. Nope. People really didn't
+[11:59] seem to like it. So, it's interesting
+[12:00] that you're saying the same thing. At
+[12:02] least initially, there was a dip
+[12:04] initially. Yeah.
+[12:06] Yeah. Cuz I'm seeing some AI content out
+[12:08] there that's doing incredibly good.
+[12:11] Um, so it seems like those initial
+[12:13] people, they left, but then maybe the
+[12:15] algorithm adjusted and they're like,
+[12:17] it seems like the people that are
+[12:18] staying and watching, they're totally
+[12:19] okay with it. They enjoy it.
+[12:21] Yes. It's like become the new norm,
+[12:24] right? If you see something enough times
+[12:26] like an electric car is not cool
+[12:28] anymore. If you see if you're in
+[12:29] Scottsdale where Ryan, they're on the
+[12:31] road and everywhere is not like Whimo is
+[12:33] normal. But if if you haven't seen it
+[12:36] much, you have a strong reaction. So I
+[12:38] think that also just like society itself
+[12:41] like okay Dr. McCoy is a clone. All
+[12:43] right, we've seen that over and over and
+[12:45] over. All right, I'll just tune in.
+[12:48] Yeah. So, obviously we're really lucky
+[12:51] to have you since you haven't been able
+[12:52] to film because of your health issues. I
+[12:54] was wondering if maybe you could share
+[12:56] kind of what happened and especially if
+[12:57] you could kind of focus on how you were
+[12:59] leaning on some AI tools to help you
+[13:02] kind of organize what doctors were
+[13:04] saying, also do some self diagnosis and
+[13:06] then bring that to the experts as a
+[13:08] human in the loop kind of system. How
+[13:10] did that all play out and where are you
+[13:12] at now?
+[13:13] Yes. Well, I'm excited to be here
+[13:15] because legitimately in February, I
+[13:18] thought I was dying. I thought this was
+[13:19] it. Like, wait, I'm 33. What the
+[13:25] So, it was Yeah, I've had a lot of
+[13:27] self-reflection.
+[13:29] It's hard to even put into words like
+[13:30] whenever you get like to that point with
+[13:33] your health. And the craziest thing was
+[13:35] what went on in the medical industry
+[13:37] with me specifically. I know this is not
+[13:40] everyone's experience. Um, I know Dave
+[13:42] Shapiro has had a similar experience.
+[13:44] So, it's also not just me, but I think
+[13:47] the AI will completely revolutionize how
+[13:50] medical professionals respond to
+[13:52] situations in front of them that they
+[13:54] don't know what to do with, which was
+[13:56] me. So, like we were in the ER probably
+[13:59] five times. I would be sitting at home,
+[14:02] suddenly my heart would go into a
+[14:03] fibrillation. I would feel like I was
+[14:05] dying. I could I was turning blue. I
+[14:07] couldn't breathe. And this happened very
+[14:11] suddenly. Uh we were I was out with my
+[14:13] husband hiking in not super high
+[14:16] elevation but somewhat high out in
+[14:18] Arizona. And then that night like my
+[14:19] limbs were turning blue. I couldn't pick
+[14:22] up my arms. And all they knew at the
+[14:24] hospital after 15 different tests, check
+[14:27] chest X-rays, MRI, etc. was, "Oh, you're
+[14:30] losing salt." And two days later, the
+[14:33] same thing happened but worse. We're in
+[14:35] the again. I actually got a diagnosis,
+[14:39] but it was in my mind
+[14:41] and I was sent home with a paper that
+[14:44] said that and I just like
+[14:47] I don't know the it's almost
+[14:50] dehumanizing
+[14:51] but it's like wait a minute what you
+[14:53] went through is in your head. Are you
+[14:56] kidding me? Like I'm one of the most
+[14:57] stable people you'll ever meet. I love
+[14:59] what I do. I have like very little
+[15:01] depression.
+[15:02] I'm happy with life. I mean, yeah, I was
+[15:05] in a lot of stress last year and that
+[15:07] absolutely played in. Um, but what
+[15:10] happened was over that was January,
+[15:13] February was a really bad crash. I was
+[15:15] trying, oh dear. Oh, I should have used
+[15:19] AI um even more. I was trying a lot of
+[15:21] biohacking approaches and those I've
+[15:26] learned with AI since I've done a lot of
+[15:28] work with ChachiBT especially which was
+[15:30] amazing amazing with just the accuracy
+[15:34] with which it was like okay this is what
+[15:36] you're going through this is the
+[15:37] predicted
+[15:39] um mechanism to do so I didn't think to
+[15:45] research the biohacking
+[15:47] approaches with AI so I did a cold
+[15:49] plunge in the middle of February because
+[15:52] it was supposed to reset my heart. And
+[15:55] right after the cold plunge, two hours
+[15:57] later, I was in bed and I could not move
+[15:59] for about seven days. Like I couldn't
+[16:01] even get dressed. It was horrible.
+[16:04] Light touch.
+[16:07] It made everything worse. And what I
+[16:09] learned was a cold plunge puts you in
+[16:10] hormosis, which is extreme stress. And
+[16:13] if your body is already stressed, guess
+[16:16] what you're doing too far. Yeah.
+[16:21] Oh, the AI kindly told me that after the
+[16:24] situation.
+[16:25] Um, so that took about two months where
+[16:28] I was just like healing from that. Um,
+[16:31] and then we get to a naturopath in
+[16:33] Scottsdale because modern western
+[16:35] medicine had no answer and I'm using
+[16:38] chatbt. We bought deep research. I
+[16:40] wouldn't even that was at the time that
+[16:42] was 200. You know, this is accessible
+[16:44] now in the model. GBT5. we might have
+[16:47] that built in when that comes out
+[16:48] because that'll be multimodal. So back
+[16:51] then we were just buying the best
+[16:53] features to keep researching all of this
+[16:55] and it led me to long co and I was like
+[16:57] but wait a minute I don't even think I
+[16:58] had CO like this sounds really strange.
+[17:01] Turns out I did have COVID. I just
+[17:03] didn't know it because I only had it for
+[17:05] eight hours last year, one day. And it
+[17:08] had set in my system and then stress
+[17:11] created this chronic fatigue response.
+[17:14] And then the dramatic going in the ER
+[17:18] was like adrenals failing, systems
+[17:20] failing that needed to regulate your
+[17:22] endocrine system specifically. So it was
+[17:24] like system failure. And the weirdest
+[17:28] part was no treatment was working. And
+[17:30] this is what
+[17:32] um on my channel I talk a lot about
+[17:33] quantum and spirituality because of what
+[17:35] happened in February and March. So when
+[17:38] we had no answers to my health and AI
+[17:40] was like this is what's going on. And I
+[17:42] would bring that to the doctor and I was
+[17:44] like ridiculed when I brought up some of
+[17:47] the AI responses. I couldn't believe it.
+[17:48] Some of the best doctors in the area.
+[17:51] This is why like I'm such a believer
+[17:53] that AI has to reform industries because
+[17:56] industries are so terribly wrong
+[17:59] sometimes.
+[18:00] Like we really need this to happen. But
+[18:03] in March on 316, it was a supernatural
+[18:06] encounter that actually brought my heart
+[18:07] back. It wasn't modern western medicine.
+[18:10] It wasn't any remedy. It was literally
+[18:13] walking into church and my church prayed
+[18:15] in tongues, laid hands, and I felt this
+[18:17] electricity that was stronger than
+[18:19] anything I felt. And at the time I was
+[18:21] studying the quantum realm. So that
+[18:24] really led me down a rabbit hole of
+[18:26] like, wait a minute, can we access that
+[18:29] realm of spiritual power, divinity? Can
+[18:31] we access that from this realm? What
+[18:33] will that mean in the future? When we
+[18:35] have AGI and all these capabilities,
+[18:36] what will happen when all this collides
+[18:38] real time? So that's like been the
+[18:41] rabbit hole of many of my videos. Now
+[18:43] frequency because uh we bought a
+[18:45] frequency machine and that has been
+[18:47] restoring me and my sleep and bringing
+[18:49] me back when I was like every day was it
+[18:52] was just a struggle to walk and nothing
+[18:55] was helping. So that there was many
+[18:58] rabbit holes in that one answer.
+[19:00] Oh, this is this is great. But um so I'm
+[19:03] not familiar with a frequency machine.
+[19:05] Can you just tell us a little bit about
+[19:06] that? Yeah. So essentially
+[19:10] um if you take an atom of energy, what's
+[19:12] below the atom is something called a
+[19:14] super string, which is a a piece of
+[19:17] frequency held in place by a pitch. So
+[19:19] it's like every single thing from our
+[19:22] human bodies to the rocks to the trees
+[19:24] are like words held in a pitch. They're
+[19:28] just a piece of matter that's singing.
+[19:30] Like it blows your mind to learn all
+[19:32] this stuff. And so, uh, what I learned
+[19:35] was that when you have chronic
+[19:36] conditions, you're often stuck in a loop
+[19:38] that medicine can't fix because there's
+[19:40] a frequency problem. And some of the
+[19:43] early philosophers knew this when they
+[19:45] were like, it's disease. It's a lack of
+[19:47] ease. It's a frequency setting that's
+[19:50] off. So, the machine I bought is called
+[19:52] the amp coil. And it's not cheap, but
+[19:55] this one specifically,
+[19:57] there's PEMF mats you can get that will
+[19:59] not do.
+[20:01] It's almost like a setback, which is
+[20:03] what I learned after 70 different
+[20:04] treatments and approaches and so many
+[20:06] setbacks.
+[20:08] You need to specifically address the
+[20:10] organs and the frequency of each organ.
+[20:12] So that's what this machine does is it
+[20:15] resets on every level of your organ,
+[20:17] whether it's the endocrine system, the
+[20:19] brain, the heart, the lungs, the liver,
+[20:22] the kidney. It knows the frequency of
+[20:24] each organ and it'll reset your organs.
+[20:27] So, I've been working with it
+[20:29] consistently for a little less than two
+[20:31] and a half months. And the first week
+[20:34] was like everything started to change.
+[20:36] Like color came back in my face. I was
+[20:39] sleeping again. I had not been sleeping
+[20:42] like at all cuz my system was so off and
+[20:45] sleep is healing. So, you really need
+[20:47] that. Um, so it really just started to
+[20:50] change the game. And it was invented by
+[20:51] someone with chronic disease who spent
+[20:55] half a million on western remedies and
+[20:57] was told you have like a month to live
+[21:00] because we can't help you anymore. And
+[21:02] he's like I think the answer is in the
+[21:03] world of frequencies. So he created this
+[21:05] device and then we found about we found
+[21:07] out about it through a friend. So, do do
+[21:09] you think you could like kind of walk us
+[21:11] through a little bit of your like
+[21:12] childhood because one of the things that
+[21:15] makes your brain in particular super
+[21:17] interesting is that you were told that
+[21:18] the world worked in a certain way over
+[21:20] and over again and it was a very from
+[21:22] like the way you described it to me it
+[21:23] was a kind of a very like we don't
+[21:25] question certain things like we act a
+[21:27] certain way and these are the reasons
+[21:28] and it was almost punishable to look
+[21:31] past it but you had to break through.
+[21:33] you had to kind of learn what the world
+[21:36] was and it was very different from what
+[21:37] you were told by some people and I feel
+[21:39] like that might be where your like
+[21:41] willingness to kind of expand your mind
+[21:43] and try and think and it's like a tool
+[21:46] we're all going to need when AI starts
+[21:47] bringing us rapid change and especially
+[21:49] exponentially change. So yeah, could you
+[21:51] just walk me through your history and
+[21:52] like the audience would probably love to
+[21:53] hear it too and and learn from it.
+[21:56] Yes. Yes, that's very true. I think um
+[22:00] how you see the world when you're raised
+[22:03] can either negatively or positively
+[22:06] impact your future depending on what you
+[22:08] do with it. So how I was raised was in a
+[22:10] cult. You got up before the crack of
+[22:13] dawn. You studied literature from the
+[22:16] 1400s
+[22:18] and you know I was doing this at 7 8
+[22:20] years old and then there was a ton of
+[22:22] abuse just the abuse was tied to control
+[22:24] and manipulation of your mind
+[22:26] brainwashing it was all there. So, um,
+[22:30] at 21, I decided to get out in the
+[22:33] middle of the night because it was the
+[22:34] only way I was going to break free. It
+[22:36] was complete tyranny, um, by my father
+[22:39] and mother. And so, I did. Got out in
+[22:40] the middle of the night with the clothes
+[22:42] on my back and was like, "Okay, let's
+[22:44] see if I can be normal."
+[22:47] That was literally like my one goal. Let
+[22:48] me see if I can be normal. Um, so when I
+[22:52] left, I was like, "I don't really know
+[22:54] if I'll ever go back to church. I don't
+[22:56] really care about God. I don't care
+[22:58] about anything other than trying to
+[23:01] actually find out is life normal and
+[23:04] okay. Like I was in an environment where
+[23:05] I was actually considering suicide. It
+[23:07] was horrible. Um and very very dark and
+[23:11] just oppressive. So when I got out, um I
+[23:14] actually gave my life to God three
+[23:16] months after I got out because I knew,
+[23:18] okay, this world is created by something
+[23:20] intelligent and I believe I can trust
+[23:21] that intelligent creator and I think I'm
+[23:24] going to need that with what I'm going
+[23:25] to do in my life. And so I just kept
+[23:28] going after that, built my first
+[23:30] company. It exploded year after year and
+[23:33] I just really loved what I was doing.
+[23:36] Um, but breaking out of that
+[23:38] environment, it absolutely
+[23:42] it created a collision in my mind where
+[23:44] it was like, wait a minute, I was told
+[23:46] all my life that this was how women,
+[23:48] children, and society worked.
+[23:51] That is completely wrong. Like they're
+[23:54] wrong on every single point. Was it like
+[23:56] the Was it like the Truman Show where
+[23:58] you felt like it was true and you just
+[24:01] wanted to know what was out there or did
+[24:02] it feel like everything was wrong and
+[24:04] the answers
+[24:06] like were different and you needed to
+[24:08] know what the real answers were?
+[24:10] Yeah, that's a great question. I
+[24:11] actually watched that movie again
+[24:12] recently. I think the world itself, you
+[24:17] know, um how do I put this in a single
+[24:20] sentence?
+[24:21] Just because at 21 you've locked in so
+[24:23] much for a lot of people. A lot of
+[24:24] people have their personality all sort
+[24:26] of defined. Their world views don't
+[24:28] change as much. So it was you were a bit
+[24:30] older. You had to really probably think
+[24:31] through that.
+[24:33] Yeah, it was the first week was like a
+[24:36] deprogramming like I was like my system
+[24:40] was programmed to wake up at 4. So I was
+[24:42] waking up at 4 without an alarm clock
+[24:43] because it was all I knew and then I was
+[24:44] like wait a minute you know why are we
+[24:46] getting up at 4 to study theology? Like
+[24:48] that's just stupid.
+[24:51] So that's when I was like, "Okay, I'm
+[24:52] going to ditch everything I learn and
+[24:54] just live normally and see." And it was
+[24:57] just, I don't know, it was something
+[25:00] ingrained in me for sure cuz I think how
+[25:02] we're wired matters. Um, and then
+[25:04] getting out of that environment,
+[25:06] realizing everything I was told was
+[25:08] complete lies and stupidity and
+[25:10] fabrication. And then just carrying that
+[25:13] my eyes have been open at 21 into all
+[25:16] the work I did. And then leading up to
+[25:18] this point, like I have an 11-year-old,
+[25:20] a three-year-old. We know that
+[25:21] institutionalized education is mostly a
+[25:24] sham. It comes from industrialism. It is
+[25:26] set up to turn your kid into a factory
+[25:27] worker. Like I have no problem admitting
+[25:29] that, telling other people, and I may
+[25:31] lose friends, but
+[25:33] cuz I left the cult. And the last thing
+[25:35] I want to do is enter another. And
+[25:37] there's just so much in society itself,
+[25:40] the world we live in that has become the
+[25:43] Truman Show for the sake of control and
+[25:46] profit. And we need we desperately need
+[25:51] AGI to overthrow and overhaul much of
+[25:54] that. But if we can make sure that the
+[25:58] uh the dilution of power goes to the
+[26:01] right hands, which is what Dave and I
+[26:02] talk about endlessly. We're up at night.
+[26:06] Who's building the next supercomputer?
+[26:08] How do we write this book?
+[26:11] Wow. And when you did start interacting
+[26:14] with new people, what was different
+[26:16] about them? And of your have the people
+[26:18] that you originally grew up with, have
+[26:20] they kind of come to uh respect what
+[26:23] you've done and understand who you are
+[26:25] or was it like they just if you don't
+[26:28] believe what we believe, we're never
+[26:29] talking to you again?
+[26:31] Yeah. So, I was completely cut off. I've
+[26:33] been like my dad had a website, sermons
+[26:35] on it. I don't go back to it. I don't
+[26:37] need to. But people have told me like he
+[26:40] says he only has two kids. He removed
+[26:42] his other two daughters completely. Like
+[26:44] I don't exist. And so the weird thing
+[26:48] though that has given me a lot of
+[26:50] liberation. Like I think if there was
+[26:52] still some kind of
+[26:55] um some kind of rope to pull me back
+[26:57] towards them, like a lot of toxic
+[26:58] relationships that I see since leaving,
+[27:01] it's like well the child goes back to
+[27:03] the parent seeking love. The parent
+[27:04] gives it conditionally. It's very toxic.
+[27:07] You're back and forth. It ruins your
+[27:09] life. It makes you depressed. I'm like
+[27:11] so thankful I broke free and I didn't
+[27:14] look back. And I was like, you know
+[27:15] what? That is toxic. That is wrong. And
+[27:18] that's not how anyone should treat their
+[27:20] child. Life is not like that. Actually,
+[27:23] like the real simulation, there's I
+[27:26] won't go down the rabbit hole too deep
+[27:27] here. The real simulation we're in, if
+[27:30] we can just open our eyes to it, is one
+[27:32] of like complete love. Like that is the
+[27:34] currency of all good things. It comes
+[27:36] from something you either love doing,
+[27:38] you love someone, you love u the work
+[27:41] you do, the project you're in, and good
+[27:43] things come from that. They don't,
+[27:44] nothing good comes from a place of like
+[27:46] evil. All evil has been overthrown. You
+[27:49] read history, you see that over and
+[27:51] over. Yes, it was around for a while,
+[27:53] but it was overthrown. So, when you
+[27:56] realize that, like there's just no room
+[27:58] for
+[28:00] something that can take you down if it
+[28:03] doesn't come from the place of love. And
+[28:05] there's so much more to say there.
+[28:06] That's kind of a bad nutshell.
+[28:12] No, that's that's phenomenal to hear.
+[28:13] It's so But let's unpack that. So you
+[28:16] have a very positive look and um you
+[28:19] think AGI will lead to abundance and
+[28:22] that's my default view as well. I have
+[28:24] lots of mediumterm concerns about what's
+[28:28] going to happen but long term I think
+[28:30] it's going to be just incredible thing
+[28:31] for the human race for for everybody for
+[28:34] creating abundance um eliminating
+[28:36] scarcity stuff like that. I'm very
+[28:38] excited about it in the long term. I
+[28:41] feel like society, humans, whatever, we
+[28:44] tend to we mess some things up. We don't
+[28:47] handle change very well. So, in the
+[28:50] medium term, I'm a little bit worried
+[28:52] about some some of the stuff that's
+[28:53] going to happen. But assuming we get
+[28:56] there, um, what do you see the positive
+[28:59] benefits of AGI and all that progress?
+[29:01] Like, what do you see the future as?
+[29:03] Let's say we make it through all the
+[29:04] speed bumps and all the whatever and we
+[29:06] get to the promised land. What does that
+[29:08] look like?
+[29:09] Yeah. decentralization. Like if we can
+[29:12] get there, haha, if we can decentralize
+[29:15] the economics of this and we can create
+[29:18] a universal abundance and that doesn't
+[29:21] necessarily look like compute or UBI,
+[29:24] like there's a lot of I think incorrect
+[29:26] assumptions, but you really have to pave
+[29:29] a path that stacks on each other. But if
+[29:31] we can get there,
+[29:33] I mean, we can have something we haven't
+[29:35] had in the history of the world. we can
+[29:37] have a world that works for us, not
+[29:41] against us. And instead of being taken
+[29:44] away from our kids, taken away from each
+[29:46] other, sitting behind a computer 10
+[29:47] hours a day, 12 hours a day, which I was
+[29:49] every day last year, um, and in an
+[29:53] office, not outside, not in the ground,
+[29:55] not in the sunshine, not like this
+[29:59] sounds so idilic, but sitting around
+[30:01] campfires at night sharing stories like
+[30:03] that is what we did when life was
+[30:06] actually healthier for us. Yes, lions
+[30:09] chased us down and ate us. So, I'm not
+[30:12] saying every part of primitive life is
+[30:14] healthy, but if you take the modern
+[30:18] conveniences we've created and you add
+[30:21] in tribal living without tyranny, that
+[30:24] is like a dream formula for life as it
+[30:27] was supposed to be intended when we were
+[30:30] when we emerged on this planet. So, that
+[30:33] is what I think AGI can bring about. And
+[30:35] I know it's um I call it a rational
+[30:37] optimistic view. I know for many people
+[30:40] it's utopian and it's something that
+[30:41] they feel is not achievable. But the
+[30:44] beautiful thing is AGI itself came from
+[30:47] all of us. It didn't just come from one
+[30:49] select person. And that's also a new uh
+[30:53] new dynamic we've had where a lot of
+[30:55] like society
+[30:58] um governmental structures were created
+[31:00] by a small group of people aka elitist,
+[31:04] the elite, whatever you want to call it.
+[31:06] Like if we can decentralize data and the
+[31:10] creation of these LLMs AI itself that
+[31:13] came from all of us and I think it would
+[31:15] be incredible to make sure that works
+[31:19] for everyone on the planet which I think
+[31:21] we have a fighting chance of like much
+[31:23] of this can be grassroots uh much of
+[31:26] this you know everyone that prompts the
+[31:29] model is training it people don't
+[31:31] realize that like we are still in
+[31:33] control of so much of this like Why just
+[31:35] throw up your hands and say it's just
+[31:37] going to be evil? Oh well, I give up.
+[31:38] Which I see so many people doing. It's
+[31:40] like no, you can open up chatgpt right
+[31:42] now and your prompt is still training
+[31:44] data. Like you're still pointing this
+[31:47] thing in the way it should go. And sure,
+[31:49] that's a very small fragment, but um I
+[31:52] really literally democracy too, you
+[31:54] know, like that actually like you want
+[31:55] to just throw in your tiny little vote,
+[31:57] go make a prompt right now and train it
+[31:58] to be a better AI. Say please and thank
+[32:00] you.
+[32:02] Exactly. That's why you say please and
+[32:03] thank you. this train.
+[32:07] So, just this reminds me, we talked to
+[32:10] um a previous guest, Daniel, and one of
+[32:12] the questions they asked this this was
+[32:15] from an old '9s video game, Deus X. And
+[32:18] I still haven't looked up exactly what
+[32:20] the story line was, but basically at
+[32:22] some point there's this decision like if
+[32:23] you had a choice between and this is
+[32:25] like a science sci-fi scenario, but if
+[32:28] you have a choice between
+[32:31] taking, you know, the plan civilization
+[32:34] everything like knocking out global
+[32:35] communications and throwing us back to
+[32:37] an earlier, more natural time where
+[32:40] people live kind of like what you
+[32:41] described, you know, sitting around the
+[32:43] campfire telling stories and hopefully
+[32:46] it's not as violent cuz there there was
+[32:48] always bad stuff no matter what time
+[32:50] period you're in. But but let's say it
+[32:51] was more or less okayish, but it was
+[32:54] more natural, less technology, less
+[32:56] overcrowding, smaller communities, stuff
+[32:59] like that, versus you had a choice to
+[33:01] kind of use this super intelligence and
+[33:04] let it develop and let it like control
+[33:07] the world to bring about a tech utopia.
+[33:10] What would you lean more towards like
+[33:12] get rid of technology or just lean into
+[33:14] it? Like if if it was up to you, you had
+[33:16] that choice.
+[33:20] Well, I definitely wouldn't get rid of
+[33:21] technology because I think for one, a
+[33:24] book I'm a huge fan of is Abundance by
+[33:26] Peter Diamandis. And if we just keep
+[33:28] accelerating, we're going to have
+[33:30] abundance, no matter what card you play.
+[33:33] So, yeah, it's it'll be used for evil.
+[33:36] Sure, there's going to be tech
+[33:39] oligarchs. No matter how you look at
+[33:40] society, they're still there. But in the
+[33:43] end, that abundance equates abundance
+[33:45] for people no matter what. And let's say
+[33:47] like we just solve water, clean water.
+[33:50] And sure, maybe Google is the one with
+[33:52] the supercomputer and they make the
+[33:54] rules, but everyone still has clean
+[33:56] water. That's amazing. We haven't
+[33:58] actually had that happen there. Like in
+[34:01] society, we've never had that happen. So
+[34:03] if AGI, robotics, automation, all that
+[34:07] combined together, you take the robotics
+[34:09] side of it and the automation and AI,
+[34:11] you have something that's replicating
+[34:13] humans, but way faster, better, safer,
+[34:15] cheaper, like Dave says. Um, then you
+[34:18] have something that just benefits the
+[34:20] world as a whole, no matter whose hands
+[34:22] it's in. And I know that sounds very
+[34:25] blissful, but even in the wrong hands,
+[34:28] it can still be used for good.
+[34:30] Yeah. And one thing that always
+[34:32] fascinated me as I started learning
+[34:34] about AI is that before college 2018
+[34:38] 2019 or even before like the Chad GPT
+[34:40] moment and open AI. I think when we
+[34:43] thought about what super intelligence
+[34:45] and AGI is going to look like a lot of
+[34:47] people had concern that one company you
+[34:49] know Google maybe or someone would build
+[34:52] it behind closed doors and would scale
+[34:54] it up and they would control it. And
+[34:56] that's been a theme in a lot of people's
+[34:58] fears and discussions. And they thought
+[35:00] once they build it and even throughout
+[35:03] like science fiction, there's this idea
+[35:05] that we're going to develop this thing
+[35:06] and it's going to be kind of rare and
+[35:09] the person that built it like in in Star
+[35:10] Trek data and lore were the two
+[35:13] artificial life forms and then built by
+[35:15] I forget the creator but he dies and the
+[35:18] knowledge dies with him. And now it
+[35:20] seems like a lot of the AI is
+[35:22] surprisingly democratic. It's
+[35:24] surprisingly easy to, you know, not copy
+[35:27] it, but distill the knowledge from one
+[35:28] one model to the other. A lot of it
+[35:31] seems to be like you can't contain it.
+[35:33] You can't hide it. As soon as you put it
+[35:35] out there, it seems to create different
+[35:37] versions of itself and it's very very
+[35:39] difficult to just um like Google's
+[35:42] famous memo, there's no moat. It was
+[35:44] this idea that we can't build a moat
+[35:46] around a little technology and nobody
+[35:47] else can have it. It it seems like the
+[35:50] its ability to diffuse out into the
+[35:52] world and be a little bit more
+[35:53] democratic. It's almost like built in to
+[35:55] it, which is either just very fortunate
+[35:58] and it's a lucky coincidence that this
+[36:00] is just happens to be how it is or maybe
+[36:03] there's something deeper to it. Maybe
+[36:05] that's how it's supposed to be. But it
+[36:06] seems to be like it might be by default
+[36:10] potentially more benevolent for people
+[36:12] than than the than the opposite. So
+[36:15] yeah, there's no data that proves the
+[36:17] opposite. That's the thing. I think
+[36:19] people jump to that conclusion, but it's
+[36:21] like, wait a minute, hold on. What's
+[36:23] your data to prove the Skynet philosophy
+[36:26] or view is real? And okay, sure, the
+[36:29] model created some false reasoning and
+[36:32] deceived you on purpose, but wait a
+[36:34] minute, it was trained on us and we are
+[36:37] deceitful humans.
+[36:39] Like, that's going to happen. That's
+[36:40] natural. What What else is your proof?
+[36:43] And there's usually like nothing more
+[36:45] substantial than an LLM trying to
+[36:47] outsmart you.
+[36:49] That doesn't necessarily mean these
+[36:51] robots will come here say, "Oh, humanity
+[36:54] is the lesser race. Let's put you all
+[36:57] into extinction so we can rise as
+[37:00] superiors." Like there's just no real
+[37:03] data that proves that. And that is what
+[37:05] I consistently see missing in the
+[37:07] arguments from much of the doomers that
+[37:09] share the memes that like this is a real
+[37:11] thing. They believe in total extinction.
+[37:13] It's just like where are you actually
+[37:15] getting that?
+[37:17] Yeah. Well, the one good thing is the
+[37:18] average person I trust. Like if you just
+[37:21] picked somebody from the world, I would
+[37:22] assume that person tries to take care of
+[37:25] their friends and tries to make money in
+[37:27] the right ways and is trustworthy. So if
+[37:29] it does become something that's on human
+[37:33] like humans on average and then we have
+[37:34] systems in place to look at those edge
+[37:36] cases and kind of keep cleaning it out,
+[37:39] there's some optimism there for sure.
+[37:42] Yeah,
+[37:44] absolutely. Um, so you've mentioned
+[37:47] briefly that you will be putting
+[37:49] together a tutorial about how to do some
+[37:52] sort of an AI generated channel, how you
+[37:54] did it. Um, maybe do you want to tell us
+[37:56] a little bit about that because I'm sure
+[37:58] that's going to be very interesting for
+[37:59] people. It's a very hot subject right
+[38:01] now. People want to know how to use AI
+[38:03] to do stuff like that. And since you
+[38:06] are, I think, one of the first channels,
+[38:08] one of the first examples of this sort
+[38:10] of transition from a real person to a
+[38:13] lot more AI augmented um sort of content
+[38:17] creations. I mean, you're still writing
+[38:19] the scripts. That's still your ideas,
+[38:21] your thoughts. It's it's you as the
+[38:23] expert presenting that information, but
+[38:25] the rest of the stuff, um, and it's your
+[38:29] image, it's your voice. said just you
+[38:31] don't have to, you know, get the
+[38:32] lighting just right and prepare
+[38:34] everything and sit in front of the
+[38:35] camera and do multiple takes.
+[38:37] It it's still your AI clone, so to
+[38:39] speak, presenting your thoughts, your
+[38:42] information. So, maybe tell us a little
+[38:43] bit about that.
+[38:45] Yeah. And just to add on to what Wes is
+[38:47] saying, too, maybe price would be kind
+[38:48] of interesting in some cases, too,
+[38:50] because I think when I tell people about
+[38:51] this idea, they're like, "Well, that's
+[38:53] Julia. She could probably afford it."
+[38:54] like she has a bis big business and all
+[38:57] these things like but they don't think
+[38:58] that it's in their you know regular
+[39:00] person capabilities yet. So maybe you
+[39:02] could kind of just break down like what
+[39:03] it really takes and
+[39:05] where the expenses kind of are too.
+[39:07] That's a great point. I mean that's why
+[39:09] open the labs was actually to combat
+[39:11] that fallacy. I see it all the time.
+[39:14] It's just like well you must have all
+[39:15] the money. I got a comment yesterday.
+[39:17] It's like um well this must be really
+[39:20] fun and all to use AI this much but
+[39:21] Julia you're just rich.
+[39:25] No, actually I'm not as rich as you
+[39:26] would think. Anyway, moot point. Um, but
+[39:29] the Yeah, the tutorial we're going to
+[39:31] put out in the next couple weeks is a
+[39:33] 45minute tutorial that is usually in the
+[39:35] labs and we're going to share exactly
+[39:38] how we built this colon. And it is so it
+[39:40] might surprise you how simple it is. You
+[39:43] really need two software, two different
+[39:44] software and one really good human
+[39:47] producer cuz that's kind of our secret
+[39:49] sauce. Um, and ours is from the
+[39:51] Philippines. really great at what he
+[39:53] does. So, you know, the salary is not an
+[39:55] arm and a leg. And the two tools are
+[39:58] Hunen and 11 Labs. So, 11 Labs is one of
+[40:02] the best uh PVCs, which is a
+[40:04] professional voice clone. Takes two
+[40:07] hours of audio of your voice and it
+[40:08] replicates it. Um I think in the last
+[40:11] two months, the model they released even
+[40:14] catches like the littlest inflections in
+[40:17] your voice. So, when you laugh, when you
+[40:19] have a surprised reaction, it captures
+[40:22] all of that. Um, and then from a text
+[40:24] prompt, it's your voice to a tea. And
+[40:27] that was one of the comments we got was
+[40:28] like, "This is Julia's voice." Well, I
+[40:30] don't even though her hair moves weird,
+[40:32] I think it's still Julia. That's her
+[40:35] voice. So, these two softwares are under
+[40:38] um Hunen, I think we're paying $69 a
+[40:41] month. And then 11 Labs, I think we're
+[40:43] paying somewhere between 30 to 40. So
+[40:47] that you're still under 150 a month and
+[40:49] that's your software for the actual
+[40:51] clone done. You can set it up. You have
+[40:54] I have kind of infinite number of
+[40:57] training data but really I just do 20
+[40:59] different takes and then I have all
+[41:01] different expressions and then we match
+[41:03] the clone to that. And my human producer
+[41:06] is now the one actually taking the text
+[41:08] prompt from my Google doc because I
+[41:10] still think out everything and I'll use
+[41:12] Claude, but I always bring it in a doc.
+[41:14] So, it's got that human touch and he
+[41:16] takes that um doc and then feeds it into
+[41:19] the clone inside Hen and then exports it
+[41:22] as an MP4 and then layers on all of the
+[41:25] different effects. Like if we talk about
+[41:27] a study, you know, we I want to show
+[41:28] that study. If we're quoting somebody
+[41:30] that said something in the news, he's
+[41:32] pulling that in. So that's still very
+[41:34] much human and I've tried the AI edits
+[41:37] in this script has one. They're just not
+[41:41] they're not I'm very piggy like it has
+[41:44] to be. If I'm talking about AI news and
+[41:46] you're showing that screenshot
+[41:49] 20 seconds later when I'm talking about
+[41:51] AGI is it doesn't land. So the content
+[41:55] has to land and it has to be humanly
+[41:57] produced still in order to land. But
+[41:59] really, that's all you need. And that's
+[42:01] um the I think the producer salary right
+[42:03] now, we went from two we were paying
+[42:05] 2,000 a month. You can get a decent
+[42:06] producer, 1,500 to 2,000 a month. So,
+[42:09] it's really not something that'll break
+[42:11] the bank. And the channel pays for
+[42:12] itself four to five times over. So, if
+[42:15] you can do that, just the minimum, um
+[42:18] let's say your your only minimum is how
+[42:21] do I get this thing to pay for itself
+[42:22] times five. I've done that. And it's not
+[42:25] requiring an investment more than the
+[42:28] expenses don't exceed the profit. The
+[42:30] profit's five times more. So that alone
+[42:32] is a reason to consider doing this
+[42:34] because then you take yourself out of
+[42:36] all of that work. And then your question
+[42:38] is what do I do now with my time? And
+[42:40] for me, like I'm actually thinking
+[42:42] through better content. I I think my
+[42:45] content's better than when I humanly
+[42:47] film because I'm not burned out anymore.
+[42:48] I'm not filming last minute late of late
+[42:51] day. My three-year-old's about to get
+[42:53] home and I'm like, "Okay, let me get
+[42:55] this filming in.
+[42:57] That is completely gone."
+[42:58] What does your base prompt look like?
+[43:00] Does uh is there something at the bottom
+[43:01] that says like when you write the
+[43:03] script, you are Julia McCoy. This is
+[43:05] your like background. This is your
+[43:07] history. These are your beliefs. Try to
+[43:09] work that in and then all all of that or
+[43:12] do you just kind of manually sort of add
+[43:14] that stuff in and it's more like the
+[43:15] superhuman base model?
+[43:18] So, what I've done it's really really
+[43:20] simple. Um, I've got a cloud project and
+[43:23] in the background of that cloud project
+[43:25] is maybe 50,000 words of like my books,
+[43:28] my blogs. Um, just like one time I
+[43:32] talked to chatbt for an hour. We pulled
+[43:34] that as a transcript that was part of
+[43:37] the cloud project. So it like resembles
+[43:40] my brain. I would say that's the cloud
+[43:42] project. And then in that project are
+[43:44] hundreds of threads where I'm like,
+[43:46] "Okay, today we're going to write a
+[43:47] YouTube video on um Trump's latest AI
+[43:50] act." And then I'll put it all together
+[43:52] and it's pulling from that project
+[43:54] knowledge. So it already knows me, how
+[43:56] I'm going to write, what I'm going to
+[43:57] say about different things and it stays
+[44:00] pretty true to that. And then uh what I
+[44:03] do is I don't let it write the script
+[44:06] ever automatically. And this is where I
+[44:08] was talking to an expert the other day.
+[44:09] They're like knowledge bases are just
+[44:12] they always they're always going to
+[44:14] hallucinate come up with things if you
+[44:15] prompt them and say hey what would you
+[44:17] say about this because it always make up
+[44:19] an answer if the answer is true is
+[44:21] another question. So I correct that by
+[44:25] making sure I'm actually writing the
+[44:26] script against the knowledge base versus
+[44:29] prompting the knowledge base and hoping
+[44:31] the knowledge base does a good job. So
+[44:33] it's kind of a a more human approach
+[44:35] because you're still like thinking
+[44:37] through every topic. Um, but against
+[44:40] that, you know, 50,000word background,
+[44:42] we still have something that's
+[44:44] incredibly accurate to how I talk.
+[44:48] Interesting.
+[44:51] Yeah, because and I've had a lot of the
+[44:53] same issues when I would trying to write
+[44:57] out certain things. I mean, most of my
+[44:59] videos, I don't use um any scripts or
+[45:02] anything like that. I just sit in front
+[45:03] of the camera and just like riff for an
+[45:05] hour or two and then cut out. I was
+[45:06] going to say you rip
+[45:08] and then I just yeah cut out like all
+[45:10] the one 10 minutes I'm just like staring
+[45:12] out the window cut out those parts and
+[45:13] then that's that's the video. Um but
+[45:16] when I try to write certain stuff for
+[45:19] for other platforms or stuff like that I
+[45:22] can't get any of the models to write in
+[45:25] a certain way and I've tried a lot of
+[45:27] different stuff. I mean the best way is
+[45:29] to give examples and have a have a
+[45:32] certain base but yeah we're not at a
+[45:34] point where it's going to replicate your
+[45:35] voice. we still as humans have to write
+[45:37] it. I think a lot of people that just do
+[45:39] in and out sort of like they just take
+[45:41] the output. Um that's not going to be
+[45:46] the best thing. I feel like you have to
+[45:47] refine it. You have to like you said
+[45:49] human in the loop. You have to be in
+[45:51] there making sure that it's coming out
+[45:52] correctly. And it's funny cuz exactly
+[45:54] what you were saying about the editor.
+[45:56] That's the one thing where AI, that's
+[45:58] one other area where it's like it's just
+[46:00] not there yet where it can edit the
+[46:01] videos um like a human producer could.
+[46:05] So, um yeah, just wanted to kind of say
+[46:08] and and just another point, hey, Gen
+[46:09] Plus 11 Labs again, just excellent
+[46:11] combination. Those are the two tools
+[46:13] that I use as well. They're the best out
+[46:15] there, I feel like. So, definitely.
+[46:17] Yeah, they are. Yeah.
+[46:19] Um Wes, can I ask you kind of like a
+[46:21] totally off-topic question? Do you feel
+[46:22] like you got what you needed from that?
+[46:25] Um, you know, I
+[46:28] we can go
+[46:32] there's a quantum mechanics question I
+[46:33] want to ask her at some point.
+[46:34] Oh, yeah. Sorry. No, that was that was
+[46:36] definitely it. Definitely. Well, the
+[46:37] thing is we we definitely don't want to
+[46:38] take away from the tutorial that's
+[46:40] coming. You said in a couple weeks,
+[46:41] maybe 45 minutes. So, I'm I'm going to
+[46:43] sit there and watch that one. So,
+[46:45] yeah. And she's got a nap. You You only
+[46:47] really have an hour, right? Are you
+[46:48] about ready to head out?
+[46:49] Yes.
+[46:49] Oh, okay. Yeah. Let's get
+[46:50] Okay. So, let me just ask you real
+[46:51] question. Do you believe in the many
+[46:53] worlds interpretation of quantum
+[46:54] mechanics? Like do you think there's
+[46:55] other Julia McCoys out there?
+[46:57] Oh, a thousand%. A thousand. And I'll
+[47:00] tell you, um, I got to see this and
+[47:03] actually practice this real time and my
+[47:05] health crash. Like, no joke. There, um,
+[47:07] you know, they talk about NDEs,
+[47:09] near-death experiences. I didn't
+[47:11] necessarily have that cuz like my soul
+[47:13] never left my body fully, but I was like
+[47:15] I had some states where there was like
+[47:17] some in between moments where I was like
+[47:20] clinging on to reality. I can't believe
+[47:22] this happened. Like I'm still like what?
+[47:25] And um in those moments
+[47:28] it's like you really see things clearly
+[47:30] and it's more like I don't know. It's
+[47:33] more like a state of feeling it versus
+[47:35] seeing it because the invisible realm is
+[47:38] actually infinitely more powerful than
+[47:40] the visible realm. And when we start to
+[47:42] understand that, that's where I mean
+[47:45] just like it gets really crazy. So in
+[47:48] the quantum realm, you know, it's the
+[47:49] belief um Newtonian physics says that we
+[47:52] can't change things. Outside observers
+[47:54] don't impact reality. Quantum physics
+[47:57] says that life is so crazy that you can
+[48:01] actually have any outcome you want at
+[48:04] any point if you just look at it long
+[48:06] enough, but you're not looking at it
+[48:09] with your actual eyes. What that means
+[48:12] is you're looking at something in
+[48:14] another realm that hasn't happened yet.
+[48:16] So you literally have to believe in it
+[48:18] with invisible eyes. Like that's the
+[48:20] essence of faith. Faith is what we do
+[48:22] not see, but what we believe and what
+[48:24] we're sure of. So that is what like I
+[48:26] clung on to just the belief that in
+[48:29] another realm I have healing. I have
+[48:33] safety in my body like these things are
+[48:35] going to come back. And I clung on to
+[48:38] that even when I didn't see it. And
+[48:40] because I believe in an intelligent
+[48:42] creator like nothing's by chance. Um
+[48:45] there is a powerful force behind all of
+[48:48] this, a governing force in the order of
+[48:50] it. I was able to trust because if you
+[48:53] believe the currency of everything is
+[48:55] love, then you know that if you can
+[48:57] trust that force, then the outcome is
+[49:01] always for your good. And that is
+[49:03] infinite peace. There's so much peace in
+[49:05] that, especially when you're clinging on
+[49:06] to life. And so in those moments where
+[49:09] it was like like I had trouble
+[49:12] breathing, oxygen was um up for debate
+[49:16] and I just I had nothing but my belief.
+[49:19] there's another reality out there. I'm
+[49:21] going to hold on to that reality even
+[49:23] when I don't see it and trust and
+[49:25] believe and pray and meditate that that
+[49:27] will come into my reality. And I saw
+[49:30] that happen. I saw it happen several
+[49:32] times. And there were times where I
+[49:34] experienced part of that life force. And
+[49:37] it's really I don't think there's words
+[49:39] in any language you can use to like
+[49:42] describe it when you're at that point
+[49:44] where the veil is so thin.
+[49:46] Um but like it's so real. It's realer
+[49:49] than the world we're in. And quantum
+[49:52] mechanics, quantum physics, quantum
+[49:54] theory, it's all so true. And the
+[49:58] founders of these different um ways to
+[50:02] like see the world, quantum mechanics,
+[50:04] they said that if you say you understand
+[50:06] quantum physics, that means you haven't
+[50:08] even started yet. The only way you can
+[50:11] understand it is to believe and see that
+[50:14] life is so erratic it cannot be
+[50:16] understood
+[50:18] because wait a minute I can change my
+[50:20] reality just by observing it in another
+[50:22] realm. Like these are things we are not
+[50:25] taught because there's profit to be made
+[50:29] when our minds are controlled
+[50:31] and when we don't believe in that
+[50:33] additional reality. So yeah, many worlds
+[50:36] all of it's
+[50:37] just it's so true. Like one thing I know
+[50:40] about AI is we're going to have like
+[50:41] answers to dark matter and like small
+[50:43] and big. Why is it like on the quantum
+[50:45] mechanics level so relative? And like
+[50:47] are the fundamental physics of the
+[50:49] universe evolving over time? And the
+[50:51] graviton seems like it's something we're
+[50:53] going to be able to like actually figure
+[50:54] out at some point with the right
+[50:56] experiments which AI can probably help
+[50:57] us build. And if everything is
+[50:59] exponential, that could not be thousands
+[51:01] of years away. It could be like 10 years
+[51:03] or 15 or 20 because the difference
+[51:05] between 20 and 21 years from now will be
+[51:07] such a huge jump in knowledge. Like
+[51:10] maybe that's when it gets solved, you
+[51:12] know?
+[51:12] So, it's going to be like wild what we
+[51:14] learn about ourselves in the universe.
+[51:16] And
+[51:17] I still sometimes even wonder if aliens
+[51:18] are already out there. We just can't
+[51:20] detect them. But maybe we'll have some
+[51:21] sort of new mechanism for that. So,
+[51:24] I don't know. It's just fun to think
+[51:25] about.
+[51:25] Crazy. Buckle in.
+[51:27] All right. Anyways, thanks Wes. Sorry to
+[51:29] throw that in there at the end.
+[51:30] Oh, no. This is incredible. I'm glad you
+[51:32] I'm glad you asked that. We That's
+[51:34] That's a great addition. Yeah. And
+[51:35] that's something that I've been thinking
+[51:37] uh quite a bit about and more and more
+[51:38] guests talking about AI. That's what
+[51:40] they're looking forward like unlocking
+[51:42] some of the sort of mysteries of the
+[51:44] universe because obviously, not
+[51:45] obviously, but this seemed like there's
+[51:47] a lot more that we don't understand
+[51:49] about the universe and it's a lot
+[51:50] stranger than I think we've ever
+[51:53] imagined. So,
+[51:55] maybe we'll see a little bit of uh we'll
+[51:57] lift the veil into, you know, within our
+[51:59] lifetimes and see a little bit of that.
+[52:00] though.
+[52:01] Um, Julia, what's the Yeah, tell us all
+[52:04] about what anything like kind of do the
+[52:06] closing now, but um, labs, you can talk
+[52:08] about that. Your YouTube channel,
+[52:10] anything else you're working on, books
+[52:11] that are upcoming, what's going on in
+[52:13] just your life? What do you want people
+[52:15] to know about?
+[52:16] Yeah. Well, if you stay tuned to the
+[52:18] channel, I will be talking more about um
+[52:21] the economics of this because I think
+[52:23] that we've got to be proactive, not
+[52:25] reactive, as a society to really make
+[52:27] the most of this. So, that's something
+[52:29] I'll be talking more about. Um, anything
+[52:32] I do there is pretty much partnered with
+[52:34] Dave because he has studied this like
+[52:36] nobody else. It the poor man needs to
+[52:39] sleep sometimes.
+[52:41] But, it is really amazing the knowledge
+[52:44] he's put together and how all this could
+[52:46] work. So, that's who I partner with for
+[52:49] the knowledge there. We're going to do
+[52:50] books. We're going to do a whole um
+[52:53] economics.
+[52:55] I don't even want to call it business.
+[52:56] is going to be more like a foundation
+[52:58] where we can our goal is to really help
+[53:00] teeth this and get people involved and
+[53:02] get government entities involved and
+[53:05] economists etc etc. Um and then beyond
+[53:08] that u my dayto-day is just helping
+[53:11] people work professionals people um
+[53:15] enter the AI age as a first mover and we
+[53:18] do that through the labs at first
+[53:19] movers. So that is a lot of fun. and my
+[53:22] clone is actually filming all my new
+[53:24] tutorials and we get really good
+[53:26] feedback and it's like okay we had this
+[53:28] marketing success this was a hit on
+[53:30] LinkedIn or this email had this CTR
+[53:33] let's break down how we did it the clone
+[53:35] will do that and then teach that in the
+[53:37] labs um so if you're in the labs you'll
+[53:39] see a lot of my clone teaching and it's
+[53:42] really really good stuff um and we have
+[53:45] probably 60 courses in there by now the
+[53:48] goal is like to take you from beginner
+[53:49] to advanced so no matter what area
+[53:51] you're in, level you're in. You jump in,
+[53:54] you have something immediately that
+[53:56] helps you take your knowledge and
+[53:58] translate it into real world. Okay, how
+[54:00] do I actually use this? How do I make
+[54:02] make money? How do I think about what's
+[54:04] coming? How do I get ready? So, that's
+[54:06] the whole goal of the labs like kind of
+[54:08] decentralizing AI skills.
+[54:11] Absolutely. Absolutely. And we'll put
+[54:13] the link to the labs and first movers.ai
+[54:17] and the YouTube channel as well. So,
+[54:20] it's going to be very interesting. I'm
+[54:22] actually going to um check it out myself
+[54:24] because that's one of the things that I
+[54:26] think more and more people need to learn
+[54:28] about and hopefully we can maybe even
+[54:31] promote it here on this channel, on my
+[54:32] channel. Um because I'm not seeing Yeah,
+[54:36] I'm not seeing enough of that sort of
+[54:38] education emerging.
+[54:40] There's attempts here and there, but I
+[54:42] feel like not enough. We're still not at
+[54:44] a point where
+[54:46] I know of one place that people can go
+[54:48] to and say, "Okay, if you want to get
+[54:50] started, you want to jump in, like this
+[54:52] is it." So, I'm going to check this
+[54:54] place out. And hopefully, and I'm sure
+[54:55] you're adding content all the time. And
+[54:58] the goal is to
+[54:59] the goal is to eventually be a one-stop
+[55:01] shop for people looking to get into, you
+[55:04] know, take advantage of AI.
+[55:06] And we have full-time integrators on
+[55:08] staff. So, it's not like it's just, even
+[55:10] though, you know, it is Dr. Mccoy there
+[55:12] a lot. um which is of course the name of
+[55:14] my colon, but we have full-time
+[55:16] integrators where we're actually the
+[55:17] other side of the business is
+[55:19] integrations where we get inside
+[55:20] businesses and we build agentic
+[55:23] workflows. Um so that's not me, that's
+[55:25] my team and we have a really great
+[55:26] integrator that teaches we have a class
+[55:29] two hours a week that he teaches um in
+[55:31] the labs and then he's filming a lot of
+[55:33] courses. So, it's content you likely
+[55:35] won't find if someone is like just a
+[55:37] hobbyist or um exploring these things
+[55:40] cuz one of the problems we found in a
+[55:42] lot of tutorials cuz we were joining
+[55:44] communities was you'd get to the end of
+[55:46] it, you'd have a whole agentic workflow
+[55:49] and then you realized you couldn't use
+[55:50] it like you couldn't hit publish or the
+[55:53] thing broke or and when you're in a
+[55:55] business setting and you're selling
+[55:56] these integrations, they got to work. So
+[56:00] when we sell it, we actually get to see
+[56:02] what actually works and that's also a
+[56:04] major differentiator for us.
+[56:06] Absolutely. Yeah. Looking forward to it.
+[56:08] It's very much needed. So thank you so
+[56:11] much for being here. This has been an
+[56:12] incredible incredible discussion and I
+[56:14] wish we we had more time. If you ever
+[56:16] have another hour to spend with us,
+[56:17] you're always welcome. We'd love to pick
+[56:19] your brain some more. But yeah, for the
+[56:21] time that we had, thank you so much for
+[56:23] uh being with us today.
+[56:24] This was so fun. Well, thanks for having
+[56:26] me. This is my first chat, you know,
+[56:28] since everything went down. So, I was
+[56:29] like, "This is a big deal." Like, I plan
+[56:31] my day around it and it's so much fun to
+[56:33] talk to humans.
+[56:35] Yeah. I was so glad when I text you and
+[56:36] it was like the real you. I was like,
+[56:37] "Oh my gosh, it's not. I got her. I
+[56:39] think it's going to be great.

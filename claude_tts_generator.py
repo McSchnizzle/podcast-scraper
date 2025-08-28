@@ -51,7 +51,7 @@ class ClaudeTTSGenerator:
             query = """
             SELECT id, title, transcript_path, episode_id
             FROM episodes 
-            WHERE status IN ('transcribed', 'digested') 
+            WHERE status = 'transcribed' 
             AND transcript_path IS NOT NULL
             ORDER BY id
             """
@@ -75,6 +75,48 @@ class ClaudeTTSGenerator:
         except Exception as e:
             logger.error(f"Error getting transcripts: {e}")
             return []
+
+    def mark_episodes_as_digested(self, episode_ids: List[str]) -> None:
+        """Mark episodes as digested and move their transcripts"""
+        import sqlite3
+        import shutil
+        from pathlib import Path
+        
+        try:
+            conn = sqlite3.connect(self.db_path)
+            cursor = conn.cursor()
+            
+            # Create digested folder if it doesn't exist
+            digested_dir = Path("transcripts/digested")
+            digested_dir.mkdir(parents=True, exist_ok=True)
+            
+            for episode_id in episode_ids:
+                # Get current transcript path
+                cursor.execute("SELECT transcript_path FROM episodes WHERE episode_id = ?", (episode_id,))
+                result = cursor.fetchone()
+                
+                if result and result[0]:
+                    old_path = Path(result[0])
+                    if old_path.exists():
+                        # Move transcript to digested folder
+                        new_path = digested_dir / old_path.name
+                        shutil.move(str(old_path), str(new_path))
+                        
+                        # Update database with new path and status
+                        cursor.execute("""
+                            UPDATE episodes 
+                            SET status = 'digested', transcript_path = ?
+                            WHERE episode_id = ?
+                        """, (str(new_path), episode_id))
+                        
+                        print(f"  📁 Moved {old_path.name} → digested/")
+            
+            conn.commit()
+            conn.close()
+            print(f"✅ Marked {len(episode_ids)} episodes as digested")
+            
+        except Exception as e:
+            print(f"❌ Error marking episodes as digested: {e}")
 
     def create_claude_digest_prompt(self, transcripts: List[Dict]) -> str:
         """Create optimized prompt for Claude digest generation"""
@@ -630,10 +672,23 @@ def main():
     if args.topic_based:
         print("🎯 Running topic-based workflow...")
         success, audio_path = generator.run_topic_based_workflow()
+        
+        if success:
+            # Mark episodes as digested and move transcripts
+            transcripts = generator.get_transcripts_for_claude()
+            episode_ids = [t['episode_id'] for t in transcripts]
+            generator.mark_episodes_as_digested(episode_ids)
+        
         return 0 if success else 1
     
     # Run complete workflow (original single digest)
     success, audio_path = generator.run_claude_tts_workflow()
+    
+    if success:
+        # Mark episodes as digested and move transcripts
+        transcripts = generator.get_transcripts_for_claude()
+        episode_ids = [t['episode_id'] for t in transcripts]
+        generator.mark_episodes_as_digested(episode_ids)
     
     return 0 if success else 1
 
