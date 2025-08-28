@@ -1,0 +1,26 @@
+[00:00] There's this product called Hedra, which
+[00:02] is I think the best way to take a still
+[00:04] frame and add custom audio to it. So
+[00:06] create a video that has sort of animated
+[00:08] from the still frame and includes the
+[00:10] audio with the right lip sync. Nirvana
+[00:13] did a really famous New York City
+[00:14] unplugged concert in '93. So there's
+[00:17] video of them playing in the way that
+[00:19] they would and audio the way that they
+[00:20] would on Tiny Desk. So that is right
+[00:22] here. So I go to audition and I take
+[00:25] this video and I just drop it in. We're
+[00:27] going to take 15 seconds. Okay. So this
+[00:29] command is going to take that audio file
+[00:31] we saved of the first 15 seconds of this
+[00:34] concert and it's going to extract the
+[00:36] vocals from the instrumentation. So this
+[00:39] will be Kurt Cobain singing come as you
+[00:41] are a capella which is as far as I know
+[00:43] has never happened. Upload an image.
+[00:45] Let's use this. Upload audio and then we
+[00:48] just say man singing
+[00:52] tiny desk. All right let's see how this
+[00:54] turned out. Come as you are.
+[01:00] >> It's very good.
