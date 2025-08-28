@@ -212,7 +212,10 @@ class FeedMonitor:
                         continue
                     
                     # Extract episode information
-                    episode_id = entry.get('id') or entry.get('guid') or entry.get('link')
+                    raw_episode_id = entry.get('id') or entry.get('guid') or entry.get('link')
+                    # Create consistent 8-character hash for episode_id to match audio filenames
+                    import hashlib
+                    episode_id = hashlib.md5(raw_episode_id.encode()).hexdigest()[:8]
                     episode_title = entry.get('title', 'Untitled')
                     
                     # Get audio URL
@@ -234,10 +237,10 @@ class FeedMonitor:
                     if cursor.fetchone():
                         continue
                     
-                    # Add new episode
+                    # Add new episode with pre-download status
                     cursor.execute('''
-                        INSERT INTO episodes (feed_id, episode_id, title, published_date, audio_url)
-                        VALUES (?, ?, ?, ?, ?)
+                        INSERT INTO episodes (feed_id, episode_id, title, published_date, audio_url, status)
+                        VALUES (?, ?, ?, ?, ?, 'pre-download')
                     ''', (feed_id, episode_id, episode_title, pub_date, audio_url))
                     
                     new_episodes.append({
