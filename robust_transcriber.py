@@ -244,38 +244,30 @@ class RobustTranscriber:
     def cleanup_transcript(self, transcript: str) -> str:
         """
         Clean up transcript by removing commercials and improving formatting
+        Uses enhanced ad filtering with Claude AI integration for better detection
         """
         if not transcript:
             return transcript
         
-        print("🧹 Cleaning up transcript...")
+        print("🧹 Cleaning up transcript with enhanced ad filtering...")
         
-        # Commercial detection patterns
-        commercial_patterns = [
-            r'this episode is brought to you by.*?(?=\.|$)',
-            r'our sponsor.*?(?=\.|$)',
-            r'visit.*?\.com.*?(?=\.|$)',
-            r'use promo code.*?(?=\.|$)',
-            r'ad\s*break',
-            r'commercial\s*break',
-        ]
-        
-        import re
-        original_length = len(transcript)
-        
-        for pattern in commercial_patterns:
-            transcript = re.sub(pattern, '', transcript, flags=re.IGNORECASE | re.MULTILINE)
-        
-        # Clean up extra whitespace
-        transcript = re.sub(r'\n\s*\n\s*\n', '\n\n', transcript)  # Reduce multiple newlines
-        transcript = re.sub(r'\s+', ' ', transcript)  # Normalize spaces
-        transcript = transcript.strip()
-        
-        removed_chars = original_length - len(transcript)
-        if removed_chars > 0:
-            print(f"🧹 Cleaned transcript: removed {removed_chars} characters (potential commercials)")
-        
-        return transcript
+        try:
+            # Import enhanced ad filter
+            from enhanced_ad_filter import EnhancedAdFilter
+            
+            # Use Claude-powered filtering for intelligent ad detection
+            filter = EnhancedAdFilter()
+            cleaned_transcript, removed_chars = filter.filter_advertisements(transcript)
+            
+            if removed_chars > 0:
+                print(f"🧹 Enhanced cleanup: removed {removed_chars} characters (advertisements)")
+            
+            return cleaned_transcript
+            
+        except Exception as e:
+            print(f"⚠️ Enhanced filtering failed, returning original transcript: {e}")
+            print(f"🧹 Skipping ad filtering due to error")
+            return transcript
     
     def transcribe_file(self, audio_file: str) -> Optional[str]:
         """
@@ -306,7 +298,21 @@ class RobustTranscriber:
                 print("❌ Failed to prepare file for transcription")
                 return None
             
-            # Step 3: Transcribe each chunk
+            # Create progress file for incremental saving
+            episode_id = Path(audio_file).stem
+            transcript_dir = Path("transcripts")
+            transcript_dir.mkdir(exist_ok=True)
+            progress_file = transcript_dir / f"{episode_id}_progress.txt"
+            
+            # Initialize progress file
+            with open(progress_file, 'w', encoding='utf-8') as f:
+                f.write(f"# Transcript for {episode_id} - In Progress\n")
+                f.write(f"# Started: {time.strftime('%Y-%m-%d %H:%M:%S')}\n")
+                f.write(f"# Total chunks: {len(chunks)}\n\n")
+            
+            print(f"📝 Progress saved to: {progress_file}")
+            
+            # Step 3: Transcribe each chunk with incremental saving
             print(f"\n🎯 Step 3: Transcribing {len(chunks)} chunk(s)...")
             transcriptions = []
             
@@ -314,6 +320,14 @@ class RobustTranscriber:
                 chunk_result = self.transcribe_chunk(chunk_file, i, len(chunks))
                 if chunk_result is not None:
                     transcriptions.append(chunk_result)
+                    
+                    # Append chunk to progress file immediately
+                    with open(progress_file, 'a', encoding='utf-8') as f:
+                        f.write(f"\n=== CHUNK {i}/{len(chunks)} ===\n")
+                        f.write(chunk_result)
+                        f.write(f"\n")
+                    
+                    print(f"💾 Chunk {i} appended to {progress_file}")
                 else:
                     print(f"⚠️ Chunk {i} failed - continuing with remaining chunks")
             
@@ -329,9 +343,15 @@ class RobustTranscriber:
             print(f"\n🧹 Step 5: Cleaning up transcript...")
             final_transcript = self.cleanup_transcript(combined_transcript)
             
-            # Step 6: Cleanup chunk files (if created)
+            # Step 6: Save final cleaned transcript  
+            final_file = transcript_dir / f"{episode_id}.txt"
+            print(f"\n💾 Step 6: Saving final cleaned transcript to: {final_file}")
+            with open(final_file, 'w', encoding='utf-8') as f:
+                f.write(final_transcript)
+            
+            # Step 7: Cleanup chunk files (if created)
             if len(chunks) > 1 and chunks[0] != audio_file:
-                print(f"\n🗑️ Step 6: Cleaning up chunk files...")
+                print(f"\n🗑️ Step 7: Cleaning up chunk files...")
                 chunk_dir = Path(chunks[0]).parent
                 try:
                     import shutil
@@ -340,16 +360,26 @@ class RobustTranscriber:
                 except Exception as e:
                     print(f"⚠️ Could not delete chunk directory: {e}")
             
+            # Step 8: Remove progress file and keep final file
+            try:
+                progress_file.unlink()
+                print(f"🧹 Removed progress file: {progress_file}")
+            except Exception as e:
+                print(f"⚠️ Could not remove progress file: {e}")
+            
             total_time = time.time() - workflow_start
             print(f"\n✅ Transcription workflow complete!")
             print(f"   • Total time: {total_time/60:.1f} minutes")
             print(f"   • Transcript length: {len(final_transcript):,} characters")
             print(f"   • Overall RTF: {total_time/duration:.3f}x")
+            print(f"   • Final transcript: {final_file}")
             
             return final_transcript
             
         except Exception as e:
             print(f"❌ Transcription workflow failed: {e}")
+            if 'progress_file' in locals():
+                print(f"⚠️ Check {progress_file} for any partial progress")
             return None
 
 def test_transcriber():
