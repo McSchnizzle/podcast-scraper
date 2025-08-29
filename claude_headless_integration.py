@@ -45,8 +45,10 @@ class ClaudeHeadlessIntegration:
             query = """
             SELECT id, title, transcript_path, episode_id, published_date
             FROM episodes 
-            WHERE status = 'transcribed' AND transcript_path IS NOT NULL
+            WHERE transcript_path IS NOT NULL 
+            AND published_date >= date('now', '-7 days')
             ORDER BY published_date DESC
+            LIMIT 10
             """
             
             cursor.execute(query)
@@ -77,35 +79,24 @@ class ClaudeHeadlessIntegration:
         # Create comprehensive input for Claude analysis
         input_parts = []
         
-        # Instructions for Claude
-        instructions = """
-Analyze these podcast transcripts and generate a topic-organized daily digest.
+        # Load instructions from file (same as TTS generator)
+        try:
+            with open('claude_digest_instructions.md', 'r', encoding='utf-8') as f:
+                instructions = f.read()
+        except Exception as e:
+            logger.warning(f"Could not load instructions file: {e}")
+            instructions = "Generate a professional daily podcast digest focusing on cross-episode synthesis and optimized for audio consumption."
+        
+        prompt_header = f"""
+You are tasked with creating a professional daily podcast digest. Follow these instructions precisely:
 
-REQUIREMENTS:
-1. Group content by topics, not individual episodes
-2. Focus on cross-episode connections and themes
-3. Extract key insights, quotes, and actionable information
-4. Identify emerging trends and important developments
-5. Create synthesis rather than summaries
+{instructions}
 
-TOPICS TO IDENTIFY:
-- AI Tools & Technology
-- Product Launches & Announcements  
-- Creative Applications
-- Technical Insights
-- Business Analysis
-- Social Commentary
-
-OUTPUT FORMAT:
-Generate a structured daily digest with:
-- Executive summary
-- Topic-based sections with cross-episode synthesis
-- Key takeaways and insights
-- Recommended deep dives
+Now analyze the following {len(transcripts)} podcast episodes and CREATE the daily digest. Do not just list requirements - actually write the complete digest following the format specified above.
 
 TRANSCRIPTS TO ANALYZE:
 """
-        input_parts.append(instructions)
+        input_parts.append(prompt_header)
         
         # Add transcript data
         for transcript in transcripts:

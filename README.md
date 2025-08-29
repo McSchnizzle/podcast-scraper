@@ -197,6 +197,8 @@ podcast-scraper/
 - **Fixed Database Sync**: Resolved transcript status mismatches
 - **Improved Chunking**: Updated to 10-minute audio segments
 - **macOS Compatibility**: Added malloc warning fix script
+- **Enhanced Deployment**: Fixed GitHub release handling for existing releases
+- **RSS Feed Reliability**: Fixed episode detection and publication to podcast.paulrbrown.org
 
 ### 📋 Future Enhancements
 - Enhanced speaker diarization with timestamps

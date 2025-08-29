@@ -51,9 +51,10 @@ class ClaudeTTSGenerator:
             query = """
             SELECT id, title, transcript_path, episode_id
             FROM episodes 
-            WHERE status = 'transcribed' 
-            AND transcript_path IS NOT NULL
-            ORDER BY id
+            WHERE transcript_path IS NOT NULL 
+            AND published_date >= date('now', '-7 days')
+            ORDER BY published_date DESC
+            LIMIT 10
             """
             
             cursor.execute(query)
@@ -266,7 +267,7 @@ Begin with: # Daily Podcast Digest - {datetime.now().strftime('%B %d, %Y')}
         
         # Generate audio file
         timestamp = datetime.now().strftime('%Y%m%d_%H%M%S')
-        audio_path = self.output_dir / f"claude_digest_audio_{timestamp}.mp3"
+        audio_path = self.output_dir / f"complete_topic_digest_{timestamp}.mp3"
         
         # Use professional host voice
         voice_config = self.tts_generator.voice_config["intro_outro"]
