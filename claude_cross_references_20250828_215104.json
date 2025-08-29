@@ -1,0 +1,23 @@
+{
+  "type": "result",
+  "subtype": "success",
+  "is_error": false,
+  "duration_ms": 55769,
+  "duration_api_ms": 55676,
+  "num_turns": 7,
+  "result": "**Key Cross-References Identified:**\n\n1. **AI/Automation Dominance** (4 episodes): Strongest theme spanning technical tutorials on Claude Code, Google's Nano Banana API, AI avatars, and GPT memory systems\n2. **Political Systems Analysis** (3 episodes): Connected discourse on institutional power, extremism monetization, and government transparency\n3. **Human Displacement** (2 episodes): Climate migration and political-driven relocation represent parallel displacement forces\n\nThe analysis reveals a podcast ecosystem heavily focused on AI technology adoption alongside critical examination of political and social systems.",
+  "session_id": "e3b7414c-8d42-4271-a795-36bde2f43995",
+  "total_cost_usd": 0.1839864,
+  "usage": {
+    "input_tokens": 6,
+    "cache_creation_input_tokens": 1878,
+    "cache_read_input_tokens": 45688,
+    "output_tokens": 129,
+    "server_tool_use": {
+      "web_search_requests": 0
+    },
+    "service_tier": "standard"
+  },
+  "permission_denials": [],
+  "uuid": "eb9204c1-7ec9-4fc4-b4cb-b1938fcd485d"
+}

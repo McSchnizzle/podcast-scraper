@@ -61,17 +61,29 @@ def create_github_release(mp3_file):
 Generated automatically from podcast monitoring and AI synthesis."""
 
     try:
-        # Create release with gh CLI
-        cmd = [
-            "gh", "release", "create", release_tag,
-            mp3_file,
-            "--title", release_title,
-            "--notes", release_notes,
-            "--latest"
-        ]
-        
-        print(f"🚀 Creating GitHub release: {release_tag}")
-        result = subprocess.run(cmd, capture_output=True, text=True, check=True)
+        # Try to create release, if it exists, upload to existing release
+        try:
+            cmd = [
+                "gh", "release", "create", release_tag,
+                mp3_file,
+                "--title", release_title,
+                "--notes", release_notes,
+                "--latest"
+            ]
+            
+            print(f"🚀 Creating GitHub release: {release_tag}")
+            result = subprocess.run(cmd, capture_output=True, text=True, check=True)
+        except subprocess.CalledProcessError as e:
+            if "already exists" in e.stderr:
+                print(f"📦 Release {release_tag} exists, uploading to existing release...")
+                cmd = [
+                    "gh", "release", "upload", release_tag,
+                    mp3_file,
+                    "--clobber"
+                ]
+                result = subprocess.run(cmd, capture_output=True, text=True, check=True)
+            else:
+                raise
         
         print(f"✅ Release created successfully: {release_tag}")
         print(f"🔗 Release URL: https://github.com/McSchnizzle/podcast-scraper/releases/tag/{release_tag}")
