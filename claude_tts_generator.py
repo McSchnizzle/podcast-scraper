@@ -1,21 +1,22 @@
 #!/usr/bin/env python3
 """
 Claude-Powered TTS Generator
-Combines Claude Code headless analysis with ElevenLabs TTS
-Enhanced with topic-based compilation
+Consolidated: Claude Code headless analysis + ElevenLabs TTS + Topic Compilation
 """
 
 import os
 import json
+import sqlite3
 import subprocess
 import logging
+import requests
+import time
+import re
 from pathlib import Path
 from datetime import datetime
-from typing import Dict, List, Optional, Tuple
+from typing import Dict, List, Optional, Tuple, Set
+from collections import defaultdict
 import tempfile
-
-from tts_generator import TTSGenerator
-from topic_compiler import TopicCompiler
 
 # Load environment variables
 try:
@@ -32,232 +33,445 @@ class ClaudeTTSGenerator:
         self.db_path = db_path
         self.output_dir = Path(output_dir)
         self.output_dir.mkdir(exist_ok=True)
-        
-        # Initialize TTS generator and topic compiler
-        self.tts_generator = TTSGenerator(db_path, audio_output_dir=str(self.output_dir))
-        self.topic_compiler = TopicCompiler(db_path)
+        self.transcripts_dir = Path("transcripts")
         
         # Claude Code settings
         self.claude_cmd = "claude"
-
-    def get_transcripts_for_claude(self) -> List[Dict]:
-        """Get transcript data for Claude analysis"""
-        import sqlite3
         
+        # ElevenLabs configuration
+        self.elevenlabs_api_key = os.getenv('ELEVENLABS_API_KEY')
+        if not self.elevenlabs_api_key:
+            logger.warning("ELEVENLABS_API_KEY not found in environment")
+        
+        self.base_url = "https://api.elevenlabs.io/v1"
+        
+        # Voice configurations for different topics
+        self.voice_config = {
+            "ai_tools": {
+                "voice_id": "21m00Tcm4TlvDq8ikWAM",  # Rachel - clear, professional
+                "stability": 0.75,
+                "similarity_boost": 0.75,
+                "style": 0.15
+            },
+            "product_launches": {
+                "voice_id": "AZnzlk1XvdvUeBnXmlld",  # Domi - energetic, engaging
+                "stability": 0.70,
+                "similarity_boost": 0.80,
+                "style": 0.25
+            },
+            "creative_applications": {
+                "voice_id": "EXAVITQu4vr4xnSDxMaL",  # Bella - warm, creative
+                "stability": 0.65,
+                "similarity_boost": 0.75,
+                "style": 0.35
+            },
+            "technical_insights": {
+                "voice_id": "ErXwobaYiN019PkySvjV",  # Antoni - authoritative
+                "stability": 0.80,
+                "similarity_boost": 0.70,
+                "style": 0.10
+            },
+            "business_analysis": {
+                "voice_id": "VR6AewLTigWG4xSOukaG",  # Arnold - confident
+                "stability": 0.85,
+                "similarity_boost": 0.75,
+                "style": 0.20
+            },
+            "social_commentary": {
+                "voice_id": "pNInz6obpgDQGcFmaJgB",  # Adam - thoughtful
+                "stability": 0.75,
+                "similarity_boost": 0.80,
+                "style": 0.30
+            },
+            "intro_outro": {
+                "voice_id": "21m00Tcm4TlvDq8ikWAM",  # Rachel - consistent host voice
+                "stability": 0.85,
+                "similarity_boost": 0.75,
+                "style": 0.20
+            }
+        }
+        
+        # Enhanced topic detection with weighted keywords
+        self.topic_definitions = {
+            "ai_tools": {
+                "display_name": "AI Tools & Technology",
+                "keywords": {
+                    "chatgpt": 3, "claude": 3, "gemini": 3, "openai": 3,
+                    "artificial intelligence": 2, "machine learning": 2, "llm": 2,
+                    "neural network": 2, "gpt": 2, "ai tool": 2,
+                    "automation": 1, "algorithm": 1, "ai": 1
+                },
+                "intro_template": "In AI and technology, we're seeing rapid evolution across {episode_count} episodes.",
+                "synthesis_focus": "technological advancement and practical applications"
+            },
+            "product_launches": {
+                "display_name": "Product Launches & Announcements", 
+                "keywords": {
+                    "google pixel": 3, "product launch": 3, "announcement": 2,
+                    "new product": 2, "release": 2, "unveil": 2, "debut": 2,
+                    "event": 1, "introduce": 1, "rollout": 1
+                },
+                "intro_template": "Major product announcements dominated {episode_count} episodes this period.",
+                "synthesis_focus": "market impact and consumer implications"
+            },
+            "creative_applications": {
+                "display_name": "Creative Applications",
+                "keywords": {
+                    "tiny desk": 3, "kurt cobain": 3, "notorious": 3, "creative": 2,
+                    "music video": 2, "content creation": 2, "art": 2, "design": 2,
+                    "video editing": 2, "remix": 2, "veo": 1, "music": 1
+                },
+                "intro_template": "Creative innovation takes center stage across {episode_count} episodes.",
+                "synthesis_focus": "artistic expression and democratization of creative tools"
+            },
+            "technical_insights": {
+                "display_name": "Technical Deep Dives",
+                "keywords": {
+                    "engineering": 2, "architecture": 2, "system": 2, "technical": 2,
+                    "optimization": 2, "processing": 2, "development": 1,
+                    "code": 1, "programming": 1
+                },
+                "intro_template": "Technical discussions across {episode_count} episodes reveal key implementation insights.",
+                "synthesis_focus": "technical innovation and system design"
+            },
+            "business_analysis": {
+                "display_name": "Business & Market Analysis",
+                "keywords": {
+                    "business model": 3, "market strategy": 3, "revenue": 2, "profit": 2,
+                    "investment": 2, "growth": 2, "competition": 2, "economy": 2,
+                    "company": 1, "business": 1, "strategy": 1
+                },
+                "intro_template": "Business implications emerge from {episode_count} episodes of market analysis.",
+                "synthesis_focus": "economic impact and strategic positioning"
+            },
+            "social_commentary": {
+                "display_name": "Social & Cultural Commentary",
+                "keywords": {
+                    "individualism": 3, "social change": 3, "decolonization": 3, "society": 2,
+                    "culture": 2, "community": 2, "social": 2, "politics": 2,
+                    "rights": 2, "justice": 2, "movement": 1, "impact": 1
+                },
+                "intro_template": "Social and cultural themes span {episode_count} thoughtful episodes.",
+                "synthesis_focus": "societal implications and cultural shifts"
+            }
+        }
+
+    # ======================
+    # TOPIC COMPILATION METHODS
+    # ======================
+    
+    def get_processed_episodes(self, status_filter: str = 'digested') -> List[Dict]:
+        """Get episodes ready for topic compilation"""
         try:
             conn = sqlite3.connect(self.db_path)
             cursor = conn.cursor()
             
             query = """
-            SELECT id, title, transcript_path, episode_id
+            SELECT id, title, transcript_path, episode_id, published_date, priority_score
+            FROM episodes 
+            WHERE status = ? AND transcript_path IS NOT NULL
+            ORDER BY published_date DESC
+            """
+            
+            cursor.execute(query, (status_filter,))
+            episodes = []
+            
+            for row in cursor.fetchall():
+                episodes.append({
+                    'id': row[0],
+                    'title': row[1],
+                    'transcript_path': row[2],
+                    'episode_id': row[3],
+                    'published_date': row[4],
+                    'priority_score': row[5] or 0.0
+                })
+            
+            conn.close()
+            return episodes
+            
+        except Exception as e:
+            logger.error(f"Error fetching episodes: {e}")
+            return []
+
+    def analyze_topic_relevance(self, content: str) -> Dict[str, float]:
+        """Calculate weighted topic scores for content"""
+        content_lower = content.lower()
+        topic_scores = {}
+        
+        for topic_id, topic_info in self.topic_definitions.items():
+            score = 0.0
+            keywords = topic_info['keywords']
+            
+            for keyword, weight in keywords.items():
+                # Count occurrences and apply weight
+                occurrences = content_lower.count(keyword.lower())
+                score += occurrences * weight
+            
+            # Normalize by content length (per 1000 characters)
+            normalized_score = (score / max(len(content), 1)) * 1000
+            topic_scores[topic_id] = normalized_score
+        
+        return topic_scores
+
+    def compile_topics_from_episodes(self, episodes: List[Dict]) -> Dict[str, Dict]:
+        """Organize episodes by dominant topics with cross-references"""
+        topic_episodes = defaultdict(list)
+        episode_topics = {}
+        
+        for episode in episodes:
+            transcript_path = episode['transcript_path']
+            
+            if not Path(transcript_path).exists():
+                logger.warning(f"Transcript not found: {transcript_path}")
+                continue
+            
+            try:
+                with open(transcript_path, 'r', encoding='utf-8') as f:
+                    content = f.read()
+                
+                # Analyze topic relevance
+                topic_scores = self.analyze_topic_relevance(content)
+                
+                # Find dominant topic (minimum threshold: 1.0)
+                dominant_topic = max(topic_scores.items(), key=lambda x: x[1])
+                
+                if dominant_topic[1] >= 1.0:  # Minimum relevance threshold
+                    topic_id = dominant_topic[0]
+                    topic_episodes[topic_id].append({
+                        **episode,
+                        'topic_score': dominant_topic[1],
+                        'all_topic_scores': topic_scores,
+                        'transcript_content': content[:2000]  # First 2000 chars for context
+                    })
+                    episode_topics[episode['episode_id']] = topic_id
+                
+            except Exception as e:
+                logger.error(f"Error analyzing episode {episode['episode_id']}: {e}")
+                continue
+        
+        # Sort episodes within each topic by relevance score
+        for topic_id in topic_episodes:
+            topic_episodes[topic_id].sort(key=lambda x: x['topic_score'], reverse=True)
+        
+        return dict(topic_episodes), episode_topics
+
+    # ======================
+    # CLAUDE INTEGRATION METHODS
+    # ======================
+
+    def get_transcripts_for_claude(self) -> List[Dict]:
+        """Get transcript data for Claude analysis"""
+        try:
+            conn = sqlite3.connect(self.db_path)
+            cursor = conn.cursor()
+            
+            # Only get episodes with status='transcribed' to match pipeline behavior
+            query = """
+            SELECT id, title, transcript_path, episode_id, published_date, status
             FROM episodes 
             WHERE transcript_path IS NOT NULL 
+            AND status = 'transcribed'
             AND published_date >= date('now', '-7 days')
             ORDER BY published_date DESC
             LIMIT 10
             """
             
+            logger.info(f"Executing query: {query}")
             cursor.execute(query)
             transcripts = []
             
-            for row in cursor.fetchall():
-                transcript_path = row[2]
+            all_rows = cursor.fetchall()
+            logger.info(f"Query returned {len(all_rows)} rows")
+            
+            for row in all_rows:
+                episode_id, title, transcript_path, episode_id_field, published_date, status = row
+                logger.info(f"Processing episode {episode_id}: '{title}' (status: {status}, transcript: {transcript_path})")
+                
                 if transcript_path and Path(transcript_path).exists():
                     transcripts.append({
-                        'id': row[0],
-                        'title': row[1], 
-                        'transcript_path': row[2],
-                        'episode_id': row[3]
+                        'id': episode_id,
+                        'title': title,
+                        'transcript_path': transcript_path,
+                        'episode_id': episode_id_field,
+                        'published_date': published_date
                     })
+                    logger.info(f"✅ Added episode {episode_id} to transcripts list")
+                else:
+                    logger.warning(f"❌ Transcript file not found for episode {episode_id}: {transcript_path}")
             
             conn.close()
+            logger.info(f"Found {len(transcripts)} transcripts for Claude analysis")
             return transcripts
             
         except Exception as e:
-            logger.error(f"Error getting transcripts: {e}")
+            logger.error(f"Error fetching transcripts: {e}")
             return []
 
-    def mark_episodes_as_digested(self, episode_ids: List[str]) -> None:
-        """Mark episodes as digested and move their transcripts"""
-        import sqlite3
-        import shutil
-        from pathlib import Path
-        
-        try:
-            conn = sqlite3.connect(self.db_path)
-            cursor = conn.cursor()
-            
-            # Create digested folder if it doesn't exist
-            digested_dir = Path("transcripts/digested")
-            digested_dir.mkdir(parents=True, exist_ok=True)
-            
-            for episode_id in episode_ids:
-                # Get current transcript path
-                cursor.execute("SELECT transcript_path FROM episodes WHERE episode_id = ?", (episode_id,))
-                result = cursor.fetchone()
-                
-                if result and result[0]:
-                    old_path = Path(result[0])
-                    if old_path.exists():
-                        # Move transcript to digested folder
-                        new_path = digested_dir / old_path.name
-                        shutil.move(str(old_path), str(new_path))
-                        
-                        # Update database with new path and status
-                        cursor.execute("""
-                            UPDATE episodes 
-                            SET status = 'digested', transcript_path = ?
-                            WHERE episode_id = ?
-                        """, (str(new_path), episode_id))
-                        
-                        print(f"  📁 Moved {old_path.name} → digested/")
-            
-            conn.commit()
-            conn.close()
-            print(f"✅ Marked {len(episode_ids)} episodes as digested")
-            
-        except Exception as e:
-            print(f"❌ Error marking episodes as digested: {e}")
-
-    def create_claude_digest_prompt(self, transcripts: List[Dict]) -> str:
+    def create_claude_prompt(self, transcripts: List[Dict]) -> str:
         """Create optimized prompt for Claude digest generation"""
+        prompt_sections = []
         
-        # Load instructions from file
-        try:
-            with open('claude_digest_instructions.md', 'r', encoding='utf-8') as f:
-                instructions = f.read()
-        except Exception as e:
-            logger.warning(f"Could not load instructions file: {e}")
-            instructions = "Generate a professional daily podcast digest focusing on cross-episode synthesis."
+        prompt_sections.append("Generate a comprehensive daily podcast digest from these transcripts:")
+        prompt_sections.append("")
         
-        prompt = f"""
-You are tasked with creating a professional daily podcast digest. Follow these instructions precisely:
-
-{instructions}
-
-Now analyze the following {len(transcripts)} podcast episodes and CREATE the daily digest. Do not just list requirements - actually write the complete digest following the format specified above.
-
-EPISODE DATA TO ANALYZE:
-"""
-        
-        # Process transcripts in batches to handle token limits effectively
-        batch_size = 8  # Process 8 episodes at a time for better synthesis
-        processed_transcripts = transcripts[:batch_size]
-        
-        for transcript in processed_transcripts:
-            try:
-                with open(transcript['transcript_path'], 'r', encoding='utf-8') as f:
-                    content = f.read()
-                
-                # Extract key sections: first 2000 chars + last 1000 chars for better coverage
-                if len(content) > 4000:
-                    key_content = content[:2000] + "\n\n[... middle content truncated ...]\n\n" + content[-1000:]
-                else:
-                    key_content = content
-                
-                prompt += f"""
-Episode {transcript['id']}: {transcript['title']}
-Key Content: {key_content}
-
-"""
-            except Exception as e:
-                logger.error(f"Error loading {transcript['transcript_path']}: {e}")
-        
-        # Add clear execution directive at the end
-        prompt += f"""
-
-EXECUTE NOW:
-Write the complete daily podcast digest following the format above. Start with the markdown header and write the full digest - do not provide meta-commentary about the task. The output should be ready for TTS conversion.
-
-Begin with: # Daily Podcast Digest - {datetime.now().strftime('%B %d, %Y')}
-"""
-        
-        return prompt
-
-    def generate_claude_digest(self) -> Optional[str]:
-        """Generate digest using Claude Code headless mode with progress tracking"""
-        
-        logger.info("🧠 Generating Claude-powered digest")
-        
-        # Get transcripts
-        transcripts = self.get_transcripts_for_claude()
-        if not transcripts:
-            logger.error("No transcripts available")
-            return None
-        
-        logger.info(f"📊 Analyzing {len(transcripts)} transcripts with Claude")
-        print(f"⏳ This will take 3-5 minutes to synthesize {len(transcripts)} episodes...")
-        
-        # Create prompt
-        print("🔧 Preparing Claude prompt with instructions...")
-        prompt = self.create_claude_digest_prompt(transcripts)
-        print(f"📝 Prompt prepared ({len(prompt)} characters)")
-        
-        try:
-            # Run Claude Code with progress monitoring
-            print("🚀 Starting Claude Code analysis...")
-            cmd = [self.claude_cmd, '-p', prompt]
+        for i, transcript in enumerate(transcripts, 1):
+            transcript_path = transcript['transcript_path']
+            title = transcript['title']
             
-            # Start process
-            process = subprocess.Popen(
+            try:
+                with open(transcript_path, 'r', encoding='utf-8') as f:
+                    content = f.read().strip()
+                
+                prompt_sections.append(f"## Episode {i}: {title}")
+                prompt_sections.append(content)
+                prompt_sections.append("")
+                
+            except Exception as e:
+                logger.error(f"Error reading transcript {transcript_path}: {e}")
+                continue
+        
+        # Add specific instructions for digest generation
+        prompt_sections.extend([
+            "---",
+            "",
+            "Create a daily digest following this format:",
+            "",
+            "# Daily Podcast Digest - {current_date}",
+            "",
+            "## Key Topics",
+            "- Organize content by themes, not individual episodes",
+            "- Focus on actionable insights and key announcements", 
+            "- Cross-reference related topics between episodes",
+            "",
+            "## Important Developments",
+            "- Product launches and announcements",
+            "- Technology breakthroughs",
+            "- Industry trends and analysis",
+            "",
+            "## Notable Quotes",
+            "- Include 2-3 most impactful quotes with context",
+            "",
+            "Requirements:",
+            "- Write for audio consumption (conversational tone)",
+            "- Keep total length under 1500 words",
+            "- Focus on information that would be valuable to tech professionals",
+            "- Use topic-based organization, not episode-by-episode summaries"
+        ])
+        
+        return "\n".join(prompt_sections)
+
+    def run_claude_analysis(self, prompt: str) -> Optional[str]:
+        """Execute Claude analysis using headless integration"""
+        try:
+            with tempfile.NamedTemporaryFile(mode='w', suffix='.txt', delete=False) as f:
+                f.write(prompt)
+                temp_file = f.name
+            
+            logger.info("🤖 Running Claude analysis for digest generation...")
+            
+            cmd = [
+                self.claude_cmd, 
+                'headless', 
+                '--prompt-file', temp_file,
+                '--output-format', 'text'
+            ]
+            
+            result = subprocess.run(
                 cmd,
-                stdout=subprocess.PIPE,
-                stderr=subprocess.PIPE,
-                text=True
+                capture_output=True,
+                text=True,
+                timeout=300
             )
             
-            # Monitor progress
-            import time
-            start_time = time.time()
+            os.unlink(temp_file)
             
-            while True:
-                # Check if process is still running
-                poll_result = process.poll()
-                
-                if poll_result is not None:
-                    # Process completed
-                    break
-                
-                # Show progress every 30 seconds
-                elapsed = time.time() - start_time
-                if elapsed > 0:
-                    print(f"⏳ Claude analysis running... {elapsed:.0f}s elapsed")
-                
-                # Check timeout (5 minutes)
-                if elapsed > 300:
-                    print("⚠️  Analysis taking longer than expected, terminating...")
-                    process.terminate()
-                    return None
-                
-                time.sleep(30)  # Check every 30 seconds
-            
-            # Get results
-            stdout, stderr = process.communicate()
-            
-            if process.returncode == 0:
-                digest_content = stdout.strip()
-                
-                if digest_content and len(digest_content) > 100:
-                    elapsed = time.time() - start_time
-                    print(f"✅ Claude analysis completed in {elapsed:.1f}s")
-                    logger.info(f"✅ Claude digest generated ({len(digest_content)} characters)")
+            if result.returncode == 0:
+                digest_content = result.stdout.strip()
+                if digest_content:
+                    logger.info("✅ Claude analysis completed successfully")
                     return digest_content
                 else:
-                    logger.error("Claude digest too short or empty")
+                    logger.error("Claude analysis returned empty content")
                     return None
             else:
-                logger.error(f"Claude Code failed: {stderr}")
+                logger.error(f"Claude analysis failed: {result.stderr}")
+                return None
+                
+        except subprocess.TimeoutExpired:
+            logger.error("Claude analysis timed out")
+            return None
+        except Exception as e:
+            logger.error(f"Error running Claude analysis: {e}")
+            return None
+
+    # ======================
+    # TTS GENERATION METHODS
+    # ======================
+
+    def _optimize_for_tts(self, text: str) -> str:
+        """Optimize text content for TTS generation"""
+        # Remove markdown headers and formatting
+        text = re.sub(r'^#{1,6}\s+', '', text, flags=re.MULTILINE)
+        
+        # Convert bullet points to spoken format
+        text = re.sub(r'^\s*[-*]\s+', 'Next, ', text, flags=re.MULTILINE)
+        
+        # Add pauses after sections
+        text = re.sub(r'\n\n', '\n\n... \n\n', text)
+        
+        # Replace URLs with "link available"
+        text = re.sub(r'https?://[^\s]+', 'link available', text)
+        
+        # Clean up extra whitespace
+        text = re.sub(r'\n{3,}', '\n\n', text)
+        text = ' '.join(text.split())
+        
+        return text.strip()
+
+    def generate_tts_audio(self, text: str, voice_config: Dict, filename: str) -> Optional[str]:
+        """Generate audio using ElevenLabs TTS"""
+        if not self.elevenlabs_api_key:
+            logger.warning("No ElevenLabs API key - skipping TTS generation")
+            return None
+        
+        try:
+            url = f"{self.base_url}/text-to-speech/{voice_config['voice_id']}"
+            
+            headers = {
+                "Accept": "audio/mpeg",
+                "Content-Type": "application/json",
+                "xi-api-key": self.elevenlabs_api_key
+            }
+            
+            data = {
+                "text": text,
+                "model_id": "eleven_multilingual_v2",
+                "voice_settings": {
+                    "stability": voice_config.get("stability", 0.75),
+                    "similarity_boost": voice_config.get("similarity_boost", 0.75),
+                    "style": voice_config.get("style", 0.20)
+                }
+            }
+            
+            response = requests.post(url, json=data, headers=headers, timeout=120)
+            
+            if response.status_code == 200:
+                audio_path = self.output_dir / f"{filename}.mp3"
+                with open(audio_path, 'wb') as f:
+                    f.write(response.content)
+                
+                logger.info(f"🎵 Generated TTS audio: {audio_path.name}")
+                return str(audio_path)
+            else:
+                logger.error(f"TTS generation failed: {response.status_code} - {response.text}")
                 return None
                 
         except Exception as e:
-            logger.error(f"Error running Claude Code: {e}")
+            logger.error(f"Error generating TTS audio: {e}")
             return None
 
-    def convert_claude_digest_to_audio(self, digest_content: str) -> Optional[str]:
-        """Convert Claude-generated digest to TTS audio"""
-        
-        logger.info("🎙️ Converting Claude digest to audio")
-        
+    def generate_complete_digest_audio(self, digest_content: str) -> Optional[str]:
+        """Generate complete audio digest with metadata"""
         if not digest_content:
             logger.error("No digest content to convert")
             return None
@@ -286,18 +500,20 @@ Begin with: # Daily Podcast Digest - {datetime.now().strftime('%B %d, %Y')}
         audio_path = self.output_dir / f"complete_topic_digest_{timestamp}.mp3"
         
         # Use professional host voice
-        voice_config = self.tts_generator.voice_config["intro_outro"]
+        host_voice = self.voice_config["intro_outro"]
         
-        success = self.tts_generator.generate_audio_segment(
-            tts_optimized, voice_config, str(audio_path)
+        generated_audio = self.generate_tts_audio(
+            tts_optimized, 
+            host_voice, 
+            f"complete_topic_digest_{timestamp}"
         )
         
-        if success:
-            # Save metadata
-            metadata_path = audio_path.with_suffix('.json')
+        if generated_audio:
+            # Generate metadata
+            metadata_path = self.output_dir / f"complete_topic_digest_{timestamp}.json"
             metadata = {
-                "title": f"Claude-Generated Daily Digest - {datetime.now().strftime('%B %d, %Y')}",
-                "generated_by": "Claude Code + ElevenLabs TTS",
+                "title": f"Daily Tech Digest - {datetime.now().strftime('%B %d, %Y')}",
+                "description": "Daily digest of tech news and insights from leading podcasts and creators",
                 "generation_time": datetime.now().isoformat(),
                 "content_length": len(digest_content),
                 "tts_optimized_length": len(tts_optimized),
@@ -307,415 +523,84 @@ Begin with: # Daily Podcast Digest - {datetime.now().strftime('%B %d, %Y')}
             }
             
             with open(metadata_path, 'w', encoding='utf-8') as f:
-                json.dump(metadata, f, indent=2, default=str)
+                json.dump(metadata, f, indent=2)
             
-            logger.info(f"✅ Claude digest audio generated: {audio_path.name}")
+            logger.info(f"📊 Metadata saved: {metadata_path.name}")
             return str(audio_path)
-        else:
-            logger.error("Failed to generate TTS audio")
-            return None
-
-    def _optimize_for_tts(self, content: str) -> str:
-        """Optimize Claude digest content for TTS"""
-        
-        # Add podcast-style introduction
-        date_str = datetime.now().strftime('%B %d, %Y')
-        
-        intro = f"""Welcome to your AI-powered Daily Podcast Digest for {date_str}. 
-        
-This digest was generated by Claude Code analysis of podcast transcripts, 
-then synthesized into audio using ElevenLabs TTS.
-
-"""
-        
-        # Clean up markdown for speech
-        import re
-        
-        # Remove markdown headers
-        content = re.sub(r'^#+\s*', '', content, flags=re.MULTILINE)
-        
-        # Convert markdown bold to emphasis
-        content = re.sub(r'\*\*(.*?)\*\*', r'\1', content)
-        
-        # Clean up formatting for speech
-        content = re.sub(r'\n+', '. ', content)
-        content = re.sub(r'\s+', ' ', content)
-        
-        # Add conclusion
-        conclusion = """
-
-That completes today's Claude-generated digest. Thank you for listening to your 
-AI-powered Daily Podcast Digest."""
-        
-        return intro + content + conclusion
-
-    def generate_topic_based_digests(self) -> Dict[str, str]:
-        """Generate separate Claude digests for each topic"""
-        
-        logger.info("🎯 Generating topic-based Claude digests")
-        
-        # Get episodes and categorize by topic
-        all_episodes = self.topic_compiler.get_processed_episodes()
-        compilation_data = self.topic_compiler.compile_topics(all_episodes)
-        
-        # Extract episodes by topic from compilation data
-        topic_episodes = {}
-        for topic_key in self.topic_compiler.topic_definitions.keys():
-            topic_episodes[topic_key] = []
-        
-        # Group episodes by their strongest topic
-        for episode in all_episodes:
-            content = self.topic_compiler._load_transcript_content(episode['transcript_path'])
-            if not content:
-                continue
-                
-            full_text = f"{episode['title']} {content}"
-            best_topic = None
-            best_score = 0.0
-            
-            for topic_key in self.topic_compiler.topic_definitions.keys():
-                score = self.topic_compiler.analyze_topic_weight(full_text, topic_key)
-                if score > best_score and score > 0.3:  # Minimum relevance threshold
-                    best_score = score
-                    best_topic = topic_key
-            
-            if best_topic:
-                episode['topic_score'] = best_score
-                topic_episodes[best_topic].append(episode)
-        
-        topic_digests = {}
-        
-        for topic_key, episodes in topic_episodes.items():
-            if not episodes:
-                logger.info(f"⏭️ Skipping {topic_key} - no episodes")
-                continue
-                
-            logger.info(f"📝 Generating {topic_key} digest from {len(episodes)} episodes")
-            
-            # Create topic-specific prompt
-            digest_content = self.generate_topic_digest(topic_key, episodes)
-            
-            if digest_content:
-                topic_digests[topic_key] = digest_content
-                logger.info(f"✅ {topic_key}: {len(digest_content)} characters")
-            else:
-                logger.error(f"❌ Failed to generate {topic_key} digest")
-        
-        return topic_digests
-
-    def generate_topic_digest(self, topic_key: str, episodes: List[Dict]) -> Optional[str]:
-        """Generate Claude digest for specific topic"""
-        
-        # Load instructions
-        try:
-            with open('claude_digest_instructions.md', 'r', encoding='utf-8') as f:
-                instructions = f.read()
-        except Exception as e:
-            logger.warning(f"Could not load instructions file: {e}")
-            return None
-        
-        # Get topic info
-        topic_info = self.topic_compiler.topic_definitions.get(topic_key, {})
-        topic_name = topic_info.get('display_name', topic_key)
-        focus_area = topic_info.get('synthesis_focus', 'key insights')
-        
-        prompt = f"""
-You are creating a focused topic segment for a daily podcast digest. Follow these guidelines:
-
-{instructions}
-
-CURRENT TASK:
-Create a focused digest segment for the topic "{topic_name}" based on {len(episodes)} relevant episodes. Focus specifically on {focus_area}.
-
-FORMAT REQUIREMENTS:
-- Write 400-600 words for this topic segment
-- Start with topic header: "## {topic_name}"
-- Focus on cross-episode synthesis within this topic area
-- Use engaging narrative suitable for audio
-- End with 2-3 key takeaways specific to this topic
-
-EPISODE DATA FOR {topic_name.upper()}:
-"""
-        
-        # Add episode content for this topic
-        for episode in episodes[:5]:  # Limit to top 5 episodes per topic
-            try:
-                with open(episode['transcript_path'], 'r', encoding='utf-8') as f:
-                    content = f.read()
-                
-                # Extract relevant sections
-                if len(content) > 3000:
-                    key_content = content[:1500] + "\n\n[...]\n\n" + content[-1000:]
-                else:
-                    key_content = content
-                
-                prompt += f"""
-Episode: {episode['title']}
-Relevance Score: {episode.get('topic_score', 'N/A')}
-Key Content: {key_content}
-
-"""
-            except Exception as e:
-                logger.error(f"Error loading {episode['transcript_path']}: {e}")
-        
-        prompt += f"""
-
-EXECUTE NOW:
-Write the complete {topic_name} segment following the format above. Focus only on this topic area and provide substantive analysis.
-
-Begin with: ## {topic_name}
-"""
-        
-        # Generate using Claude
-        try:
-            cmd = [self.claude_cmd, '-p', prompt]
-            result = subprocess.run(cmd, capture_output=True, text=True, timeout=120)
-            
-            if result.returncode == 0 and result.stdout.strip():
-                return result.stdout.strip()
-            else:
-                logger.error(f"Claude failed for {topic_key}: {result.stderr}")
-                return None
-                
-        except Exception as e:
-            logger.error(f"Error generating {topic_key} digest: {e}")
-            return None
-
-    def create_multi_topic_audio(self, topic_digests: Dict[str, str]) -> Optional[str]:
-        """Create multi-topic audio with transitions"""
-        
-        logger.info("🎼 Creating multi-topic audio compilation")
-        
-        audio_segments = []
-        timestamp = datetime.now().strftime('%Y%m%d_%H%M%S')
-        
-        # Generate intro with joke and date
-        jokes = [
-            "Why don't podcasters ever get lost? Because they always follow their feed!",
-            "What's a podcast's favorite type of music? Anything with good feeds and speeds!",
-            "Why did the AI cross the road? To get to the other data!",
-            "What do you call a podcast about gardening? A pod-cast!",
-            "Why don't robots ever panic? They have excellent error handling!"
-        ]
-        
-        import random
-        daily_joke = random.choice(jokes)
-        
-        intro_text = f"""Welcome to your Daily Podcast Digest for {datetime.now().strftime('%B %d, %Y')}. 
-
-Here's your daily tech joke: {daily_joke}
-
-Today we'll explore {len(topic_digests)} key topic areas from our latest podcast episodes."""
-        
-        intro_path = self.output_dir / f"intro_{timestamp}.mp3"
-        intro_voice = self.tts_generator.voice_config["intro_outro"]
-        
-        if self.tts_generator.generate_audio_segment(intro_text, intro_voice, str(intro_path)):
-            audio_segments.append(str(intro_path))
-        
-        # Generate music transition using ElevenLabs
-        transition_text = "♪ ♪ ♪"  # Musical notes for ElevenLabs to interpret as music
-        music_voice = self.tts_generator.voice_config["intro_outro"]  # Use intro voice for music
-        
-        # Generate topic segments with specific voices and transitions
-        topic_keys = list(topic_digests.keys())
-        for i, (topic_key, digest_content) in enumerate(topic_digests.items()):
-            topic_voice = self.tts_generator.voice_config.get(topic_key, self.tts_generator.voice_config["intro_outro"])
-            topic_path = self.output_dir / f"topic_{topic_key}_{timestamp}.mp3"
-            
-            if self.tts_generator.generate_audio_segment(digest_content, topic_voice, str(topic_path)):
-                audio_segments.append(str(topic_path))
-                
-                # Skip music transitions - ElevenLabs doesn't generate music properly
-        
-        # Generate outro with joke
-        outro_jokes = [
-            "Why do podcasts make terrible comedians? They always end on a cliffhanger!",
-            "What's the difference between a podcast and a broken clock? The podcast is right way more than twice a day!",
-            "Why don't AIs ever get tired? They run on renewable energy - data!",
-            "What do you call a podcast host who never stops talking? Unemployed!",
-            "Why was the neural network bad at dating? It kept overfitting!"
-        ]
-        
-        outro_joke = random.choice(outro_jokes)
-        
-        outro_text = f"""That completes today's topic-based podcast digest. 
-
-And here's your closing tech joke: {outro_joke}
-
-Thanks for listening!"""
-        outro_path = self.output_dir / f"outro_{timestamp}.mp3"
-        
-        if self.tts_generator.generate_audio_segment(outro_text, intro_voice, str(outro_path)):
-            audio_segments.append(str(outro_path))
-        
-        # Simple audio concatenation using ffmpeg
-        if len(audio_segments) > 1:
-            final_path = self.output_dir / f"complete_topic_digest_{timestamp}.mp3"
-            
-            if self._concatenate_audio_segments(audio_segments, str(final_path)):
-                logger.info(f"✅ Multi-topic audio created: {final_path.name}")
-                return str(final_path)
         
         return None
 
-    def _concatenate_audio_segments(self, segments: List[str], output_path: str) -> bool:
-        """Simple audio concatenation without complex filters"""
-        
-        try:
-            # Create temporary file list for ffmpeg with absolute paths
-            import tempfile
-            with tempfile.NamedTemporaryFile(mode='w', suffix='.txt', delete=False) as f:
-                for segment in segments:
-                    abs_path = str(Path(segment).resolve())
-                    if Path(abs_path).exists():
-                        f.write(f"file '{abs_path}'\n")
-                concat_list = f.name
-            
-            # Simple concatenation command - re-encode to avoid codec issues
-            cmd = [
-                'ffmpeg', '-f', 'concat', '-safe', '0', 
-                '-i', concat_list, 
-                '-c:a', 'mp3', '-b:a', '128k',
-                output_path, 
-                '-y'
-            ]
-            
-            result = subprocess.run(cmd, capture_output=True, text=True)
-            
-            # Cleanup
-            Path(concat_list).unlink(missing_ok=True)
-            
-            if result.returncode == 0:
-                logger.info("✅ Audio segments concatenated successfully")
-                
-                # Clean up intermediate TTS files
-                try:
-                    for segment_file in segments:
-                        Path(segment_file).unlink(missing_ok=True)
-                    logger.info(f"🧹 Cleaned up {len(segments)} intermediate TTS files")
-                except Exception as e:
-                    logger.warning(f"⚠️ Cleanup warning: {e}")
-                
-                return True
-            else:
-                logger.error(f"❌ Concatenation failed: {result.stderr}")
-                return False
-                
-        except Exception as e:
-            logger.error(f"Error concatenating segments: {e}")
-            return False
+    # ======================
+    # MAIN WORKFLOW METHODS
+    # ======================
 
-    def run_topic_based_workflow(self) -> Tuple[bool, Optional[str]]:
-        """Complete workflow: Topic analysis → Claude digests → Multi-topic audio"""
+    def generate_daily_digest(self) -> Optional[str]:
+        """Complete workflow: get transcripts, analyze with Claude, generate audio"""
+        logger.info("🚀 Starting daily digest generation workflow")
         
-        print("🎯🎙️ Topic-Based Claude + TTS Workflow")
-        print("=" * 45)
+        # Step 1: Get transcripts for analysis
+        transcripts = self.get_transcripts_for_claude()
+        if not transcripts:
+            logger.warning("No transcripts available for digest generation")
+            return None
         
-        # Generate topic-based digests
-        topic_digests = self.generate_topic_based_digests()
+        logger.info(f"📚 Found {len(transcripts)} transcripts for analysis")
         
-        if not topic_digests:
-            print("❌ No topic digests generated")
-            return False, None
+        # Step 2: Create Claude prompt
+        prompt = self.create_claude_prompt(transcripts)
+        logger.info("📝 Generated Claude analysis prompt")
         
-        print(f"✅ Generated {len(topic_digests)} topic digests")
-        
-        # Create multi-topic audio
-        audio_path = self.create_multi_topic_audio(topic_digests)
-        
-        if audio_path:
-            file_size = Path(audio_path).stat().st_size / 1024 / 1024
-            print(f"✅ Multi-topic audio: {Path(audio_path).name} ({file_size:.1f}MB)")
-            return True, audio_path
-        else:
-            print("❌ Multi-topic audio generation failed")
-            return False, None
-
-    def run_claude_tts_workflow(self) -> Tuple[bool, Optional[str]]:
-        """Complete workflow: Claude analysis → TTS audio"""
-        
-        print("🧠🎙️ Claude + TTS Workflow")
-        print("=" * 35)
-        
-        # Generate Claude digest
-        digest_content = self.generate_claude_digest()
-        
+        # Step 3: Run Claude analysis
+        digest_content = self.run_claude_analysis(prompt)
         if not digest_content:
-            print("❌ Claude digest generation failed")
-            return False, None
+            logger.error("Failed to generate digest content")
+            return None
         
-        print(f"✅ Claude digest: {len(digest_content)} characters")
+        logger.info("✅ Claude analysis completed")
         
-        # Convert to audio
-        audio_path = self.convert_claude_digest_to_audio(digest_content)
+        # Step 4: Generate TTS audio
+        audio_path = self.generate_complete_digest_audio(digest_content)
         
         if audio_path:
-            file_size = Path(audio_path).stat().st_size / 1024 / 1024
-            print(f"✅ TTS audio: {Path(audio_path).name} ({file_size:.1f}MB)")
-            return True, audio_path
-        else:
-            print("❌ TTS audio generation failed")
-            return False, None
-
-
-def main():
-    """CLI entry point"""
-    
-    import argparse
-    
-    parser = argparse.ArgumentParser(description="Claude-Powered TTS Generator")
-    parser.add_argument('--digest-only', action='store_true', help='Generate digest text only')
-    parser.add_argument('--audio-only', action='store_true', help='Convert existing digest to audio')
-    parser.add_argument('--topic-based', action='store_true', help='Generate topic-based multi-voice compilation')
-    args = parser.parse_args()
-    
-    generator = ClaudeTTSGenerator()
-    
-    if args.digest_only:
-        print("📝 Generating Claude digest only...")
-        digest = generator.generate_claude_digest()
-        if digest:
-            # Save full digest to file
-            timestamp = datetime.now().strftime('%Y%m%d_%H%M%S')
-            digest_path = generator.output_dir / f"claude_digest_full_{timestamp}.txt"
+            logger.info(f"🎵 Complete digest generated: {audio_path}")
             
-            with open(digest_path, 'w', encoding='utf-8') as f:
-                f.write(digest)
+            # Update episode statuses to 'digested'
+            self._mark_episodes_as_digested(transcripts)
             
-            print("✅ Digest generated")
-            print(f"📁 Full digest saved: {digest_path.name}")
-            print("Preview:")
-            print("-" * 40)
-            print(digest[:500] + "..." if len(digest) > 500 else digest)
-            return 0
+            return audio_path
         else:
-            print("❌ Digest generation failed")
-            return 1
-    
-    if args.topic_based:
-        print("🎯 Running topic-based workflow...")
-        success, audio_path = generator.run_topic_based_workflow()
-        
-        if success:
-            # Mark episodes as digested and move transcripts
-            transcripts = generator.get_transcripts_for_claude()
+            logger.warning("Audio generation failed, but text digest was created")
+            return digest_content
+
+    def _mark_episodes_as_digested(self, transcripts: List[Dict]):
+        """Mark processed episodes as digested in database"""
+        try:
+            conn = sqlite3.connect(self.db_path)
+            cursor = conn.cursor()
+            
             episode_ids = [t['episode_id'] for t in transcripts]
-            generator.mark_episodes_as_digested(episode_ids)
-        
-        return 0 if success else 1
-    
-    # Run complete workflow (original single digest)
-    success, audio_path = generator.run_claude_tts_workflow()
-    
-    if success:
-        # Mark episodes as digested and move transcripts
-        transcripts = generator.get_transcripts_for_claude()
-        episode_ids = [t['episode_id'] for t in transcripts]
-        generator.mark_episodes_as_digested(episode_ids)
-    
-    return 0 if success else 1
-
+            placeholders = ','.join(['?' for _ in episode_ids])
+            
+            cursor.execute(f"""
+                UPDATE episodes 
+                SET status = 'digested' 
+                WHERE episode_id IN ({placeholders})
+            """, episode_ids)
+            
+            rows_updated = cursor.rowcount
+            conn.commit()
+            conn.close()
+            
+            logger.info(f"📋 Marked {rows_updated} episodes as digested")
+            
+        except Exception as e:
+            logger.error(f"Error updating episode statuses: {e}")
 
 if __name__ == "__main__":
-    exit(main())
+    generator = ClaudeTTSGenerator()
+    result = generator.generate_daily_digest()
+    
+    if result:
+        print(f"✅ Daily digest generated: {result}")
+    else:
+        print("❌ Daily digest generation failed")

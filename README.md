@@ -15,6 +15,7 @@ The Daily Podcast Digest System continuously monitors podcast RSS feeds and YouT
 - **Smart Filtering**: Length-based filtering for YouTube content (>3 minutes)
 - **Automated Publishing**: RSS generation and GitHub deployment pipeline
 - **Web API**: Endpoints for audio streaming and RSS feed serving
+- **Dual Status Workflow**: RSS (pre-download→downloaded→transcribed→digested) and YouTube (pre-download→transcribed→digested)
 
 ## System Architecture
 
@@ -70,6 +71,9 @@ pip install -r requirements.txt
 
 # Install Parakeet MLX for Apple Silicon optimization
 pip install parakeet-mlx
+
+# Install additional dependencies
+pip install feedparser youtube-transcript-api python-dotenv
 
 # Fix Python malloc warnings (optional)
 ./fix_malloc_warnings.sh
@@ -137,7 +141,7 @@ feeds = [
 ## Performance Metrics
 
 ### Parakeet MLX Performance
-- **Speed**: 3380 RTFx (transcribes 56 minutes in 1 second)
+- **Speed**: ~0.18x RTF (Real-Time Factor) - optimized for quality
 - **Quality**: Superior podcast-specific accuracy
 - **Apple Silicon**: Native Metal acceleration
 - **Chunking**: 10-minute segments for optimal processing
@@ -154,14 +158,15 @@ feeds = [
 podcast-scraper/
 ├── README.md                   # This file
 ├── podscraper_prd.md          # Product Requirements Document
-├── requirements.txt            # Python dependencies
+├── requirements.txt            # Python dependencies (updated)
+├── config.py                   # Centralized configuration management ⭐
 ├── fix_malloc_warnings.sh     # macOS malloc warning fix
 ├── daily_podcast_pipeline.py  # Main orchestration script ⭐
 ├── feed_monitor.py            # RSS/YouTube feed monitoring
 ├── content_processor.py       # Audio transcription and processing
 ├── claude_headless_integration.py # Claude AI analysis
 ├── robust_transcriber.py      # Advanced transcription engine
-├── claude_tts_generator.py    # TTS generation (optional)
+├── claude_tts_generator.py    # Consolidated TTS + topic compilation ⭐
 ├── deploy_episode.py          # GitHub deployment
 ├── rss_generator.py           # RSS feed generation
 ├── api/
@@ -218,7 +223,8 @@ podcast-scraper/
 
 ### Episode Processing Workflow
 ```
-pending → transcribed → digested → published
+RSS Audio:    pre-download → downloaded → transcribed → digested
+YouTube:      pre-download → transcribed → digested
 ```
 
 ## Troubleshooting

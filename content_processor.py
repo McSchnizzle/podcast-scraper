@@ -76,7 +76,7 @@ class ContentProcessor:
             SELECT e.id, e.episode_id, e.title, e.audio_url, f.type, f.topic_category
             FROM episodes e
             JOIN feeds f ON e.feed_id = f.id
-            WHERE e.id = ? AND e.status IN ('pending', 'pre-download')
+            WHERE e.id = ? AND e.status IN ('downloaded', 'pre-download')
         ''', (episode_id,))
         
         episode = cursor.fetchone()
@@ -503,7 +503,8 @@ class ContentProcessor:
         cursor.execute('''
             SELECT 
                 COUNT(CASE WHEN status IN ('transcribed', 'digested') THEN 1 END) as transcribed,
-                COUNT(CASE WHEN status = 'pending' THEN 1 END) as pending,
+                COUNT(CASE WHEN status = 'pre-download' THEN 1 END) as pre_download,
+                COUNT(CASE WHEN status = 'downloaded' THEN 1 END) as downloaded,
                 COUNT(CASE WHEN status = 'failed' THEN 1 END) as failed,
                 f.type,
                 f.topic_category

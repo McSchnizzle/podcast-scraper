@@ -98,7 +98,7 @@ class DailyPodcastPipeline:
         
         if new_episodes:
             logger.info(f"Found {len(new_episodes)} new episodes")
-            # Update database status to 'pending'
+            # Episodes from feed monitor already have correct status (pre-download)
             self._update_new_episodes_status(new_episodes)
         else:
             logger.info("No new episodes found")
@@ -186,7 +186,7 @@ class DailyPodcastPipeline:
                                 sample_transcript = transcriber.transcribe_file(temp_file.name)
                             
                             # Look for failed episodes and try to match by title keywords
-                            cursor.execute("SELECT id, episode_id, title FROM episodes WHERE status IN ('failed', 'pending', 'pre-download') ORDER BY id DESC LIMIT 20")
+                            cursor.execute("SELECT id, episode_id, title FROM episodes WHERE status IN ('failed', 'downloaded', 'pre-download') ORDER BY id DESC LIMIT 20")
                             failed_episodes = cursor.fetchall()
                             
                             # Try to match by looking for key phrases
@@ -209,21 +209,21 @@ class DailyPodcastPipeline:
                                 # Create new episode entry as fallback
                                 cursor.execute("""
                                     INSERT INTO episodes (episode_id, title, audio_url, status, published_date)
-                                    VALUES (?, ?, ?, 'pending', datetime('now'))
+                                    VALUES (?, ?, ?, 'downloaded', datetime('now'))
                                 """, (episode_id, f"Cached Audio: {audio_file.name}", str(audio_file)))
                                 db_id = cursor.lastrowid
                         else:
                             # Fallback without transcriber
                             cursor.execute("""
                                 INSERT INTO episodes (episode_id, title, audio_url, status, published_date)
-                                VALUES (?, ?, ?, 'pending', datetime('now'))
+                                VALUES (?, ?, ?, 'downloaded', datetime('now'))
                             """, (episode_id, f"Cached Audio: {audio_file.name}", str(audio_file)))
                             db_id = cursor.lastrowid
                     except Exception as match_error:
                         logger.warning(f"Could not match episode, creating new entry: {match_error}")
                         cursor.execute("""
                             INSERT INTO episodes (episode_id, title, audio_url, status, published_date)
-                            VALUES (?, ?, ?, 'pending', datetime('now'))
+                            VALUES (?, ?, ?, 'downloaded', datetime('now'))
                         """, (episode_id, f"Cached Audio: {audio_file.name}", str(audio_file)))
                         db_id = cursor.lastrowid
                 

@@ -32,7 +32,7 @@ Automated system that monitors podcast RSS feeds and YouTube channels, processes
 - **Pipeline Orchestration**: Unified daily processing pipeline ✅
 
 **Technical Achievements**:
-- **Performance**: 3380 RTFx transcription speed (transcribes 56 minutes in 1 second)
+- **Performance**: ~0.18x RTF transcription speed (optimized for quality over raw speed)
 - **Apple Silicon Optimization**: Native MLX framework acceleration
 - **Speaker Detection**: Multi-speaker conversation identification
 - **Audio Chunking**: Optimized 10-minute segments for processing efficiency
@@ -68,24 +68,28 @@ Automated system that monitors podcast RSS feeds and YouTube channels, processes
 
 ## Current Architecture
 
-### Core Components
+### Core Components (Optimized)
 1. **`daily_podcast_pipeline.py`** - Main orchestration and automation
 2. **`feed_monitor.py`** - RSS/YouTube feed monitoring and discovery
 3. **`content_processor.py`** - Audio transcription and processing pipeline
 4. **`claude_headless_integration.py`** - Claude AI analysis and digest generation
-5. **`robust_transcriber.py`** - Advanced Parakeet MLX transcription engine
+5. **`robust_transcriber.py`** - Advanced Parakeet MLX transcription engine (cleaned)
+6. **`config.py`** - Centralized configuration management ⭐
+7. **`claude_tts_generator.py`** - Consolidated TTS + topic compilation ⭐
 
 ### Supporting Infrastructure
 - **`deploy_episode.py`** - GitHub deployment automation
 - **`rss_generator.py`** - RSS feed generation and validation
-- **`claude_tts_generator.py`** - Text-to-speech audio generation
 - **`api/`** - Web API endpoints for RSS and audio serving
 
 ### Episode Processing Workflow
 ```
-Feed Discovery → Download/Transcript → Process → Claude Analysis → Generate Digest → Publish
-     ↓              ↓                    ↓            ↓               ↓            ↓
-  New Episodes   Parakeet MLX      Priority Score  Topic Grouping   Audio/RSS   GitHub
+RSS Audio: Feed Discovery → Download → Parakeet MLX → Claude Analysis → Generate Digest → Publish
+YouTube:   Feed Discovery → YouTube API → Claude Analysis → Generate Digest → Publish
+
+Status Flow:
+RSS:     pre-download → downloaded → transcribed → digested
+YouTube: pre-download → transcribed → digested
 ```
 
 ### Database Schema
@@ -105,7 +109,7 @@ feeds (
 ## Technical Specifications
 
 ### Performance Requirements ✅
-- **Transcription Speed**: 3380 RTFx (real-time factor)
+- **Transcription Speed**: ~0.18x RTF (real-time factor, quality-optimized)
 - **Processing Time**: <30 minutes for complete daily pipeline
 - **Storage Efficiency**: <1KB per transcript (vs ~100MB audio)
 - **Memory Usage**: <2GB RAM for transcription processing
@@ -155,13 +159,14 @@ feeds = [
 ## Success Metrics
 
 ### ✅ Achieved Metrics
-- **Episode Processing**: 41+ episodes successfully processed and digested
-- **Transcription Quality**: High accuracy with speaker detection
+- **Episode Processing**: 62+ episodes successfully processed and digested
+- **Transcription Quality**: High accuracy with optimized RTF (~0.18x)
 - **Analysis Automation**: 100% automated Claude-powered content analysis
 - **Publishing Pipeline**: Fully automated RSS generation and GitHub deployment
-- **Code Efficiency**: Reduced from 28 to 10 Python files (64% reduction)
-- **Error Resolution**: Fixed database sync issues and malloc warnings
-- **Performance**: 10-minute chunking optimization implemented
+- **Code Efficiency**: Reduced from 12 to 9 core files (25% reduction)
+- **Enhanced Workflow**: Dual status workflow (RSS vs YouTube)
+- **Centralized Config**: All settings managed through config.py
+- **Consolidated TTS**: Merged 3 files into 1 comprehensive module
 
 ### Operational KPIs
 - **Daily Uptime**: >99% automated pipeline success rate
@@ -225,6 +230,6 @@ The system is ready for daily production use and can be extended with additional
 
 ---
 
-**Last Updated**: August 28, 2024  
-**Version**: 4.0 - Production Release  
-**Status**: All phases complete and operational
+**Last Updated**: August 30, 2025  
+**Version**: 4.1 - Refactored & Optimized Release  
+**Status**: All phases complete, codebase optimized and consolidated
