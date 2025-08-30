@@ -262,11 +262,27 @@ Begin with: # Daily Podcast Digest - {datetime.now().strftime('%B %d, %Y')}
             logger.error("No digest content to convert")
             return None
         
+        # Generate timestamp for consistent naming
+        timestamp = datetime.now().strftime('%Y%m%d_%H%M%S')
+        
+        # ALWAYS save the full human-readable script first
+        full_script_path = self.output_dir / f"claude_digest_full_{timestamp}.txt"
+        with open(full_script_path, 'w', encoding='utf-8') as f:
+            f.write(digest_content)
+        
+        logger.info(f"📝 Full digest script saved: {full_script_path.name}")
+        
         # Optimize content for TTS
         tts_optimized = self._optimize_for_tts(digest_content)
         
+        # Also save the TTS-optimized version for debugging
+        tts_script_path = self.output_dir / f"claude_digest_tts_{timestamp}.txt"
+        with open(tts_script_path, 'w', encoding='utf-8') as f:
+            f.write(tts_optimized)
+        
+        logger.info(f"📝 TTS-optimized script saved: {tts_script_path.name}")
+        
         # Generate audio file
-        timestamp = datetime.now().strftime('%Y%m%d_%H%M%S')
         audio_path = self.output_dir / f"complete_topic_digest_{timestamp}.mp3"
         
         # Use professional host voice
@@ -285,7 +301,9 @@ Begin with: # Daily Podcast Digest - {datetime.now().strftime('%B %d, %Y')}
                 "generation_time": datetime.now().isoformat(),
                 "content_length": len(digest_content),
                 "tts_optimized_length": len(tts_optimized),
-                "audio_file": audio_path.name
+                "audio_file": audio_path.name,
+                "full_script_file": full_script_path.name,
+                "tts_script_file": tts_script_path.name
             }
             
             with open(metadata_path, 'w', encoding='utf-8') as f:

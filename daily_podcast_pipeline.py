@@ -300,8 +300,28 @@ class DailyPodcastPipeline:
         conn = sqlite3.connect(self.db_path)
         cursor = conn.cursor()
         
+        # Debug: Show detailed episode counts by status
+        cursor.execute("SELECT status, COUNT(*) FROM episodes GROUP BY status")
+        status_counts = cursor.fetchall()
+        logger.info("📊 Episode status breakdown:")
+        for status, count in status_counts:
+            logger.info(f"   {status}: {count} episodes")
+        
         cursor.execute("SELECT COUNT(*) FROM episodes WHERE status = 'transcribed'")
         transcribed_count = cursor.fetchone()[0]
+        
+        # Debug: Show specific transcribed episodes
+        cursor.execute("""
+            SELECT id, title, episode_id, published_date, transcript_path 
+            FROM episodes 
+            WHERE status = 'transcribed'
+            ORDER BY published_date DESC
+        """)
+        transcribed_episodes = cursor.fetchall()
+        logger.info(f"📋 Found {len(transcribed_episodes)} transcribed episodes:")
+        for episode_id, title, episode_id_field, pub_date, transcript_path in transcribed_episodes:
+            logger.info(f"   Episode {episode_id}: '{title}' ({episode_id_field}) - {transcript_path}")
+        
         conn.close()
         
         if transcribed_count == 0:
