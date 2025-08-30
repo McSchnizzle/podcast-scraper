@@ -1,0 +1,23 @@
+{
+  "type": "result",
+  "subtype": "success",
+  "is_error": false,
+  "duration_ms": 35849,
+  "duration_api_ms": 35674,
+  "num_turns": 7,
+  "result": "The analysis reveals a podcast collection with diverse but identifiable patterns:\n\n**Top Topics by Importance:**\n1. **Technology & AI** (95% strength) - Strongest theme across 3 episodes\n2. **Political Commentary** (90% strength) - Consistent current events focus  \n3. **Sports Analysis** (75% strength) - Recurring \"Beyond the Red Zone\" series\n4. **Intelligence & Security** (70% strength) - National security themes\n5. **Personal Development** (65% strength) - Self-improvement content\n6. **Content Creation** (60% strength) - Media and monetization discussions\n\n**Key Cross-References:**\n- Format consistency in sports content (\"Beyond the Red Zone\" series)\n- Political analysis thread connecting multiple episodes\n- Technology education pattern across AI-focused episodes\n\nThe podcast appears to blend educational technology content with political commentary and sports analysis, suggesting a multi-topic format or network of related shows.",
+  "session_id": "fd772d9f-2809-4218-b8e1-f64dcdf8ba3d",
+  "total_cost_usd": 0.1754994,
+  "usage": {
+    "input_tokens": 6,
+    "cache_creation_input_tokens": 1387,
+    "cache_read_input_tokens": 45727,
+    "output_tokens": 207,
+    "server_tool_use": {
+      "web_search_requests": 0
+    },
+    "service_tier": "standard"
+  },
+  "permission_denials": [],
+  "uuid": "5e72469e-85bd-4718-a96b-b2ee414f4ed1"
+}

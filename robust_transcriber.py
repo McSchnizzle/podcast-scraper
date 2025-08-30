@@ -43,6 +43,7 @@ class RobustTranscriber:
     def estimate_transcription_time(self, audio_file: str) -> Tuple[float, float, int]:
         """
         Estimate transcription time based on audio duration and file size
+        Updated algorithm based on real performance data from logs
         Returns: (duration_seconds, estimated_processing_time, recommended_chunks)
         """
         try:
@@ -62,22 +63,35 @@ class RobustTranscriber:
             duration = float(parts[0]) if parts[0] else 0
             file_size = float(parts[1]) if len(parts) > 1 and parts[1] else 0
             
-            # Estimation based on Parakeet MLX performance (Apple Silicon)
-            # Conservative estimate: 0.05x RTF (20x slower than real-time for safety)
-            base_processing_time = duration * 0.05
+            # Updated estimation based on actual log data analysis:
+            # Observed RTF range: 0.05x to 0.243x, with most chunks around 0.15-0.2x
+            # Using more realistic estimate: 0.18x RTF (average of observed performance)
+            # This accounts for variability and gives a more accurate prediction
+            base_rtf = 0.18  # More realistic based on actual measurements
+            base_processing_time = duration * base_rtf
             
-            # Adjust for file size (larger files may need more memory and processing)
+            # Adjust for file size and complexity factors
             size_mb = file_size / (1024 * 1024)
-            if size_mb > 200:  # Large files
-                base_processing_time *= 1.5
+            
+            # Size-based adjustments (larger files tend to have higher RTF)
+            if size_mb > 300:  # Very large files
+                base_processing_time *= 1.4
+            elif size_mb > 200:  # Large files
+                base_processing_time *= 1.2
+            elif size_mb > 100:  # Medium files
+                base_processing_time *= 1.1
+            
+            # Account for variability in processing time (some chunks take 2-3x longer)
+            # Add a safety margin of 30% to account for occasional slow chunks
+            base_processing_time *= 1.3
             
             # Determine chunking strategy
             max_chunk_duration = 600  # 10 minutes per chunk (conservative)
             num_chunks = math.ceil(duration / max_chunk_duration)
             
-            # Add overhead for chunking
+            # Add realistic overhead for chunking operations
             if num_chunks > 1:
-                chunking_overhead = num_chunks * 10  # 10 seconds per chunk overhead
+                chunking_overhead = num_chunks * 15  # 15 seconds per chunk overhead (more realistic)
                 total_processing_time = base_processing_time + chunking_overhead
             else:
                 total_processing_time = base_processing_time
@@ -86,7 +100,7 @@ class RobustTranscriber:
             
         except Exception as e:
             print(f"⚠️ Error estimating transcription time: {e}")
-            return 0, 60, 1  # Default fallback
+            return 0, 90, 1  # Updated default fallback (was too optimistic at 60s)
     
     def split_audio_file(self, input_file: str, chunk_duration: int = 300) -> List[str]:
         """
@@ -244,30 +258,20 @@ class RobustTranscriber:
     def cleanup_transcript(self, transcript: str) -> str:
         """
         Clean up transcript by removing commercials and improving formatting
-        Uses enhanced ad filtering with Claude AI integration for better detection
+        DISABLED: Enhanced ad filtering with Claude AI integration (temporarily on hold)
         """
         if not transcript:
             return transcript
         
-        print("🧹 Cleaning up transcript with enhanced ad filtering...")
+        print("🧹 Cleaning up transcript...")
         
-        try:
-            # Import enhanced ad filter
-            from enhanced_ad_filter import EnhancedAdFilter
-            
-            # Use Claude-powered filtering for intelligent ad detection
-            filter = EnhancedAdFilter()
-            cleaned_transcript, removed_chars = filter.filter_advertisements(transcript)
-            
-            if removed_chars > 0:
-                print(f"🧹 Enhanced cleanup: removed {removed_chars} characters (advertisements)")
-            
-            return cleaned_transcript
-            
-        except Exception as e:
-            print(f"⚠️ Enhanced filtering failed, returning original transcript: {e}")
-            print(f"🧹 Skipping ad filtering due to error")
-            return transcript
+        # TODO: Ad filtering functionality is temporarily disabled
+        # The Claude AI ad filtering is not working properly and has been put on hold
+        # We might want to revisit this in the future with a different approach
+        # For now, just return the original transcript without any ad filtering
+        
+        print("ℹ️ Ad filtering temporarily disabled - returning original transcript")
+        return transcript
     
     def transcribe_file(self, audio_file: str) -> Optional[str]:
         """

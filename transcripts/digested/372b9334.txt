@@ -1,0 +1,898 @@
+[00:00] In this video, I'll be teaching you how
+[00:01] to do one of the most unique
+[00:02] combinations of a GPT and an external
+[00:06] database that works with the GPT.
+[00:08] Meaning, you're giving a custom version
+[00:09] of chat GPT custom memories. The use
+[00:12] case we'll be doing that with in this
+[00:14] video is a journaling GPT where every
+[00:16] time you interact with it, it looks into
+[00:18] the database, brings in any journal
+[00:20] entries from the past seven days to come
+[00:22] up with custom questions to ask you
+[00:24] today. Then you type out the answers and
+[00:26] it stores them back in the database. And
+[00:29] the way we're doing this is with an
+[00:30] automation. So what practically happens
+[00:32] is we have a make automation in the
+[00:34] middle. And when you engage the GPT, a
+[00:37] make automation gets the data into your
+[00:39] GPT. So you get a custom start. And once
+[00:41] you're done journaling, you send your
+[00:42] journal entry to the automation which
+[00:45] stores it in the database. Now to be
+[00:47] clear, this is not a beginner level
+[00:48] automation, but I believe this is well
+[00:50] worth teaching because you can customize
+[00:52] it to do other things than journals.
+[00:54] Essentially, I'm showing you how to
+[00:55] build a custom chatbot inside of chat
+[00:57] GPT with an external storage attached to
+[01:01] it. And at this point, I also want to
+[01:02] point out that this video is sponsored
+[01:04] by Make. They approached us to do a
+[01:05] video with their product. And we were
+[01:06] very excited to actually do that because
+[01:08] we did not build this automation for the
+[01:10] collaboration. We built it cuz we
+[01:12] thought it was really unique and we were
+[01:13] going to teach it in our community
+[01:15] before they even approached us because
+[01:16] we like teaching automations in make as
+[01:19] we find that it's the perfect balance
+[01:20] for beginners. Now again, not a beginner
+[01:23] automation, but don't worry, I have my
+[01:24] trusty iPad here. I'll do my very best
+[01:26] to explain the theory, and then we're
+[01:28] going to do a step by step, which is
+[01:29] also going to include me giving you
+[01:31] everything to copy paste, including the
+[01:32] make blueprint. But because we're
+[01:34] working with JSON objects and notion
+[01:36] databases and everything here, you can
+[01:38] start by importing my blueprint, which
+[01:39] you can also find in the description
+[01:41] below, but then you'll have to reconnect
+[01:43] everything, but it might be a good
+[01:44] starting point to leave less room for
+[01:47] errors. So, with that being said, let's
+[01:48] have a closer look at what we're about
+[01:50] to build here. Okay, so let's begin by
+[01:52] talking about what you need to actually
+[01:54] accomplish this. As I mentioned, this is
+[01:55] no beginner automation, but the tools
+[01:58] involved are quite simple and very
+[01:59] similar to many of the tutorials we
+[02:01] already did on this channel. First of
+[02:02] all, we'll be using a GPT inside of Chat
+[02:05] GPT running on their newest model, GPT5.
+[02:08] Those are only accessible on the premium
+[02:10] plan, which starts at $20 a month. Then
+[02:12] you will need a make account, and a free
+[02:14] account will totally suffice for this.
+[02:16] If you like the automation, want to keep
+[02:17] using it, you can upgrade to build out
+[02:19] more on your account. But for the sake
+[02:20] of this tutorial, you only need to sign
+[02:22] up for the free account. And then
+[02:23] lastly, to store our data here, we'll be
+[02:25] using notion as it's a free software
+[02:27] that allows to get going here without
+[02:29] paying for something like Air Table. And
+[02:31] in my experience, if you're automating,
+[02:32] it does work better than something like
+[02:34] Google Sheets. In terms of setup of all
+[02:36] these free, it's quite simple. Chat GBD,
+[02:38] let's be real, if you're watching this
+[02:39] channel, you probably have an account
+[02:40] already. With Make, you can use the
+[02:42] first link in the description to get
+[02:43] started for free, which in my
+[02:45] experience, it's usually the easiest to
+[02:46] just loging in with your Google account.
+[02:48] And with Notion, it's the same deal. You
+[02:49] can just sign up for free, but in the
+[02:51] video, we'll be setting up a connection.
+[02:52] So, what I want you to do now in
+[02:54] preparation is copy over this journal
+[02:57] GPT template that we prepared for you
+[03:00] into your own Notion account. You simply
+[03:02] go to the link in the description. It is
+[03:04] completely free. It's just a database
+[03:06] template. and you simply go on here and
+[03:08] click duplicate which will allow you to
+[03:09] add it to your workspace like so. By
+[03:12] clicking this I have added this to my
+[03:14] private workspace and those are all our
+[03:16] prerequisites. So with that being said
+[03:17] we're ready to look at how to build this
+[03:19] automation. But I want to do one thing
+[03:20] before we do that and that's because
+[03:22] we're exploring some new and more
+[03:24] advanced concepts than what we've done
+[03:25] previously on this channel. And for that
+[03:27] I want to take some time to actually
+[03:29] talk about them. So look, if you're
+[03:30] already familiar with what web hooks are
+[03:32] and how they function and what JSONs
+[03:34] are, feel free to skip this section. We
+[03:36] put timestamps down below so you can get
+[03:38] to the practical implementation part.
+[03:40] But in case you could use a refresher,
+[03:41] which for my experience, most people
+[03:43] working with these things, unless you're
+[03:44] a seasoned programmer, a refresher like
+[03:46] this can be really useful or you're not
+[03:48] familiar at all. Well, let me clear my
+[03:49] iPad here and explain these two
+[03:51] absolutely essential concepts in
+[03:54] automation and development that if
+[03:56] you're going to be building automations
+[03:57] like this, you just need to know. and I
+[03:59] promise I'll keep it as concise as I
+[04:00] can. Okay, so first up, web hooks. What
+[04:02] is a web hook? Well, you can essentially
+[04:04] think of the concept of a web hook as a
+[04:06] tool that enables communication between
+[04:09] two applications. So, I'm going to
+[04:11] employ my advanced drawing skills here.
+[04:12] If so, if we have app number one over
+[04:14] here and app number two over here,
+[04:16] right, that's actually not so bad. If
+[04:18] app number one fires a web hook, okay,
+[04:20] that's my illustration of a signal.
+[04:22] Well, that web hook is going to have a
+[04:23] unique ID. It's very similar to API key,
+[04:26] which it's going to be looking for. So
+[04:27] let's say in this case the web hook is
+[04:29] named peanut one. I don't know why
+[04:31] peanut one. I just came up with that. So
+[04:32] if app one is firing and saying hey I'm
+[04:35] firing a web hook with the name peanut
+[04:37] one and app number two is actively
+[04:39] looking for peanut one and then it hits
+[04:42] the exact web hook and it sees that web
+[04:44] hook says peanut one then it allows for
+[04:47] these two to connect and exchange data.
+[04:50] I think that's a pretty good way of
+[04:51] explaining it actually. So practically
+[04:53] the web hook is not going to be called
+[04:54] peanut one but it's going to be
+[04:55] something like cg7y i ks3 etc. And the
+[05:00] make is going to be scanning for this
+[05:01] exact web hook and we're going to set up
+[05:03] our GPT to be sending that exact web
+[05:06] hook whenever the user decides that he
+[05:08] finished his journal entry for the day.
+[05:10] So in our illustration this is make this
+[05:12] the journaling GPT and we will be
+[05:14] sending this package over. I'll make it
+[05:16] look like a document. Let's see how I
+[05:18] do. And this document is going to be a
+[05:21] JSON. And if you're not familiar with
+[05:22] JSONs, that's completely fine. You can
+[05:24] just think of it as PDFs are made for
+[05:26] humans and JSONs are made for computers.
+[05:29] It's just a different format that makes
+[05:30] it really easily readable for programs.
+[05:33] So nothing gets lost as we send it
+[05:35] through the web hook. And this JSON will
+[05:37] have a very specific format. For this, I
+[05:39] will open a new page and we'll be
+[05:41] setting this exact format that we'll be
+[05:42] sending over up in the very first step
+[05:44] in our automation. And what the
+[05:46] so-called data structure within the JSON
+[05:48] will contain is the following items. an
+[05:51] action, a note, and then just so you
+[05:53] know, within the note, we'll have sub
+[05:55] items. This is the stuff we're going to
+[05:57] store in our database, which is going to
+[05:58] make this journal real nice and
+[06:00] convenient. We'll be storing another
+[06:01] date, a title, the actual content of
+[06:04] your journal entry, the mood of the day,
+[06:05] tags, and one more called note ID, and
+[06:09] then two dates, from date and to date.
+[06:11] So to sum up, we're going to be sending
+[06:13] this JSON with all the details of your
+[06:15] journal entry, including the mood,
+[06:17] dates, the actual journal entry, and
+[06:18] more via web hook to our automation,
+[06:20] which will make sure everything is
+[06:22] safely placed within our database. So
+[06:24] that's the theory. Now, let's get into
+[06:26] the step by step of actually setting
+[06:28] this up. Okay, so our setup is going to
+[06:30] begin inside of chat GPT. We're going to
+[06:31] be setting up this GPT. Then we'll move
+[06:33] into make to get the database and all
+[06:35] the connections, right? And finally,
+[06:36] we'll finish the GPT. So, what I need
+[06:39] you to do is inside of the chatb
+[06:40] account, go over to GPTs. On the top
+[06:42] right, say create and then you can pull
+[06:44] up this page from the description of
+[06:46] this video called journal GPT setup. And
+[06:49] we just prefilled some of the fields
+[06:51] here that you'll be copying over. So,
+[06:53] for the name, you can call this journal
+[06:54] GPT. Here's a quick description of what
+[06:57] it does. For the instructions, we
+[06:59] carefully crafted this over many
+[07:00] iterations. Feel free to customize it,
+[07:02] but this is what we came up with. Simply
+[07:04] copy paste this into the instructions
+[07:06] here. And as we're right here, I need
+[07:08] you to customize one thing right now.
+[07:10] This is important, otherwise it won't
+[07:12] work. Here under time zone, just replace
+[07:15] this user time zone. So in my case, I'm
+[07:17] going to say Lisbon/ Europe. We can just
+[07:20] do this format of city/continent
+[07:23] and it's going to work every time. And
+[07:25] then for conversation starter, a simple
+[07:27] let's begin will do. We have no
+[07:28] knowledge files and as a recommended
+[07:30] model from our testing already we found
+[07:32] that GPT5 actually works best here and
+[07:34] that is for the reason of its
+[07:35] instruction following being the best
+[07:37] amongst all open AAI models meaning that
+[07:39] these detailed instructions they include
+[07:41] a lot of nuance and details and GP5
+[07:44] simply follows these the best and that's
+[07:46] why it's the best choice here. We want
+[07:47] this to work reliably for capabilities.
+[07:49] We'll turn everything on including the
+[07:51] code interpreter and data analysis. And
+[07:53] then that concludes our initial setup.
+[07:55] after we're done with the make part. We
+[07:57] will come back here to create the new
+[07:59] action. But to do this, we need the web
+[08:01] hook details that we'll be creating
+[08:03] within the make automation. And that's
+[08:05] why we're going to leave this right
+[08:06] here. Maybe one more thing. I'm just
+[08:08] going to generate the image with deli.
+[08:10] And with that being said, we're ready to
+[08:11] move on into the make part, which will
+[08:13] be a bit more technical, but this
+[08:14] tutorial will document every click, so
+[08:16] you have a chance of recreating this
+[08:18] from scratch yourself. Okay. Okay, now
+[08:20] inside of make we will start with a web
+[08:22] hook as that is what will be triggering
+[08:24] our automation here which is essentially
+[08:26] going to be the middle part between the
+[08:28] GPT and our database and our journey
+[08:31] starts within our account under
+[08:32] scenarios here I will create a brand new
+[08:35] scenario and then as we explained what
+[08:37] we're actually going to be doing here in
+[08:38] the illustrations with the iPad in the
+[08:40] last segment we can move through this a
+[08:42] bit quicker first we'll be adding the
+[08:44] web hook and here you want a custom web
+[08:46] hook so we can create a brand new one by
+[08:48] clicking add and And I'm going to say my
+[08:51] journal tutorial web hook. I'm going to
+[08:53] add an API key here just to make this
+[08:56] thing secure. I'm going to also add
+[08:58] that. Change the name to my tutorial API
+[09:01] key. And here you can really make this
+[09:02] as simple or as complicated as you want
+[09:04] to. For this tutorial, I will simply say
+[09:07] tutorial 1 2 3 4 5. Create this. And now
+[09:10] that's a password to my web hook. Let's
+[09:12] make sure that not everybody on the
+[09:14] internet can just start using this. When
+[09:15] I click show advanced settings, it will
+[09:17] allow me to add a data structure here.
+[09:19] And as I mentioned, we're going to be
+[09:21] sending a very specific type of data
+[09:22] structure across here because we don't
+[09:24] just want to capture the message. We
+[09:26] want to capture a whole bunch of
+[09:27] information from our journal to actually
+[09:29] store that in our database. Again, if
+[09:30] any of this confuses you, make sure to
+[09:32] check out the explanation section where
+[09:34] you also got to enjoy my drawing skills.
+[09:36] So, for data structure, we'll also be
+[09:38] adding a brand new data structure. And
+[09:40] I'll just say my tutorial data
+[09:42] structure. And here I will be adding a
+[09:44] specification. And this is where we'll
+[09:46] be adding all the objects we discussed.
+[09:48] This is the type of thing that you don't
+[09:49] really need to understand in depth right
+[09:52] now. You can kind of just follow along
+[09:54] this tutorial and do exactly what I do.
+[09:56] And then by using this, you will kind of
+[09:57] understand how it goes from GPT to
+[09:59] database through what we do right here.
+[10:01] But what I'm going to do is I'm going to
+[10:03] set up the fields we discussed earlier.
+[10:04] So the first one is an action. The type
+[10:06] is text here. And I want to make this
+[10:08] one required actually, which means it's
+[10:10] always expecting it. What I like to do
+[10:11] is I always like to close these down
+[10:13] after I finish them. It just maintains
+[10:14] my overview. I'm going to add another
+[10:16] one. The next one is note type is
+[10:18] collection. This one is also required.
+[10:20] And then within the note I'm actually
+[10:22] going to have multiple sub items. So in
+[10:24] this specification I'm going to say add
+[10:26] item. Just say date. This type I'm
+[10:29] changing to date also required. Collapse
+[10:31] this. We want the title which is text
+[10:33] also required. Then we want content
+[10:36] which is text also required. mood, which
+[10:38] is a text, and this one is actually not
+[10:40] required, meaning it's optional. Tags,
+[10:42] and just make sure to switch tags to an
+[10:45] array right here. This will allow us to
+[10:48] create a tagging system within our
+[10:49] notion database, which is kind of a neat
+[10:51] feature because then you're going to be
+[10:52] able to return to some of your journal
+[10:54] entries later down the line really
+[10:55] easily. Not required. Okay, so we added
+[10:58] tags and then we're also going to add
+[10:59] one called node ID. Keep it as text.
+[11:03] It's not required. And we can move on to
+[11:05] the next one. And actually I want to
+[11:07] change one thing which is the note is
+[11:08] actually not required here. It only
+[11:11] needs the action to work. I mean this is
+[11:13] not going to make a practical difference
+[11:15] but just bear with me as we set this up
+[11:17] step by step and then you can use it and
+[11:18] tweak it to your liking. So I can close
+[11:20] out the note and then we need two last
+[11:22] fields to round this out. One of is
+[11:24] going to be from underscore date. I'm
+[11:26] going to change the type to date and
+[11:28] then to underscore date. The type is
+[11:31] also date and also not required. Okay.
+[11:34] So we're done here. I'm going to save
+[11:35] this data structure. And I know that
+[11:37] might have been a lot, but honestly, you
+[11:38] don't need a deep understanding of this.
+[11:40] Just follow along and it's going to make
+[11:42] this app work. And then you can do your
+[11:43] thing later on. So, as you can see, this
+[11:45] is already looking for the web hook
+[11:46] right here. Right now, we're not sending
+[11:48] any. So, we can just move on to the next
+[11:50] step, which in our case is going to be
+[11:52] our router. So, under flow control,
+[11:54] there's these routers, which allow you
+[11:56] to set up different scenarios in the
+[11:58] automation. In total, we want four of
+[12:00] these. So, I'm just going to click plus
+[12:02] twice, but a lot of it is going to be
+[12:03] identical. So let's just starting out by
+[12:05] building one which is our notion step
+[12:07] and we will set up this notion step in
+[12:08] just a second here. But before we do
+[12:10] that we have to define when this
+[12:12] automation should go down this
+[12:14] particular path as we'll have four of
+[12:16] these in the end. Where you do that is
+[12:17] you click this wrench right here. You
+[12:19] say set up a filter and right here you
+[12:21] can pick when it will go down this first
+[12:23] path. So I want it to go down this first
+[12:25] path when the action from the web hook
+[12:27] equals to create note. This is what we
+[12:30] set up inside of the GBT to send through
+[12:32] the web hook. So whenever it wants to
+[12:34] create a new note, it will send exactly
+[12:36] this create note. You can review that
+[12:37] within the GPT prompt. And then I can
+[12:39] also label it. And now this very first
+[12:41] path will happen if we want to create a
+[12:43] new note. Okay, now we're ready to start
+[12:45] building out this path with the notion
+[12:47] step. Now to do that, if you've never
+[12:48] worked with notion make before, we have
+[12:50] to do a setup one time. This takes a few
+[12:52] steps. So if you have a connection like
+[12:54] me here, you could pick that. But I'm
+[12:55] going to go through this with you step
+[12:57] by step just to make sure that everybody
+[12:59] can do this while following the
+[13:00] tutorial. So you're going to say add and
+[13:03] then here you're going to say notion
+[13:04] internal. I'm just going to call this
+[13:06] the notion internal tutorial connection.
+[13:09] And then it wants this internal
+[13:11] integration token right here. And the
+[13:14] way to get that is if I go over to my
+[13:15] notion and I'm on my database here, the
+[13:18] journal GPT that we copied over in the
+[13:20] beginning. You can click the three dots,
+[13:21] go here into connections and say manage
+[13:24] connections. And then all the way at the
+[13:26] bottom you want to go to develop or
+[13:28] manage integrations. This will open up a
+[13:30] new browser tab in which you can just
+[13:31] click new integration. You name it. So
+[13:33] we're going to say journal GPT tutorial
+[13:37] connection to make this super clear.
+[13:39] This is the notion workspace I'm in.
+[13:41] It's an internal connection. And that is
+[13:43] it. I just say save right here. And when
+[13:45] I click configure integration settings,
+[13:47] this is set up. And we see our internal
+[13:49] integration secret right here. I'm just
+[13:52] going to show it and copy it over here
+[13:54] and paste it. Right now, when I save
+[13:57] this, there's one last step we need to
+[13:59] do to actually make this work. And this
+[14:01] couldn't be any simpler. Back inside of
+[14:03] the notion database, you click the three
+[14:04] dots again. And now, if you go under
+[14:06] connections, if I look for tutorial,
+[14:08] you're going to see the journal GPT
+[14:10] tutorial connection. If I select this
+[14:13] and confirm, we're all done. Our
+[14:15] database is hooked up to the automation,
+[14:17] which will allow us to put anything we
+[14:19] want inside of the database from here on
+[14:21] out. And if you ever use make again, you
+[14:23] don't have to go through this process
+[14:24] again. and it's set up and you can just
+[14:26] pick your connection from this list and
+[14:27] it's right there. So that's the
+[14:28] connection. Now we just have to tell
+[14:30] make which database we want to edit
+[14:32] things in. Select from the list is fine.
+[14:34] And for database ID, it's actually
+[14:36] really simple. You just have to look for
+[14:37] the name. So journal GPT, we don't have
+[14:39] to spell out the full thing and click
+[14:41] okay and it should find it
+[14:43] automatically. That's it right there.
+[14:45] Okay. Okay, so you can already see some
+[14:46] of the tags that are in the database pop
+[14:48] up here, but we won't actually be
+[14:50] needing those because now it's time to
+[14:52] hook up the data we got from the GPT and
+[14:54] put it in the right place in the
+[14:56] database. So, we're going to start up
+[14:57] top here with the title inside of the
+[14:59] note. That's this title right here. For
+[15:01] tags, we actually want to map. So, you
+[15:02] flip this little switch and then you
+[15:04] select tags. For content, we pick
+[15:06] content. For mood, we want to flip map
+[15:09] again and we pick the mood. And for the
+[15:11] start time, we have to do a little trick
+[15:12] here. And I have to admit while we built
+[15:14] this automation we actually use chat GBT
+[15:16] to exactly give us the right thing to
+[15:18] write here. But essentially you have to
+[15:20] look for parse date which will allow you
+[15:22] to reformat the date into a format that
+[15:25] notion will accept seamlessly. These are
+[15:27] intermediate to advanced operations
+[15:29] which you can do with all of your data
+[15:30] to essentially transform it from one
+[15:32] format into another. In this case we're
+[15:34] going to be transforming it from the
+[15:35] format that GPD gives us into a format
+[15:37] that notion wants. So we're going to be
+[15:39] parsing this data. We're going to be
+[15:41] filling in two things in the brackets
+[15:42] here. So, first up, right here, we want
+[15:44] the dates that we passed from the notes
+[15:46] here. And then in the second part, you
+[15:48] can just put in X, and this will work.
+[15:50] Just trust me on this. Then, in the end,
+[15:51] we say include time. Yes. And voila,
+[15:54] that is the notion step. Now, I know
+[15:55] this is becoming a lot of step-by-step
+[15:57] following, but hey, that's how it is
+[15:58] when you get into things that go beyond
+[16:00] the basics. Just super quick anecdote,
+[16:02] and we'll get back to it. I remember
+[16:03] back in the day when I was learning
+[16:04] Photoshop and I went through some of
+[16:06] these tutorials where for 5 minutes
+[16:08] straight it was just well you set this
+[16:09] slider to 74 and this slider to 14.5 and
+[16:13] then the gsh and blur settings should be
+[16:14] these five exact settings and you kind
+[16:16] of just followed it hit enter but then
+[16:18] the damn thing worked and it felt like
+[16:20] magic and it gave you that motivation to
+[16:22] actually go ahead and learn about these
+[16:23] steps and I hope this tutorial does the
+[16:25] same. So if you feel a bit confused,
+[16:27] don't worry. It's completely normal when
+[16:28] you're pushing beyond the boundaries of
+[16:30] your knowledge. And hopefully I'm doing
+[16:31] good enough of a job of explaining this
+[16:33] so you can follow along well and then
+[16:35] the whole thing works and then you can
+[16:36] learn exactly about parsing dates later
+[16:39] on if you feel like it. So for the next
+[16:41] step, we need to create a JSON object
+[16:43] right here, which we can do by clicking
+[16:45] plus JSON and then create JSON. We'll be
+[16:48] doing this with the Eigore diary node
+[16:50] data structure. So it's important to
+[16:52] select that. And here we're going to be
+[16:54] pre-selecting the corresponding fields.
+[16:57] And most of them are going to come from
+[16:58] these properties values down here. So
+[17:00] for the date, we want properties,
+[17:02] values, and then date. And then I want
+[17:03] you to select the start. And then on the
+[17:05] title, we want to open it up and use the
+[17:07] plain text title. That's just the title
+[17:09] without any formatting. That's what we
+[17:11] want here. For content, we again want to
+[17:12] go into content, plain text. Beautiful.
+[17:15] For mood, we take the name of the mood.
+[17:17] And for tags, we'll be adding an item.
+[17:19] And then in here you actually want to
+[17:20] use the map function to make this work
+[17:22] properly. And in the first part of this
+[17:24] mapping function you want the whole list
+[17:26] of tags. This is a programming specific
+[17:29] thing but if you have these two brackets
+[17:30] in the end you know it's a list so it
+[17:31] can contain multiple tags. And then the
+[17:33] second half we want the name of the tag.
+[17:34] So just select the name right here. And
+[17:36] then finally for the note ID we want to
+[17:38] go all the way to the top and use the
+[17:40] database item ID. And this will allow us
+[17:42] to identify which item in the database
+[17:44] it exactly is as we pass this JSON
+[17:46] around. Okay. So that rounds out this
+[17:48] step. You don't have to understand all
+[17:50] of that. All I need you to know is that
+[17:51] this is sort of the package that helps
+[17:53] us communicate between the GPT and the
+[17:54] database. Okay. And as we have the
+[17:56] complete JSON that contains all the data
+[17:58] we need, we can add one final step here,
+[18:01] which is a web hook. And you're just
+[18:02] going to paste in this custom code here
+[18:05] where the response type is single note.
+[18:07] And then the single note is the JSON
+[18:09] that we created in this string. So I'm
+[18:11] going to go in here and just link that
+[18:12] like so. Say save. And that is really
+[18:15] the first branch complete. So to recap,
+[18:17] if ever the GPT is going to be sending
+[18:19] out a web hook via its actions, this
+[18:22] automation will catch it, decide what
+[18:25] type of web hook that was, and if that
+[18:27] web hook is saying we should create a
+[18:29] note, then it will go into our database,
+[18:31] create a new database item, reformat the
+[18:34] data it got into a beautiful JSON, and
+[18:36] then fire another web hook, which the
+[18:37] GPT can then again catch to continue
+[18:40] working. Now, we need a few different
+[18:41] routes because not in every case are we
+[18:43] creating a brand new node, right? As I
+[18:45] told you, we also want the GPT to be
+[18:47] able to pick up the last nodes from the
+[18:49] database. So, it's not just writing but
+[18:51] also reading. And for that, we have some
+[18:52] other routes here. So, in the second
+[18:54] route, what we want to happen is the
+[18:56] action to exactly match update note
+[18:59] because the GPT also has the ability to
+[19:01] change the database entries. I'll also
+[19:03] name it that so it's nicely visible on
+[19:05] here. And then we want another notion
+[19:07] action this time because this is about
+[19:09] updating. We're going to be updating the
+[19:11] database item. All we need is a quick
+[19:13] search. And if I look for journal and if
+[19:15] I just type in the first letters of the
+[19:16] database name again we link it up here
+[19:18] for the ID we're going to be using the
+[19:20] note ID right here. For the title we got
+[19:23] the title tags we're mapping and giving
+[19:26] it the tags. Content is content. Mood
+[19:28] again we're mapping giving it the mood.
+[19:31] And for the date we'll have to do the
+[19:32] same little trick as before where we're
+[19:33] parsing the date to make it the right
+[19:36] format. First part is date. Second part
+[19:38] is yet again x just like before. And
+[19:40] then finally we need to set include time
+[19:42] to yes for this to work reliably. Say
+[19:44] save. Then we need to create another
+[19:46] JSON. So JSON create JSON. And then here
+[19:50] I can already choose the data structure
+[19:51] which is going to be Eigor's diary node.
+[19:53] And here we'll be using data from the
+[19:55] latest step the notion action that
+[19:57] updates. So for the date we want to use
+[19:58] the date start. For the title the title
+[20:01] in plain text. For the content the
+[20:03] content in plain text. For the mood we
+[20:06] want the name of the mood. And we'll be
+[20:08] mapping the tags. And you need to use
+[20:10] this mapping function here for this to
+[20:12] work. And all the way at the bottom on
+[20:13] the properties value as with the others,
+[20:16] you just give it the tags which is an
+[20:18] array. And that essentially means it's a
+[20:19] list of all the tags. And here you just
+[20:21] type name. And for note ID, finally we
+[20:24] give it the database item ID. Click save
+[20:26] and the JSON is set up. And then we
+[20:28] round this out with another web hook.
+[20:31] Insert the web hook. We can keep the
+[20:33] single note because that's what we're
+[20:35] sending here. Again, it's just a single
+[20:37] piece of data. But then the note
+[20:38] changed. So as you see, I copy pasted
+[20:40] that over from the first web hook and it
+[20:42] was still linking to this JSON which was
+[20:44] indicated by the number four. You have
+[20:46] to be careful with little details like
+[20:48] this single node is the new JSON which
+[20:50] you can see here by the number 10. So
+[20:52] I'm just going to click that save. And
+[20:53] now it sends the web hook with this
+[20:55] JSON. Okay, two more paths and we got
+[20:57] this. So next path is yet again going to
+[20:59] be determined by action but this time we
+[21:01] want to get the notes. Also adding that
+[21:03] as a label. If you've been following
+[21:05] closely this will hopefully make sense.
+[21:07] Get nodes is to retrieve the nodes when
+[21:09] the GPT gets engaged. This first one was
+[21:12] for writing a new database item. The
+[21:14] second one is for updating an existing
+[21:15] database item and this one is just to
+[21:17] fetch one of the previous database
+[21:18] items. So the notion action therefore is
+[21:21] going to be search objects because we
+[21:22] need to find one of the database items.
+[21:24] Again, we can just link up the database
+[21:26] by looking for the name of it journal.
+[21:28] Say okay, beautiful. There it is. And
+[21:30] then we can up this limit to 100 in case
+[21:32] you're going to be using this a lot and
+[21:33] you want to look over a total of up to
+[21:35] 100 entries. But on this one, we
+[21:37] actually have to use the filter because
+[21:38] we don't want to look at every single
+[21:40] database item. As I said, this GPT is
+[21:42] set up to only look at the journal
+[21:43] entries from the past week. So here, you
+[21:45] could change that, but to only look at
+[21:47] the past week, we need to set up a
+[21:48] filter. And we're going to be filtering
+[21:50] for the date. So I'll set up the filter
+[21:52] for the date. And then if I do that,
+[21:53] there's this option in here that says
+[21:55] date on or after. Okay. And when we
+[21:58] select this date as before, we again
+[22:00] need to parse this date to get it into
+[22:02] the format that works with notion here.
+[22:04] So in the first part, we're going to do
+[22:06] the from date and the second part just
+[22:08] the X as before. Again, this just
+[22:10] changes the formatting so that notion
+[22:11] can actually read it. And we add a and
+[22:13] rule here. And now we want to go to
+[22:15] date, but this time we want date on or
+[22:19] before. This allows us to create a
+[22:21] little date range for all the nodes
+[22:23] between two dates. Just like before, we
+[22:25] need to parse the date so notion can
+[22:27] read it. And here we'll be taking the
+[22:28] two date and the X here. And this will
+[22:30] filter for all the nodes between this
+[22:32] date and this date. Save that filter
+[22:34] just like that. Okay. Then we need
+[22:35] another JSON. So I'm just going to pick
+[22:37] this notion step. Take the ego diary
+[22:39] note. And then from the notion step,
+[22:40] we're putting the data into here. Just
+[22:42] like with the previous two paths, date
+[22:44] start. I want the title in plain text. I
+[22:47] want the content in plain text. I want
+[22:50] the mood name. And for the tags, we want
+[22:52] to use the map function here like so.
+[22:56] And then here we want the tags and the
+[22:58] name. And then for note ID, we want to
+[23:00] use the page ID. Amazing. We're really
+[23:03] getting close to actually making this
+[23:04] work. While we tested this, there is one
+[23:07] error that could occur here, which is if
+[23:09] there's nothing in your database, this
+[23:10] step will throw an error. So, the way we
+[23:12] can handle that in here is by
+[23:13] right-clicking this JSON saying add
+[23:15] error handler resume. And then here, you
+[23:18] just want to enter square brackets,
+[23:19] which means this is an empty list. So,
+[23:21] in this case, we'll keep everything
+[23:22] working as it will return an empty list
+[23:25] in case there's nothing in the database,
+[23:27] which can happen. Okay. And then we
+[23:28] round out this one with another webbook
+[23:30] response. I'm just going to copy this
+[23:31] over from the other one. But here we
+[23:34] actually got to change three things.
+[23:36] This and this right here because it's
+[23:38] not a single note anymore. We filtered
+[23:39] for multiple nodes. So say notes right
+[23:41] here, notes right here. And then here
+[23:44] you want to pick the correct JSON, the
+[23:45] JSON from step 14. And save this out cuz
+[23:48] we want to send this one for the web
+[23:49] hook. Because when we looked inside of
+[23:51] the notion database and searched for
+[23:52] date range, if it's multiple days, it
+[23:54] can return more than one note. So it's
+[23:56] not the same thing as a single note
+[23:58] before. Okay, let's finish the last
+[23:59] path, which will round out the
+[24:00] automation. This one is going to be all
+[24:03] about getting the tags, which honestly
+[24:06] with the journaling example here is kind
+[24:08] of a nice to have, but if you rebuild
+[24:10] this automation to do other things,
+[24:12] having things tagged can be extremely
+[24:14] useful. Sometimes even mission critical.
+[24:15] So, this is how you do it. You set up
+[24:17] this route to be to get the tags. We'll
+[24:19] add a notion step. This time, we want to
+[24:22] get a database, the same database as
+[24:24] before. Click save. And then we want one
+[24:26] last web hook which is going to be a web
+[24:29] hook response. And then this one we need
+[24:30] to customize a little bit. So the
+[24:32] response type is tags. And then all the
+[24:35] tags we want to pass on as a list which
+[24:38] we do by giving these square brackets
+[24:40] which creates a list. Then inside the
+[24:42] square brackets we want the map function
+[24:44] like so. And then right here in the
+[24:46] first part of the map function I want
+[24:48] the tags but I want the list here under
+[24:50] options. All the options we have. And
+[24:52] then in the second part we just say
+[24:54] name. Click save. And that is it right
+[24:56] there. That is the full step by step on
+[24:58] how to build this automation that can
+[25:00] now be customized for so many different
+[25:03] use cases. But we're going to finish out
+[25:05] our journaling GPT here by heading back
+[25:07] over into chat GPT. And now hooking this
+[25:10] automation up with the GPT. So
+[25:14] previously we finished all the other
+[25:15] fields here except of the action. And
+[25:17] the action is what's going to be
+[25:19] communicating with the automation here.
+[25:21] So let's create a new action. And then
+[25:23] what you want to do here is take the
+[25:24] notion page I gave to you. And then here
+[25:26] at the bottom you can see JSON. And you
+[25:28] can copy this by clicking copy. And this
+[25:30] entire JSON is what links this to the
+[25:33] automation. All the things we set up in
+[25:35] there is specified in this JSON. So you
+[25:37] can see there's different mood types. It
+[25:39] either sends single notes or notes. All
+[25:42] the things that we set up in the
+[25:43] automation is in here. So all I do is
+[25:46] copy and paste that JSON in here. And
+[25:49] then I just need to fill out one single
+[25:50] thing right here where it says web hook
+[25:52] URL. This is essential. This is where we
+[25:55] connect it. Remember what I explained to
+[25:57] you that we're going to be firing a web
+[25:59] hook with the GPT which the automation
+[26:01] is going to be listening for. Well, this
+[26:03] is the listening step right here. And
+[26:05] it's listening for this very specific
+[26:08] URL. So I'm going to copy this address
+[26:10] to the clipboard. Head back over to my
+[26:11] GPT and paste that in here. And make
+[26:14] sure nothing gets lost here. Right. In
+[26:15] this case, when I pasted it, it actually
+[26:17] deleted the second quotation mark. So, I
+[26:19] absolutely want to preserve that
+[26:20] otherwise it won't work. So, it's URL
+[26:22] and quotation marks colon space
+[26:25] quotation mark then the URL then the
+[26:28] quotation marks. If you do this, you
+[26:29] should see a check diary action pop up
+[26:32] here. And this is what's going to be
+[26:33] linking our GBT to the automation to the
+[26:37] database and backwards. Okay, there's
+[26:39] one more thing because to make this
+[26:40] extra secure, we did set up a API key.
+[26:43] So you need to go to authentication up
+[26:45] here and actually set it up to otherwise
+[26:47] it won't be able to speak to each other.
+[26:48] It's like a password for the
+[26:50] communication here. So off type I'm
+[26:52] going to set to custom. And remember
+[26:54] right here we set this up my tutorial
+[26:55] API key. And actually to be fair I
+[26:57] already forgot what I set this to. So
+[26:59] I'm just going to set a new one and
+[27:01] remove the first one. Going to call this
+[27:03] my second tutorial API key. The value is
+[27:05] going to be tutorial 1 2 3 4 5. Actually
+[27:08] thinking back that might have been what
+[27:10] I set for this tutorial. I will simply
+[27:12] say tutorial 1 2 3 4 5. Anyway, what I
+[27:16] want to do here is copy this right here.
+[27:19] Send the API key using the X make API
+[27:22] key. HTTP header. That is what it wants
+[27:24] down here, the custom header name. So,
+[27:26] I'm going to paste that in here. And
+[27:28] then the API key was tutorial 1 2 3 4 5.
+[27:32] Save. We're done. Would you believe
+[27:33] that? So, let's create the GPT. But I
+[27:36] actually want to only create this one
+[27:37] for myself. So, that concludes the GPT
+[27:39] setup. But I have to do one more thing
+[27:40] in the make automation and I have to
+[27:42] turn this on immediately as data arrives
+[27:45] and for that to work I actually need to
+[27:46] save the changes here. This had some
+[27:48] unsaved changes. Okay, we can fix that.
+[27:50] Run scenario immediately and now this is
+[27:53] running and listening. And now if we go
+[27:55] into a brand new conversation with the
+[27:56] GPT and say let's begin. It will fetch
+[27:59] our latest journal entries and all of
+[28:01] our tags. And you will see that it will
+[28:04] be engaging me with a custom message
+[28:06] that is based on what is in my database
+[28:08] where I talk about development and
+[28:10] pedal. And then it's talking to me as if
+[28:12] it knew because it does. And if I share
+[28:14] a new message, I can say save to
+[28:15] database. And I'll just pull over the
+[28:17] notion database here because you will
+[28:19] see it using the action up here. And
+[28:20] voila, it populates into the database.
+[28:22] And this way you can set up a two-way
+[28:24] connection straight from within chat GPT
+[28:26] to access an external database as your
+[28:29] very own storage. As mentioned before, I
+[28:31] also included a blueprint to this entire
+[28:33] scenario. So you can just go in here and
+[28:34] make say more import blueprint and then
+[28:37] bring the whole automation in, but you
+[28:39] will have to reconnect everything one by
+[28:40] one to your own accounts. But this way
+[28:42] you at least have a starting point where
+[28:44] less can go wrong. So if you want to try
+[28:46] this out for yourself, you can get one
+[28:47] month of make for free from the first
+[28:49] link in the video's description below.
+[28:51] And that's it for today. Something a bit
+[28:53] more in-depth, a bit more advanced. The
+[28:55] options are vast here. You could really
+[28:56] customize this to do many other things.
+[28:58] And that interface of being within chat
+[29:01] is something that over 80% of the users
+[29:03] will resonate with cuz it is the most
+[29:04] popular LLM platform in the world. And
+[29:06] now you know how to extend it with
+[29:08] external memory. All right, my name is
+[29:09] Igor and I hope you have a wonderful

@@ -42,28 +42,39 @@ class ClaudeHeadlessIntegration:
             conn = sqlite3.connect(self.db_path)
             cursor = conn.cursor()
             
+            # Only get episodes with status='transcribed' to match pipeline behavior
             query = """
-            SELECT id, title, transcript_path, episode_id, published_date
+            SELECT id, title, transcript_path, episode_id, published_date, status
             FROM episodes 
             WHERE transcript_path IS NOT NULL 
+            AND status = 'transcribed'
             AND published_date >= date('now', '-7 days')
             ORDER BY published_date DESC
             LIMIT 10
             """
             
+            logger.info(f"Executing query: {query}")
             cursor.execute(query)
             transcripts = []
             
-            for row in cursor.fetchall():
-                transcript_path = row[2]
+            all_rows = cursor.fetchall()
+            logger.info(f"Query returned {len(all_rows)} rows")
+            
+            for row in all_rows:
+                episode_id, title, transcript_path, episode_id_field, published_date, status = row
+                logger.info(f"Processing episode {episode_id}: '{title}' (status: {status}, transcript: {transcript_path})")
+                
                 if transcript_path and Path(transcript_path).exists():
                     transcripts.append({
-                        'id': row[0],
-                        'title': row[1],
-                        'transcript_path': row[2],
-                        'episode_id': row[3],
-                        'published_date': row[4]
+                        'id': episode_id,
+                        'title': title,
+                        'transcript_path': transcript_path,
+                        'episode_id': episode_id_field,
+                        'published_date': published_date
                     })
+                    logger.info(f"✅ Added episode {episode_id} to transcripts list")
+                else:
+                    logger.warning(f"❌ Transcript file not found for episode {episode_id}: {transcript_path}")
             
             conn.close()
             logger.info(f"Found {len(transcripts)} transcripts for Claude analysis")

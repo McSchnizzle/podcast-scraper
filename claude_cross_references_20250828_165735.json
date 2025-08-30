@@ -1,0 +1,23 @@
+{
+  "type": "result",
+  "subtype": "success",
+  "is_error": false,
+  "duration_ms": 36968,
+  "duration_api_ms": 36872,
+  "num_turns": 7,
+  "result": "The analysis identifies **AI Technology** as the strongest recurring theme (0.85 strength), appearing in 3 episodes focusing on development tools and automation. **Political Analysis** ranks second (0.75), with particular emphasis on fascism and extremism across multiple episodes. **Systemic Corruption** appears in intelligence and sports contexts, while **Societal Challenges** encompasses climate migration and economic systems analysis.",
+  "session_id": "94b5327b-d0ec-4fbd-84f9-4428ee472a4a",
+  "total_cost_usd": 0.17413815000000002,
+  "usage": {
+    "input_tokens": 6,
+    "cache_creation_input_tokens": 1450,
+    "cache_read_input_tokens": 45519,
+    "output_tokens": 89,
+    "server_tool_use": {
+      "web_search_requests": 0
+    },
+    "service_tier": "standard"
+  },
+  "permission_denials": [],
+  "uuid": "ad30a7e6-5df3-4017-bf57-0b26d25b3c47"
+}

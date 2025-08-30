@@ -1,0 +1,2547 @@
+[00:00] So today I have the pleasure of teaching
+[00:02] you everything I know about claw code in
+[00:04] one video. And there's a lot of ground
+[00:06] to cover, but I won't just be talking
+[00:07] about starting your first project. I'll
+[00:09] be guiding you from the entire process
+[00:11] of literally creating a new folder all
+[00:14] the way to your application idea being
+[00:16] live on the internet with user
+[00:18] authentication and multiple AI
+[00:20] integrations. This might sound quite
+[00:23] ambitious, but recently I've had the
+[00:25] experience of multiple friends
+[00:26] approaching me and asking about this
+[00:28] whole vibe coding thing and some of them
+[00:30] specifically asking about claude code.
+[00:32] And this session is going to be exactly
+[00:34] how I would walk a good friend through
+[00:36] this entire process as a newcomer to all
+[00:39] of this. The main chapters that we'll be
+[00:40] covering here is one the setup and
+[00:42] applications we'll be using, two, the
+[00:44] agents feature within cloud code, how to
+[00:46] create them, what's their purpose, how I
+[00:48] use them. Then we'll hop on over to MCPs
+[00:51] again, which ones actually matter as a
+[00:52] beginner. And then we'll also go through
+[00:54] setting up your first database and
+[00:56] making your application not just
+[00:57] available online through the use of a
+[00:59] combination of GitHub and Versell, but
+[01:01] also functional by showing you how to
+[01:03] fix issues when they arise with a
+[01:05] combination of all the things that we
+[01:07] previously discussed. So, as you can
+[01:09] see, there is a lot to go through. But
+[01:11] I'm making this video because I'm
+[01:12] confident that you can absolutely do
+[01:14] this. And I'm saying that because I have
+[01:16] done this myself. I myself do not have a
+[01:18] development background, but with nothing
+[01:20] but curiosity and a little bit of grit,
+[01:22] I managed to really work my way into
+[01:23] this. And I'm looking forward to sharing
+[01:25] everything I know at this point in time
+[01:27] with you in order to get started with
+[01:29] this incredibly, incredibly powerful
+[01:30] software. So, with that being said,
+[01:32] let's get right into it. And the thing
+[01:33] that we'll be getting done today is
+[01:35] building a brand new application around
+[01:37] the idea that I personally quite enjoy.
+[01:39] And here's my idea. I'm going to draw it
+[01:40] out. It's basically a web application
+[01:42] into which you can log in. So, this is,
+[01:44] you know, username and password. And
+[01:46] then once you are inside, it uses two
+[01:48] different AI models to help you set
+[01:50] boundaries. Also, in other words, it's
+[01:52] kind of a AI tool to help you say no in
+[01:55] an elegant and professional way. This is
+[01:57] the topic that I noticed a lot of people
+[01:58] are not good with. For me, this has been
+[02:00] something that I was not that good at.
+[02:01] And as I got good at it, it completely
+[02:03] changed my life. And now I see it all
+[02:04] around me like people don't have the
+[02:06] ability to kind of assert themsel and
+[02:08] say no. So, we're going to build an app
+[02:09] that will help with that. And the idea
+[02:11] is basically just a text box at the top
+[02:13] where you can enter the event you want
+[02:14] to avoid or the ask that somebody's
+[02:16] making that you want to say no to. And
+[02:18] then what I wanted to generate is three
+[02:20] different versions of saying no. Light,
+[02:22] medium, and heavy. And then I want
+[02:24] images along with each one that I could
+[02:26] maybe send with the message to lighten
+[02:28] the mood a little bit. So quite simple,
+[02:30] but we'll be using the entropic API to
+[02:32] generate the free ways of saying no. And
+[02:34] then we'll be using a image generation
+[02:36] API to generate respective images for
+[02:38] you. and it's behind a payw wall so you
+[02:39] can share it with loved ones, with team
+[02:41] members, whatever you want. And I think
+[02:42] this concept of app is small enough for
+[02:44] us to get it done in one session, but
+[02:47] large enough to cover everything to make
+[02:49] you confident enough to actually do this
+[02:51] yourself because you're going to see the
+[02:53] entire process here. A toz. Okay, so
+[02:54] let's get into building what we'll call
+[02:56] the no machine. Yeah, I actually kind of
+[02:58] like that word. But in order for us to
+[02:59] build the no machine, we actually have
+[03:01] to get set up first. So I'll be
+[03:02] switching over to my screen here to
+[03:04] guide you through the step by step. So,
+[03:05] first things first with the setup and
+[03:06] all the supporting materials and prompts
+[03:08] and agent prompts that we'll be using in
+[03:10] this video. I put all of them into one
+[03:12] big notion page that you should open up
+[03:13] along with watching this video in order
+[03:15] to have all the links, prompts, and
+[03:17] resources, including the little tips and
+[03:19] tricks that I share in this video in one
+[03:20] simple page. I put the link to that in
+[03:22] the description below. I also pinned it
+[03:24] as the top comment. All I ask of you is
+[03:25] to sign up to the free newsletter where
+[03:27] we share prompts similar to the one that
+[03:29] this entire application is built on on a
+[03:31] weekly basis for free. So just check out
+[03:32] the link in the description for all the
+[03:34] resources that we'll be using in this
+[03:35] video and all the various applications
+[03:37] and various other recommendations. So
+[03:39] that's one essential resource. And the
+[03:40] second one is actually a video that I
+[03:42] already have on a channel which helps
+[03:44] you get set up with cloth code. In that
+[03:46] video I did my very best to show you the
+[03:48] setup from not having it on your
+[03:49] computer all the way to have a
+[03:51] functional version of cloth code on your
+[03:53] computer. That I won't be doing in this
+[03:55] video. Again, I'll kind of just assume
+[03:57] that you already have cloud code
+[03:58] running. In case you don't, that video
+[03:59] will be linked below. Go through that
+[04:01] first. I think it's like a six or seven
+[04:02] minute video and it includes some
+[04:04] examples too. So in just a few minutes
+[04:06] you'll be ready to go with clot code
+[04:08] running and in case you want to prepare
+[04:09] for the rest of this process. The other
+[04:11] things that you will need to have to
+[04:12] follow along this entire process are the
+[04:14] following. As mentioned you need clot
+[04:16] code installed on your computer. You
+[04:17] will need an enthropic account for the
+[04:19] API key from Enropic. You will need a
+[04:21] file.ai account for the image generation
+[04:24] API key. From there you will need a
+[04:26] Verscella account to deploy. You will
+[04:28] need a GitHub account to store your
+[04:30] application and do versioning of it.
+[04:32] Then for extra credits to make things
+[04:34] more convenient, I'll be using this in a
+[04:35] video. You will want to install the
+[04:37] GitHub CLI. And then finally, you want a
+[04:39] subabase account to host your user data
+[04:42] and the application data in a database.
+[04:44] The good news is if you set all of these
+[04:46] up once, you can keep building apps and
+[04:48] you'll just keep using the same
+[04:49] services. You just have to set it up
+[04:51] once including clot code. About the cost
+[04:53] of these, GitHub and GitHub CLI are
+[04:54] completely free. Both supper and
+[04:56] Verscell are going to be more than
+[04:57] sufficient on the free plan. I mean,
+[04:59] I've been literally running our website
+[05:00] on the free Versell plan for a few
+[05:02] months and I didn't even hit the limits.
+[05:04] So, that is free for both Enthropic and
+[05:06] the Fala API. You'll be paying per
+[05:07] usage. So, you'll have to load a few
+[05:09] dollars there. But, to get started, $5
+[05:10] in each account will suffice. And then
+[05:12] clot code is free, but the most
+[05:14] efficient way to use it is on the paid
+[05:15] entropic plans. I recommend the $20 one
+[05:17] to get started. If you hit the limits
+[05:19] regularly, you upgrade to the $100 one.
+[05:21] If you hit those limits regularly, you
+[05:22] upgrade to the $200 one. That's the one
+[05:24] I'm on right now. But I've been kind of
+[05:26] obsessed with this thing. A lot of 5:00
+[05:28] a.m. mornings and just having two free
+[05:30] cloud codes open, working on different
+[05:31] projects simultaneously. I only
+[05:32] recommend upgrading once you start
+[05:34] hitting those limits regularly, though.
+[05:36] So, start with the $20 one and avoid
+[05:38] paying through the API for cla code
+[05:40] because that just gets super expensive
+[05:42] extremely quickly. And for example, on a
+[05:43] $200 plan, you get thousands of dollars
+[05:45] of value in terms of the APIs. So, those
+[05:48] are all the things that you need to set
+[05:49] up. And I realize that's a lot. And I
+[05:51] also realize I'm kind of throwing you
+[05:52] into the deep end of the pool right
+[05:53] here. Especially if you've never worked
+[05:55] with any one of these apps. I decided
+[05:57] that for this process, it would not be
+[05:59] the most useful thing for me to go
+[06:01] through and sign up with Google into
+[06:03] each one of those services to create an
+[06:04] account. You can do that on your own.
+[06:06] And if you ever get stuck, you can
+[06:07] always ask Chat GPT or Claude to assist
+[06:09] you through the process. So if you're
+[06:11] trying to create a Versell account or
+[06:13] you're trying to do something in this
+[06:14] video and it doesn't work and you're not
+[06:15] sure about that one, you can type it
+[06:17] right into Claude code and say, "Hey, I
+[06:19] don't really understand this. Can you
+[06:20] explain this to me step by step or you
+[06:22] just go into chat chip and ask the same
+[06:23] thing and you will always get the
+[06:25] support that you need to get all of this
+[06:26] done. I'm confident in that because
+[06:28] again I've done it myself and also in
+[06:29] the community we've seen so many people
+[06:32] go through this entire process and set
+[06:34] it up with no prior knowledge. We have
+[06:36] nontechnical college professors. We have
+[06:38] entrepreneurs who took a software
+[06:39] development class 30 years ago in
+[06:42] university and haven't touched it since
+[06:44] picking this up building applications
+[06:46] monetizing them empowering their own
+[06:48] companies. This just works. And there's
+[06:49] a reason I haven't done a video like
+[06:51] this in a long time. This really is a
+[06:53] game changer and I can't wait to get
+[06:55] into the next section of explaining the
+[06:56] agents to you. Finally, now we have the
+[06:58] setup section. I'll assume you have all
+[06:59] of these accounts. You have cloud code
+[07:01] running and we'll just get right into it
+[07:04] by creating a brand new folder. Okay, I
+[07:06] have this folder here with various cloud
+[07:08] code projects. I'm just going to create
+[07:09] a brand new folder. Name it the no
+[07:12] machine. Okay, and then what I'm going
+[07:14] to do is rightclick the no machine. And
+[07:15] here on Mac, this is the quickest way to
+[07:17] get the clot code. new terminal at
+[07:19] folder down here and then you just type
+[07:21] clot. As I have it installed already, it
+[07:23] will open up clot code. I'll just make
+[07:24] this larger so it's easy for you to see.
+[07:27] Okay, I trust the files in this folder
+[07:29] and this is where the process begins. So
+[07:30] the no machine is created in a brand new
+[07:33] folder and clot code will be creating it
+[07:35] within here. So I'll kind of do this
+[07:36] two-tiered setup with the folder over
+[07:38] here and claude code right here. So
+[07:40] before we start creating the first files
+[07:41] in a folder, I want to show you some
+[07:43] essential things you need to set up in
+[07:44] here. One of them would just right away
+[07:46] be going to slash model. And then they
+[07:48] shipped a recent update here with Opus
+[07:50] plan mode. And this is just the best
+[07:52] thing ever. If you're in the lower
+[07:53] tiers, you're not going to be able to
+[07:54] use Opus all the time. So a lot of
+[07:56] people just default to Sonnet cuz it's
+[07:58] just way cheaper and you don't need Opus
+[08:00] in most of the use cases. Opus is just a
+[08:02] larger, smarter model. But many of the
+[08:04] things you do, Sonnet is perfectly fine.
+[08:06] It's extremely good to especially for
+[08:08] writing code. But in this OPUS plan
+[08:10] mode, what I'll be showing you in a
+[08:11] second is that before you implement a
+[08:13] new feature or you start a new app, you
+[08:15] always want to create a plan. And what
+[08:17] OPUS plan mode does is it uses Opus, the
+[08:20] big smart model with a lot of forward
+[08:22] thinking and planning and strategy for
+[08:24] your plans and then uses Sonnet to write
+[08:25] the code. So you kind of get the best of
+[08:27] both worlds without maxing out your plan
+[08:28] too quick. Okay, so when you have that
+[08:30] set up, then you will want to move into
+[08:32] initializing this project. And you do
+[08:34] that by saying /init. And if you say
+[08:36] /init in here, it will look at my
+[08:39] codebase. And right now it has no
+[08:41] information. It has nothing, right? It
+[08:43] is just the name of the folder, the no
+[08:45] machine. But this will set up the
+[08:47] project for success with claude code.
+[08:50] And you always, always, always want to
+[08:51] do this because the main thing this is
+[08:53] going to do is create a markdown file in
+[08:54] the root of the folder called clot.md
+[08:58] with essential information on your
+[08:59] entire app. And then as it works, it
+[09:01] will keep updating this file. You can
+[09:03] kind of think of this as the brain of
+[09:04] the project because really every time
+[09:06] something changes or you add more things
+[09:07] a cloud MD will be updated and here
+[09:10] wants a confirmation. So I have three
+[09:12] options here. I can say one yes, two yes
+[09:14] and don't ask me again. This command is
+[09:16] always okay and then free no and then
+[09:18] you can kind of direct it. I usually
+[09:19] like to say the second yes so it doesn't
+[09:21] bug me so much. And there you go. It
+[09:23] created the cloud MD file. We can kind
+[09:25] of have a quick look at this. This file
+[09:26] provides guidance to clot code when
+[09:28] working with code in this repository.
+[09:30] This repository is currently empty. when
+[09:31] code is added this file should be
+[09:32] updated with and then here are the
+[09:34] different things that will be in here.
+[09:35] So again this is kind of the brain of
+[09:37] the project. You can also think of it in
+[09:38] terms of human psychology as the ego of
+[09:41] the project. The identity like what does
+[09:43] it do? What is this project's job? What
+[09:45] are the previous employments or schools
+[09:47] that this project went to? What tools is
+[09:48] it using etc. So now that we have the
+[09:50] basic setup I want to get started with
+[09:51] this app. Let's actually start turning
+[09:53] the no machine into a reality by telling
+[09:55] it about our app idea. But before we
+[09:57] start typing we got to enable one
+[09:59] essential feature. You got to know this
+[10:00] and it's a bit hidden. So what you want
+[10:02] to do is hit shift and tab. And I want
+[10:05] you to watch this part of the screen
+[10:06] when I do that. Shift and tap once. Plan
+[10:09] mode on. See that? If I shift and tap
+[10:11] multiple times, it kind of cycles
+[10:12] through these three options. I want to
+[10:14] go to plan mode. Because if you're
+[10:16] inside of plan mode, clot code will not
+[10:18] be doing. It will be planning its next
+[10:22] actions. Because if I would just type
+[10:24] what I want from this app, what would
+[10:25] usually happen is say this is cloud code
+[10:28] right here. And I send it a prompt with
+[10:30] hey, I want the no machine. And then I
+[10:32] give it some details on what I imagine
+[10:34] with the app. Without the plan mode on,
+[10:36] clot code would move on to create a
+[10:38] to-do list. This is my beautiful drawing
+[10:40] of a to-do list with different items.
+[10:42] And then it will think for a little bit
+[10:44] and start working on the first item. And
+[10:47] then it will work on the second item and
+[10:49] so on and implement all of this. And a
+[10:51] few minutes later you have the
+[10:52] application right there for you to
+[10:53] review, add features, remove features,
+[10:56] remove any bugs, etc. We do not want
+[10:59] this for anything that is a big task.
+[11:02] It's fine to let it work like this many
+[11:03] times, but if you're starting a brand
+[11:05] new app, especially also if you're
+[11:07] adding any new feature, what you rather
+[11:08] want to do is have cloud code here, but
+[11:11] have it in plan mode as we switched it
+[11:13] right now. And we're going to send the
+[11:14] same no machine prompt idea to it. Oh
+[11:17] god, my writing is getting increasingly
+[11:19] bad here. And then rather than it
+[11:20] creating a to-do list and just getting
+[11:22] to work right away in the plan mode, as
+[11:23] you might already be able to tell, it
+[11:25] will create a plan for us and say,
+[11:27] "Okay, these are the to-dos that I'm
+[11:29] planning to do. These are the features
+[11:30] that I want to include. These are the
+[11:32] things that it's going to achieve, and
+[11:33] this is the architecture that I
+[11:35] propose." Now, you don't have to
+[11:36] understand all of the things that we
+[11:38] will plan for in order for this to be
+[11:40] useful for you, but you definitely want
+[11:42] to review its direction, especially if
+[11:44] you're starting with nothing as we are
+[11:45] right now. So, what I'm going to do
+[11:47] right here is I'm just going to type out
+[11:49] my idea for this no machine. I want to
+[11:51] create a web app that uses the enthropic
+[11:55] API to turn a event that I want to
+[11:59] decline or a message that I want to
+[12:02] reject into three different ideas on how
+[12:06] to set a boundary or say no. The
+[12:08] application will be titled the no
+[12:10] machine. And for each one of the three
+[12:13] ideas, I also want to generate images
+[12:17] that could be sent along with the
+[12:19] message you generate to get the point
+[12:21] across smoothly. Okay, I think that
+[12:23] describes it pretty well. And now I'm
+[12:25] just going to name the different models
+[12:26] that I plan on using the file.AI AI flux
+[12:28] realism API and ropic opus 4.1 API for
+[12:35] the response generation and a sappa
+[12:39] basease for the authentication.
+[12:43] And I think that's actually it. So this
+[12:46] is really all it takes to get going. And
+[12:48] now that we're in plan mode, I can
+[12:50] already hit enter and kind of explain a
+[12:52] few alternative approaches that other
+[12:53] people take because as you start
+[12:55] consuming content on cloud code, you
+[12:56] will find many different opinions on how
+[12:58] to get a project started. Some
+[13:00] developers have these elaborate
+[13:01] frameworks on how to exactly do it and
+[13:03] they're sure that they have the very
+[13:04] best way. There's these entire methods
+[13:06] with like 10 steps that you have to do
+[13:08] before you even get started into the
+[13:10] project. And although that might make
+[13:11] sense, what I found from some fellow
+[13:13] developers and cloud code users is that
+[13:15] a lot of them don't work reliably. And
+[13:17] at this point in time, we just don't
+[13:18] have a single consensus of how to best
+[13:20] do it. And this tutorial is for getting
+[13:21] your first proper project up and
+[13:23] running. So we won't be getting into
+[13:25] creating an entire PRD and design
+[13:28] specifications in advance before getting
+[13:30] into this. I just described this in
+[13:31] natural language in two sentences. And
+[13:34] there we go. We have the plan. In case
+[13:35] you wondered how I dictated right into
+[13:37] cloth code that's not a native feature
+[13:39] is this is a app called Whisperflow that
+[13:41] actually reached out to sponsor us and
+[13:42] we're going to be doing some
+[13:43] partnerships with them in other videos.
+[13:44] But yeah, this is not sponsored. I just
+[13:46] generally use them and it works great
+[13:48] with cloud code because I just press two
+[13:49] buttons and I can dictate just like I
+[13:51] would in chatbt or claude. Back to our
+[13:53] plan. So here we have the plan. You
+[13:55] really want to review this in details.
+[13:56] So the no machine web app implementation
+[13:58] plan text stack front end next.js14 with
+[14:01] app router TypeScript tailwind and CSS.
+[14:03] So if you're non-technical, you don't
+[14:05] really have to understand all of this.
+[14:06] But I think as you work with a few
+[14:08] projects, you'll just naturally learn
+[14:09] about some of these frameworks. And it
+[14:11] often helps to kind of just zero one out
+[14:13] and then ask for chippity explain
+[14:15] next.js 14 to me like I'm 16. I kind of
+[14:19] like the 16 to 18 range because it
+[14:21] doesn't tell children stories but it
+[14:23] really keeps it simple. It's like Lego
+[14:25] blocks for a website. You build small
+[14:26] pieces and snap them together. NextJ is
+[14:29] like a pro toolkit that makes React
+[14:30] easier and more powerful. Okay. And it
+[14:32] explains more back to building this
+[14:34] thing. So authentication will be with
+[14:36] supperase APIs will be enthropic cloud
+[14:39] and file AI flux realism. The database
+[14:42] will be supperase and will deploy on
+[14:44] versel. This is the folder structure it
+[14:46] imagines that will in a second appear in
+[14:48] here. And then these are the different
+[14:50] implementation steps. You can see
+[14:51] there's only seven. This is actually
+[14:52] quite a simple application for us to
+[14:54] build here today. So it will go through
+[14:56] the step by step. And now it asks you,
+[14:58] okay, do you want me to proceed and then
+[14:59] stop at every phase and do you need to
+[15:01] approve the edits or do you want to
+[15:02] change something about the plan and keep
+[15:04] going? Now we could just say yes, but at
+[15:06] this point I will show you the very best
+[15:08] practice that I hope you will have
+[15:09] learned and adopted by the end of this
+[15:11] video and that is using MCP to make sure
+[15:14] these entire plans are based on the
+[15:16] reality of what these frameworks do
+[15:19] today and how they're used today. Now
+[15:21] that may sound complex, but luckily this
+[15:23] is the most common problem and there's a
+[15:25] fantastic tool that you can activate as
+[15:28] a MCP and cloud code to actually get
+[15:31] this done automatically. Still confused?
+[15:33] Let me show you in practice and explain
+[15:34] after. Okay, so I'm going to say no,
+[15:36] keep planning and I want to alter the
+[15:37] plan. And what I'm going to do is I'm
+[15:39] just going to tell it review the plan
+[15:42] with context 7. And I'm just going to
+[15:44] hit enter and we're going to see this
+[15:45] work. What context 7 is is a MCP that I
+[15:48] have installed in here. It's completely
+[15:50] free. We'll do it later on in this video
+[15:51] and I'll be showing you MCP management
+[15:53] and agent management in a later point of
+[15:55] this video. But as I said, we're kind of
+[15:57] skipping ahead here because this is so
+[15:59] damn useful. If you're not familiar,
+[16:01] context 7.com is just this free website
+[16:03] that collects the newest version of the
+[16:06] documentation for all of these things.
+[16:07] So, for example, we'll be using Versel,
+[16:09] right? And they updated their
+[16:10] documentation 6 days ago, and the newest
+[16:13] version is available right here. And you
+[16:16] could go in here and copy this entire
+[16:18] documentation by hand and paste it into
+[16:21] cloud code. And you could do that with
+[16:23] each one of the actual tech tools that
+[16:25] you'll be using here. Or alternatively,
+[16:27] you just install the MCP server by
+[16:29] running this one line in clot code. This
+[16:31] is somewhere down here. We'll do this
+[16:33] later. Installing clot code. And if you
+[16:35] run this line once and restart clot
+[16:37] code, this right here, it will add a MCP
+[16:39] server that you can then invoke inside
+[16:42] of clot code by simply saying what I did
+[16:44] right there. So if we scroll up a little
+[16:45] bit, you'll see review the plan with
+[16:47] context 7. Aha. And then we see right
+[16:49] here I actually do not have the context
+[16:51] 7 server. So I'll hit escape to abandon
+[16:53] this plan for now and say /mcp. Ah, and
+[16:56] it says no MCP servers configured. So
+[16:59] what I'm going to do is I'm going to
+[17:00] just close this conversation with cloud
+[17:02] code right there. And to install the MCP
+[17:04] again, this is skipping ahead a little
+[17:05] bit. You just go ahead and run this
+[17:08] command. And it looks like it added it
+[17:10] successfully. So we can just close this
+[17:11] terminal and open up clot code again.
+[17:13] new terminal folder claude. And now I
+[17:15] get to show you this extra feature which
+[17:17] is if you type /help, you see all the
+[17:19] commands that are available to you. And
+[17:21] there's one that continues your last
+[17:23] conversation where it left off. It's
+[17:24] /resume. Okay, so I'm going to say
+[17:26] /resume and then it's this one from 1
+[17:29] minute ago with 55 messages. Perfect.
+[17:30] See, it loads right into where we were
+[17:32] before. And now I can type /mcp and
+[17:35] hopefully we have the context 7 server
+[17:36] here right there. It's already installed
+[17:38] in the project. So now that it's
+[17:39] installed, I could just escape out of
+[17:41] this. I can say review the plan with the
+[17:45] context 7 mcp and now it has the server
+[17:49] to actually look at all this
+[17:50] documentation for all the apps again it
+[17:52] told us about in the beginning so as you
+[17:53] remember it told us it's going to use
+[17:55] nexjs sapper basease typescript tailwind
+[17:58] versel and now clot code has the ability
+[18:00] to on its own check out all the newest
+[18:03] documentation on those tools and adjust
+[18:07] the plan for how to exactly implement
+[18:09] this according to the makers of those
+[18:12] technologies themselves. And that's
+[18:14] really what you do. This is how you get
+[18:15] the best most reliable results because
+[18:17] often these LLMs are trained on code
+[18:19] that is a few years old and maybe
+[18:20] certain things worked a bit differently
+[18:22] back then. This way you make sure it's
+[18:24] all up to date. So I'm going to confirm
+[18:27] once more here. And from here on out, I
+[18:29] won't be explaining this whole
+[18:30] confirmation process. If you just see
+[18:32] this pop up, you can always either say
+[18:34] yes, continue or no, don't continue.
+[18:36] Sometimes you get this option in the
+[18:37] middle like yes, don't ask me again. And
+[18:39] usually I use that. So then it just
+[18:41] becomes a bit more flowy and easy. Okay,
+[18:43] here's the updated plan. So based on my
+[18:45] research with context 7, here's the
+[18:46] updated and refined implementation plan.
+[18:48] And then it tells you here are the key
+[18:49] insights from the research from the new
+[18:51] documents. NextJS app browser
+[18:53] authentication. Here's a best practice
+[18:55] on how to actually do it. This is
+[18:56] something it didn't have before.
+[18:58] Amazing. Sappa based documentation said
+[19:00] this is how authentication is best done
+[19:02] today, not a year ago, not two weeks
+[19:04] ago, today. Also checked out the
+[19:06] entropic integrations and the
+[19:07] documentation from Enthropic themselves
+[19:09] on how to use the API and then here are
+[19:11] the phases. First it will build the
+[19:12] foundations. Then it will build
+[19:14] authentication. Then core functionality,
+[19:16] image generation features and data and
+[19:18] polish. So one thing I noticed here is
+[19:20] we're not in plan mode anymore. So I'm
+[19:22] going to say shift tab twice more to get
+[19:25] back to the plan mode. At this point I
+[19:26] could just say continue. But I'm going
+[19:28] to go back to plan mode and insert one
+[19:31] more thing for our plan because I do
+[19:32] actually have a very specific prompt
+[19:34] that I want to use that I prepared here
+[19:36] in advance. I just had a conversation
+[19:37] about Claude with what I imagine with
+[19:39] this prompt and after a few refinements
+[19:41] I arrived at this point where I feel
+[19:43] very happy with it. System prompt
+[19:45] boundary coach AI. So this right here,
+[19:47] you are a reformed peopleleaser turned
+[19:49] boundary expert. You once apologized to
+[19:51] automatic doors for making them open.
+[19:53] Now you help others set clear
+[19:55] professional boundaries without the
+[19:56] guilt spiral. And then the whole point
+[19:58] of this is that you input a specific
+[20:00] boundary scenario and then it outputs
+[20:02] free boundary options, a soft no, a
+[20:04] clear no, and a wall, including free
+[20:06] image prompts to visualize that. I'm
+[20:08] just going to take this as is and copy
+[20:10] it into claw code. It even has some
+[20:12] example image prompts. Amazing. And I'm
+[20:14] actually going to copy this entire
+[20:16] message and tell claw code one last
+[20:18] refinement of our plan. All right, that
+[20:20] sounds great. I also already have the
+[20:25] prompt. I want to use to generate the
+[20:29] free boundaries and the according
+[20:32] visuals. Okay. And then in quotation
+[20:34] marks I just paste in this entire prompt
+[20:36] with commandV. And that is it. Now I'm
+[20:38] ready to hit enter. It's going to create
+[20:40] one final plan and we're ready to go.
+[20:42] And as that will work, we will move to
+[20:44] talking about agents and how to use them
+[20:46] in the process. But already with us
+[20:48] having this set up and being at this
+[20:50] stage, we're ready to hit enter and let
+[20:52] this agentic system do its thing and
+[20:54] build out this application for us. Now,
+[20:57] to be clear, there's more to talk about
+[20:58] here and we have to finish this entire
+[21:00] process, okay? But if you got to this
+[21:02] stage and if you followed along and if
+[21:04] you set up all the things, you're super
+[21:06] far already because this core process of
+[21:08] planning, refining the plan, and then
+[21:10] getting to this point where it tells you
+[21:12] this is the entire implementation plan.
+[21:14] These are the key features. We're going
+[21:15] to have free responses, humorous
+[21:17] visuals, we're going to have the
+[21:18] reformed doormat personality. I just
+[21:20] absolutely love that word combination
+[21:22] right there. We are ready to just hit
+[21:24] enter to build this. Okay, so now that
+[21:27] this is on its way, it will work for I
+[21:29] don't know, my guess would be 5 minutes
+[21:31] to actually populate this entire folder.
+[21:33] I'll kind of leave this on screen right
+[21:35] now and we can fast forward over it. And
+[21:37] I'll probably have to confirm this a few
+[21:39] times in the process. But what I want to
+[21:41] do next is review how claw code is
+[21:43] practically working right here and how
+[21:46] you can make this workflow even better
+[21:48] by using MCPs and agents. They really go
+[21:51] hand in hand, but I want to start out by
+[21:53] talking agents because we'll be using
+[21:55] them in a second here. Now, as you can
+[21:57] see right here from this entire
+[21:58] conversation, there is a to-do list
+[22:00] right here that it will work for. And
+[22:02] what clot code basically does in the
+[22:04] background, you can think of it as uh
+[22:05] agentic system that will spawn a agent
+[22:08] to tackle the first item and work
+[22:10] through it and then it moves on to the
+[22:12] second item and works through it. And it
+[22:14] has a lot of tools here. This is the
+[22:16] terminal. So it can create folders. It
+[22:17] can delete folders. It has different
+[22:19] search functions to look over the entire
+[22:21] application that it's building. Look, if
+[22:23] I open this up already, we have all
+[22:24] these files that it created in here just
+[22:27] by doing its thing. To be clear, I'm
+[22:29] just explaining right now, right? This
+[22:30] is running by itself. The only thing I'm
+[22:32] clicking is that if it asks for
+[22:33] permissions, I tell it, yeah, do that.
+[22:35] And if you ask again, keep doing it. But
+[22:38] it's already creating the application in
+[22:39] here by itself. This is not like chat
+[22:41] GPT where it writes 200 300 lines of
+[22:44] code and you can maybe preview it in
+[22:45] there. But if you start going beyond, it
+[22:47] starts getting lost. No, because this
+[22:49] has task management built in this big
+[22:51] old to-do that it's doing here and these
+[22:54] planning features where it uses the
+[22:56] super smart model to plan for you and
+[22:58] you refine the plan. The results of this
+[23:00] are far superior. You can build apps
+[23:02] that are thousands, if not tens of
+[23:04] thousands of lines of code that actually
+[23:05] work. I'm not saying they're perfect.
+[23:07] I'm not saying you should go ahead and
+[23:08] sell them to the world and pretend as if
+[23:10] you have enterprisegrade security right
+[23:12] off the bat. No, for that you should
+[23:14] probably work with a professional
+[23:15] developer or a studio to get it audited
+[23:17] so that it's all okay. But if you're
+[23:19] using this for yourself or within your
+[23:21] company or the stakes are not that high,
+[23:24] this works and it works better than
+[23:25] anything like this before. And I want to
+[23:28] be clear, we've seen many applications
+[23:30] like this before. This is not the first
+[23:32] agentic builder that has come out.
+[23:34] Matter of fact, there's been dozens if
+[23:36] not hundreds before this. I remember
+[23:37] back in 20123, we had agent GPT and we
+[23:41] had baby AGI. Remember those? They kind
+[23:43] of worked. Not really. Nobody really
+[23:45] used them for anything useful, but it
+[23:47] was the same idea. Let's not use one
+[23:49] chat GPT, but let's use five chat GPS
+[23:52] working together to get more done. This
+[23:54] is the first system that really
+[23:55] successfully integrated it and that's
+[23:57] why I'm showing it to you today. And
+[23:58] that explanation now transitions into
+[24:01] this discussion around agents which as
+[24:03] this works I want to illustrate to you
+[24:05] on brand new slide right here because
+[24:07] what you're probably familiar with is
+[24:09] the following when it comes to agents. I
+[24:11] will assume you're familiar with chatb
+[24:12] if you're watching this video like
+[24:14] probably have account and you've
+[24:15] probably been using it for a while. And
+[24:16] the way chatb works is well you give
+[24:19] chatpt a prompt and chatt gives you a
+[24:21] response. Now they started making it
+[24:23] more powerful in multiple ways. They add
+[24:26] extra context to your prompt. So the
+[24:28] memories dynamically look at your other
+[24:30] conversations and all of a sudden Chachi
+[24:32] knows more about you. And it's not just
+[24:33] the prompt that you're feeding it.
+[24:34] You're giving it the prompt plus some
+[24:36] extra stuff. You can set this up in a
+[24:38] custom way through custom instructions.
+[24:39] So Chachi is not just getting the
+[24:40] prompt, but then also they started
+[24:42] adding in tools, right? There's the code
+[24:44] interpreter. There's the image
+[24:45] generation function. Chachidi doesn't
+[24:47] just give you text back. It can generate
+[24:49] images. It can write code. So it doesn't
+[24:51] just give you the response, but here in
+[24:53] the middle it might use the image
+[24:54] generator that went so viral this year.
+[24:56] Then it gives you a response plus a
+[24:58] image and people are really excited
+[24:59] about that because all of a sudden their
+[25:01] AI assistant can generate images. It can
+[25:03] visualize data. It can do maths and
+[25:06] things like that by running code. It's
+[25:07] really impressive. Now how does this
+[25:09] differ from clot code and how does just
+[25:11] clot code differ from using custom sub
+[25:14] aents in cloud code which I want to
+[25:15] explain now. Well the base promise stays
+[25:17] the same, right? Just instead of chatt
+[25:19] we have cloud code over here and you
+[25:21] still input a prompt that it works with
+[25:22] right the fact that this interface looks
+[25:25] a lot less user friendly than chat GPT
+[25:27] is just a visual thing under the hood
+[25:29] the same thing is happening you give a
+[25:30] prompt to LLM and then it processes it
+[25:32] but the big difference here is there's
+[25:34] different types of context that get
+[25:36] added one so as we talked about the clot
+[25:39] MD file is one type this didn't get
+[25:42] updated yet with everything we want to
+[25:43] do with our project we'll do this in a
+[25:44] second as soon as it's done with all of
+[25:46] these tasks here but that is one piece
+[25:48] of context that keeps it on track. We're
+[25:49] not just working on a task. We're
+[25:51] working on an entire project and you got
+[25:52] to keep the northstar of the project in
+[25:54] mind, not just the task you're working
+[25:55] on. Beyond that, it spawns these
+[25:57] different sub aents by itself. You can
+[25:59] see it's doing these things step by
+[26:00] step. So, it has a to-do list and then
+[26:02] it spawns different versions of itself
+[26:04] to tackle those things and then it
+[26:06] prompts itself on the background. So,
+[26:08] they didn't fully reveal this. There's
+[26:10] people studying this and using proxy
+[26:12] servers to kind of look at the messages
+[26:13] it sends back and forth. But essentially
+[26:15] like the way you can think about this is
+[26:16] this is not just claude code giving you
+[26:18] a result. It's claude code talking to
+[26:21] claude code talking to claude code to
+[26:24] get your thing done. I think you get the
+[26:25] point. It just keeps going like this and
+[26:27] it does that while keeping this entire
+[26:29] to-do list in mind. Okay. So, it also
+[26:32] manages its to-do. And then also, as
+[26:34] you've seen before, we have these
+[26:35] different ways of dynamically adding
+[26:37] even more context and really engineer
+[26:39] our context to our advantage with
+[26:41] different tools in here. The one tool I
+[26:43] showed you so far is the context 7 MCP
+[26:46] where it pulls the freshest
+[26:47] documentations and adds that. So, when
+[26:48] we did that, it wasn't just considering
+[26:50] the prompt I was giving. It was also
+[26:51] considering the claw.md and the to-do or
+[26:54] more like the plan in that case that it
+[26:57] had at that point cuz it had the entire
+[26:58] chat history too. But it was also
+[27:00] considering the context from the context
+[27:03] 7 MCP. And all of a sudden that's a lot
+[27:05] of information. That's a lot of rich
+[27:07] information to actually do something. In
+[27:09] contrast to you doing the same thing in
+[27:10] GPT5 and it then going ahead and giving
+[27:12] you an answer. This is a lot of concrete
+[27:14] info you're giving it. And the whole
+[27:16] system is set up to work for 5 minutes.
+[27:18] Sometimes I had it run for an hour or
+[27:20] two with some of the sub agents that
+[27:21] we're about to explain next here on its
+[27:23] own. You never get a 2-hour waiting time
+[27:25] in chat. just a whole different system
+[27:27] for a different purpose for users that
+[27:29] have more patience are ready to really
+[27:31] engineer the context and refine the
+[27:33] results rather than GPT5 being optimized
+[27:36] for outputs that are usable as is. Okay,
+[27:38] so over here you see the different types
+[27:40] of context and over here you can kind of
+[27:41] see the workflow as it goes. But
+[27:44] additionally to all these types of
+[27:46] context, there's one more thing that you
+[27:47] can do and that is set up custom agents
+[27:50] that add even more context and make your
+[27:53] request even more specific. Plus, they
+[27:55] come with other advantages like you can
+[27:57] force them to use specific tools because
+[27:59] they have a specific purpose. More on
+[28:01] that in the next section on MCPS. But if
+[28:03] you're using one of these sub agents,
+[28:05] which actually at this point I'm going
+[28:06] to show you visually because that just
+[28:08] makes it so much simpler. So, I'm just
+[28:10] going to open a project that I've been
+[28:11] working on recently here with some sub
+[28:13] aent setup. I'm just going to say claude
+[28:15] and then as I'm in here, I'm going to
+[28:16] say / agents. And as you can see, I have
+[28:18] multiple agents in here. So I have a QA
+[28:20] software tester, a AIAS backend
+[28:23] engineer, I have a versatile deployment
+[28:25] fixer, a code reviewer, front-end
+[28:27] webdev, and then a flux image generator.
+[28:29] You can see these are all different
+[28:31] agents. And you might be like, all
+[28:32] right, okay, so different agents. What
+[28:34] is that all about? Well, it's really
+[28:36] simple to create them. And I think
+[28:37] understanding them starts from this
+[28:39] creation because you say create new
+[28:40] agent and then it asks you, okay, do you
+[28:42] want to create this agent in this local
+[28:44] project or do you want to create your
+[28:46] personal agent generally in Claude?
+[28:48] Let's just do a personal one that is
+[28:49] going to be across all of my different
+[28:50] projects. And then what Enropic
+[28:52] recommends here is that you always start
+[28:53] by generating it with claude. So I'm
+[28:55] just going to pick the first version
+[28:56] here and then I can answer this
+[28:57] question. Describe what this agent
+[28:59] should do and when it should be used. So
+[29:01] specifically I'm going to create an
+[29:03] agent that is just there for expert
+[29:07] development documentation writer that
+[29:10] updates all documentation
+[29:13] including the clothd file. Okay. Going
+[29:16] to hit enter. It's going to use clots to
+[29:18] generate the agent setup file. And there
+[29:20] we go. We proceeded to step four where
+[29:22] it asks what tools does this agent want.
+[29:25] So you could just give it all tools. Or
+[29:26] if you go to the advanced options, you
+[29:28] can really see the full list. And you
+[29:29] could be very selective. You could, for
+[29:30] example, tell it, hey, I have no
+[29:32] interest in this one having these other
+[29:34] MCPS. Going to deselect this one and
+[29:36] this one. Can hide advanced options
+[29:38] again. Make it simpler. And then it can
+[29:40] keep all other tools. That's fine. And
+[29:42] then we're going to continue. And then
+[29:43] it's going to ask, okay, what model do
+[29:45] you want to use for this agent? As
+[29:46] writing out the documentation is pretty
+[29:48] simple. You could get away with using
+[29:49] the Haiku model here. That will eat up
+[29:51] the most credits and give you the most
+[29:52] mileage on your plan. In my case,
+[29:54] because I have the biggest plan, I'm
+[29:55] going to use Opus. I really like the
+[29:56] writing and the thinking and the
+[29:58] strategy of Opus. So, especially for my
+[29:59] documentation, I want this to be well
+[30:01] written. You can probably get away with
+[30:02] Haiku, though. And then I'll give it a
+[30:03] color. Uh, this one is going to be cyan.
+[30:05] Perfect. And there we go. The final
+[30:07] setup, our dev docs updater. There's a
+[30:09] description of him right there. There's
+[30:11] a system prompt. And we can just hit
+[30:12] enter right here. And rather than me
+[30:15] kind of like overexlaining this, let's
+[30:17] just look at the agent who's right here.
+[30:18] Devoc updator. You can see him. I can
+[30:20] navigate to him, hit enter, say edit
+[30:22] agent, and then open in editor. And then
+[30:26] it will open up a text editor with the
+[30:28] entire system prompt and the entire
+[30:31] instructions for the agent that Claude
+[30:32] came up with. And right here, this is
+[30:34] where we return to our little
+[30:36] visualization of what the agent does.
+[30:37] Because if you're using an agent, you're
+[30:39] not just giving it all of this context
+[30:40] right here. You're also giving it well
+[30:43] in this case the devd docs updater
+[30:45] markdown file but for our little
+[30:46] visualization here let's just write
+[30:48] agent because what really happens is all
+[30:50] of this gets added to your history and
+[30:52] all of a sudden this agent is executing
+[30:54] the task that you assign him to and
+[30:56] that's exactly what you can do. So now
+[30:57] if you do things and don't worry we'll
+[30:59] review this file in a second and what
+[31:01] the different sections mean. But when
+[31:03] you're actively working with clot code,
+[31:05] what you can now do is not just that you
+[31:07] have all of this context that you're
+[31:08] communicating to clot code and therefore
+[31:10] being really precise in what you want
+[31:11] and how you want it done, but also the
+[31:13] entire process changes because all of a
+[31:15] sudden instead of clot code just
+[31:17] interacting with itself and just
+[31:18] creating to-dos and doing things, you
+[31:20] can tell it more concretely, hey Claude,
+[31:22] I want you to work through the to-do
+[31:23] list, but once you're done, I want you
+[31:25] to spawn this devdoc updator and use
+[31:28] specifically that agent to update all of
+[31:31] my documents. So then clot code will
+[31:33] classically work with itself and itself.
+[31:36] But then once it's finished, it will
+[31:37] move and use this dev docs agent. I'll
+[31:41] just type a because I'm out of space
+[31:43] here. And it will use this specific
+[31:45] agent to do the specific task. Now on
+[31:48] the surface that might look trivial. You
+[31:50] could just say, okay, why can't I just
+[31:52] send this prompt to chat GPT after
+[31:54] having a bit of a conversation? Isn't
+[31:56] that the same thing? Well, if that's all
+[31:58] you're doing, yeah. But the point here
+[32:00] is that this does way more. Okay?
+[32:02] Because the structure here is the
+[32:04] following. At the top, you have a
+[32:05] description for other agents to
+[32:07] understand what this one is doing. And
+[32:08] it's really there to make the other
+[32:10] agents understand when they would want
+[32:12] to invoke aka activate this agent. So
+[32:15] here it says, "Use this agent when you
+[32:16] need to create, update, or maintain
+[32:18] development documentation, including
+[32:19] readme files, cloud MD files, API
+[32:21] documentation, blah blah blah blah
+[32:23] blah." Then down here is a list of all
+[32:24] the tools it has including MCPs. So we
+[32:27] gave it access to the context 7 MCP. You
+[32:29] can see that right there. We select that
+[32:31] as an option, right? So it can actually
+[32:33] pull up the newest documentation to
+[32:34] write our own documentation reliably.
+[32:36] That's a great thing that you cannot
+[32:38] just do in chat GPT. And then down here
+[32:40] is the system prompt on how it should
+[32:41] behave. And this is the part you would
+[32:43] want to customize along with this
+[32:45] description if something there doesn't
+[32:46] sound right to you. But usually gets it
+[32:48] pretty right. But especially for agents
+[32:50] that you're going to be using regularly,
+[32:51] this is where prompt engineering, as
+[32:53] much as people dislike the word at this
+[32:55] point, is necessary because, well, this
+[32:57] is where the magic happens. This is
+[32:59] where you define the behavior of the
+[33:00] agent, the rules that it lives by, and
+[33:02] this is where you can make changes. So,
+[33:03] Claude did an excellent job at this
+[33:05] agent building prompt in the background.
+[33:07] So, usually what you get right here is
+[33:09] an incredible starting point and all you
+[33:10] need to do is make a few minor tweaks.
+[33:12] But if you want to change how it handles
+[33:14] Claude MD files right here, then you
+[33:16] could make that right in this section.
+[33:17] And then if you make any changes to the
+[33:19] file, you want to resave this, close out
+[33:22] of it, and your agent will be updated.
+[33:24] And then just to demo this right away in
+[33:25] this other project, I actually just
+[33:27] realized that I haven't updated the claw
+[33:29] and def file today on the changes that
+[33:30] I've done. So use the documentation
+[33:33] agent to update my documentation. Hit
+[33:36] enter. And then in a second, we should
+[33:38] see the sign agent spawn in here. and
+[33:40] cloud code actively using that agent
+[33:43] with the tools that it has assigned to
+[33:44] it and the system prompt that we just
+[33:46] updated to do it. And here you can see
+[33:48] it dev docs updater it's already doing
+[33:50] it and updating the documentation for
+[33:52] this project right here and that's the
+[33:54] very basics of how agents work. Now the
+[33:57] cool thing is if you set up multiple
+[33:58] agents you can say things like okay I
+[34:00] want you to build the front end with the
+[34:01] front end engineer then I want you to
+[34:03] connect the back end with the back end
+[34:04] engineer then I want you to use the
+[34:05] testing agent to test the entire app and
+[34:07] then in the end use the devdocs updater
+[34:10] to update the entire documentation of
+[34:12] the working app that the other free
+[34:13] agents built and you hit enter and you
+[34:15] go get a coffee and 3 hours later you
+[34:17] come back and the whole thing happened.
+[34:19] Now in practice you might have to
+[34:20] confirm a few commands in between but
+[34:22] that's how it works. But at this point,
+[34:24] I do want to talk about when to use
+[34:25] these agents cuz it's actually not so
+[34:27] obvious and from my experience, I don't
+[34:29] think you should be using an agent for
+[34:30] every single thing you can. Now, this is
+[34:32] maybe more of advanced concept, but
+[34:34] nevertheless, I want to kind of squeeze
+[34:35] it in here because if you work with
+[34:36] agents, it's important to understand
+[34:38] that when you spawn agent one and he
+[34:41] goes off and does all of this work,
+[34:43] okay? And then, let's say it's a
+[34:45] research agent with access to the
+[34:46] internet and it researches various sites
+[34:48] and pulls them together and creates a
+[34:50] summary for you. Then the research agent
+[34:52] will have an output. It will create this
+[34:55] research text that is maybe this long.
+[34:57] It's just a fraction of the work it did,
+[34:58] right? Like that's the whole point. You
+[35:00] don't want every single detail of what
+[35:01] the agent did. Well, if you then take
+[35:03] the research agent and you hand it off
+[35:05] to a writing agent and yeah, at this
+[35:06] point it's hopefully starting to click
+[35:08] that you can use these agents for more
+[35:09] than just development. You could use
+[35:11] them for any workflow that you already
+[35:12] have in CHP to recreate your prompts
+[35:14] with agents and then let them
+[35:16] collaborate. But if you do that again
+[35:18] it's important to realize that if agent
+[35:20] one produces this research document this
+[35:22] output when it hands its work to the
+[35:24] next agent or to claude code the kind of
+[35:27] main agent the orchestrator as you can
+[35:28] think of him then it only hands off the
+[35:30] result and not the entire process. In
+[35:32] many cases like if you have a research
+[35:34] agent that's fantastic. If you have an
+[35:36] agent writing documentation that's
+[35:38] incredible you don't want the entire
+[35:39] fault process handed off to the next
+[35:41] agent. The beautiful thing about these
+[35:42] agents is they have independent context.
+[35:44] So, right here, agent one has 200,000
+[35:46] tokens of context as of now. They
+[35:48] released the update to the Sonnet API
+[35:50] recently with 1 million tokens, but as
+[35:52] of now, it's not live yet, depending on
+[35:54] when you're watching the video. That
+[35:55] might be the case already. But the point
+[35:56] is, each agent has its own context
+[35:59] window, meaning its memory is limited.
+[36:00] It cannot just intake every book in the
+[36:02] world into its context. There's only so
+[36:04] many words it will take. And it uses
+[36:06] that context to do all of this work
+[36:08] right here. But then it produces a
+[36:09] report that, let's say, is maybe just a
+[36:12] few thousand tokens. and it hands that
+[36:13] off to the next agent which takes over.
+[36:16] So here we have agent two and maybe
+[36:18] agent two is a writer and again this
+[36:20] agent has another 200,000 tokens of
+[36:23] context and it takes in this report
+[36:25] which is amazing cuz now it has a
+[36:27] summary of everything that it needs to
+[36:28] know to then go ahead and work again on
+[36:31] a final I don't know let's say blog post
+[36:33] and then it writes its blog post with
+[36:35] all the context it has including this
+[36:38] report and then voila you have your
+[36:40] final blog post and this worked great.
+[36:42] So at this point you might be asking
+[36:43] what are the advantages of using an
+[36:45] agent over just using clot code as is.
+[36:47] Well there's a few. One of them is you
+[36:49] can give specific agents specific tools.
+[36:51] So you can make our agent read only so
+[36:53] that doesn't have the ability to create
+[36:54] or delete files which can be
+[36:56] advantageous in some situations. Also,
+[36:58] you can assign certain MCPS to just a
+[37:00] certain agent, not to overwhelm claude
+[37:02] code. Because if you have a bunch of
+[37:03] MCPS, you can assign one to each agent
+[37:06] and then just invoke that agent when you
+[37:08] need that MCP. And you know that you set
+[37:10] up the agent with all the instructions
+[37:11] of how to really use that MCP. So, for
+[37:13] example, if you want the backend
+[37:14] engineer that uses context 7 every time
+[37:16] in the prompt, you can specify and
+[37:17] claude code gives you this advice of
+[37:19] using the word proactively. So if you're
+[37:22] in the process of refining that agent's
+[37:23] prompt, you can say proactively use the
+[37:26] context 7 MCP to verify all the planning
+[37:29] you do. And then every time it plants,
+[37:31] it will use context 7 on its own. You
+[37:33] can do this with any MCP. Really
+[37:34] powerful. Beyond that, you can pick
+[37:36] which model to use. And by far my
+[37:38] favorite thing is you can chain or run
+[37:40] agents in parallel. So let's abstract
+[37:43] away from coding for a second because
+[37:44] you can use cloth code for way more than
+[37:46] that. People are using it to write to
+[37:48] build design studios all of these other
+[37:50] tasks that you might already be doing
+[37:52] inside of chat manually by copy pasting
+[37:54] prompts. Well, you can set up agents
+[37:56] here and kind of chain them together.
+[37:57] So, how that looks practically as we
+[37:59] illustrated before with chatpt you put
+[38:01] in a prompt with some extra context and
+[38:03] you get a result as it works for it.
+[38:05] Maybe it thinks maybe it uses some
+[38:06] tools. With clot code, you get a whole
+[38:08] lot more context as we discussed with
+[38:10] the cloud MD file and all these extra
+[38:12] agent prompts etc. And also the work
+[38:14] process is different. That's clot code
+[38:16] talking with clot code talking with clot
+[38:18] code creating a plan talking with 20
+[38:21] more instances of clot code. So it kind
+[38:22] of works with itself and then gives you
+[38:24] the result. And now when we introduce
+[38:26] agents well yet again this looks
+[38:28] differently because it's just clot code
+[38:30] talking with I'm just going to say agent
+[38:32] one and then if you chain them together
+[38:34] it can be agent one doing its work and
+[38:36] talking to agent two. And to keep this
+[38:38] simple then you would get the result.
+[38:40] Now to be clear, even the agent works
+[38:42] with itself and uses this clot code
+[38:44] engine to kind of go through things and
+[38:46] work through them. Doesn't just give you
+[38:47] the results straight away. But this is
+[38:49] really cool because if you, for example,
+[38:50] set up a researcher agent and you give
+[38:52] it an MCP that can browse the web, well
+[38:54] then the researcher agent can go out and
+[38:56] find different pieces of information and
+[38:57] create a report for you that it then
+[38:59] hands over to the second agent, which
+[39:02] might be a blog writing agent. And then
+[39:04] the blog writing agent does one thing.
+[39:06] It writes the blog for you, which you
+[39:08] then get as a result. And that's
+[39:09] beautiful. You can change this together.
+[39:11] In ChachiPD, you would have to do
+[39:12] multiple steps, right? You run a deep
+[39:14] research and then you run a block
+[39:15] writing prompt and then maybe you follow
+[39:17] up and refine that. You can have all
+[39:19] that baked into your prompt writing
+[39:20] agent with some criteria for a good
+[39:22] outcome and it will kind of reprompt
+[39:24] itself and keep working on itself until
+[39:26] it gets to a desired result as you
+[39:28] specified it in the prompt. Now this is
+[39:29] great but there's one more scenario
+[39:31] possible here and it's also the most
+[39:32] exciting one because you can kind of
+[39:34] start seeing the potential of this
+[39:36] versus an assistant like chatt because
+[39:38] what you can do is let's say you have
+[39:40] these two agents right you have agent
+[39:41] one which is the research agent and then
+[39:43] you have agent two which is the writing
+[39:45] agent and this is kind of the first
+[39:47] workflow that I showed you here right
+[39:48] but what you can also do is you can just
+[39:50] spawn three research agents like so and
+[39:53] then all three of them give their
+[39:55] reports to the writing agent as context
+[39:57] to consider and that agent will produce
+[40:00] the result. So it's not just that you
+[40:01] can chain these agents together, you can
+[40:03] also run them in parallel. And that's
+[40:05] where it gets incredible because once
+[40:07] you get one of them working in a way
+[40:09] that is productive to you, you can say
+[40:11] now spawn five and then hand all of that
+[40:14] work to agent number two to finish up
+[40:15] the task or you can create an entire
+[40:17] chain with actually more than two or
+[40:19] three steps. Right? You can see how many
+[40:21] possibilities you have here. And as I
+[40:23] said that both of our tasks finished up
+[40:25] here. On the one hand, my documentation
+[40:27] agent in this other project finished
+[40:29] writing the documentation including the
+[40:32] systems that I implemented today. So
+[40:33] that is really great. But this one will
+[40:35] close out for now. I just quickly wanted
+[40:36] to show you the agents feature. But the
+[40:39] most exciting part is the project that
+[40:40] we're building. This no machine is
+[40:42] really shaping up. As you can see, it
+[40:44] told us, okay, we completed almost all
+[40:46] of these tasks right here. No machine is
+[40:48] now successfully built and ready for
+[40:50] deployment. Okay, so here it catches me
+[40:52] up what we've accomplished. created a
+[40:54] nextjs web application with the
+[40:55] following features. This is the things
+[40:57] we talked about. Perfect. Technical
+[40:59] implementation. This is the stack it
+[41:00] plan for. Perfect. This is the project
+[41:02] structure. It outlined the plan. Also
+[41:04] great. And then here next steps and this
+[41:06] is how you use it. It communicates with
+[41:07] you just like chatpt. But it tells you
+[41:09] hey bro I did everything I could. These
+[41:12] are the next steps we need to do. To
+[41:13] complete the setup you will need to
+[41:15] that's me create a supper.com.
+[41:19] Set up the database schema provided in
+[41:20] cloud.md. get API keys for entropic and
+[41:23] file AI and configure environment
+[41:26] variables in env.local deploy to versel.
+[41:28] So let me explain this to you if you've
+[41:31] never encountered this before. So sepase
+[41:33] as I mentioned earlier is a site that
+[41:35] creates and manages databases. So on
+[41:37] there we'll be creating a database and
+[41:39] the way these production ready databases
+[41:40] work is usually they're in a language
+[41:42] that is called SQL. And essentially the
+[41:44] way it works is that Claude will write
+[41:46] up these files that you just need to
+[41:48] copy and paste into a specific point on
+[41:52] sapperabase.com. If you just copy paste
+[41:54] and then you hit the green button, it
+[41:56] will do all the actions for you and
+[41:58] you're set. Sounds easy. It also is
+[42:00] easy, but you do have to take these
+[42:01] steps manually. So let's do this by
+[42:03] opening up Sapperabase right here and
+[42:05] going to my dashboard. I'll go into my
+[42:07] pre-existing organization. And at this
+[42:09] point, let me just review this. Create a
+[42:10] supperase project at sapperabase.com. So
+[42:12] I'm on supper.com and you can see this
+[42:14] new project button here. In case that is
+[42:16] not clear or maybe you're not sure how
+[42:18] to do something, you could say, "Okay,
+[42:20] explain step one in detail." And then it
+[42:22] will really give you a click byclick
+[42:24] navigation. And as you'll see in a
+[42:26] second here, you could even give it
+[42:27] screenshots like this. On Mac, I'm
+[42:30] clicking command shift 4 to drag this.
+[42:32] And then I could go in here and say
+[42:34] CtrlV and it will paste this image in
+[42:37] here. And I can say the green new
+[42:40] project button question mark. And I can
+[42:43] talk to this as if I would talk to
+[42:45] chatbt. Right? It told me what to do.
+[42:47] Now I'm coming back with my feedback.
+[42:49] And in a second it's going to look at
+[42:50] the image and it should tell me, yeah,
+[42:51] it can see where I'm at. And new project
+[42:53] button is on the top left. Perfect. So
+[42:55] as you can see, you can really use it to
+[42:57] guide you through everything step by
+[42:58] step, even if you're not familiar. So
+[43:00] let's do this. Let's click new project.
+[43:02] And ah okay, I'm at a point where I only
+[43:04] have two projects live and I use supper
+[43:06] base and two projects on this account.
+[43:07] I'll just quickly upgrade so we can keep
+[43:09] going. But yeah, as I said on a free
+[43:10] plan, you can have two live apps. So
+[43:12] back to projects, gonna say new project.
+[43:15] Going to call this the no machine. One
+[43:17] best practice is to never use spaces. I
+[43:19] mean, you can, but if you can avoid it
+[43:21] with anything development related,
+[43:23] you're going to prevent things from
+[43:24] breaking here and there. It's just a
+[43:25] good best practice. I'm going to pick a
+[43:27] server that is close to me. I think
+[43:30] Western Europe, Paris sounds good. I'm
+[43:32] just going to give it a password and
+[43:33] create a new project. Say understand
+[43:34] here. And then here's the stuff that
+[43:36] I'll be needing in the next steps. The
+[43:37] project API keys and more. So let's go
+[43:39] back to cloud code. See what it wants.
+[43:41] Okay. Choose a project name. Set a
+[43:43] database password. Done. Done. Select a
+[43:45] region. Done. Pricing plan. Free tier
+[43:47] should be perfect for getting started.
+[43:48] Okay. Also sorted. After the project is
+[43:50] created, you'll get your next supper URL
+[43:52] and the anon key. Okay. And these files
+[43:55] you will need to add to your project.
+[43:57] And in case you're not familiar with
+[43:59] this locally, you want to manage these
+[44:01] in a so-called. Eenv file. Now this file
+[44:04] is hidden by default and on a Mac you
+[44:06] want to hit commandshift dot to show
+[44:08] hidden files. So here it is.local
+[44:11] and then also up here you can see a
+[44:12] cloud folder that is hidden. If you
+[44:14] create local agents they will be placed
+[44:16] in here. Anyway, right now we're working
+[44:17] with thev.local file. I'll say open with
+[44:20] text edit and right here I will copy in
+[44:24] the data. So what I need is the next
+[44:26] public supper URL and the next public
+[44:28] supper anon key and the supperase
+[44:30] service ro key. Okay, let's see if we
+[44:32] can get those from this site. So, if
+[44:34] you're on the project, what you want to
+[44:35] do is go here to the project settings on
+[44:37] the left side and then here you can find
+[44:39] API keys. Now, this can be confusing
+[44:42] sometimes because they had old API keys
+[44:44] and now they have new API keys. So, what
+[44:46] I'm just going to do is give a
+[44:47] screenshot of this to clot code and ask
+[44:49] which one of these do I set as? And then
+[44:54] I'm going to give it all the free keys
+[44:55] that it wants here in my file and then
+[44:57] I'll wait for the answer. While I do
+[44:59] that, I want to show you one little tip
+[45:01] on a Mac. And that is something a friend
+[45:02] of mine showed to me recently. And that
+[45:04] is if you hit commandshift 5, you can
+[45:07] change the settings of how these
+[45:09] screenshots are made. And usually what
+[45:10] you want is go to the options and then
+[45:13] save to clipboard instead of the desktop
+[45:15] or the documents folder cuz then it
+[45:17] doesn't just create new files every time
+[45:18] you take a screenshot. And you can kind
+[45:20] of just take screenshots and then paste
+[45:22] them in. This also works with chatbt,
+[45:24] cloud code, any other app. Just a really
+[45:26] good little tip to make a bit more
+[45:28] efficient and get through a process like
+[45:30] this setting up the database. So let's
+[45:31] see what did it say. The anom public key
+[45:33] is shown in the first section. So I copy
+[45:35] the anon key and then next public suppon
+[45:38] key I paste it in here with command v.
+[45:40] Then the supperase service ro key is the
+[45:42] one we need to reveal. So I'm going to
+[45:43] click reveal right here. Say copy and
+[45:46] paste that one in here under service ro
+[45:48] key. Then we're missing one, right? The
+[45:50] next public supper URL. You'll need to
+[45:52] go back to the main project setting to
+[45:53] get your project URL. Look for something
+[45:55] like your project ID.appabase.co. Go to
+[45:58] project settings and general in the left
+[46:00] sidebar. Okay. So let's go to project
+[46:02] settings in general. Look for project
+[46:03] URL or reference ID. Okay. So project
+[46:05] ID. It's this right here. Right. So I'm
+[46:07] going to copy this. And this is my Sappa
+[46:09] base URL. Ah, it actually wants the URL,
+[46:11] not just the ID. So I only have this
+[46:14] project ID. I could insert it into here.
+[46:17] But again, if I'm not sure, I'm just
+[46:18] going to tell it what I'm not sure
+[46:20] about. Here is the project ID, but the
+[46:24] URL looks different. I'll say project ID
+[46:28] colon and then paste it. And then I
+[46:30] always separate things with comma.
+[46:31] That's the simplest way. Here my project
+[46:33] URL looks like this up here. So I'll
+[46:35] give it that project URL and then I'll
+[46:38] paste it in here. Let's see what it has
+[46:39] to say. Ah, and now it's proactively
+[46:41] actually fixing the file for me. Okay.
+[46:43] So it's changing it from just ID to
+[46:45] yeah, the format it told me about. Okay.
+[46:47] Okay, so if I close this file again and
+[46:49] reopen it, I guess Claude made the
+[46:51] changes for me now. Yeah, there you go.
+[46:52] So, see this is how you kind of do
+[46:54] things that you have no idea how to do.
+[46:56] Claude can assist you and do it for you
+[46:58] and it will many times. So, there's a
+[47:00] few more things here and it tells you
+[47:01] perfect. Now, your supper configuration
+[47:03] is correct. Next step to complete, you
+[47:05] need these two API keys and you need to
+[47:08] set up the database schema. So, let's
+[47:09] first do the database schema. And this
+[47:11] is simply explained. Honestly, you don't
+[47:13] need to understand this. You just have
+[47:14] to know that these SQL databases,
+[47:16] they're set up by running what's called
+[47:19] uh SQL schema. And the good thing is
+[47:21] clot code will write these for you. So
+[47:23] it'll tell you we'll need to go to the
+[47:24] SQL editor in your subbase dashboard and
+[47:26] run the schema. So what I'll do is I'll
+[47:28] just copy this schema right here. Copy.
+[47:30] And then in my application, I will go
+[47:33] into the SQL editor right here on the
+[47:34] left. And here I will paste. And as this
+[47:37] is pasted, I will hit run. And that's
+[47:40] it. That's our entire database set up.
+[47:42] If you're curious, you can go over here
+[47:43] to the table editor and see the
+[47:45] databases that it created right here. We
+[47:47] have favorites and we have different
+[47:48] boundaries. And then that's the database
+[47:50] setup for now. So there's any troubles,
+[47:52] we'll return to this and we can run new
+[47:54] schemas, but it's all connected. We can
+[47:56] close this file unless there's two more
+[47:59] things that we want here. But these are
+[48:00] not database related anymore. So this
+[48:02] completes the database setup for now. It
+[48:04] also wants the two API keys. So we want
+[48:05] the entropic API key and the file API
+[48:07] key. So in the case of entropic you need
+[48:09] to go to the empropic console and you
+[48:12] need some dollars on your account and
+[48:14] here I can create a new key say default
+[48:16] and say no machine add a new key copy
+[48:19] this key paste it right after where it
+[48:22] says enthropic API key and then I need a
+[48:24] file API key which is really simple when
+[48:26] you have accountant file and you load
+[48:27] some money into it here you just go to
+[48:29] the API keys tab and you can easily
+[48:32] create a brand new one which I'll call
+[48:34] no machine here I can copy the key and
+[48:36] over here I'll paste it right after file
+[48:39] API key equals. Okay, if I save over
+[48:42] this file and close it out, we're all
+[48:44] set up with the different AI connections
+[48:46] and database connections. And the good
+[48:48] news is you set this up once, it just
+[48:50] works. Your app has access to these
+[48:52] things now. So, I'll say all done and
+[48:54] let's see what is next. I'm a little
+[48:56] impatient here. So, I'm going to go up
+[48:58] and see what it wanted from me before.
+[49:00] And it says, yeah, it's actually ready
+[49:02] to run the application once we have
+[49:04] this. So, it says, "Excellent. You're
+[49:05] all set up. Let's test the no machine
+[49:07] application now. So, it's starting a
+[49:09] development server here. And you can see
+[49:10] that down here. This is also a new
+[49:12] feature they added recently. It can run
+[49:13] these processes in the background like a
+[49:15] development server that's just running.
+[49:17] So, you don't have to go to the online
+[49:18] version right away. You can kind of just
+[49:20] check it out locally and make quick
+[49:22] changes and update it. And then next up,
+[49:24] we'll also be getting this whole thing
+[49:25] live. But first, we need it to work
+[49:27] locally. Okay, so it's running. I can go
+[49:29] to this URL, localhost 303, and let's
+[49:32] see how this actually does. Okay, that
+[49:35] looks good. There's a login and a sign
+[49:36] up. Let's see. So, I'll fill this out
+[49:38] with a burner email of mine. Ooh, the
+[49:40] color is not great on here. This is all
+[49:42] stuff we can adjust in a second. Create
+[49:44] a email and a password. Check email to
+[49:46] continue signin process. So, my guess is
+[49:48] this will not work cuz we didn't connect
+[49:50] it to any email service. So, I can just
+[49:52] copy this and tell it like, okay, it
+[49:54] tells me to check email to continue
+[49:57] signin process, but there is no email.
+[50:00] And then sometimes you run into things
+[50:01] like this. It's like, okay, it
+[50:02] overthought the app. It made it really
+[50:04] complex. It forgot to implement the
+[50:05] whole email sending thing. And it will
+[50:07] fix that now. And as we do that, you
+[50:10] might notice here in the bottom right
+[50:11] corner right here, context left until
+[50:13] autocomplete 4%. So it's running out of
+[50:16] its 200,000 tokens of context here. And
+[50:19] as it hits that context window, it will
+[50:21] run this compact function that will
+[50:22] compress the entire conversation into a
+[50:24] very short file that it will pass to a
+[50:26] new conversation. In the interface, it
+[50:28] will look fluent, but really you'll be
+[50:30] losing most of the detail of what is
+[50:32] happening. So that is one thing to watch
+[50:34] out for, especially if you're in the
+[50:36] middle of some big change. Sometimes
+[50:38] running out of context can be disruptive
+[50:39] because it loses all the details of what
+[50:41] you were doing. It just passes the
+[50:42] summary to the new one. Just something
+[50:44] to be aware of. So it tells me, okay,
+[50:45] this is common with Sappa. It requires
+[50:47] email confirmation. Let's disable this
+[50:49] for development so you can test the app
+[50:51] immediately. Go to authentication
+[50:52] settings and disable this. And hold up.
+[50:54] Wait, that means I should have actually
+[50:56] Yeah, I received the email. Okay, so
+[50:58] this is completely my bad. I was using a
+[51:00] different off service on my other app
+[51:02] and I didn't even realize. Yeah. So, if
+[51:03] you set up supper, it's going to send
+[51:05] these emails so I can kind of just
+[51:06] confirm and it should work. My bad. So,
+[51:08] there you go. I just wanted to show you
+[51:09] the legitimate process of how I work
+[51:11] with this. So, yeah, includes little
+[51:13] hiccups like that, too. Let's see. This
+[51:14] just keeps loading. And I see the issue
+[51:16] here. So, it's redirecting me to
+[51:18] localhost 3000, but the server it's
+[51:19] running on is 300 free. So, let's just
+[51:22] see. This might just work actually at
+[51:23] this point. Let's see.
+[51:24] eagerpilm@gmail.com
+[51:26] password that I typed in login and it
+[51:28] worked. So yeah, we're logged in. The
+[51:30] authentication worked. The email
+[51:32] confirmation worked. Now, obviously,
+[51:34] this text is not optimal. I can barely
+[51:36] see this. We'll repair this in a second
+[51:38] here. But we can kind of give it a first
+[51:40] shot. No. See if this works. So, what's
+[51:41] the scenario here? Invitation to a
+[51:45] birthday party. Generate boundaries. And
+[51:48] let's see. Do our AI features work? No,
+[51:50] they don't. Fail to generate boundaries.
+[51:51] Please try again. Okay. And this is
+[51:54] where we get into fixing things. So,
+[51:56] let's talk about how to fix things like
+[51:57] this and how to improve. What you want
+[51:58] to do is you want to give it the error
+[52:00] message and tell it when I share
+[52:03] boundary I get and then quotation marks
+[52:06] the error message and then what also
+[52:07] really helps is if you say console and
+[52:09] then you copy the console into this. So
+[52:11] this is something you need to learn if
+[52:13] you are going to work with cloud code in
+[52:15] Google Chrome. Here you can right click,
+[52:16] say inspect, and then up here you want
+[52:19] to tab over to console. And then this is
+[52:21] basically what the web app has been
+[52:22] doing. And this console shows any errors
+[52:25] and stuff. And this is really helpful to
+[52:26] improve on what it is doing. So what you
+[52:28] want to do here is click anywhere in the
+[52:30] text and just rightclick and say copy
+[52:31] console. And we're just going to paste
+[52:33] that entire console log into here. Now,
+[52:36] to be clear, there's also MCPS to kind
+[52:38] of automate this. But again, we're
+[52:39] building our first thing. We're getting
+[52:41] things done. And then further down the
+[52:42] line as you learn more, you can automate
+[52:44] things like copying the console over. So
+[52:46] I just sent that message and now it's
+[52:48] just a matter of patience for it to fix
+[52:50] the issue. Sometimes it takes three,
+[52:52] four, five different iterations of this
+[52:54] and it just doesn't work. Doesn't work.
+[52:55] Doesn't work. But you'll make it work
+[52:56] anyway. And in the resource that I
+[52:58] included with this, I also included an
+[53:01] extra prompt to really find solutions
+[53:04] that might not be obvious at first
+[53:06] because sometimes you get stuck.
+[53:07] Sometimes you try this process 10 times
+[53:09] in a row and you still can't fix it. In
+[53:11] that case, I included a special extra
+[53:13] prompt that does this. Now, to be clear,
+[53:15] I got this somewhere off Twitter like a
+[53:17] year ago, but it has been a blessing
+[53:19] because it just shows you multiple
+[53:20] avenues to finding a solution. So,
+[53:22] again, that's included in the little
+[53:23] cheat sheet I prepared to accompany this
+[53:25] video. And right there, it tells me,
+[53:26] okay, the main issue is insufficient
+[53:28] credits on your anthropic API account.
+[53:30] Aha. Is that true though? If I look at
+[53:32] my enthropic API account billing, I see
+[53:35] there's $100 of balance. Okay, so I'll
+[53:37] just tell it actually there is $100 in
+[53:39] the account. Meanwhile, I will test out
+[53:41] this new version of the app and just say
+[53:43] invitation to a birthday party barely
+[53:44] visible, but I'll just generate
+[53:46] boundaries again. Maybe a little
+[53:47] refresh. So, it updates for the new
+[53:49] code. Failed to generate boundaries.
+[53:50] Please try again. Okay. Um, let's have a
+[53:52] look. What's the issue here? So, the
+[53:54] error from the console was saying it's
+[53:55] an invalid request error. Your credit
+[53:57] balance is too low to access the
+[53:58] entropic API. It's giving me some tips
+[54:00] on how I can verify if this is the right
+[54:02] key. So, API keys. Yeah, I'm in the
+[54:05] right organization. Okay, I would say
+[54:07] let's just try again. So, I'm going to
+[54:09] refresh the page. Describe the boundary
+[54:11] scenario. Invitation to a birthday party
+[54:13] and generate boundaries. Let's see.
+[54:14] Okay. So, I have a suspicion here
+[54:16] because there's money there. This might
+[54:18] not be an issue with my credits, but
+[54:20] with the way it implemented the API. So,
+[54:22] I'm just going to say this, use context
+[54:25] 7 to verify the enfor
+[54:29] API implementation. And this way, you
+[54:32] can also prompt MCP servers. You don't
+[54:34] need agents with the MCP servers to use
+[54:36] them. You'll see that it'll engage it
+[54:38] right here because we have it installed.
+[54:39] You can already see it pulled in 2,000
+[54:41] lines of anthropic documentation and the
+[54:44] implementation looks correct. So, that's
+[54:45] good. And as you can see right here, it
+[54:47] ran out of context. So, it's going to
+[54:48] compact the entire conversation and kind
+[54:50] of start a new one with a summary of
+[54:52] everything we did. In this case, it's
+[54:53] fine. We're not in the middle of
+[54:55] something big. So, I'm really confused
+[54:56] by why this doesn't work. This should
+[54:58] kind of just work. So, give me a minute
+[54:59] here to figure out what's wrong. And
+[55:01] I'll be back in a second. Okay. Okay, so
+[55:03] now after giving it a screenshot of this
+[55:04] page and this page, I asked it, "Hey,
+[55:07] I'm doing what you tell me and it's
+[55:09] still not working." It figured out on
+[55:10] its own that it was actually using some
+[55:13] old key that it had caged in the
+[55:15] browser. I didn't even know where that
+[55:17] old key came from. But my point is with
+[55:19] these two screenshots, it managed to
+[55:21] hopefully fix it. And now our
+[55:23] application should be working because it
+[55:25] also tested the API and it works now
+[55:28] apparently. Let's see. Invitation to a
+[55:30] birthday party. Generate boundaries.
+[55:31] failed to generate boundaries. Okay,
+[55:33] maybe I need to refresh one more try.
+[55:35] Failed to generate. Okay, so again,
+[55:37] inspect, open the console. I'll copy the
+[55:40] console and say still doesn't work. And
+[55:44] honestly, this is the reality of the
+[55:46] process. But the good news is all of
+[55:47] this stuff is figure outable and I
+[55:49] haven't arrived at a problem yet that I
+[55:51] wasn't able to solve. And also take this
+[55:53] little scenario as a piece of advice to
+[55:55] not overengineer your apps from the
+[55:57] beginning. Rather create the simplest
+[55:59] version possible. make sure that that
+[56:01] works reliably and then add on top of
+[56:03] it. That's a really good piece of advice
+[56:05] by the way. And again, always make sure
+[56:07] to use the plan mode when you do that or
+[56:08] when you add big features. Ah, so cloud
+[56:10] code is telling me here that hey, the
+[56:12] server is still using the old API key.
+[56:14] The environment shows it's loading, but
+[56:16] somehow it's not picking up the new key.
+[56:18] Let me check if there's a issue. Okay,
+[56:20] do your thing cloud code. Just fix it.
+[56:22] But as you can see with the info from
+[56:24] the console, it usually is able to
+[56:26] figure this out quite well. When in
+[56:27] doubt, add screenshots. Okay, so now it
+[56:30] took the app offline on this port 3000
+[56:32] free and it ran a new server on the port
+[56:35] 3000. So that essentially mean it's the
+[56:37] same URL but just 3000 instead of 3000
+[56:39] free. And then I get an error here. I
+[56:41] can just copy this error and paste it in
+[56:43] here and hit enter and it will fix that
+[56:45] too. And yeah, this is the reality of
+[56:48] fixing bugs. I mean, we're building a
+[56:50] custom application with multiple AI
+[56:52] integrations all in one shot. Might just
+[56:55] take a few of these little bug fixing
+[56:57] rotations. Remember the process is
+[56:59] always similar. It's clot code does
+[57:01] something. Say it creates a page but
+[57:03] then something might not work. So what
+[57:05] you want to do is you want to take a
+[57:07] screenshot. I'll try to draw a camera
+[57:09] here. That's the flash. How did I do?
+[57:11] Does that look like a camera? Fair
+[57:12] enough. And you also want to add what's
+[57:15] in the console and feed that back into
+[57:16] clot code which will then improve the
+[57:18] app. And the cycle continues. So it
+[57:20] fixed it right here. So let's have a
+[57:22] look. The no machine had a new look
+[57:24] there for a second but there's another
+[57:26] error. So, I'm going just copy that and
+[57:27] paste it back in. What's going on here,
+[57:30] Claude? Make this work. So, we can get
+[57:31] to the fun part here, which is some
+[57:33] final notes on MCPS and actually getting
+[57:35] this live on the web. Right now, it's
+[57:36] combobulating. And if we refresh, voila,
+[57:39] it just fixed it. I'm not even sure how,
+[57:41] but that's okay. So, the no machine.
+[57:43] Okay, we can start getting boundaries
+[57:44] right here. I need to sign in again.
+[57:46] Fair enough. Okay, we definitely have to
+[57:48] fix this text in a second here, but
+[57:49] there it is. So, a birthday invitation.
+[57:51] Generate boundaries. Ooh, it's loading
+[57:53] this time. Come on. You know you want
+[57:56] it. Yes, that's it right there. Okay, so
+[57:58] okay, we have a soft null, clear no the
+[58:01] wall, and it made four variations of the
+[58:03] wall. Okay, that's unexpected. And then
+[58:06] we can generate these images. Yes,
+[58:07] apparently it successfully picked out
+[58:09] the part of the prompt that generates
+[58:11] the images, too. So, let's see. So, the
+[58:13] first one is the soft no. Thank you so
+[58:14] much for thinking of me. Unfortunately,
+[58:16] I won't be able to make it this time. I
+[58:18] hope you have an amazing celebration.
+[58:19] Now, let's generate the image along with
+[58:21] that. Oh, and it errored out. That's
+[58:23] okay, though. Oh, we really got far
+[58:24] here. And we have the error here in the
+[58:26] console. So, we kind of just copy that
+[58:27] and tell clot code. Okay, that worked,
+[58:30] but the image generation failed.
+[58:33] Console. Then I paste the console.
+[58:35] Meanwhile, I want to try this again,
+[58:36] though. This is kind of fun. And I can
+[58:38] think about how I want to improve this
+[58:40] already. So, one thing definitely is
+[58:41] that I wanted this text to be easily
+[58:44] readable. But then I really like how it
+[58:45] splits it out. I really don't need six
+[58:47] responses. I only kind of need three
+[58:49] right here as I have the images. So, I
+[58:51] can prompt it to remove these three. And
+[58:53] then the reformed doormat note. Okay.
+[58:55] Remember, your time and energy are
+[58:57] precious. Saying no to one invitation
+[58:59] doesn't make you a bad friend. It makes
+[59:00] you a good friends to yourself. Your
+[59:02] mental health is worth more than any
+[59:03] awkward social moment. Okay, that's good
+[59:05] advice right there. Okay, cloth code
+[59:07] finished up. Okay, so now it should
+[59:09] work. Let's refresh the page. Uh,
+[59:11] birthday invitation. Generate
+[59:13] boundaries. Okay, let's generate the
+[59:15] first image. So, that would be thank you
+[59:17] so much for thinking of me.
+[59:18] Unfortunately, I won't be able to make
+[59:19] it. And then the visual concept is a
+[59:22] birthday cake with tiny white flag
+[59:23] sticking out. Laundry work Netflix
+[59:25] calling. Oh, that's actually so cute.
+[59:27] That's a great image to send along with
+[59:29] that message, you know. Okay, let's look
+[59:31] at the hard boundary. The wall. Thanks
+[59:33] for the invite, but I'll be passing on
+[59:34] this one. Ooh, that's a bit harsh. Well,
+[59:36] fair enough. I mean, that's the wall.
+[59:38] What is the image like for this one? Do
+[59:40] not disturb. I mean, that's kind of
+[59:43] good. Honestly, I really like how these
+[59:45] came out. So, now it's about refining
+[59:47] it. So, let's do the two main things
+[59:49] here. And also it has a save function.
+[59:51] Interesting. Kind of save. Okay. Can
+[59:53] also review my history. That's nice.
+[59:56] Okay. But let me share what's wrong. So
+[59:58] like first of all the text when I type
+[60:01] is barely visible. And if you do visual
+[60:04] things, I would recommend just including
+[60:06] screenshots. So I'll just screenshot
+[60:08] this and then paste it in here and then
+[60:10] let it work. So it will figure that out.
+[60:12] And probably increase the contrast by
+[60:14] changing the font color. Here it sees
+[60:15] that it's barely visible. Let me fix the
+[60:17] color. It's writing some code. And this
+[60:19] will be done in a second. And then
+[60:20] meanwhile I can prepare my next message.
+[60:22] It generates a total of six boundaries.
+[60:26] Whereas I just need three. And then in
+[60:30] brackets you can always add extra
+[60:31] context. This is just a classic prompt
+[60:33] engineering trick but it helps. So if
+[60:35] you want to make it more specific you
+[60:36] could say the last free red boundaries
+[60:41] can be removed. So perfect. I just
+[60:44] finished typing that as it finished the
+[60:46] first change. And I'm going to just
+[60:47] refresh and see how it works now. Ah,
+[60:49] text looks great. That works very well
+[60:51] for me. Let's see if it only shows three
+[60:53] cards as we're hoping for here. Drum
+[60:56] roll. Yeah. Ah, close. Okay, so it still
+[60:58] has four. I'll just give it a screenshot
+[61:00] and tell it there are four. Remove the
+[61:04] last red one, the wall. Hit enter again,
+[61:07] but it's getting closer already. And
+[61:09] then this remains functional. And at the
+[61:11] bottom, let's see. Let's do maybe the
+[61:13] middle one this time while we wait. The
+[61:14] clear. No, I appreciate the invitation,
+[61:16] but I won't be able to attend. I hope
+[61:17] you have a wonderful birthday. It's a
+[61:19] good balance. A calendar with the
+[61:20] birthday date circled dramatically in
+[61:22] red with a tiny stick figure running
+[61:24] away screaming. Nope. Okay, fair enough.
+[61:26] There's one. Kind of makes me want to do
+[61:27] one more while cloth code is jazzer
+[61:30] sizing. No entry. These are really good.
+[61:32] I like these visual concepts from the
+[61:34] model. And as you can see, it
+[61:35] implemented everything successfully.
+[61:36] Like it's making images with the file
+[61:38] API. It's generating these ideas with
+[61:40] the enthropic API. It's storing
+[61:42] everything in our database. If I go over
+[61:44] to our supper base, if I go to
+[61:46] boundaries, yeah, you can see these
+[61:48] different birthday invitation boundaries
+[61:50] being generated here. You have them all,
+[61:51] the soft responses, medium responses,
+[61:53] firm responses. It's parsing it out
+[61:55] correctly. It understood what we want to
+[61:56] do. They're all stored in here,
+[61:58] including the reformed doormat notes.
+[62:01] Okay. And all of that is happening
+[62:03] because Claude Code set it up
+[62:04] successfully. So, this is great. Final
+[62:06] test. Uh, wedding invitation. There it
+[62:09] is. Free boundaries ready to be copied.
+[62:12] Like so we can generate the images in
+[62:15] here. This is really everything I wanted
+[62:17] from the app. Remember the original
+[62:19] concept. I didn't even give it this
+[62:20] image, but it's exactly like that. 1 2 3
+[62:22] 1 2 3. Thank you so much for thinking of
+[62:24] me. Unfortunately, I won't be able to
+[62:26] make it to the wedding. I'm sending all
+[62:27] my love and best wishes to you both. And
+[62:29] then this image with that. That's kind
+[62:30] of good. That's not bad. Let's do one
+[62:32] more to just verify all of this works. I
+[62:34] appreciate the invitation, but I won't
+[62:36] be able to attend the wedding. Thank you
+[62:37] for including me in your celebration.
+[62:38] Boundary ninja. Okay, I don't love that
+[62:40] part. Maybe I could tweak the prompt and
+[62:42] make sure it doesn't include the word
+[62:43] boundary in the images, but I'm pretty
+[62:46] happy with this as is. Next up, I could
+[62:48] work on the save function. And the way I
+[62:50] would do that is well, I would explore
+[62:52] my app. The history seems to work well,
+[62:53] but the save button doesn't seem to
+[62:55] work, so I'll just tell it. And then I
+[62:57] go through the same process as before.
+[62:59] But at this point, I won't bore you with
+[63:00] further refinements and adding features.
+[63:02] I think you see the point. If we want to
+[63:04] add a brand new functionality to the app
+[63:06] that is rather large, I would again
+[63:07] switch to the plan mode, refine the plan
+[63:09] until I'm happy and then implement that.
+[63:11] Additionally, I also want to highlight
+[63:13] that the claude MD file has been updated
+[63:14] in the process and we have project
+[63:16] details on the no machine right here.
+[63:18] So, it's always using that in the
+[63:20] context and if you want to make
+[63:22] architectural changes to the whole
+[63:23] thing, you could just go in here and
+[63:25] then clot will respect that in every
+[63:28] message it sends afterwards. Okay, but
+[63:30] now at this point while it's
+[63:31] implementing this fix to the safe
+[63:33] function, we really want to do one more
+[63:35] thing and that is get this onto the
+[63:36] internet. So how do we do that? Well,
+[63:38] the easiest way that almost everybody is
+[63:41] using that vibe codes is the following.
+[63:43] They use their own GitHub to store the
+[63:45] code. You can think of this as a online
+[63:47] hard drive for all your code and then
+[63:48] they link it up to Verscell that for
+[63:50] every new deployment on GitHub, it
+[63:52] deploys a new version of the site that
+[63:54] is then accessible via URL. So in order
+[63:56] for this to work for us, we need to get
+[63:58] our code on GitHub. Now there's many
+[64:00] ways to do that and a billion tutorials
+[64:02] on the web, but the most basic one would
+[64:04] be just going to the GitHub to your
+[64:06] repositories saying new and then naming
+[64:08] this and saying okay, this is the no
+[64:09] machine and then I'll make this one
+[64:11] public. You can access the code in the
+[64:13] description below in case you like my
+[64:14] app here and you want to extend it from
+[64:16] the point where it is right now. Make it
+[64:18] your own. You'll just have to change the
+[64:19] different keys in the env file as I
+[64:21] showed you. But like this, I created a
+[64:23] brand new repository. And then
+[64:24] practically what you want to do is and
+[64:26] what I recommended in the setup section
+[64:28] is you want to install the GitHub CLI.
+[64:30] Again, like I'm not going to go through
+[64:32] all of the setup step by step because
+[64:33] that would just make this video
+[64:35] unbearably massive, but installing the
+[64:37] CLI is pretty straightforward. And
+[64:38] again, you can consult CHPT in order to
+[64:40] help you with that. But the magical
+[64:42] thing that it allows you to do is that
+[64:44] from within here, sure the interface
+[64:45] might not be the prettiest thing in the
+[64:47] world, but it's so damn functional
+[64:48] because all of these developer tools are
+[64:50] just right here. They're right in there.
+[64:52] So, for example, with the GitHub CLI
+[64:53] already installed on my machine, now
+[64:55] that it implemented a fix for the save
+[64:57] button, which I'll just briefly test
+[64:59] before we put this live, I say my boss
+[65:01] has a wedding. Click generate boundaries
+[65:03] and then let's just see if that works.
+[65:04] And then let's get this live onto the
+[65:06] internet. Let's see. It's saving
+[65:08] boundaries saved to your history. Okay,
+[65:10] I guess that does something. Let's just
+[65:11] get this online. What I can do now
+[65:13] because I created the repository, I can
+[65:14] just say add this project to my GitHub
+[65:20] repository
+[65:21] and then I share the URL. Now, just to
+[65:23] be clear, you could also create the
+[65:25] repository from within here. I just kind
+[65:27] of showed you on the website, so it
+[65:28] makes more sense, but you could equally
+[65:29] say create a new repository for this
+[65:31] project on my GitHub, but you do need
+[65:33] the GitHub CLI for this. Otherwise,
+[65:35] you'll just have to take these files and
+[65:37] every other way that you can do this is
+[65:38] just so much more complicated and
+[65:40] cumbersome. And you'll be doing this all
+[65:41] the time. Whenever you add new features,
+[65:43] add new bug fixes, whatever. You always
+[65:45] want to add it to your GitHub because
+[65:47] then with Versell, it's just looking at
+[65:48] your GitHub and every time you add a new
+[65:50] version of the app, it just hosts a new
+[65:52] version of the app for you on the
+[65:54] internet. And then that whole process
+[65:56] becomes super simple. So, you get both
+[65:57] the versioning with GitHub. So every
+[65:59] time you add new changes, it creates
+[66:01] something that it calls a commit which
+[66:03] is essentially a new checkpoint. And if
+[66:05] something breaks with the code or you
+[66:07] make changes with cloud code and
+[66:08] something stops working, you know you
+[66:10] have every previous version on GitHub
+[66:11] and you can just easily return. So
+[66:13] that's why GitHub is absolutely
+[66:15] essential in this workflow. And then if
+[66:16] you link it to Versell, you
+[66:18] automatically will have a live website
+[66:20] as you'll see. So I'll just confirm this
+[66:22] a few times. Say yes. And yeah, looks
+[66:24] like it's finishing up the process. And
+[66:26] then we should see all our files appear
+[66:28] in our GitHub here in a second. If we
+[66:30] just refresh the no machine repository
+[66:32] again, these steps could be done
+[66:33] differently. You could be using the
+[66:35] GitHub desktop app, but just do this
+[66:37] from the get- go. It just works so well
+[66:39] cuz every time you have a new version,
+[66:41] you just say push and commit to Git and
+[66:43] it writes these beautiful commit
+[66:44] messages where it tells you what it
+[66:46] changed. So yeah, that's it. I just
+[66:47] confirm this and now it's adding it to
+[66:50] GitHub. So again, just for your
+[66:51] reference, whenever you change
+[66:52] something, you'll just say push and
+[66:53] commit to Git. After this is set up
+[66:55] once, you'll just be saying push and
+[66:57] commit to git or I guess you could just
+[66:58] say commit to git and then it's going to
+[67:00] add the new version of your code that
+[67:01] you worked on with plot code to your
+[67:03] GitHub as it did right here. So yeah, if
+[67:06] I head over and refresh, I should see
+[67:07] all the code appear here. Beautiful. The
+[67:09] entire app is in here with very detailed
+[67:12] instructions on what it does written by
+[67:14] AI and the whole app in here. So this is
+[67:16] wonderful. Now it's stored on my GitHub
+[67:18] and in case you wonder where those
+[67:20] versions are, well you go to these
+[67:21] commits here and you will see a commit
+[67:23] history here and then you can take this
+[67:25] commit number right here and just in
+[67:27] clot code you could say okay revert to
+[67:29] this version and it will go back to that
+[67:31] version discarding all the changes you
+[67:33] made after that. That can and probably
+[67:34] will be a lifesaver for you at some
+[67:36] point. It is for everyone trust me.
+[67:38] Okay, so now that we have the code on
+[67:40] GitHub successfully, one last step and
+[67:42] that is hooking that up to our Verscell
+[67:43] one time so that every time there's a
+[67:45] new commit, a new version of the site
+[67:47] gets actually hosted on the internet cuz
+[67:48] in GitHub we just store it. It's not a
+[67:50] live website that you could now access.
+[67:52] So in Verscell, I'm just going to go
+[67:54] into my account and said add new project
+[67:57] and then here import Git repository. As
+[68:00] I logged into Verscell, I immediately
+[68:02] connected it to my GitHub account and
+[68:03] now it lets me do this. I can pick my
+[68:05] git repository and we're looking for the
+[68:07] nom machine. Oh, there you go. It's at
+[68:08] the top. I can kind of just hit import
+[68:10] and I believe all the default settings
+[68:12] should be fine right here. I'll just say
+[68:14] deploy. And that's how simple it is. I
+[68:17] can already tell you we'll be needing to
+[68:18] do one more thing which is on Verscell.
+[68:21] We also need to transfer these
+[68:22] environment variables. Remember the env
+[68:25] file where we were adding the empropic
+[68:27] API key, file API key, the database
+[68:29] connections. We'll also have to put them
+[68:31] in here in a sec. But let's let this
+[68:33] deploy first and then we'll copy these
+[68:35] files over. So in our finder,
+[68:37] commandshift dot to expose the hidden
+[68:40] files. I'm going to open myv.local file.
+[68:43] And after this is done deploying, we can
+[68:45] add these keys to versel. Wonderful. So
+[68:48] this is deployed. Continue to the
+[68:50] dashboard. And then in this project, the
+[68:52] way you set up these environment
+[68:53] variables, again, this is a onetime
+[68:54] thing. You go to settings and then in
+[68:56] here it says environment variables. And
+[68:57] I'll just add exactly the ones that I
+[69:00] have in myv file. So next public supper
+[69:03] URL is the key and then the value is
+[69:05] what comes after the equal sign. Just be
+[69:08] careful that I copy this correctly that
+[69:11] I get every sign. Or alternatively, what
+[69:13] is even easier, you can just import the
+[69:15] env file. I just drag it onto here like
+[69:18] so and import all of this and it will
+[69:20] automatically bring in all the
+[69:22] environment variables like so. And I can
+[69:24] just say save and there they are. So now
+[69:26] my Verscell is set up with the
+[69:27] environment variables and we can look at
+[69:29] our deployment and see if this thing
+[69:31] actually works. So if I go to overview
+[69:33] here, it shows a preview of the site.
+[69:35] This is the main URL for the app. No
+[69:37] machine.verell.app.
+[69:39] And then we get some sort of error. So
+[69:40] now this gives us a chance to do a final
+[69:42] troubleshooting run in cloud code to
+[69:45] push it to GitHub to for it to show up
+[69:47] on the internet. So we're getting this
+[69:49] error. Now what do we do? As per usual,
+[69:51] we pull up clot code and I'll say what I
+[69:53] did. deployed through Verscell. Now I
+[69:58] get and then I'm just going to copy this
+[70:02] error and also as per usual just get
+[70:06] used to doing this every time. I could
+[70:08] copy the console logs. Okay, there's no
+[70:10] console logs so we'll keep it as is. And
+[70:12] it says this is a common versell
+[70:14] deployment issue with middleware. Let me
+[70:15] help you fix this. And then it does its
+[70:17] thing. Okay, it's saying that's likely
+[70:19] because it doesn't have the environment
+[70:20] variables but we actually already did
+[70:22] that. So let's check again environment
+[70:24] variables. Yeah, that should be all
+[70:26] good. Okay, and it automatically decided
+[70:28] to commit to git. You could always see
+[70:29] that right here and by this little
+[70:31] generator with claude comment under the
+[70:33] commit. So I'll just say yes. So it's
+[70:35] higglypiging right now. I love these
+[70:38] sometimes. And then it goes straight
+[70:39] from my app into GitHub and then that
+[70:42] will automatically start a new
+[70:44] deployment here on Verscell. So in case
+[70:45] it doesn't start a new deployment, we
+[70:47] can always go to the settings of the
+[70:48] project here, go to git and then this
+[70:50] should be enabled. So if it's linked in
+[70:52] here, then every new commit will launch
+[70:54] a new deployment in here. Ah, and you
+[70:56] can see it appear just here. It's going
+[70:58] to build the site, which will take a few
+[71:00] seconds, and then we can check out the
+[71:01] new version of it. While it does that,
+[71:03] we can also double check GitHub just for
+[71:05] your understanding because right here
+[71:06] you will see we already have free
+[71:07] commits. See, this is the new one minute
+[71:09] ago. And yeah, as I said, every time
+[71:11] this appears, it will just push it to
+[71:13] Verscell. Excellent stuff. Ah, right
+[71:14] there it finished up. And we can kind of
+[71:17] preview our app just by clicking the
+[71:18] preview. And you'll see there's always
+[71:20] two links. There's this one right here
+[71:22] which is just this version of the app
+[71:23] and then there's kind of a main one that
+[71:24] you can share around and also for your
+[71:26] understanding the main one will always
+[71:28] go to the production app that is the
+[71:29] current version and then this concrete
+[71:31] link will change every time. So if you
+[71:32] want to share it with a friend or
+[71:34] colleague you just share this one and
+[71:36] then the newest version is always going
+[71:37] to update to that. And if you just want
+[71:38] the one to the current version then you
+[71:40] would share this link. Okay, doesn't
+[71:41] matter. In this case it's the same. I'm
+[71:43] going to use my login from before. Oh, I
+[71:46] still didn't change the text right here,
+[71:47] but I think at this point you understand
+[71:49] how you do that. And then I'm just going
+[71:51] to log in. That works. My boss has a
+[71:55] wedding. Generate boundaries. Let's see
+[71:57] if this works. This is the live
+[71:58] application right on the web that you
+[72:00] could access to. It worked. Okay,
+[72:03] perfect. Thank you so much for thinking
+[72:04] of me. I won't be able to make it. Let's
+[72:06] test the image generation on this one.
+[72:08] This one. This one. I guess that kind of
+[72:09] works. Yeah, there you go. Free images.
+[72:11] Boundaries right here. Boundary saved to
+[72:14] history. I mean, I guess that kind of
+[72:15] works. It saves everything to history,
+[72:17] but I could further refine that. But
+[72:19] there you go. That's the entire
+[72:21] application live on the internet. We did
+[72:24] it. I think that with the knowledge that
+[72:26] I gave you here, you're really able to
+[72:28] build a ton. And I want to round this
+[72:30] out with kind of next steps and what to
+[72:32] think about next. Okay. So, first of
+[72:34] all, if you want to redo this again,
+[72:36] check out the first link in the
+[72:37] description with my little cheat sheet
+[72:39] with all the prompts and resources and
+[72:41] some agents that I use and MCPS that I
+[72:43] would recommend. And as we kind of
+[72:44] completed the whole process here and hit
+[72:46] the entire checklist that I promised you
+[72:48] in the beginning from talking you
+[72:50] through the setup, introducing you to
+[72:52] agents, talking about MCPs, going
+[72:54] through the whole debugging cycle, and
+[72:56] making sure you have a database
+[72:57] integrated and everything hosted on the
+[72:59] web. There's really two items that I
+[73:01] want to touch on in the end that I
+[73:03] didn't go really deep into because
+[73:05] they're a bit more intermediate, I would
+[73:07] say. Those are agents and MCPS. So, I
+[73:09] briefly showed you how to install MCP
+[73:11] with the context 7 MCP. Installing MCPS
+[73:14] is super straightforward. It always
+[73:15] looks like that. And we talked about
+[73:17] agents extensively in theory, but then
+[73:20] here in practice, I actually want to put
+[73:22] them to work. So, I'm going to pull up
+[73:23] clot code one more time here. And I'm
+[73:25] going to say / agents here. And let's
+[73:27] see what we have here. So we have one
+[73:29] user agent which is a flux image
+[73:31] generator agent a general one and just
+[73:33] for the purpose of this demo we're going
+[73:34] to create one in this project. So we
+[73:36] went through the setup previously so I
+[73:38] don't need to explain everything. We're
+[73:39] just going to say generate with claude
+[73:40] right here. We want the agent that is a
+[73:43] QA tester which is essentially a quality
+[73:45] tester for apps in the development
+[73:47] industry. A QA tester that tries to
+[73:49] break my application. And I'll hit
+[73:50] enter. And then as you'll see in my
+[73:52] cheat sheet one of the free MCP servers
+[73:54] that I would recommend you begin with is
+[73:56] one that is called Playright. And I
+[73:58] could and I might create an entire video
+[74:00] just on this, but this is such a
+[74:01] powerful MCP server. It's kind of the
+[74:03] go-to for browser remote control and it
+[74:06] does literally that. So if you scroll
+[74:08] down here on the GitHub, you can go to
+[74:10] clot code and this one line will install
+[74:12] that MCP in my folder. So my sub agent
+[74:15] is set up. I'll just give it all the
+[74:17] MCPS for now. It's okay. The QA tester
+[74:19] can use Sonnet. That's fine. We'll give
+[74:21] it a green color. And that's it. That's
+[74:23] my agent right there. I'll hit enter. So
+[74:25] when I escape out of this now I have
+[74:27] some basic agent that claude generated.
+[74:29] I will also run this cloud MCP at
+[74:32] playright and that will add the MCP
+[74:34] server to my cloud. And here's the
+[74:36] interesting thing. Okay, so there's a
+[74:37] ton of MCP servers and most of them are
+[74:39] not worth your attention but in my
+[74:41] little cheat sheet I included the three
+[74:42] of them that I use all the time and that
+[74:44] I also recommend playright being one of
+[74:46] them. And the amazing thing about this
+[74:47] is it allows clawed code to use the MCP
+[74:50] to open up a new tab with your app and
+[74:52] then actually use that app. And if
+[74:54] something breaks, it knows about it
+[74:56] right away. So it can kind of try
+[74:57] different things. And if something
+[74:58] doesn't work out, the QA tester agent
+[75:00] gets all the console logs from that and
+[75:02] can deliver a report to Claude code on
+[75:04] what doesn't work so that Claude can fix
+[75:07] it. And as I added that, it's already
+[75:09] telling me, okay, since you added a QA
+[75:10] breaker agent and added Playright, these
+[75:12] are great tools for testing your no
+[75:14] machine app. Let's see if this is
+[75:16] available right away. I'm actually not
+[75:17] sure if I say MCP. Nah, it's not
+[75:19] available yet, right? You only see the
+[75:20] context 7 server that we installed
+[75:22] earlier. So I'm just going to close out
+[75:24] and open up new version of clot code.
+[75:27] And now the MCP should be active. So if
+[75:29] I say /mcp, ah, still not active. So
+[75:31] I'll run the command once more. And I
+[75:33] think I need to restart Claude to see
+[75:36] that. There it is. Play right. Perfect.
+[75:37] So now I can say / agents. And if I go
+[75:40] to my agents, I don't see my QA tester.
+[75:42] So I guess I'll just have to recreate
+[75:44] him. That's okay. QA tester agent that
+[75:47] tries to break my app. It will write
+[75:50] instructions that will most likely be
+[75:52] fine here. there. And then I just want
+[75:53] to make sure it has access to the
+[75:54] Playright MCP. So here if I go to
+[75:56] advanced, it will show me the full list
+[75:58] of all the tools. Again, you don't need
+[76:00] to know all of this. Just here under MCP
+[76:02] service. Maybe I can switch off the
+[76:03] context 7 MCP server cuz it really does
+[76:05] not need that. And then I go up and say
+[76:07] continue. For the QA tester, I think set
+[76:10] will be completely fine. Okay. Hit
+[76:12] enter. So now I have the agent right
+[76:13] here, the QA breaker. Beautiful. So if I
+[76:15] go on him, I can say edit agent, open an
+[76:18] editor. And then here's the entire agent
+[76:20] that was created. And here's the final
+[76:22] tip that I wanted to share. Like if you
+[76:24] go in here, this first part as I
+[76:26] mentioned earlier is for other agents to
+[76:28] pick when to activate this one. So this
+[76:30] we don't need to edit. But down here we
+[76:32] have the system prompt. And if you want
+[76:33] this agent to always use playright, then
+[76:35] we should alter this. You're an elite QA
+[76:37] engineer and penetration tester
+[76:38] specializing in breaking web
+[76:40] applications. Your mission is to think
+[76:41] like both a malicious user and an edge
+[76:43] case explorer. Here we can say
+[76:46] proactively
+[76:47] using playright to uncover hidden bugs.
+[76:50] So this wording is actually recommended
+[76:52] by Enthropic. If you say proactively
+[76:54] using and then a name of a MCP server,
+[76:56] you're going to see this agent using
+[76:58] that MCP server all the time if not
+[77:00] always. And that's one change you can
+[77:01] make. And another one in other agents
+[77:03] that is super useful, not for this one,
+[77:05] is you can kind of just add a new title
+[77:07] in markdown and say something like extra
+[77:09] context. And then if you want to give it
+[77:11] some specific documentation, you could
+[77:13] just paste it in here. You could just
+[77:15] throw any extra context that the agent
+[77:16] should have down here. So in this case I
+[77:18] don't need that but this is just an
+[77:20] extra tip for building agents. One of
+[77:22] the most useful things you can just take
+[77:24] an entire documentation and just paste
+[77:26] it into the agent that you know he knows
+[77:28] about everything. Doesn't need to use
+[77:29] context 7. He just knows. So if I save
+[77:31] and close out of this then that's it.
+[77:33] Then we have our little QA breaker
+[77:35] agent. And now you can do a few things.
+[77:36] As I showed you before in the drawing,
+[77:38] you could tell it fix XYZ and then use
+[77:42] the QA breaker agent to test it and it
+[77:46] will first do the fix with Claude and
+[77:48] then use the QA breaker agent. Or you
+[77:50] could do something like this. Use free
+[77:53] QA breaker agents to test the app. Now,
+[77:57] I think concretely with testing the app,
+[77:59] this doesn't make the most sense in the
+[78:01] world. This is not something I've
+[78:02] actually done before. It might make
+[78:04] sense in theory. I mean, with a lot of
+[78:06] these things, you just have to try and
+[78:07] you'll see if it works for you. But as
+[78:09] you can see, it's spawning three
+[78:11] different agents simultaneously right
+[78:12] now that will all be using Playright to
+[78:15] test my application. Now, honestly, I
+[78:17] don't even know if I can be using three
+[78:18] copies of Playright at the same time.
+[78:20] Probably, but this is where
+[78:21] experimentation opens up. You could give
+[78:23] API access to these agents, right? You
+[78:25] could have a image generation agent. You
+[78:26] could have a video generation agent. You
+[78:28] could have a whole dev team. You could
+[78:30] have a marketing manager, a creative
+[78:32] director. Then a bunch of agents with
+[78:33] specific APIs to generate images and
+[78:36] generate copy. And then you have one
+[78:37] agent that has MCP that connects to your
+[78:40] own database so it can post blogs for
+[78:42] you. And then you can unleash your
+[78:44] entire marketing studio by letting them
+[78:46] collaborate. I mean, people are
+[78:47] experimenting with this stuff, okay?
+[78:49] They're turning the promps they have in
+[78:50] chat GPT into these agents, letting them
+[78:52] collaborate, letting them build things,
+[78:54] do things. People are not just using
+[78:56] this for development. But I think by
+[78:58] learning the development basics, you'll
+[78:59] understand how these things work
+[79:01] together, how cloth code works. And
+[79:03] yeah, now you can see these agents just
+[79:05] like opening up browsers and asking for
+[79:08] permissions of, hey, can I take uh
+[79:10] snapshots of the current page, etc. And
+[79:12] I have to like confirm that multiple
+[79:13] times cuz I have three agents running.
+[79:14] So I have to hit enter like six times.
+[79:16] Okay. And now it's doing its thing. It's
+[79:18] signing up with a test email address,
+[79:20] etc. I think you see the point. So, now
+[79:23] we really covered all of it. Setup
+[79:25] agents, MCPs, debugging, using
+[79:27] databases, putting it on the web. Again,
+[79:29] don't forget to get your little cheat
+[79:31] sheet with all the notes from this
+[79:32] lecture and my MCP and agent
+[79:34] recommendations in there. But that right
+[79:36] there was quite the process and you made
+[79:37] it all the way through. We might have
+[79:39] never met, but I'm actually kind of
+[79:41] proud of you because I know how much it
+[79:43] takes to sit for a long video like this.
+[79:45] But as I say always with all of these AI
+[79:47] tools and skills, they stack. Whatever
+[79:50] you learned in chat GPT will apply to
+[79:52] editing the agent prompts in here.
+[79:54] Whatever you learned in automation,
+[79:55] well, you can connect all the
+[79:56] automations up to either agents or you
+[79:59] can trigger them within your
+[80:00] applications. If you follow the weekly
+[80:01] show on the channel, AI news you can
+[80:03] use. Well, we talk about new apps and
+[80:05] APIs and models all the time. Those can
+[80:07] inspire you in order to use your
+[80:09] prompting skills and vibe coding skills
+[80:11] to spawn new agents and use them in
+[80:13] parallel just like I am right here. All
+[80:15] of this stacks and creates a smoother
+[80:17] transition into a new technological era
+[80:19] for that most people won't be prepared.
+[80:21] But you being here at the end of this
+[80:23] video gives me confidence in the fact
+[80:25] that you'll be able to adjust to
+[80:26] whatever is coming cuz 99.99%
+[80:29] of the people don't have the patience
+[80:31] and the curiosity to be exploring new
+[80:33] skills like this. So with that being
+[80:34] said, I hope this was helpful. If you're
+[80:36] looking to hang out with other people
+[80:38] who do this type of stuff, that's
+[80:39] literally why we built AI advantage
+[80:41] community. We have extra spaces for Vibe
+[80:43] coding. People are sharing the apps
+[80:44] they're building. You could get
+[80:45] personalized support from my team on
+[80:47] this process. And just a few days ago, I
+[80:49] ran an event where I showed two new
+[80:51] workflows, both involving agents and the
+[80:54] custom app that I built. But all of that
+[80:56] kind of builds on what you just consumed
+[80:57] here. So, make sure you're solid on
+[80:59] this. And if you want to go further, the
+[81:01] Advantage community is there for you.
+[81:03] And with that being said, that's
+[81:04] literally all I have right now. Go and
+[81:06] build something and you might just
+[81:07] realize how creative, fun, and addictive
+[81:09] it can be.
