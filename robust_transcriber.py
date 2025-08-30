@@ -257,21 +257,16 @@ class RobustTranscriber:
     
     def cleanup_transcript(self, transcript: str) -> str:
         """
-        Clean up transcript by removing commercials and improving formatting
-        DISABLED: Enhanced ad filtering with Claude AI integration (temporarily on hold)
+        Basic transcript cleanup - removes extra whitespace and formatting
         """
         if not transcript:
             return transcript
         
-        print("🧹 Cleaning up transcript...")
+        # Basic cleanup - remove extra whitespace and normalize line endings
+        cleaned = transcript.strip()
+        cleaned = ' '.join(cleaned.split())  # Remove extra whitespace
         
-        # TODO: Ad filtering functionality is temporarily disabled
-        # The Claude AI ad filtering is not working properly and has been put on hold
-        # We might want to revisit this in the future with a different approach
-        # For now, just return the original transcript without any ad filtering
-        
-        print("ℹ️ Ad filtering temporarily disabled - returning original transcript")
-        return transcript
+        return cleaned
     
     def transcribe_file(self, audio_file: str) -> Optional[str]:
         """
