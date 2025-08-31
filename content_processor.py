@@ -177,7 +177,7 @@ class ContentProcessor:
         
         # Get episode info with feed details
         cursor.execute('''
-            SELECT e.id, e.episode_id, e.title, e.audio_url, f.type, f.topic_category, f.name
+            SELECT e.id, e.episode_id, e.title, e.audio_url, f.type, f.topic_category, f.title
             FROM episodes e
             JOIN feeds f ON e.feed_id = f.id
             WHERE e.id = ? AND e.status IN ('downloaded', 'pre-download')
@@ -189,8 +189,8 @@ class ContentProcessor:
             conn.close()
             return None
         
-        ep_id, episode_guid, title, audio_url, feed_type, topic_category, feed_name = episode
-        print(f"\n🎬 Processing Episode from {feed_name}")
+        ep_id, episode_guid, title, audio_url, feed_type, topic_category, feed_title = episode
+        print(f"\n🎬 Processing Episode from {feed_title}")
         print(f"📺 Title: {title}")
         print(f"🔖 Category: {topic_category or 'General'}")
         print(f"⚙️ Type: {feed_type}")
