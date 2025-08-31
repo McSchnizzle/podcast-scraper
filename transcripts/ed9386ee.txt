@@ -1,0 +1,243 @@
+[00:00] Welcome back to the AI Daily Brief
+[00:01] headlines edition. All the daily AI news
+[00:03] you need in around 5 minutes. We kick
+[00:06] off today with an interesting
+[00:07] partnership announcement Meta has struck
+[00:09] a new deal with Midjourney. On Friday,
+[00:12] Meta's new chief AI officer, Alexander
+[00:14] Wang, posted on XT today. We're proud to
+[00:16] announce a partnership with Midjourney
+[00:18] to license their aesthetic technology to
+[00:20] our future models and products, bringing
+[00:21] beauty to billions. This technical
+[00:23] collaboration between our research teams
+[00:25] is part of our effort to team up with
+[00:26] the best companies in the industry whose
+[00:28] work and expertise complements our own.
+[00:30] We are incredibly impressed by
+[00:31] MidJourney. They've accomplished true
+[00:33] feats of technical and aesthetic
+[00:34] excellence and we're thrilled to be
+[00:36] working more closely with them to ensure
+[00:37] Meta is able to deliver the best
+[00:39] possible products for people. It will
+[00:40] require taking an all of the- above
+[00:42] approach. This means world-class talent,
+[00:44] ambitious compute roadmap, and working
+[00:46] with the best players across the
+[00:47] industry. Midjourney founder David Holes
+[00:49] wrote, "Bringing sublime tools of
+[00:51] creation and beauty to billions of
+[00:52] people is squarely within our mission,
+[00:54] excited to partner with the titans of
+[00:55] industry to make this happen." However,
+[00:57] he also confirmed, quote, "We remain an
+[00:59] independent community-backed research
+[01:00] lab with no investors working on a
+[01:02] staggering array of ambitious projects
+[01:04] focused on bringing about humane futures
+[01:06] where we are all midjourney. Join us."
+[01:08] Now, this one is super interesting.
+[01:10] Midjourney has always had a pretty
+[01:12] fascinating place in the AI image
+[01:14] generation pantheon and that it is just
+[01:16] really aesthetically tasteful. I've said
+[01:18] before that my first conversion
+[01:20] experiences into the world of AI were
+[01:22] largely with Midjourney. I would imagine
+[01:24] dreamy scenes from history like Ernest
+[01:26] Hemingway in Paris in the 1920s. As
+[01:28] their models have evolved, they've
+[01:30] continued to get better and more
+[01:31] tasteful and more interesting and more
+[01:32] visually arresting. Although they
+[01:34] haven't evolved in some of the ways that
+[01:35] other tools have, which have left them
+[01:37] in a different use case column for me
+[01:39] and many others. When you see an image
+[01:41] like a cover image or a thumbnail on one
+[01:42] of my videos, it's almost invariably
+[01:44] created by Ideogram. Sometimes it's from
+[01:47] OpenAI, which you can usually tell from
+[01:49] the weird yellow tint, but I would say
+[01:51] that the vast majority of time it is in
+[01:53] fact ideog. Ideogram has the best
+[01:55] fidelity to text, most closely follows
+[01:57] my instructions, and ends up being
+[01:59] really good for the day in dayout
+[02:00] business sort of use cases. When I need
+[02:02] to do something visually arresting
+[02:04] though, something where the main
+[02:05] determinant of success is beauty or just
+[02:07] visual interestingness, then I'm turning
+[02:09] to Midjourney. This has led people to
+[02:12] wonder what Meta is going to do with the
+[02:13] company. The Verge suggested that in
+[02:15] their words, Meta is going to stuff
+[02:17] Midjourney AI images into your feed,
+[02:18] which some think is terrible, but which
+[02:20] others rightly point out that since
+[02:21] Facebook is already inundated with AI
+[02:23] images, leveling up the aesthetic
+[02:25] quality with a midjourney partnership
+[02:26] might not hurt. The other question is
+[02:28] whether the deal arises out of a failed
+[02:30] Aquaire attempt. It was already reported
+[02:32] that Meta had attempted to buy out gen
+[02:34] video startup Runway. So, we know
+[02:35] they've had their sights on various AI
+[02:37] multimedia companies. The partnership,
+[02:39] however, suggests that Meta isn't just
+[02:41] looking for talent, but also trying to
+[02:42] get their hand on the best tech to build
+[02:44] visual AI products. Responses really run
+[02:46] the gamut. Some saw this as a knock on
+[02:48] Meta Scale. AI commenter Spore writes,
+[02:50] "Midejourney is phenomenal, and this is
+[02:52] a great partnership for both parties,
+[02:54] but man, another point in favor of being
+[02:55] bearish on Meta." Gaming startup founder
+[02:58] Assad Dar suggested instead though that
+[03:00] the move was more about urgency,
+[03:01] commenting, "Meta licensing midjourney
+[03:03] tech is smart. Creative AI is still
+[03:05] undervalued, but it's going to define
+[03:07] how we share, market, and communicate
+[03:09] online. Tony Wong thought it was an
+[03:11] example of the natural evolution of
+[03:13] platforms. He wrote, "Meta plus
+[03:15] midjourney equals platforms now
+[03:16] outsourced taste itself." We've seen
+[03:18] this playbook before. Spotify didn't
+[03:20] just stream music, they algorithmic
+[03:22] musical discovery. Netflix didn't just
+[03:24] host shows, they became the curator of
+[03:26] what stories get told. Tik Tok didn't
+[03:28] just show videos, they rewired attention
+[03:29] spans. Now Meta embeds AI taste into the
+[03:32] infrastructure. Like all things with AI,
+[03:35] this is basically a roar shack test on
+[03:36] how you feel about AI and the companies
+[03:38] involved. So whether this is making AI
+[03:40] slop look prettier or an example of how
+[03:42] Zuckerberg comes back swinging when his
+[03:44] back is against the wall is mostly going
+[03:45] to be in the eye of the beholder. One
+[03:48] other story about Meta, however, the
+[03:50] company is upsizing their infrastructure
+[03:51] through a $10 billion cloud deal with
+[03:53] Google. Sources speaking with the
+[03:55] information say that the two tech giants
+[03:56] have agreed to a six-year deal that will
+[03:58] see Meta spend more than $10 billion.
+[04:00] Though sources said that the deal
+[04:02] largely relates to Meta securing their
+[04:03] AI inference needs. Now this month has
+[04:06] seen Meta shuffle around their data
+[04:07] center plans as they figure out how to
+[04:09] fund one of the most ambitious buildouts
+[04:11] in the industry. The company has
+[04:12] forecast around 70 billion in capex this
+[04:14] year and another big increase in 2026.
+[04:17] Earlier this week, it was reported that
+[04:18] Meta had closed a $29 billion private
+[04:20] credit deal, marking an interesting
+[04:22] shift from big tech firms self-
+[04:24] financing their infrastructure buildout.
+[04:26] And now we have Meta positioning
+[04:27] themselves as a large renter of
+[04:28] inference as well as a data center
+[04:30] operator in their own right. Meta also
+[04:32] has agreements in place with Amazon and
+[04:33] Microsoft. But the Google deal is a
+[04:35] significant jump in capacity. Now
+[04:37] ultimately this makes sense. When
+[04:38] Zuckerberg was out recruiting the super
+[04:40] intelligence team, he made a big point
+[04:41] that the best talent wants access to
+[04:43] unconstrained compute. Ever since then,
+[04:45] Meta's move seemed designed to set up
+[04:47] near infinite resources for their big AI
+[04:49] push.
+[04:50] News from another major player in the
+[04:52] foundation model game XAI. The company
+[04:54] has officially open sourced Grock 2.5.
+[04:57] The model, which is now two generations
+[04:59] behind, has become available on
+[05:00] HuggingFace. Elon Musk said that the
+[05:03] previous generation model Gro 3 will be
+[05:05] available in around 6 months. The
+[05:07] release gives us the first opportunity
+[05:08] to examine Grock's architecture. The
+[05:10] model has 268 billion parameters
+[05:12] arranged in a mixture of experts design
+[05:14] with eight total experts and two active
+[05:16] at a time. It has a maximum of 131,000
+[05:18] tokens of context. Interestingly, AI
+[05:21] engineer Tim Kellogg criticized the
+[05:22] release, noting that the custom license
+[05:24] has some anti-competitive terms. He
+[05:26] queried, "Why did it take so long to
+[05:28] open this up? There's nothing
+[05:29] interesting here." Now, to the extent
+[05:31] that there is something interesting for
+[05:33] some, it's really just XAI setting the
+[05:35] tone by deprecating their old models
+[05:36] into the open source world. AI
+[05:38] researcher Sebastian Rashka commented,
+[05:40] "It's quite cool that the open source
+[05:41] community gets the real full-size model
+[05:43] that was used in production as opposed
+[05:45] to the light or spin-off version."
+[05:47] Separately, Elon Musk has announced
+[05:48] plans to launch an AI software company
+[05:50] called Macrohard. Aside from enjoying
+[05:52] the pun relative to Microsoft, Musk
+[05:55] commented, "In principle, given that
+[05:56] software companies like Microsoft do not
+[05:58] themselves manufacture any physical
+[06:00] hardware, it should be possible to
+[06:01] simulate them entirely with AI. We'll
+[06:04] see whether anything comes of it, but
+[06:05] the idea does echo OpenAI's concept of
+[06:07] level 5 agents that are capable of doing
+[06:09] all the work of an organization."
+[06:11] Lastly today, a fundraising update from
+[06:13] Anthropic. The company is nearing a deal
+[06:15] to raise up to $10 billion in a
+[06:17] jumbosized round. The last reporting on
+[06:19] the rumored term suggests Anthropic was
+[06:21] looking to take in 5 billion at a $170
+[06:23] billion valuation. So, in a matter of a
+[06:26] few weeks, Anthropic has doubled their
+[06:27] target and apparently had no trouble at
+[06:29] all filling the round. Bloomberg reports
+[06:31] that Iconic Capital is leading the round
+[06:33] with firms including TPG, Lightseed
+[06:35] Venture Partners, Spark Capital, and
+[06:36] Menllo Ventures participating. The
+[06:38] Carter Investment Authority and the
+[06:40] Government of Singapore Investment
+[06:41] Corporation have also reportedly
+[06:42] participated in talks as Enthropic opens
+[06:44] their cap table to sovereign wealth
+[06:45] funds for the first time. Now, if you're
+[06:47] keeping track, this seems to be the
+[06:49] round where Enthropic grows beyond the
+[06:50] capacity of traditional venture capital.
+[06:52] They'll come close to tripling the $61.5
+[06:55] billion valuation they achieved at their
+[06:56] last round in March and have also
+[06:58] tripled the scale of fundraising for
+[06:59] this particular round. At this rate,
+[07:02] Anthropic will overtake OpenAI is the
+[07:04] most valuable AI lab in a year. And
+[07:06] Benedict pointing out the public market
+[07:08] appetite said, "If Anthropic IPOed, it
+[07:10] would rip straight to 500 billion."
+[07:13] Indeed. And by the way, I think that is
+[07:14] an arbitrage that people are not taking
+[07:16] enough advantage of, but that is a topic
+[07:18] for another day. For now, that's going
+[07:20] to do it for today's AI daily brief
+[07:21] headlines. Next up, the main
