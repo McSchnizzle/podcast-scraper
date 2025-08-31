@@ -16,7 +16,11 @@ from youtube_transcript_api import YouTubeTranscriptApi
 import re
 import hashlib
 
-# Parakeet MLX imports for Apple Silicon optimized ASR
+# ASR backend detection and imports
+import platform
+import os
+
+# Parakeet MLX for Apple Silicon (local development)
 try:
     from parakeet_mlx import from_pretrained
     import mlx.core as mx
@@ -25,9 +29,32 @@ try:
     print("✅ Parakeet MLX available - using Apple Silicon optimized ASR")
 except ImportError:
     PARAKEET_MLX_AVAILABLE = False
-    print("❌ Parakeet MLX not available - cannot process audio")
-    print("Install with: pip install parakeet-mlx")
-    raise ImportError("Parakeet MLX is required for audio processing")
+
+# OpenAI Whisper for cross-platform (GitHub Actions, etc.)
+try:
+    import whisper
+    WHISPER_AVAILABLE = True
+    if not PARAKEET_MLX_AVAILABLE:
+        print("✅ OpenAI Whisper available - using cross-platform ASR")
+except ImportError:
+    WHISPER_AVAILABLE = False
+
+# Environment detection
+IS_GITHUB_ACTIONS = os.getenv('GITHUB_ACTIONS') == 'true'
+IS_APPLE_SILICON = platform.machine() == 'arm64' and platform.system() == 'Darwin'
+
+# Determine ASR backend
+if IS_APPLE_SILICON and PARAKEET_MLX_AVAILABLE and not IS_GITHUB_ACTIONS:
+    ASR_BACKEND = 'parakeet_mlx'
+    print("🍎 Using Parakeet MLX (Apple Silicon optimized)")
+elif WHISPER_AVAILABLE:
+    ASR_BACKEND = 'whisper'
+    print("🌐 Using OpenAI Whisper (cross-platform)")
+else:
+    ASR_BACKEND = None
+    print("❌ No ASR backend available")
+    if not IS_GITHUB_ACTIONS:  # Only raise error in local dev, not in CI
+        raise ImportError("No ASR backend available. Install whisper or parakeet-mlx")
 
 class ContentProcessor:
     def __init__(self, db_path="podcast_monitor.db", audio_dir="audio_cache", min_youtube_minutes=3.0):
@@ -36,10 +63,20 @@ class ContentProcessor:
         self.audio_dir.mkdir(exist_ok=True)
         self.min_youtube_minutes = min_youtube_minutes
         
-        # Initialize Parakeet ASR models
+        # Initialize ASR models based on environment
         self.asr_model = None
         self.speaker_model = None
-        self._initialize_parakeet_mlx_models()
+        self.asr_backend = ASR_BACKEND
+        self._initialize_asr_models()
+    
+    def _initialize_asr_models(self):
+        """Initialize ASR models based on detected backend"""
+        if self.asr_backend == 'parakeet_mlx':
+            self._initialize_parakeet_mlx_models()
+        elif self.asr_backend == 'whisper':
+            self._initialize_whisper_models()
+        else:
+            print("⚠️ No ASR backend available - audio processing will be skipped")
     
     def _initialize_parakeet_mlx_models(self):
         """Initialize Parakeet MLX ASR models for Apple Silicon optimized podcast transcription"""
@@ -65,6 +102,29 @@ class ContentProcessor:
             print(f"❌ Error loading Parakeet MLX models: {e}")
             print("Cannot proceed without Parakeet MLX ASR")
             raise RuntimeError(f"Failed to initialize Parakeet MLX: {e}")
+    
+    def _initialize_whisper_models(self):
+        """Initialize OpenAI Whisper models for cross-platform transcription"""
+        try:
+            print("Initializing OpenAI Whisper models...")
+            
+            # Use medium model for good quality/speed balance
+            # Options: tiny, base, small, medium, large
+            model_name = "medium"
+            print(f"Loading Whisper model: {model_name}")
+            
+            self.asr_model = whisper.load_model(model_name)
+            
+            print("✅ OpenAI Whisper ASR model loaded successfully")
+            print("🌐 Using cross-platform Whisper transcription")
+            
+            # Whisper doesn't have separate speaker models
+            self.speaker_model = None
+            
+        except Exception as e:
+            print(f"❌ Error loading Whisper models: {e}")
+            print("Cannot proceed without Whisper ASR")
+            raise RuntimeError(f"Failed to initialize Whisper: {e}")
     
     def process_episode(self, episode_id):
         """Process a single episode: download audio, extract transcript, analyze content"""
@@ -254,10 +314,16 @@ class ContentProcessor:
             return None
     
     def _audio_to_transcript(self, audio_file):
-        """Convert audio to transcript using Parakeet MLX ASR"""
+        """Convert audio to transcript using available ASR backend"""
         if self.asr_model is None:
-            raise RuntimeError("Parakeet ASR model not initialized")
-        return self._parakeet_mlx_transcribe(audio_file)
+            raise RuntimeError("ASR model not initialized")
+        
+        if self.asr_backend == 'parakeet_mlx':
+            return self._parakeet_mlx_transcribe(audio_file)
+        elif self.asr_backend == 'whisper':
+            return self._whisper_transcribe(audio_file)
+        else:
+            raise RuntimeError(f"Unsupported ASR backend: {self.asr_backend}")
     
     def _parakeet_mlx_transcribe(self, audio_file):
         """High-quality podcast transcription using robust workflow with progress monitoring"""
@@ -284,6 +350,46 @@ class ContentProcessor:
             
         except Exception as e:
             print(f"❌ Parakeet MLX transcription failed: {e}")
+            raise RuntimeError(f"Transcription failed: {e}")
+    
+    def _whisper_transcribe(self, audio_file):
+        """Cross-platform transcription using OpenAI Whisper"""
+        try:
+            print(f"🌐 Transcribing with Whisper: {audio_file}")
+            
+            # Transcribe with Whisper
+            result = self.asr_model.transcribe(
+                str(audio_file),
+                language=None,  # Auto-detect language
+                task="transcribe",  # Not translate
+                verbose=False
+            )
+            
+            # Extract text from segments with timestamps
+            transcript_lines = []
+            for segment in result.get('segments', []):
+                start_time = segment.get('start', 0)
+                text = segment.get('text', '').strip()
+                
+                if text:
+                    minutes = int(start_time // 60)
+                    seconds = int(start_time % 60)
+                    transcript_lines.append(f"[{minutes:02d}:{seconds:02d}] {text}")
+            
+            transcript_text = "\n".join(transcript_lines)
+            
+            if not transcript_text:
+                raise RuntimeError("No transcription content generated")
+            
+            print(f"✅ Whisper transcription complete: {len(transcript_text)} characters")
+            
+            # Add basic speaker detection (Whisper doesn't do speaker diarization)
+            transcript_text = self._add_basic_speaker_detection(transcript_text, audio_file)
+            
+            return transcript_text
+            
+        except Exception as e:
+            print(f"❌ Whisper transcription failed: {e}")
             raise RuntimeError(f"Transcription failed: {e}")
     
     def _log_episode_failure(self, episode_id, failure_reason):
