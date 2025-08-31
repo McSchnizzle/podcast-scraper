@@ -60,6 +60,7 @@ jobs:
       with:
         path: |
           podcast_monitor.db
+          youtube_transcripts.db
           audio_cache/
           transcripts/
         key: podcast-data-${{ github.run_id }}-${{ github.run_attempt }}
@@ -88,8 +89,10 @@ jobs:
         ls -la transcripts/ || echo "No transcripts/ directory"
         echo "=== Digested Transcripts ==="
         ls -la transcripts/digested/ || echo "No transcripts/digested/ directory"
-        echo "=== Database Status ==="
-        sqlite3 podcast_monitor.db "SELECT COUNT(*) as total_episodes, status, COUNT(*) as count FROM episodes GROUP BY status;" || echo "Database query failed"
+        echo "=== RSS Database Status ==="
+        sqlite3 podcast_monitor.db "SELECT status, COUNT(*) as count FROM episodes GROUP BY status;" || echo "RSS database query failed"
+        echo "=== YouTube Database Status ==="
+        sqlite3 youtube_transcripts.db "SELECT status, COUNT(*) as count FROM episodes GROUP BY status;" || echo "YouTube database query failed or not found"
         
     - name: Upload generated artifacts
       uses: actions/upload-artifact@v4
@@ -101,6 +104,7 @@ jobs:
           transcripts/
           transcripts/digested/
           podcast_monitor.db
+          youtube_transcripts.db
         retention-days: 30
         
     - name: Commit and push changes
