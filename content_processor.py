@@ -823,16 +823,16 @@ class ContentProcessor:
         return analysis
     
     def process_all_pending(self):
-        """Process all pending episodes"""
+        """Process all episodes awaiting transcription (pending/pre-download status)"""
         conn = sqlite3.connect(self.db_path)
         cursor = conn.cursor()
         
         cursor.execute('SELECT id FROM episodes WHERE status IN (\'pending\', \'pre-download\')')
-        pending_episodes = cursor.fetchall()
+        episodes_to_process = cursor.fetchall()
         conn.close()
         
         results = []
-        for (episode_id,) in pending_episodes:
+        for (episode_id,) in episodes_to_process:
             result = self.process_episode(episode_id)
             if result:
                 results.append(result)

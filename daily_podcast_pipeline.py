@@ -282,8 +282,8 @@ class DailyPodcastPipeline:
         logger.info(f"🏁 Audio cache processing complete: {processed_files} files in {total_time/60:.1f} minutes")
     
     def _process_pending_episodes(self):
-        """Process all pending episodes"""
-        logger.info("⚙️ Processing pending episodes...")
+        """Process episodes awaiting transcription"""
+        logger.info("⚙️ Processing episodes awaiting transcription (pending/pre-download)...")
         
         results = self.content_processor.process_all_pending()
         
