@@ -26,10 +26,14 @@ share/python-wheels/
 *.egg
 MANIFEST
 
-# Audio cache and transcripts - Project specific
+# Audio cache - Project specific  
 audio_cache/*.mp3
 audio_cache/*.wav
-transcripts/*.txt
+
+# Exclude only temporary/working transcript files, not the final ones
+# Note: YouTube transcripts need to be committed for dual database architecture
+transcripts/temp_*.txt
+transcripts/working_*.txt
 
 # Database (keep for development, exclude in production)
 # podcast_monitor.db
