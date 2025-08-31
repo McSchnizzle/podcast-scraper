@@ -357,12 +357,13 @@ class ContentProcessor:
         try:
             print(f"🌐 Transcribing with Whisper: {audio_file}")
             
-            # Transcribe with Whisper
+            # Transcribe with Whisper (force FP32 for CPU compatibility)
             result = self.asr_model.transcribe(
                 str(audio_file),
                 language=None,  # Auto-detect language
                 task="transcribe",  # Not translate
-                verbose=False
+                verbose=False,
+                fp16=False  # Explicitly disable FP16 to avoid CPU warnings
             )
             
             # Extract text from segments with timestamps
