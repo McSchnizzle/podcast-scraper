@@ -24,17 +24,25 @@ jobs:
       uses: actions/cache@v4
       with:
         path: ~/.cache/pip
-        key: ${{ runner.os }}-pip-${{ hashFiles('**/requirements.txt') }}
+        key: ${{ runner.os }}-pip-${{ hashFiles('**/requirements.txt') }}-v1
         restore-keys: |
+          ${{ runner.os }}-pip-${{ hashFiles('**/requirements.txt') }}-
           ${{ runner.os }}-pip-
           
     - name: Install Python dependencies
       run: |
         python -m pip install --upgrade pip
         if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
-        # Install additional dependencies for GitHub Actions environment
-        pip install anthropic sqlite3
+        # sqlite3 is built into Python, no need to install via pip
         
+    - name: Cache system dependencies
+      uses: actions/cache@v4
+      with:
+        path: /var/cache/apt
+        key: ${{ runner.os }}-apt-cache-v1
+        restore-keys: |
+          ${{ runner.os }}-apt-cache-
+          
     - name: Install system dependencies
       run: |
         sudo apt-get update
@@ -47,8 +55,9 @@ jobs:
           podcast_monitor.db
           audio_cache/
           transcripts/
-        key: podcast-data-${{ github.run_number }}
+        key: podcast-data-${{ github.run_id }}-${{ github.run_attempt }}
         restore-keys: |
+          podcast-data-${{ github.run_id }}-
           podcast-data-
           
     - name: Set up environment variables
