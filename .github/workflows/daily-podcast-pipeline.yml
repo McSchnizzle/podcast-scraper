@@ -5,6 +5,20 @@ on:
     # Run daily at 6 AM UTC (adjust timezone as needed)
     - cron: '0 6 * * *'
   workflow_dispatch:  # Allow manual triggering
+    inputs:
+      mode:
+        description: 'Processing mode'
+        required: false
+        default: 'normal'
+        type: choice
+        options:
+        - normal
+        - test-run
+      debug:
+        description: 'Enable debug output'
+        required: false
+        default: false
+        type: boolean
 
 permissions:
   contents: write  # Allow the workflow to push changes
@@ -68,6 +82,15 @@ jobs:
           podcast-data-${{ github.run_id }}-
           podcast-data-
           
+    - name: Show workflow configuration
+      run: |
+        echo "🎯 Workflow Mode: ${{ github.event.inputs.mode || 'normal (scheduled)' }}"
+        echo "🐛 Debug Mode: ${{ github.event.inputs.debug || 'false' }}"
+        echo "⚡ Trigger: ${{ github.event_name }}"
+        if [ "${{ github.event.inputs.mode }}" == "test-run" ]; then
+          echo "🧪 TEST MODE: No commits, pushes, or releases will be made"
+        fi
+        
     - name: Set up environment variables
       env:
         ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
@@ -80,7 +103,18 @@ jobs:
         
     - name: Run RSS-only podcast pipeline (GitHub Actions mode)
       run: |
-        python3 daily_podcast_pipeline.py --rss-only
+        if [ "${{ github.event.inputs.debug }}" == "true" ]; then
+          echo "🐛 Debug mode enabled"
+          export DEBUG=1
+        fi
+        
+        if [ "${{ github.event.inputs.mode }}" == "test-run" ]; then
+          echo "🧪 Test run mode - will not deploy or update feeds"
+          python3 daily_podcast_pipeline.py --rss-only --test
+        else
+          echo "🚀 Normal processing mode"
+          python3 daily_podcast_pipeline.py --rss-only
+        fi
         
     - name: Debug transcript status
       if: always()
@@ -108,7 +142,7 @@ jobs:
         retention-days: 30
         
     - name: Commit and push changes
-      if: success()
+      if: success() && github.event.inputs.mode != 'test-run'
       run: |
         git config --local user.email "action@github.com"
         git config --local user.name "GitHub Action"
@@ -138,7 +172,7 @@ RSS episodes processed and YouTube episode statuses synced
         fi
         
     - name: Create release with digest
-      if: success() && hashFiles('daily_digests/*.md') != ''
+      if: success() && hashFiles('daily_digests/*.md') != '' && github.event.inputs.mode != 'test-run'
       uses: softprops/action-gh-release@v1
       with:
         tag_name: digest-${{ github.run_number }}
