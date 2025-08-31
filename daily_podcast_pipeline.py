@@ -293,44 +293,55 @@ class DailyPodcastPipeline:
             logger.info("No pending episodes to process")
     
     def _generate_daily_digest(self):
-        """Generate daily digest from ONLY 'transcribed' episodes"""
-        logger.info("📝 Generating daily digest...")
+        """Generate daily digest from BOTH RSS and YouTube 'transcribed' episodes"""
+        logger.info("📝 Generating daily digest from RSS + YouTube transcripts...")
         
-        # Check for transcribed episodes
+        # Check RSS transcribed episodes
         conn = sqlite3.connect(self.db_path)
         cursor = conn.cursor()
         
-        # Debug: Show detailed episode counts by status
-        cursor.execute("SELECT status, COUNT(*) FROM episodes GROUP BY status")
-        status_counts = cursor.fetchall()
-        logger.info("📊 Episode status breakdown:")
-        for status, count in status_counts:
-            logger.info(f"   {status}: {count} episodes")
-        
         cursor.execute("SELECT COUNT(*) FROM episodes WHERE status = 'transcribed'")
-        transcribed_count = cursor.fetchone()[0]
+        rss_transcribed_count = cursor.fetchone()[0]
         
-        # Debug: Show specific transcribed episodes
-        cursor.execute("""
-            SELECT id, title, episode_id, published_date, transcript_path 
-            FROM episodes 
-            WHERE status = 'transcribed'
-            ORDER BY published_date DESC
-        """)
-        transcribed_episodes = cursor.fetchall()
-        logger.info(f"📋 Found {len(transcribed_episodes)} transcribed episodes:")
-        for episode_id, title, episode_id_field, pub_date, transcript_path in transcribed_episodes:
-            logger.info(f"   Episode {episode_id}: '{title}' ({episode_id_field}) - {transcript_path}")
+        cursor.execute("SELECT status, COUNT(*) FROM episodes GROUP BY status")
+        rss_status_counts = cursor.fetchall()
+        logger.info("📊 RSS Episode status breakdown:")
+        for status, count in rss_status_counts:
+            logger.info(f"   {status}: {count} episodes")
         
         conn.close()
         
-        if transcribed_count == 0:
-            logger.warning("No 'transcribed' episodes available for digest")
+        # Check YouTube transcribed episodes
+        youtube_transcribed_count = 0
+        youtube_db_path = "youtube_transcripts.db"
+        if Path(youtube_db_path).exists():
+            try:
+                conn = sqlite3.connect(youtube_db_path)
+                cursor = conn.cursor()
+                
+                cursor.execute("SELECT COUNT(*) FROM episodes WHERE status = 'transcribed'")
+                youtube_transcribed_count = cursor.fetchone()[0]
+                
+                cursor.execute("SELECT status, COUNT(*) FROM episodes GROUP BY status")
+                youtube_status_counts = cursor.fetchall()
+                logger.info("📊 YouTube Episode status breakdown:")
+                for status, count in youtube_status_counts:
+                    logger.info(f"   {status}: {count} episodes")
+                
+                conn.close()
+            except Exception as e:
+                logger.warning(f"Could not check YouTube database: {e}")
+        else:
+            logger.info("📊 No YouTube database found")
+        
+        total_transcribed = rss_transcribed_count + youtube_transcribed_count
+        logger.info(f"📋 Total transcripts for digest: {rss_transcribed_count} RSS + {youtube_transcribed_count} YouTube = {total_transcribed}")
+        
+        if total_transcribed == 0:
+            logger.warning("No 'transcribed' episodes available from either database")
             return False
         
-        logger.info(f"Found {transcribed_count} transcribed episodes for digest")
-        
-        # Generate Claude-powered digest
+        # Generate Claude-powered digest (reads from both databases automatically)
         success, digest_path, cross_refs_path = self.claude_integration.generate_api_digest()
         
         if success:
@@ -402,20 +413,37 @@ class DailyPodcastPipeline:
             return False
     
     def _mark_episodes_digested(self):
-        """Mark all 'transcribed' episodes as 'digested'"""
-        logger.info("📋 Marking episodes as digested...")
+        """Mark all 'transcribed' episodes as 'digested' in BOTH databases"""
+        logger.info("📋 Marking episodes as digested in both RSS and YouTube databases...")
         
+        # Mark RSS episodes as digested
         conn = sqlite3.connect(self.db_path)
         cursor = conn.cursor()
         
-        # Mark transcribed episodes as digested
         cursor.execute("UPDATE episodes SET status = 'digested' WHERE status = 'transcribed'")
-        updated_count = cursor.rowcount
+        rss_updated_count = cursor.rowcount
         
         conn.commit()
         conn.close()
         
-        logger.info(f"✅ Marked {updated_count} episodes as digested")
+        # Mark YouTube episodes as digested
+        youtube_updated_count = 0
+        youtube_db_path = "youtube_transcripts.db"
+        if Path(youtube_db_path).exists():
+            try:
+                conn = sqlite3.connect(youtube_db_path)
+                cursor = conn.cursor()
+                
+                cursor.execute("UPDATE episodes SET status = 'digested' WHERE status = 'transcribed'")
+                youtube_updated_count = cursor.rowcount
+                
+                conn.commit()
+                conn.close()
+            except Exception as e:
+                logger.warning(f"Could not update YouTube database: {e}")
+        
+        total_updated = rss_updated_count + youtube_updated_count
+        logger.info(f"✅ Marked episodes as digested: {rss_updated_count} RSS + {youtube_updated_count} YouTube = {total_updated} total")
     
     def _cleanup_old_files(self):
         """Clean up old files and transcripts"""
