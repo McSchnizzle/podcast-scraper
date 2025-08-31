@@ -19,6 +19,7 @@ import hashlib
 # ASR backend detection and imports
 import platform
 import os
+import logging
 
 # Parakeet MLX for Apple Silicon (local development)
 try:
@@ -443,9 +444,9 @@ class ContentProcessor:
             raise RuntimeError(f"Transcription failed: {e}")
     
     def _faster_whisper_transcribe(self, audio_file):
-        """Optimized chunked transcription using Faster-Whisper with robust workflow"""
+        """Enhanced chunked transcription using Faster-Whisper with Parakeet-style logging"""
         try:
-            print(f"⚡ Starting Faster-Whisper chunked transcription: {audio_file}")
+            print(f"\n🎯 Starting Faster-Whisper transcription: {Path(audio_file).name}")
             
             # Use the robust chunking workflow similar to Parakeet
             from pathlib import Path
@@ -453,38 +454,59 @@ class ContentProcessor:
             import subprocess
             import math
             
-            # Step 1: Estimate duration and determine chunking strategy
+            # Step 1: Estimate duration and determine chunking strategy with detailed logging
             duration = self._get_audio_duration(audio_file)
             if duration == 0:
                 print("❌ Could not analyze audio file")
                 raise RuntimeError("Could not analyze audio file")
             
-            # Determine chunking (10-minute chunks like Parakeet)
+            # Enhanced analysis display
+            file_size_mb = Path(audio_file).stat().st_size / (1024*1024)
             max_chunk_duration = 600  # 10 minutes
             num_chunks = math.ceil(duration / max_chunk_duration)
             
-            print(f"📋 Audio Analysis:")
-            print(f"   • Duration: {duration/60:.1f} minutes")
-            print(f"   • Processing in {num_chunks} chunks (10min each)")
+            # Estimate processing time using Faster-Whisper performance metrics
+            # Faster-Whisper is typically 4x faster than OpenAI Whisper, so ~0.05-0.1x RTF
+            estimated_rtf = 0.08  # Conservative estimate for CPU processing
+            estimated_total_time = duration * estimated_rtf
+            if num_chunks > 1:
+                estimated_total_time += num_chunks * 10  # Add chunking overhead
             
-            # Step 2: Split into chunks if needed
+            print(f"📊 Audio Analysis Complete:")
+            print(f"   • File: {Path(audio_file).name} ({file_size_mb:.1f}MB)")
+            print(f"   • Duration: {duration/60:.1f} minutes ({duration:.1f}s)")
+            print(f"   • Chunks: {num_chunks} × {max_chunk_duration//60}min")
+            print(f"   • Estimated processing time: {estimated_total_time/60:.1f} minutes")
+            print(f"   • Target RTF: ~{estimated_rtf:.3f}x (4x faster than Whisper)")
+            
+            # Step 2: Split into chunks if needed with enhanced logging
             chunks = self._split_audio_for_faster_whisper(audio_file, max_chunk_duration)
             if not chunks:
                 print("❌ Failed to prepare file for transcription")
                 raise RuntimeError("Failed to prepare audio chunks")
             
-            # Step 3: Process each chunk with progress tracking
+            # Step 3: Process each chunk with detailed progress tracking
             all_transcripts = []
             total_chars = 0
             total_processing_time = 0
             
-            print(f"\n🚀 Starting chunked transcription with Faster-Whisper...")
+            print(f"\n🚀 Starting Faster-Whisper transcription pipeline...")
+            print(f"{'='*60}")
             overall_start = time.time()
             
             for i, chunk_file in enumerate(chunks, 1):
-                chunk_info = f"chunk {i}/{len(chunks)}"
-                chunk_size_mb = Path(chunk_file).stat().st_size / (1024*1024)
-                print(f"\n⚡ Processing {chunk_info}: {Path(chunk_file).name} ({chunk_size_mb:.1f}MB)")
+                chunk_path = Path(chunk_file)
+                chunk_size_mb = chunk_path.stat().st_size / (1024*1024)
+                chunk_duration = self._get_audio_duration(chunk_file)
+                
+                print(f"\n🎬 Processing Chunk {i}/{len(chunks)}")
+                print(f"   📄 File: {chunk_path.name}")
+                print(f"   📏 Size: {chunk_size_mb:.1f}MB")
+                print(f"   ⏱️  Duration: {chunk_duration/60:.1f}min")
+                
+                # Estimate this chunk's processing time
+                chunk_est_time = chunk_duration * estimated_rtf
+                print(f"   🎯 Estimated processing: {chunk_est_time:.1f}s")
                 
                 chunk_start_time = time.time()
                 chunk_transcript = self._transcribe_faster_whisper_chunk(chunk_file, i, len(chunks))
@@ -494,21 +516,31 @@ class ContentProcessor:
                 if chunk_transcript:
                     all_transcripts.append(chunk_transcript)
                     total_chars += len(chunk_transcript)
-                    # Calculate processing speed
-                    rtf = chunk_processing_time / 600  # 600 seconds per chunk
-                    print(f"✅ Chunk {i} complete: {chunk_processing_time:.1f}s (RTF: {rtf:.3f}x) - {len(chunk_transcript)} chars")
                     
-                    # Show overall progress
+                    # Calculate actual performance metrics
+                    actual_rtf = chunk_processing_time / chunk_duration if chunk_duration > 0 else 0
+                    speedup = chunk_est_time / chunk_processing_time if chunk_processing_time > 0 else 1
+                    
+                    print(f"   ✅ Transcription complete!")
+                    print(f"   📊 Performance: {chunk_processing_time:.1f}s actual (RTF: {actual_rtf:.3f}x)")
+                    print(f"   📝 Output: {len(chunk_transcript)} characters")
+                    
+                    # Show overall progress with time estimates
                     elapsed_total = time.time() - overall_start
                     if i < len(chunks):
                         avg_time_per_chunk = elapsed_total / i
                         remaining_chunks = len(chunks) - i
                         est_remaining = avg_time_per_chunk * remaining_chunks
-                        print(f"📊 Progress: {i}/{len(chunks)} chunks ({i/len(chunks)*100:.1f}%) - Est. remaining: {est_remaining/60:.1f}min")
+                        progress_pct = (i / len(chunks)) * 100
+                        
+                        print(f"   📈 Overall Progress: {progress_pct:.1f}% ({i}/{len(chunks)} chunks)")
+                        print(f"   ⏰ Time: {elapsed_total/60:.1f}min elapsed, ~{est_remaining/60:.1f}min remaining")
                 else:
-                    print(f"⚠️ Chunk {i} produced no transcription")
+                    print(f"   ⚠️ Chunk {i} produced no transcription")
+                
+                print(f"   {'-'*50}")
             
-            # Step 4: Combine all transcripts
+            # Step 4: Combine all transcripts with summary
             final_transcript = "\n\n".join(all_transcripts)
             
             if not final_transcript:
@@ -517,7 +549,18 @@ class ContentProcessor:
             # Step 5: Cleanup chunks
             self._cleanup_audio_chunks(chunks, audio_file)
             
-            print(f"✅ Faster-Whisper transcription complete: {len(final_transcript)} characters from {len(chunks)} chunks")
+            # Final summary matching Parakeet style
+            total_time = time.time() - overall_start
+            overall_rtf = total_time / duration if duration > 0 else 0
+            
+            print(f"\n🏁 Faster-Whisper Transcription Complete!")
+            print(f"{'='*60}")
+            print(f"📊 Final Statistics:")
+            print(f"   • Total time: {total_time/60:.1f} minutes ({total_time:.1f}s)")
+            print(f"   • Overall RTF: {overall_rtf:.3f}x")
+            print(f"   • Processing speed: {duration/total_time:.1f}x realtime")
+            print(f"   • Output: {len(final_transcript):,} characters from {len(chunks)} chunks")
+            print(f"   • Average per chunk: {len(final_transcript)//len(chunks):,} chars")
             
             # Add basic speaker detection
             final_transcript = self._add_basic_speaker_detection(final_transcript, audio_file)
@@ -590,7 +633,7 @@ class ContentProcessor:
             return [str(input_file)]
     
     def _transcribe_faster_whisper_chunk(self, chunk_file, chunk_num, total_chunks):
-        """Transcribe a single chunk with Faster-Whisper"""
+        """Transcribe a single chunk with enhanced Faster-Whisper logging"""
         try:
             # Get chunk start time for timestamp adjustment
             chunk_name = Path(chunk_file).stem
@@ -599,9 +642,15 @@ class ContentProcessor:
                 chunk_number = int(chunk_name.split('_')[1]) - 1
                 chunk_start_offset = chunk_number * 600  # 10 minutes per chunk
             
-            print(f"🎙️ Transcribing with Faster-Whisper (VAD enabled to skip silence)")
+            print(f"   🎙️ Starting Faster-Whisper ASR...")
+            print(f"   ⚙️ VAD filter: Enabled (skip silence >500ms)")
+            print(f"   🔧 Beam size: 5 (quality/speed balance)")
             
-            # Transcribe chunk
+            # Start transcription timer
+            import time
+            transcribe_start = time.time()
+            
+            # Transcribe chunk with detailed settings
             segments, info = self.asr_model.transcribe(
                 str(chunk_file),
                 language=None,  # Auto-detect language
@@ -613,14 +662,23 @@ class ContentProcessor:
                 word_timestamps=False
             )
             
-            # Show detection results
+            transcribe_time = time.time() - transcribe_start
+            
+            # Show ASR engine results
             if hasattr(info, 'language') and hasattr(info, 'language_probability'):
-                print(f"🌐 Detected: {info.language} ({info.language_probability:.1%} confidence)")
+                print(f"   🌐 Language: {info.language} ({info.language_probability:.1%} confidence)")
             if hasattr(info, 'duration'):
-                print(f"⏱️ Chunk duration: {info.duration:.1f}s")
+                print(f"   ⏱️  Audio processed: {info.duration:.1f}s")
+            if hasattr(info, 'duration_after_vad'):
+                vad_removed = info.duration - info.duration_after_vad
+                vad_removed_pct = (vad_removed / info.duration) * 100 if info.duration > 0 else 0
+                print(f"   🔇 VAD removed: {vad_removed:.1f}s ({vad_removed_pct:.1f}% silence)")
             
             # Extract text with adjusted timestamps
+            print(f"   📝 Processing segments...")
             transcript_lines = []
+            segment_count = 0
+            
             for segment in segments:
                 adjusted_time = segment.start + chunk_start_offset
                 text = segment.text.strip()
@@ -629,11 +687,18 @@ class ContentProcessor:
                     minutes = int(adjusted_time // 60)
                     seconds = int(adjusted_time % 60)
                     transcript_lines.append(f"[{minutes:02d}:{seconds:02d}] {text}")
+                    segment_count += 1
             
-            return "\n".join(transcript_lines)
+            final_transcript = "\n".join(transcript_lines)
+            
+            # Report segment processing results
+            print(f"   📊 Segments: {segment_count} text segments extracted")
+            print(f"   ⏱️  ASR time: {transcribe_time:.1f}s")
+            
+            return final_transcript
             
         except Exception as e:
-            print(f"❌ Error transcribing chunk {chunk_num}: {e}")
+            print(f"   ❌ Error transcribing chunk {chunk_num}: {e}")
             return None
     
     def _cleanup_audio_chunks(self, chunk_files, original_file):
