@@ -30,11 +30,20 @@ try:
 except ImportError:
     PARAKEET_MLX_AVAILABLE = False
 
-# OpenAI Whisper for cross-platform (GitHub Actions, etc.)
+# Faster-Whisper for cross-platform (GitHub Actions, etc.) - 4x faster than OpenAI Whisper
+try:
+    from faster_whisper import WhisperModel
+    FASTER_WHISPER_AVAILABLE = True
+    if not PARAKEET_MLX_AVAILABLE:
+        print("✅ Faster-Whisper available - using optimized cross-platform ASR")
+except ImportError:
+    FASTER_WHISPER_AVAILABLE = False
+
+# Fallback to OpenAI Whisper if faster-whisper not available
 try:
     import whisper
     WHISPER_AVAILABLE = True
-    if not PARAKEET_MLX_AVAILABLE:
+    if not PARAKEET_MLX_AVAILABLE and not FASTER_WHISPER_AVAILABLE:
         print("✅ OpenAI Whisper available - using cross-platform ASR")
 except ImportError:
     WHISPER_AVAILABLE = False
@@ -47,6 +56,9 @@ IS_APPLE_SILICON = platform.machine() == 'arm64' and platform.system() == 'Darwi
 if IS_APPLE_SILICON and PARAKEET_MLX_AVAILABLE and not IS_GITHUB_ACTIONS:
     ASR_BACKEND = 'parakeet_mlx'
     print("🍎 Using Parakeet MLX (Apple Silicon optimized)")
+elif FASTER_WHISPER_AVAILABLE:
+    ASR_BACKEND = 'faster_whisper'
+    print("⚡ Using Faster-Whisper (4x faster cross-platform)")
 elif WHISPER_AVAILABLE:
     ASR_BACKEND = 'whisper'
     print("🌐 Using OpenAI Whisper (cross-platform)")
@@ -54,7 +66,7 @@ else:
     ASR_BACKEND = None
     print("❌ No ASR backend available")
     if not IS_GITHUB_ACTIONS:  # Only raise error in local dev, not in CI
-        raise ImportError("No ASR backend available. Install whisper or parakeet-mlx")
+        raise ImportError("No ASR backend available. Install faster-whisper, whisper, or parakeet-mlx")
 
 class ContentProcessor:
     def __init__(self, db_path="podcast_monitor.db", audio_dir="audio_cache", min_youtube_minutes=3.0):
@@ -73,6 +85,8 @@ class ContentProcessor:
         """Initialize ASR models based on detected backend"""
         if self.asr_backend == 'parakeet_mlx':
             self._initialize_parakeet_mlx_models()
+        elif self.asr_backend == 'faster_whisper':
+            self._initialize_faster_whisper_models()
         elif self.asr_backend == 'whisper':
             self._initialize_whisper_models()
         else:
@@ -125,6 +139,36 @@ class ContentProcessor:
             print(f"❌ Error loading Whisper models: {e}")
             print("Cannot proceed without Whisper ASR")
             raise RuntimeError(f"Failed to initialize Whisper: {e}")
+    
+    def _initialize_faster_whisper_models(self):
+        """Initialize Faster-Whisper models for optimized cross-platform transcription"""
+        try:
+            print("Initializing Faster-Whisper models...")
+            
+            # Use medium model for good quality/speed balance
+            # Available models: tiny, base, small, medium, large-v1, large-v2, large-v3, turbo
+            model_size = "medium"
+            print(f"Loading Faster-Whisper model: {model_size}")
+            
+            # Initialize with optimizations for CPU
+            self.asr_model = WhisperModel(
+                model_size,
+                device="cpu",
+                compute_type="int8",  # Use int8 for faster CPU inference
+                num_workers=4,  # Use multiple threads
+                download_root=None  # Use default cache
+            )
+            
+            print("✅ Faster-Whisper ASR model loaded successfully")
+            print("⚡ Using optimized CTranslate2 engine (4x faster)")
+            
+            # Faster-Whisper doesn't have separate speaker models
+            self.speaker_model = None
+            
+        except Exception as e:
+            print(f"❌ Error loading Faster-Whisper models: {e}")
+            print("Cannot proceed without Faster-Whisper ASR")
+            raise RuntimeError(f"Failed to initialize Faster-Whisper: {e}")
     
     def process_episode(self, episode_id):
         """Process a single episode: download audio, extract transcript, analyze content"""
@@ -320,6 +364,8 @@ class ContentProcessor:
         
         if self.asr_backend == 'parakeet_mlx':
             return self._parakeet_mlx_transcribe(audio_file)
+        elif self.asr_backend == 'faster_whisper':
+            return self._faster_whisper_transcribe(audio_file)
         elif self.asr_backend == 'whisper':
             return self._whisper_transcribe(audio_file)
         else:
@@ -392,6 +438,200 @@ class ContentProcessor:
         except Exception as e:
             print(f"❌ Whisper transcription failed: {e}")
             raise RuntimeError(f"Transcription failed: {e}")
+    
+    def _faster_whisper_transcribe(self, audio_file):
+        """Optimized chunked transcription using Faster-Whisper with robust workflow"""
+        try:
+            print(f"⚡ Starting Faster-Whisper chunked transcription: {audio_file}")
+            
+            # Use the robust chunking workflow similar to Parakeet
+            from pathlib import Path
+            import time
+            import subprocess
+            import math
+            
+            # Step 1: Estimate duration and determine chunking strategy
+            duration = self._get_audio_duration(audio_file)
+            if duration == 0:
+                print("❌ Could not analyze audio file")
+                raise RuntimeError("Could not analyze audio file")
+            
+            # Determine chunking (10-minute chunks like Parakeet)
+            max_chunk_duration = 600  # 10 minutes
+            num_chunks = math.ceil(duration / max_chunk_duration)
+            
+            print(f"📋 Audio Analysis:")
+            print(f"   • Duration: {duration/60:.1f} minutes")
+            print(f"   • Processing in {num_chunks} chunks (10min each)")
+            
+            # Step 2: Split into chunks if needed
+            chunks = self._split_audio_for_faster_whisper(audio_file, max_chunk_duration)
+            if not chunks:
+                print("❌ Failed to prepare file for transcription")
+                raise RuntimeError("Failed to prepare audio chunks")
+            
+            # Step 3: Process each chunk with progress tracking
+            all_transcripts = []
+            total_chars = 0
+            
+            for i, chunk_file in enumerate(chunks, 1):
+                print(f"\n🔄 Processing chunk {i}/{len(chunks)}: {Path(chunk_file).name}")
+                
+                chunk_start_time = time.time()
+                chunk_transcript = self._transcribe_faster_whisper_chunk(chunk_file, i, len(chunks))
+                chunk_processing_time = time.time() - chunk_start_time
+                
+                if chunk_transcript:
+                    all_transcripts.append(chunk_transcript)
+                    total_chars += len(chunk_transcript)
+                    print(f"✅ Chunk {i} complete: {chunk_processing_time:.1f}s ({len(chunk_transcript)} chars)")
+                else:
+                    print(f"⚠️ Chunk {i} produced no transcription")
+            
+            # Step 4: Combine all transcripts
+            final_transcript = "\n\n".join(all_transcripts)
+            
+            if not final_transcript:
+                raise RuntimeError("No transcription content generated from any chunk")
+            
+            # Step 5: Cleanup chunks
+            self._cleanup_audio_chunks(chunks, audio_file)
+            
+            print(f"✅ Faster-Whisper transcription complete: {len(final_transcript)} characters from {len(chunks)} chunks")
+            
+            # Add basic speaker detection
+            final_transcript = self._add_basic_speaker_detection(final_transcript, audio_file)
+            
+            return final_transcript
+            
+        except Exception as e:
+            print(f"❌ Faster-Whisper transcription failed: {e}")
+            raise RuntimeError(f"Transcription failed: {e}")
+    
+    def _get_audio_duration(self, audio_file):
+        """Get audio duration using ffprobe"""
+        try:
+            cmd = [
+                'ffprobe', '-v', 'quiet', '-print_format', 'csv=p=0',
+                '-show_entries', 'format=duration', str(audio_file)
+            ]
+            result = subprocess.run(cmd, capture_output=True, text=True, timeout=30)
+            if result.returncode == 0 and result.stdout.strip():
+                return float(result.stdout.strip())
+        except Exception as e:
+            print(f"⚠️ Could not get duration: {e}")
+        return 0
+    
+    def _split_audio_for_faster_whisper(self, input_file, chunk_duration=600):
+        """Split audio into chunks for faster-whisper processing"""
+        try:
+            base_path = Path(input_file)
+            chunk_dir = base_path.parent / f"{base_path.stem}_chunks"
+            chunk_dir.mkdir(exist_ok=True)
+            
+            duration = self._get_audio_duration(input_file)
+            if duration <= chunk_duration:
+                print(f"📄 File duration ({duration/60:.1f}min) within chunk limit - no splitting needed")
+                return [str(input_file)]
+            
+            print(f"✂️ Splitting {duration/60:.1f}min audio into {chunk_duration//60}min chunks...")
+            
+            chunk_files = []
+            start_time = 0
+            chunk_num = 1
+            
+            while start_time < duration:
+                chunk_file = chunk_dir / f"chunk_{chunk_num:03d}.wav"
+                
+                # Use ffmpeg to extract chunk
+                ffmpeg_cmd = [
+                    'ffmpeg', '-y', '-i', str(input_file),
+                    '-ss', str(start_time), '-t', str(chunk_duration),
+                    '-c', 'copy', str(chunk_file)
+                ]
+                
+                print(f"📄 Creating chunk {chunk_num}: {start_time//60:.0f}m-{(start_time+chunk_duration)//60:.0f}m")
+                result = subprocess.run(ffmpeg_cmd, capture_output=True, text=True, timeout=60)
+                
+                if result.returncode == 0 and chunk_file.exists() and chunk_file.stat().st_size > 1000:
+                    chunk_files.append(str(chunk_file))
+                    print(f"✅ Chunk {chunk_num} created: {chunk_file.stat().st_size//1024//1024}MB")
+                else:
+                    print(f"❌ Failed to create chunk {chunk_num}")
+                    break
+                
+                start_time += chunk_duration
+                chunk_num += 1
+            
+            return chunk_files if chunk_files else [str(input_file)]
+            
+        except Exception as e:
+            print(f"❌ Error splitting audio: {e}")
+            return [str(input_file)]
+    
+    def _transcribe_faster_whisper_chunk(self, chunk_file, chunk_num, total_chunks):
+        """Transcribe a single chunk with Faster-Whisper"""
+        try:
+            # Get chunk start time for timestamp adjustment
+            chunk_name = Path(chunk_file).stem
+            chunk_start_offset = 0
+            if 'chunk_' in chunk_name:
+                chunk_number = int(chunk_name.split('_')[1]) - 1
+                chunk_start_offset = chunk_number * 600  # 10 minutes per chunk
+            
+            # Transcribe chunk
+            segments, info = self.asr_model.transcribe(
+                str(chunk_file),
+                language=None,  # Auto-detect language
+                task="transcribe",
+                vad_filter=True,  # Skip silence
+                vad_parameters=dict(min_silence_duration_ms=500),
+                beam_size=5,
+                temperature=0,
+                word_timestamps=False
+            )
+            
+            # Extract text with adjusted timestamps
+            transcript_lines = []
+            for segment in segments:
+                adjusted_time = segment.start + chunk_start_offset
+                text = segment.text.strip()
+                
+                if text:
+                    minutes = int(adjusted_time // 60)
+                    seconds = int(adjusted_time % 60)
+                    transcript_lines.append(f"[{minutes:02d}:{seconds:02d}] {text}")
+            
+            return "\n".join(transcript_lines)
+            
+        except Exception as e:
+            print(f"❌ Error transcribing chunk {chunk_num}: {e}")
+            return None
+    
+    def _cleanup_audio_chunks(self, chunk_files, original_file):
+        """Clean up temporary audio chunks"""
+        try:
+            if len(chunk_files) <= 1:
+                return  # No chunks created
+            
+            # Remove chunk files and directory
+            for chunk_file in chunk_files:
+                chunk_path = Path(chunk_file)
+                if chunk_path.exists() and str(chunk_path) != str(original_file):
+                    chunk_path.unlink()
+            
+            # Remove chunk directory if empty
+            base_path = Path(original_file)
+            chunk_dir = base_path.parent / f"{base_path.stem}_chunks"
+            if chunk_dir.exists():
+                try:
+                    chunk_dir.rmdir()
+                    print(f"🧹 Cleaned up chunk directory")
+                except OSError:
+                    pass  # Directory not empty
+                    
+        except Exception as e:
+            print(f"⚠️ Error cleaning up chunks: {e}")
     
     def _log_episode_failure(self, episode_id, failure_reason):
         """Log episode failure or skip to database with reason and timestamp"""
