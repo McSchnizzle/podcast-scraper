@@ -37,13 +37,15 @@ class ClaudeAPIIntegration:
                 self.client = None
                 self.api_available = False
 
-    def get_transcripts_for_analysis(self) -> List[Dict]:
-        """Get transcripts ready for API analysis"""
+    def get_transcripts_for_analysis(self, include_youtube: bool = True) -> List[Dict]:
+        """Get transcripts ready for API analysis from both databases"""
+        transcripts = []
+        
+        # Get RSS transcripts from main database
         try:
             conn = sqlite3.connect(self.db_path)
             cursor = conn.cursor()
             
-            # Only get episodes with status='transcribed'
             query = """
             SELECT id, title, transcript_path, episode_id, published_date, status
             FROM episodes 
@@ -53,11 +55,10 @@ class ClaudeAPIIntegration:
             """
             
             cursor.execute(query)
-            episodes = cursor.fetchall()
+            rss_episodes = cursor.fetchall()
             conn.close()
             
-            transcripts = []
-            for episode_id, title, transcript_path, ep_id, published_date, status in episodes:
+            for episode_id, title, transcript_path, ep_id, published_date, status in rss_episodes:
                 transcript_file = Path(transcript_path)
                 
                 if transcript_file.exists():
@@ -72,16 +73,64 @@ class ClaudeAPIIntegration:
                                 'episode_id': ep_id,
                                 'published_date': published_date,
                                 'transcript_path': str(transcript_path),
-                                'content': content[:50000]  # Limit content for API
+                                'content': content[:50000],  # Limit content for API
+                                'source': 'rss'
                             })
                     except Exception as e:
-                        logger.error(f"Error reading transcript {transcript_path}: {e}")
+                        logger.error(f"Error reading RSS transcript {transcript_path}: {e}")
             
-            return transcripts
+            logger.info(f"Found {len(transcripts)} RSS transcripts")
             
         except Exception as e:
-            logger.error(f"Error getting transcripts: {e}")
-            return []
+            logger.error(f"Error getting RSS transcripts: {e}")
+        
+        # Get YouTube transcripts from YouTube database
+        if include_youtube:
+            try:
+                youtube_db_path = "youtube_transcripts.db"
+                if Path(youtube_db_path).exists():
+                    conn = sqlite3.connect(youtube_db_path)
+                    cursor = conn.cursor()
+                    
+                    cursor.execute(query)  # Same query
+                    youtube_episodes = cursor.fetchall()
+                    conn.close()
+                    
+                    youtube_count = 0
+                    for episode_id, title, transcript_path, ep_id, published_date, status in youtube_episodes:
+                        transcript_file = Path(transcript_path)
+                        
+                        if transcript_file.exists():
+                            try:
+                                with open(transcript_file, 'r', encoding='utf-8') as f:
+                                    content = f.read().strip()
+                                
+                                if content:
+                                    transcripts.append({
+                                        'id': f"yt_{episode_id}",  # Prefix to avoid ID conflicts
+                                        'title': title,
+                                        'episode_id': ep_id,
+                                        'published_date': published_date,
+                                        'transcript_path': str(transcript_path),
+                                        'content': content[:50000],
+                                        'source': 'youtube'
+                                    })
+                                    youtube_count += 1
+                            except Exception as e:
+                                logger.error(f"Error reading YouTube transcript {transcript_path}: {e}")
+                    
+                    logger.info(f"Found {youtube_count} YouTube transcripts")
+                else:
+                    logger.info("No YouTube database found - RSS only")
+            
+            except Exception as e:
+                logger.error(f"Error getting YouTube transcripts: {e}")
+        
+        # Sort combined transcripts by date
+        transcripts.sort(key=lambda x: x['published_date'], reverse=True)
+        logger.info(f"Total transcripts for analysis: {len(transcripts)}")
+        
+        return transcripts
 
     def prepare_digest_prompt(self, transcripts: List[Dict]) -> str:
         """Prepare comprehensive digest prompt for Claude API"""
@@ -187,8 +236,8 @@ Format the output as clean Markdown suitable for publication. Focus on accuracy,
             
             logger.info(f"✅ Digest saved to {digest_path}")
             
-            # Update database - mark episodes as digested
-            self._mark_episodes_as_digested([t['id'] for t in transcripts])
+            # Update databases - mark episodes as digested  
+            self._mark_episodes_as_digested(transcripts)
             
             # Move transcripts to digested folder
             self._move_transcripts_to_digested(transcripts)
@@ -199,25 +248,61 @@ Format the output as clean Markdown suitable for publication. Focus on accuracy,
             logger.error(f"Error generating digest with Anthropic API: {e}")
             return False, None, None
 
-    def _mark_episodes_as_digested(self, episode_ids: List[int]):
-        """Mark episodes as digested in database"""
-        try:
-            conn = sqlite3.connect(self.db_path)
-            cursor = conn.cursor()
-            
-            for episode_id in episode_ids:
-                cursor.execute("""
-                    UPDATE episodes 
-                    SET status = 'digested'
-                    WHERE id = ?
-                """, (episode_id,))
-            
-            conn.commit()
-            conn.close()
-            logger.info(f"✅ Marked {len(episode_ids)} episodes as digested")
-            
-        except Exception as e:
-            logger.error(f"Error updating database: {e}")
+    def _mark_episodes_as_digested(self, transcripts: List[Dict]):
+        """Mark episodes as digested in both databases"""
+        rss_episodes = []
+        youtube_episodes = []
+        
+        # Separate by source
+        for transcript in transcripts:
+            if transcript['source'] == 'rss':
+                rss_episodes.append(transcript['id'])
+            elif transcript['source'] == 'youtube':
+                # Remove 'yt_' prefix to get original ID
+                original_id = int(transcript['id'].replace('yt_', ''))
+                youtube_episodes.append(original_id)
+        
+        # Update RSS episodes in main database
+        if rss_episodes:
+            try:
+                conn = sqlite3.connect(self.db_path)
+                cursor = conn.cursor()
+                
+                for episode_id in rss_episodes:
+                    cursor.execute("""
+                        UPDATE episodes 
+                        SET status = 'digested'
+                        WHERE id = ?
+                    """, (episode_id,))
+                
+                conn.commit()
+                conn.close()
+                logger.info(f"✅ Marked {len(rss_episodes)} RSS episodes as digested")
+                
+            except Exception as e:
+                logger.error(f"Error updating RSS database: {e}")
+        
+        # Update YouTube episodes in YouTube database
+        if youtube_episodes:
+            try:
+                youtube_db_path = "youtube_transcripts.db"
+                if Path(youtube_db_path).exists():
+                    conn = sqlite3.connect(youtube_db_path)
+                    cursor = conn.cursor()
+                    
+                    for episode_id in youtube_episodes:
+                        cursor.execute("""
+                            UPDATE episodes 
+                            SET status = 'digested'
+                            WHERE id = ?
+                        """, (episode_id,))
+                    
+                    conn.commit()
+                    conn.close()
+                    logger.info(f"✅ Marked {len(youtube_episodes)} YouTube episodes as digested")
+                
+            except Exception as e:
+                logger.error(f"Error updating YouTube database: {e}")
 
     def _move_transcripts_to_digested(self, transcripts: List[Dict]):
         """Move transcript files to digested folder"""

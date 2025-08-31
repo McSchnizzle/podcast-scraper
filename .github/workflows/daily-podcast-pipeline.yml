@@ -6,6 +6,10 @@ on:
     - cron: '0 6 * * *'
   workflow_dispatch:  # Allow manual triggering
 
+permissions:
+  contents: write  # Allow the workflow to push changes
+  packages: read   # Allow reading packages if needed
+
 jobs:
   daily-podcast-digest:
     runs-on: ubuntu-latest
@@ -14,6 +18,9 @@ jobs:
     steps:
     - name: Checkout repository
       uses: actions/checkout@v4
+      with:
+        fetch-depth: 0  # Fetch full history for proper git operations
+        token: ${{ secrets.GITHUB_TOKEN }}
       
     - name: Set up Python
       uses: actions/setup-python@v5
@@ -70,9 +77,19 @@ jobs:
         echo "ELEVENLABS_API_KEY=$ELEVENLABS_API_KEY" >> $GITHUB_ENV
         echo "GITHUB_TOKEN=$GITHUB_TOKEN" >> $GITHUB_ENV
         
-    - name: Run daily podcast pipeline
+    - name: Run RSS-only podcast pipeline (GitHub Actions mode)
       run: |
-        python3 daily_podcast_pipeline.py --run
+        python3 daily_podcast_pipeline.py --rss-only
+        
+    - name: Debug transcript status
+      if: always()
+      run: |
+        echo "=== Transcript Directory Status ==="
+        ls -la transcripts/ || echo "No transcripts/ directory"
+        echo "=== Digested Transcripts ==="
+        ls -la transcripts/digested/ || echo "No transcripts/digested/ directory"
+        echo "=== Database Status ==="
+        sqlite3 podcast_monitor.db "SELECT COUNT(*) as total_episodes, status, COUNT(*) as count FROM episodes GROUP BY status;" || echo "Database query failed"
         
     - name: Upload generated artifacts
       uses: actions/upload-artifact@v4
@@ -81,6 +98,7 @@ jobs:
         name: podcast-digest-${{ github.run_number }}
         path: |
           daily_digests/
+          transcripts/
           transcripts/digested/
           podcast_monitor.db
         retention-days: 30
@@ -90,12 +108,29 @@ jobs:
       run: |
         git config --local user.email "action@github.com"
         git config --local user.name "GitHub Action"
-        git add -A
+        
+        # Add all changes including both databases
+        git add podcast_monitor.db youtube_transcripts.db
+        git add daily_digests/
+        git add transcripts/
+        git add transcripts/digested/
+        git add daily-digest.xml
+        
         if git diff --staged --quiet; then
           echo "No changes to commit"
         else
-          git commit -m "Daily podcast digest update - $(date -u +%Y-%m-%d)"
+          # Create detailed commit message
+          commit_msg="Daily podcast digest update - $(date -u +%Y-%m-%d)
+
+RSS episodes processed and YouTube episode statuses synced
+- Updated podcast_monitor.db (RSS episodes marked as digested)
+- Updated youtube_transcripts.db (YouTube episodes marked as digested)  
+- Generated daily digest and TTS audio
+- Updated RSS feed"
+
+          git commit -m "$commit_msg"
           git push
+          echo "✅ Committed digest updates to both databases"
         fi
         
     - name: Create release with digest

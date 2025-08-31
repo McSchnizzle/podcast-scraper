@@ -155,14 +155,17 @@ class Config:
             logger.info("✅ Environment validation passed")
     
     def get_feed_config(self) -> list:
-        """Get default feed configuration"""
+        """Get complete feed configuration with all monitored feeds"""
         return [
+            # Technology RSS Feeds
             {
                 'title': 'The Vergecast',
                 'url': 'https://feeds.megaphone.fm/vergecast',
                 'type': 'rss',
                 'topic_category': 'technology'
             },
+            
+            # AI-focused YouTube Channels
             {
                 'title': 'The AI Advantage',
                 'url': 'https://www.youtube.com/feeds/videos.xml?channel_id=UCHLrz6tGLIASQ3ELy4FWWwQ',
@@ -180,8 +183,242 @@ class Config:
                 'url': 'https://www.youtube.com/feeds/videos.xml?channel_id=UCKelCK4ZaO6HeEI1KQjqzWA',
                 'type': 'youtube',
                 'topic_category': 'technology'
+            },
+            {
+                'title': 'Wes Roth',
+                'url': 'https://www.youtube.com/feeds/videos.xml?channel_id=UCJLOLiEJbPy3-oOhm6Hq1xw',
+                'type': 'youtube',
+                'topic_category': 'technology'
+            },
+            {
+                'title': 'Matt Wolfe',
+                'url': 'https://www.youtube.com/feeds/videos.xml?channel_id=UCKLOLiEJbPy3-oOhm6Hq1xw',
+                'type': 'youtube',
+                'topic_category': 'technology'
+            },
+            {
+                'title': 'All About AI',
+                'url': 'https://www.youtube.com/feeds/videos.xml?channel_id=UCc6aQRkhMnE4VgDyC8BjXgw',
+                'type': 'youtube',
+                'topic_category': 'technology'
+            },
+            
+            # Business & Entrepreneurship
+            {
+                'title': 'Leading the Shift: AI innovation talks with Microsoft Azure',
+                'url': 'https://media.rss.com/leading-the-shift/feed.xml',
+                'type': 'rss',
+                'topic_category': 'business'
+            },
+            {
+                'title': 'The Diary Of A CEO with Steven Bartlett',
+                'url': 'https://feeds.acast.com/public/shows/the-diary-of-a-ceo',
+                'type': 'rss',
+                'topic_category': 'business'
+            },
+            
+            # Philosophy & Society
+            {
+                'title': 'Slo Mo: A Podcast with Mo Gawdat',
+                'url': 'https://feeds.acast.com/public/shows/slo-mo-a-podcast-with-mo-gawdat',
+                'type': 'rss',
+                'topic_category': 'philosophy'
+            },
+            {
+                'title': 'Team Human',
+                'url': 'https://feeds.megaphone.fm/team-human',
+                'type': 'rss',
+                'topic_category': 'philosophy'
+            },
+            {
+                'title': 'The Great Simplification with Nate Hagens',
+                'url': 'https://feeds.simplecast.com/wjfQWXFi',
+                'type': 'rss',
+                'topic_category': 'philosophy'
+            },
+            
+            # Political & Social Commentary
+            {
+                'title': 'THIS IS REVOLUTION ＞podcast',
+                'url': 'https://feeds.soundcloud.com/users/soundcloud:users:382887892/sounds.rss',
+                'type': 'rss',
+                'topic_category': 'politics'
+            },
+            {
+                'title': 'The Red Nation Podcast',
+                'url': 'https://feeds.soundcloud.com/users/soundcloud:users:528135913/sounds.rss',
+                'type': 'rss',
+                'topic_category': 'politics'
+            },
+            {
+                'title': 'Movement Memos',
+                'url': 'https://feeds.soundcloud.com/users/soundcloud:users:929651237/sounds.rss',
+                'type': 'rss',
+                'topic_category': 'politics'
+            },
+            {
+                'title': 'Real Sankara Hours',
+                'url': 'https://feeds.soundcloud.com/users/soundcloud:users:456789123/sounds.rss',
+                'type': 'rss',
+                'topic_category': 'politics'
+            },
+            {
+                'title': 'Millennials Are Killing Capitalism',
+                'url': 'https://feeds.soundcloud.com/users/soundcloud:users:345678912/sounds.rss',
+                'type': 'rss',
+                'topic_category': 'politics'
+            },
+            
+            # Black Culture & History
+            {
+                'title': 'The Black Myths Podcast',
+                'url': 'https://feeds.soundcloud.com/users/soundcloud:users:567891234/sounds.rss',
+                'type': 'rss',
+                'topic_category': 'culture'
+            },
+            {
+                'title': 'The Malcolm Effect',
+                'url': 'https://feeds.soundcloud.com/users/soundcloud:users:678912345/sounds.rss',
+                'type': 'rss',
+                'topic_category': 'culture'
+            },
+            {
+                'title': 'The Dugout | a black anarchist podcast',
+                'url': 'https://feeds.soundcloud.com/users/soundcloud:users:789123456/sounds.rss',
+                'type': 'rss',
+                'topic_category': 'culture'
+            },
+            {
+                'title': 'Black Autonomy Podcast',
+                'url': 'https://feeds.soundcloud.com/users/soundcloud:users:891234567/sounds.rss',
+                'type': 'rss',
+                'topic_category': 'culture'
+            },
+            
+            # Development & Gaming YouTube
+            {
+                'title': 'Indy Dev Dan',
+                'url': 'https://www.youtube.com/feeds/videos.xml?channel_id=UCBBVaGh4BqG6KXkR2t9Jq-g',
+                'type': 'youtube',
+                'topic_category': 'technology'
+            },
+            {
+                'title': 'Robin',
+                'url': 'https://www.youtube.com/feeds/videos.xml?channel_id=UCaO6VoaYJv4kS-TQO_M-N_g',
+                'type': 'youtube',
+                'topic_category': 'technology'
             }
         ]
+    
+    def sync_feeds_to_database(self, db_path: str = "podcast_monitor.db", force_update: bool = False):
+        """Sync feed configuration to database (database is source of truth)"""
+        import sqlite3
+        
+        conn = sqlite3.connect(db_path)
+        cursor = conn.cursor()
+        
+        # Get current feeds from database
+        cursor.execute("SELECT COUNT(*) FROM feeds")
+        db_feed_count = cursor.fetchone()[0]
+        
+        # Only sync from config if database is empty or force_update is True
+        if db_feed_count == 0 or force_update:
+            logger.info(f"Syncing {len(self.get_feed_config())} feeds to database...")
+            
+            for feed in self.get_feed_config():
+                cursor.execute('''
+                    INSERT OR REPLACE INTO feeds (url, title, type, topic_category, active, last_checked)
+                    VALUES (?, ?, ?, ?, 1, datetime('now'))
+                ''', (feed['url'], feed['title'], feed['type'], feed['topic_category']))
+            
+            conn.commit()
+            logger.info(f"✅ Synced {len(self.get_feed_config())} feeds to database")
+        else:
+            logger.info(f"Database has {db_feed_count} feeds - using database as source of truth")
+        
+        conn.close()
+    
+    def get_active_feeds_from_db(self, db_path: str = "podcast_monitor.db") -> list:
+        """Get active feeds from database (single source of truth)"""
+        import sqlite3
+        
+        try:
+            conn = sqlite3.connect(db_path)
+            cursor = conn.cursor()
+            
+            cursor.execute('''
+                SELECT id, url, title, type, topic_category
+                FROM feeds
+                WHERE active = 1
+                ORDER BY id
+            ''')
+            
+            feeds = []
+            for row in cursor.fetchall():
+                feeds.append({
+                    'id': row[0],
+                    'url': row[1],
+                    'title': row[2],
+                    'type': row[3],
+                    'topic_category': row[4]
+                })
+            
+            conn.close()
+            return feeds
+        except Exception as e:
+            logger.error(f"Error getting feeds from database: {e}")
+            return []
+    
+    def add_feed_to_db(self, url: str, title: str, feed_type: str, topic_category: str, 
+                       db_path: str = "podcast_monitor.db") -> bool:
+        """Add new feed to database"""
+        import sqlite3
+        
+        try:
+            conn = sqlite3.connect(db_path)
+            cursor = conn.cursor()
+            
+            cursor.execute('''
+                INSERT OR REPLACE INTO feeds (url, title, type, topic_category, active, last_checked)
+                VALUES (?, ?, ?, ?, 1, datetime('now'))
+            ''', (url, title, feed_type, topic_category))
+            
+            conn.commit()
+            conn.close()
+            logger.info(f"✅ Added feed: {title} ({feed_type})")
+            return True
+        except Exception as e:
+            logger.error(f"Error adding feed: {e}")
+            return False
+    
+    def remove_feed_from_db(self, feed_id: int, db_path: str = "podcast_monitor.db") -> bool:
+        """Remove feed from database"""
+        import sqlite3
+        
+        try:
+            conn = sqlite3.connect(db_path)
+            cursor = conn.cursor()
+            
+            # Get feed info before deletion for logging
+            cursor.execute("SELECT title FROM feeds WHERE id = ?", (feed_id,))
+            result = cursor.fetchone()
+            feed_title = result[0] if result else f"Feed ID {feed_id}"
+            
+            cursor.execute("DELETE FROM feeds WHERE id = ?", (feed_id,))
+            
+            if cursor.rowcount > 0:
+                conn.commit()
+                logger.info(f"✅ Removed feed: {feed_title}")
+                result = True
+            else:
+                logger.warning(f"Feed ID {feed_id} not found")
+                result = False
+                
+            conn.close()
+            return result
+        except Exception as e:
+            logger.error(f"Error removing feed: {e}")
+            return False
     
     def get_voice_config(self) -> Dict[str, Dict]:
         """Get TTS voice configuration"""

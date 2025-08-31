@@ -560,6 +560,7 @@ def main():
     parser = argparse.ArgumentParser(description="Daily Tech Digest Pipeline")
     parser.add_argument('--status', action='store_true', help='Show current status')
     parser.add_argument('--run', action='store_true', help='Run daily workflow')
+    parser.add_argument('--rss-only', action='store_true', help='Process RSS feeds only (GitHub Actions mode)')
     parser.add_argument('--cleanup', action='store_true', help='Run cleanup only')
     parser.add_argument('--test', action='store_true', help='Test individual components')
     args = parser.parse_args()
@@ -592,6 +593,55 @@ def main():
         # Run the complete daily workflow
         success = pipeline.run_daily_workflow()
         exit(0 if success else 1)
+    
+    if args.rss_only:
+        # GitHub Actions mode: Process RSS + pull YouTube transcripts + generate unified digest
+        logger.info("🚀 Starting GITHUB ACTIONS Pipeline")
+        logger.info("📝 GITHUB SCOPE: RSS processing + YouTube transcripts + Digest generation")
+        logger.info("=" * 75)
+        
+        try:
+            # Pull latest changes (gets YouTube transcripts already pushed to repo)
+            import subprocess
+            subprocess.run(['git', 'pull', 'origin', 'main'], check=True) 
+            logger.info("✅ Pulled latest changes - YouTube transcripts already in repo")
+            
+            # Step 1: Monitor RSS feeds and add new episodes
+            pipeline._monitor_rss_feeds()
+            
+            # Step 2: Process RSS audio cache files → transcribe → mark 'transcribed'
+            pipeline._process_audio_cache_files()
+            
+            # Step 3: Process pending RSS episodes → transcribe → mark 'transcribed'  
+            pipeline._process_pending_episodes()
+            
+            # Step 4: Generate digest from ALL 'transcribed' episodes (RSS + YouTube databases)
+            logger.info("📊 Generating digest from ALL 'transcribed' episodes (RSS + YouTube)")
+            digest_success = pipeline._generate_daily_digest()
+            
+            if digest_success:
+                # Step 5: Create TTS audio
+                pipeline._create_tts_audio()
+                
+                # Step 6: Deploy to GitHub releases
+                pipeline._deploy_to_github()
+                
+                # Step 7: Update RSS feed
+                pipeline._update_rss_feed()
+                
+                # Step 8: Mark ALL processed episodes as 'digested' (both databases)
+                pipeline._mark_episodes_digested()
+            
+            # Step 9: Cleanup old files and episodes
+            pipeline._cleanup_old_files()
+            
+            logger.info("✅ GITHUB ACTIONS workflow completed successfully")
+            logger.info("🔄 Local machine will pull digest status updates on next run")
+            exit(0)
+            
+        except Exception as e:
+            logger.error(f"❌ GITHUB ACTIONS workflow failed: {e}")
+            exit(1)
     
     # Default: show help and status
     parser.print_help()
