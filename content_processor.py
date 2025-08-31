@@ -175,9 +175,9 @@ class ContentProcessor:
         conn = sqlite3.connect(self.db_path)
         cursor = conn.cursor()
         
-        # Get episode info
+        # Get episode info with feed details
         cursor.execute('''
-            SELECT e.id, e.episode_id, e.title, e.audio_url, f.type, f.topic_category
+            SELECT e.id, e.episode_id, e.title, e.audio_url, f.type, f.topic_category, f.name
             FROM episodes e
             JOIN feeds f ON e.feed_id = f.id
             WHERE e.id = ? AND e.status IN ('downloaded', 'pre-download')
@@ -189,8 +189,11 @@ class ContentProcessor:
             conn.close()
             return None
         
-        ep_id, episode_guid, title, audio_url, feed_type, topic_category = episode
-        print(f"Processing: {title}")
+        ep_id, episode_guid, title, audio_url, feed_type, topic_category, feed_name = episode
+        print(f"\n🎬 Processing Episode from {feed_name}")
+        print(f"📺 Title: {title}")
+        print(f"🔖 Category: {topic_category or 'General'}")
+        print(f"⚙️ Type: {feed_type}")
         
         try:
             if feed_type == 'youtube':
@@ -473,18 +476,35 @@ class ContentProcessor:
             # Step 3: Process each chunk with progress tracking
             all_transcripts = []
             total_chars = 0
+            total_processing_time = 0
+            
+            print(f"\n🚀 Starting chunked transcription with Faster-Whisper...")
+            overall_start = time.time()
             
             for i, chunk_file in enumerate(chunks, 1):
-                print(f"\n🔄 Processing chunk {i}/{len(chunks)}: {Path(chunk_file).name}")
+                chunk_info = f"chunk {i}/{len(chunks)}"
+                chunk_size_mb = Path(chunk_file).stat().st_size / (1024*1024)
+                print(f"\n⚡ Processing {chunk_info}: {Path(chunk_file).name} ({chunk_size_mb:.1f}MB)")
                 
                 chunk_start_time = time.time()
                 chunk_transcript = self._transcribe_faster_whisper_chunk(chunk_file, i, len(chunks))
                 chunk_processing_time = time.time() - chunk_start_time
+                total_processing_time += chunk_processing_time
                 
                 if chunk_transcript:
                     all_transcripts.append(chunk_transcript)
                     total_chars += len(chunk_transcript)
-                    print(f"✅ Chunk {i} complete: {chunk_processing_time:.1f}s ({len(chunk_transcript)} chars)")
+                    # Calculate processing speed
+                    rtf = chunk_processing_time / 600  # 600 seconds per chunk
+                    print(f"✅ Chunk {i} complete: {chunk_processing_time:.1f}s (RTF: {rtf:.3f}x) - {len(chunk_transcript)} chars")
+                    
+                    # Show overall progress
+                    elapsed_total = time.time() - overall_start
+                    if i < len(chunks):
+                        avg_time_per_chunk = elapsed_total / i
+                        remaining_chunks = len(chunks) - i
+                        est_remaining = avg_time_per_chunk * remaining_chunks
+                        print(f"📊 Progress: {i}/{len(chunks)} chunks ({i/len(chunks)*100:.1f}%) - Est. remaining: {est_remaining/60:.1f}min")
                 else:
                     print(f"⚠️ Chunk {i} produced no transcription")
             
@@ -579,17 +599,25 @@ class ContentProcessor:
                 chunk_number = int(chunk_name.split('_')[1]) - 1
                 chunk_start_offset = chunk_number * 600  # 10 minutes per chunk
             
+            print(f"🎙️ Transcribing with Faster-Whisper (VAD enabled to skip silence)")
+            
             # Transcribe chunk
             segments, info = self.asr_model.transcribe(
                 str(chunk_file),
                 language=None,  # Auto-detect language
                 task="transcribe",
-                vad_filter=True,  # Skip silence
-                vad_parameters=dict(min_silence_duration_ms=500),
-                beam_size=5,
-                temperature=0,
+                vad_filter=True,  # Skip silence for faster processing
+                vad_parameters=dict(min_silence_duration_ms=500),  # Skip 500ms+ silence
+                beam_size=5,  # Good quality/speed balance
+                temperature=0,  # Deterministic
                 word_timestamps=False
             )
+            
+            # Show detection results
+            if hasattr(info, 'language') and hasattr(info, 'language_probability'):
+                print(f"🌐 Detected: {info.language} ({info.language_probability:.1%} confidence)")
+            if hasattr(info, 'duration'):
+                print(f"⏱️ Chunk duration: {info.duration:.1f}s")
             
             # Extract text with adjusted timestamps
             transcript_lines = []
