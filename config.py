@@ -174,6 +174,12 @@ class Config:
                 'url': 'https://www.youtube.com/feeds/videos.xml?channel_id=UC6jBgC88wZ_VCxhlGK8FhNg',
                 'type': 'youtube',
                 'topic_category': 'technology'
+            },
+            {
+                'title': 'AI Daily Brief',
+                'url': 'https://www.youtube.com/feeds/videos.xml?channel_id=UCKelCK4ZaO6HeEI1KQjqzWA',
+                'type': 'youtube',
+                'topic_category': 'technology'
             }
         ]
     
