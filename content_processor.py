@@ -242,16 +242,58 @@ class ContentProcessor:
             conn.close()
     
     def _process_youtube_episode(self, video_url, episode_id):
-        """Extract transcript from YouTube video"""
+        """Extract transcript from YouTube video with GitHub Actions fallback"""
         video_id = self._extract_youtube_video_id(video_url)
         if not video_id:
             print(f"Could not extract video ID from {video_url}")
             return None
         
         try:
-            # Fetch transcript using instance method  
+            # Check if we're in GitHub Actions environment
+            is_github_actions = os.getenv('GITHUB_ACTIONS') == 'true'
+            
+            if is_github_actions:
+                print("🚨 Running in GitHub Actions - YouTube API may be blocked by cloud IPs")
+                print("💡 Attempting YouTube transcript API with timeout...")
+            
+            # Fetch transcript with reduced timeout in GitHub Actions
             api = YouTubeTranscriptApi()
-            transcript_data = api.fetch(video_id, languages=['en'])
+            
+            # Simple timeout approach for GitHub Actions (Linux)
+            if is_github_actions:
+                import threading
+                import time
+                
+                class TimeoutError(Exception):
+                    pass
+                
+                transcript_data = None
+                exception_occurred = None
+                
+                def fetch_with_timeout():
+                    nonlocal transcript_data, exception_occurred
+                    try:
+                        transcript_data = api.fetch(video_id, languages=['en'])
+                    except Exception as e:
+                        exception_occurred = e
+                
+                # Start fetch in thread with timeout
+                thread = threading.Thread(target=fetch_with_timeout)
+                thread.daemon = True
+                thread.start()
+                thread.join(timeout=15)  # 15 second timeout
+                
+                if thread.is_alive():
+                    raise TimeoutError("YouTube API request timed out in GitHub Actions")
+                
+                if exception_occurred:
+                    raise exception_occurred
+                    
+                if transcript_data is None:
+                    raise RuntimeError("YouTube API request failed")
+            else:
+                # Normal fetch for local development
+                transcript_data = api.fetch(video_id, languages=['en'])
             
             # Check video length before processing
             if not transcript_data:
@@ -287,6 +329,15 @@ class ContentProcessor:
             
         except Exception as e:
             error_msg = str(e)
+            is_github_actions = os.getenv('GITHUB_ACTIONS') == 'true'
+            
+            if is_github_actions:
+                if "blocked" in error_msg.lower() or "forbidden" in error_msg.lower() or "timeout" in error_msg.lower():
+                    skip_reason = "YouTube API blocked by GitHub Actions cloud IPs - requires local processing"
+                    print(f"🚨 GitHub Actions limitation: {skip_reason}")
+                    self._log_episode_failure(video_url, f"GITHUB_ACTIONS_SKIP: {skip_reason}")
+                    return None
+            
             print(f"Error extracting YouTube transcript: {error_msg}")
             
             # Log failure reason to database
@@ -449,7 +500,6 @@ class ContentProcessor:
             print(f"\n🎯 Starting Faster-Whisper transcription: {Path(audio_file).name}")
             
             # Use the robust chunking workflow similar to Parakeet
-            from pathlib import Path
             import time
             import subprocess
             import math
