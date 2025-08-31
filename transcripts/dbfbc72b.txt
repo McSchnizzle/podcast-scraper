@@ -1,0 +1,266 @@
+[00:00] Welcome back to the AI Daily Brief
+[00:01] headlines edition. All the daily AI news
+[00:03] you need in around 5 minutes. We kick
+[00:06] off today with a story that depending on
+[00:08] your perspective is either a sad
+[00:10] reflection on how far Apple has fallen,
+[00:13] a positive reflection on how much
+[00:15] Google's Gemini has started to assert
+[00:17] leadership in the AI race, or just an
+[00:19] OMG, thank you. My goodness, how long
+[00:21] can Siri be bad for before we bring this
+[00:23] thing out behind the shed? Yes, it
+[00:25] appears that Apple is going to solve its
+[00:27] Siri problem by turning to Google.
+[00:29] According to Bloomberg's Apple insider
+[00:31] Mark German, Apple recently approached
+[00:33] Google to quote explore building a
+[00:34] custom AI model that would serve as the
+[00:36] foundation of the new Siri next year.
+[00:38] His sources said that Google had already
+[00:40] started training a model that could run
+[00:41] on Apple's servers. They added that
+[00:43] Apple is still weeks away from making a
+[00:45] final decision on whether to partner on
+[00:47] the Siri model or continue to use their
+[00:49] own internal models. Still, for months,
+[00:51] we've heard rumors that the AI Siri
+[00:53] project is seen as a dead end and that
+[00:55] Apple have been looking around for
+[00:56] partners. This, however, is the first
+[00:58] time we've heard that they're close to
+[00:59] making a final decision. According to
+[01:01] the reporting, Apple is in the middle of
+[01:03] a bake off with an internally developed
+[01:04] Siri going against another that uses
+[01:06] outside technology. And while it may
+[01:08] seem initially strange for Apple to
+[01:10] outsource the defining technology of the
+[01:12] moment to a key rival, they do have a
+[01:14] long history of being pragmatic and
+[01:16] seeding ground to Google when it makes
+[01:18] financial sense. Google, for example,
+[01:20] famously pays Apple around 20 billion
+[01:22] annually to have Google Search as the
+[01:24] default setting on iPhones. Given that,
+[01:26] if a deal does come together, it'll be
+[01:28] interesting to see which way the money
+[01:29] flows. The economics of search are
+[01:31] clear, but it's still pretty early to
+[01:33] know exactly how the money works when it
+[01:35] comes to AI powered search. Still, even
+[01:38] if AI chatbots have not shown yet the
+[01:40] same ad revenue as traditional search,
+[01:42] it is obviously a massive data stream
+[01:44] that Google could benefit from. Also,
+[01:46] whatever happens, it's not going to be
+[01:47] like Google just pulls their existing
+[01:49] Gemini model off the shelf. Whichever
+[01:51] model Apple ends up going with, they
+[01:52] want it to run on their own servers.
+[01:54] That means it's going to need to be
+[01:55] compatible with Apple silicone rather
+[01:57] than being optimized for Nvidia chips or
+[01:59] Google or presumably Google's TPUs. It's
+[02:02] also an open question whether the
+[02:03] architecture of iOS itself is a
+[02:04] roadblock. Google recently demonstrated
+[02:07] most of the functions that had been
+[02:08] originally slated for Apple intelligence
+[02:10] running on their Pixel 10 handset. At
+[02:12] the same time, Android is far more open
+[02:13] to cross application interactions than
+[02:15] iOS, which could prove a limitation for
+[02:17] an agentic Siri. The responses are
+[02:20] pretty much what you might imagine. Zero
+[02:22] Hedge writes, "Apple has completely
+[02:24] given up on AI." Now, former Quant
+[02:26] investor Jeffrey Emanuel did note that
+[02:28] quote, "Google is probably offering to
+[02:30] pay them a lot of money to do this, just
+[02:32] like they do to make Google the default
+[02:33] search on iPhone and Safari." It's still
+[02:35] crazy, though, that Apple would advocate
+[02:37] a leadership role of any kind in the
+[02:39] most disruptive technology of the last
+[02:40] 40 years. Delphi Ventures partner Tom
+[02:42] Shaughnessy wrote, "If Apple chooses
+[02:44] Google's Gemini to run Siri, it's game
+[02:46] over. Gemini would be running AI on all
+[02:48] Android and Apple devices around the
+[02:50] world. Billions of devices rhfing the
+[02:52] models, providing data, and improving
+[02:54] the models make the moat even stronger.
+[02:56] Would be impossible for a competitor to
+[02:58] keep up. Apple could be using this to
+[02:59] get better deal terms from OpenAI, who
+[03:01] they already have a deal with, though. I
+[03:03] also think it would get touchy on
+[03:04] antitrust. I think that last point is a
+[03:06] salient one where there's no guarantee
+[03:08] that this would get through given how
+[03:10] much scrutiny Apple's search deal with
+[03:11] Google has had in the last couple of
+[03:13] years as well. One very expansive
+[03:15] analysis came from Robert Scoble. He
+[03:17] writes, "It makes sense for Apple to do
+[03:19] a deal with Google. This would be good
+[03:21] for Hollow fans. Google's Genie 3 is
+[03:23] something I want on the Vision Pro in
+[03:24] the worst way. It would be good for
+[03:26] Google fans who will see its AI and
+[03:27] ecosystem strengthened by such a move.
+[03:29] It'll be bad for Nvidia and Open AAI. I
+[03:32] keep dreaming about Tim Cook doing a
+[03:33] deal with Elon Musk, but Google is the
+[03:35] best other choice. It has the best real
+[03:37] world data, a very decent AI model, and
+[03:39] the best hollow deck we've seen so far.
+[03:41] And with Whimo has a credible autonomous
+[03:42] car network to compete with Elon with,
+[03:44] and this is where Scobble's analysis
+[03:46] gets even more expansive. This move, he
+[03:48] says, strengthens Whimo against Tesla's
+[03:50] robo taxi. Apple hates Google
+[03:52] culturally, but hates Mark Zuckerberg
+[03:54] more. Back a decade or so ago, someone
+[03:56] at Apple PR told me that Zuckerberg got
+[03:57] in a yelling match with Steve Jobs. And
+[03:59] Apple hates Meta's privacy stance.
+[04:01] Google isn't the best at privacy, but at
+[04:03] least it's a known entity and hasn't
+[04:04] done anything nasty on the privacy front
+[04:06] and has put the best security
+[04:07] protections into Gmail and its other
+[04:08] services that I've seen. Google makes
+[04:10] its own GPUs and AI inferencing chips
+[04:12] for its data centers, which gives it a
+[04:14] lot of benefits. And its advertising
+[04:15] network is top rate, in many ways,
+[04:16] better than Metas. And in the future,
+[04:18] advertising will play a big role in
+[04:20] funding hollow deck experiences. Apple
+[04:22] knows consumers aren't ready for AI
+[04:24] glasses yet, but is planning on its own
+[04:25] sometime between now and the end of
+[04:26] 2027, and its vision pro sets the stage
+[04:28] for the future very well. Apple also
+[04:30] knows that Sam Alman is gassing up to go
+[04:32] into consumer devices over the next
+[04:34] decade. So, doesn't want a new hot
+[04:36] competitor to take its lunch in robotics
+[04:37] or brain computer interfaces either. If
+[04:39] Apple makes this deal happen, we'll see
+[04:41] a duopoly form like Microsoft and Intel
+[04:43] had for decades. It will be hard to
+[04:45] disrupt by Zuckerberg or Alman. Now,
+[04:47] Scoville, for those of you who don't
+[04:48] follow, is much more interested in the
+[04:50] hardware, VR, AR kind of world than
+[04:53] currently the average consumer is. But I
+[04:55] think the patternicity here of how he
+[04:56] sees these big tech relationships
+[04:58] changing is pretty interesting. Now,
+[05:00] staying on Google for just a moment, the
+[05:02] company is rolling out AI mode worldwide
+[05:04] and taking their first tentative steps
+[05:06] towards agentic search. AI mode, which
+[05:08] allows users to perform complex queries
+[05:10] and ask follow-up questions within
+[05:11] search, will now be available across 180
+[05:14] countries. The first agentic feature
+[05:16] will be the ability to use AI mode to
+[05:18] make restaurant reservations based on
+[05:20] user preferences. Google says they will
+[05:22] soon roll out the ability to make local
+[05:23] service appointments and book event
+[05:24] tickets as well. The agentic features
+[05:27] are only available within the
+[05:28] experimental Google labs and will
+[05:30] require the $250 a month ultra plan. So
+[05:33] this is a very very limited rollout. In
+[05:35] fact, given that they are only available
+[05:36] in that high price tier, it seems pretty
+[05:38] clear that they want to test the
+[05:40] features with a very friendly and highly
+[05:41] infranchised audience to begin. Now,
+[05:44] some are, I think, quite limitedly
+[05:46] dismissing this as a one-trick agent.
+[05:48] And yet, quite obviously, this is just
+[05:49] the beginning of a much grander vision.
+[05:51] Google Deepmind research scientist Anal
+[05:53] Guli writes, "We just launched Project
+[05:55] Mariner in Google search AI mode. One of
+[05:57] the most fun projects we've worked on
+[05:59] lately behind every search query and
+[06:00] agentic system works quietly for you.
+[06:02] Maybe one of the most profound
+[06:03] interfaces ever built." What's
+[06:06] interesting about this, especially given
+[06:07] our previous conversation about Apple
+[06:08] and Google, is that it kind of seems
+[06:10] like Google is making all the moves to
+[06:12] integrate AI into people's normal lives
+[06:14] in really subtle, simple ways without
+[06:15] smashing it over their heads that it's
+[06:17] AI that Apple intelligence was supposed
+[06:19] to be. Some definitely see this as a
+[06:22] trajectory play. Anchor Roy writes,
+[06:24] "Project Mariner integration is the real
+[06:26] story here. Search becoming an agent
+[06:27] that acts versus just retrieves changes
+[06:29] the game completely. Reservation booking
+[06:31] feels like the obvious first step." Now,
+[06:34] staying on the theme of big tech and
+[06:36] their battles, Elon Musk continues to be
+[06:39] lawsuit happy, suing Apple and Open AAI
+[06:41] on Monday for anti-competitive
+[06:43] practices. Now, if you've spent any time
+[06:45] on Twitter/X lately, you will know
+[06:47] exactly what this is about. The
+[06:49] information explains that the suit
+[06:50] accuses Apple and OpenAI of working
+[06:52] together to basically direct people
+[06:54] towards Chat GBT and away from
+[06:56] competitors like Grock. The information
+[06:58] writes XAI's lawsuit also claims that
+[07:00] Apple has given ChacheBT favorable
+[07:02] placement in its app store and quote
+[07:04] dragged out its app store app review
+[07:06] process for competitors like Grock wrote
+[07:08] the lawsuit. This is a tale of two
+[07:09] monopouists joining forces to ensure
+[07:11] their continued dominance in a world
+[07:12] rapidly driven by the most powerful
+[07:14] technology humanity has ever created.
+[07:16] And although everything that Elon does
+[07:18] is mostly a roar shack test on how you
+[07:20] feel about Elon, I would say that this
+[07:21] one has even less resonance than normal.
+[07:24] Accelerate harder really summed up the
+[07:26] feelings of many dennisens of Twitterx
+[07:28] when they wrote, "Does anyone really
+[07:29] find it plausible that Apple needs to
+[07:31] suppress the XAI app for OpenAI to
+[07:33] continue beating it on the app store?"
+[07:35] "Chatbt is the only AI that most
+[07:36] consumers can name and XAI has a porny
+[07:39] brand problem in a much smaller install
+[07:40] base," responded an OpenAI spokesperson.
+[07:43] "The latest filing is consistent with
+[07:45] Mr. Musk's ongoing pattern of
+[07:46] harassment." Now, this not being a soap
+[07:49] opera show, we will end it there. Look,
+[07:51] at the end of the day, Grock's models
+[07:52] are really good and they're moving fast.
+[07:54] If you haven't tried out Gro 4 yet, I
+[07:56] highly suggest you take some time to do
+[07:57] so. I'm still in a phase where I'm
+[07:59] running a lot of different strategic
+[08:01] prompts by a number of different models,
+[08:02] including Gro 4, alongside GPT5, 03,
+[08:05] etc. Ultimately, it all just seems like
+[08:07] noise, and the real battle is going to
+[08:09] be won just by out competing. For now,
+[08:11] though, that's going to do it for
+[08:12] today's headlines. Next up, the main

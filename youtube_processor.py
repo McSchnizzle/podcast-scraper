@@ -93,14 +93,15 @@ class YouTubeProcessor:
         conn.close()
         logger.info(f"✅ Synced {len(youtube_feeds)} YouTube feeds")
     
-    def check_new_youtube_episodes(self, hours_back: int = 6) -> List[Dict]:
-        """Check for new YouTube episodes (similar to feed_monitor but YouTube-only)"""
+    def check_new_youtube_episodes(self, hours_back: int = 168) -> List[Dict]:
+        """Check for new YouTube episodes (default: 7 days back to catch missed episodes)"""
         from feed_monitor import FeedMonitor
         
         # Create temporary feed monitor with YouTube database
         feed_monitor = FeedMonitor(db_path=self.youtube_db_path)
         
-        # Check for new episodes
+        # Check for new episodes going back specified hours (default 7 days = 168 hours)
+        logger.info(f"🔍 Checking for YouTube episodes from last {hours_back} hours ({hours_back/24:.1f} days)")
         new_episodes = feed_monitor.check_new_episodes(hours_back=hours_back)
         
         logger.info(f"Found {len(new_episodes)} new YouTube episodes")
@@ -237,9 +238,61 @@ class YouTubeProcessor:
             logger.warning(f"⚠️ Could not pull from GitHub: {e}")
             # Continue processing even if pull fails
             return False
+
+    def commit_and_push_transcripts(self):
+        """Commit and push YouTube transcripts to GitHub"""
+        try:
+            import subprocess
+            
+            logger.info("📤 Committing and pushing YouTube transcripts to GitHub...")
+            
+            # Check if there are changes to commit
+            result = subprocess.run(['git', 'status', '--porcelain'], 
+                                  capture_output=True, text=True, timeout=10)
+            
+            if not result.stdout.strip():
+                logger.info("📭 No new transcripts to commit")
+                return True
+                
+            # Add all changes (transcripts and database)
+            subprocess.run(['git', 'add', '.'], timeout=10)
+            
+            # Get count of new transcripts
+            transcript_count = len([line for line in result.stdout.split('\n') 
+                                  if line.strip().endswith('.txt')])
+            
+            # Commit with informative message
+            commit_msg = f"Add YouTube transcripts from automated processing\n\n" \
+                        f"- Processed {transcript_count} YouTube episodes using YouTube Transcript API\n" \
+                        f"- Updated youtube_transcripts.db with transcribed status\n" \
+                        f"- Ready for GitHub Actions digest generation\n\n" \
+                        f"🤖 Generated with [Claude Code](https://claude.ai/code)\n\n" \
+                        f"Co-Authored-By: Claude <noreply@anthropic.com>"
+            
+            commit_result = subprocess.run(['git', 'commit', '-m', commit_msg], 
+                                         capture_output=True, text=True, timeout=30)
+            
+            if commit_result.returncode != 0:
+                logger.warning(f"⚠️ Git commit issue: {commit_result.stderr}")
+                return False
+                
+            # Push to GitHub
+            push_result = subprocess.run(['git', 'push', 'origin', 'main'], 
+                                       capture_output=True, text=True, timeout=60)
+            
+            if push_result.returncode == 0:
+                logger.info("✅ Successfully pushed YouTube transcripts to GitHub")
+                return True
+            else:
+                logger.error(f"❌ Git push failed: {push_result.stderr}")
+                return False
+                
+        except Exception as e:
+            logger.error(f"❌ Could not commit/push to GitHub: {e}")
+            return False
     
-    def run_youtube_workflow(self, hours_back: int = 6):
-        """LOCAL ONLY: Download and transcribe YouTube episodes"""
+    def run_youtube_workflow(self, hours_back: int = 168):
+        """LOCAL ONLY: Download and transcribe YouTube episodes (default: 7 days back)"""
         logger.info("🎬 Starting LOCAL YouTube Transcription Workflow") 
         logger.info("📝 LOCAL SCOPE: YouTube Transcript API → Mark 'transcribed' → Push to GitHub")
         logger.info("🚀 RESULT: GitHub repo will have YouTube transcripts ready for GitHub Actions")
@@ -262,12 +315,19 @@ class YouTubeProcessor:
             stats = self.get_youtube_stats()
             logger.info(f"📊 Local YouTube Stats: {stats['status_counts']}")
             
-            # Step 5: Cleanup only old failed episodes (keep transcribed for GitHub)
+            # Step 5: Commit and push any new transcripts to GitHub
+            if processed_count > 0:
+                push_success = self.commit_and_push_transcripts()
+                if push_success:
+                    logger.info(f"📤 Pushed {processed_count} new YouTube transcripts to GitHub")
+                else:
+                    logger.warning("⚠️ Failed to push transcripts to GitHub - manual push may be needed")
+            
+            # Step 6: Cleanup only old failed episodes (keep transcribed for GitHub)
             self.cleanup_old_episodes()
             
             logger.info("✅ LOCAL YouTube transcription completed")
-            logger.info(f"📤 NEXT: Push transcripts to GitHub repo for GitHub Actions")
-            logger.info(f"🤖 GitHub Actions will find YouTube transcripts already in repo")
+            logger.info(f"🤖 GitHub Actions will process transcripts in next digest run")
             return True
             
         except Exception as e:
@@ -279,8 +339,8 @@ def main():
     parser = argparse.ArgumentParser(description="Local YouTube Processor")
     parser.add_argument('--process-new', action='store_true', 
                        help='Process new YouTube episodes')
-    parser.add_argument('--hours-back', type=int, default=6,
-                       help='Hours back to check for new episodes (default: 6)')
+    parser.add_argument('--hours-back', type=int, default=168,
+                       help='Hours back to check for new episodes (default: 168 = 7 days)')
     parser.add_argument('--stats', action='store_true',
                        help='Show YouTube processing statistics')
     parser.add_argument('--cleanup', action='store_true',
