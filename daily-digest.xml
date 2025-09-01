@@ -18,7 +18,7 @@
     </itunes:category>
     <itunes:explicit>false</itunes:explicit>
     <atom:link href="https://paulrbrown.org/daily-digest.xml" rel="self" type="application/rss+xml"/>
-    <pubDate>Sat, 30 Aug 2025 02:24:42 +0000</pubDate>
+    <pubDate>Mon, 01 Sep 2025 01:32:37 +0000</pubDate>
     <item>
       <title>Daily Tech Digest - August 29, 2025</title>
       <description>Daily digest of tech news and insights from leading podcasts and creators, covering AI tools, product launches, and industry developments. Generated on August 29, 2025 from multiple verified sources including The Vergecast, The AI Advantage, and How I AI.
@@ -56,19 +56,6 @@ This episode features cross-episode synthesis with topic-based organization, mul
       <itunes:summary>Daily digest of tech news and insights from leading podcasts and creators, covering AI tools, product launches, and industry developments. Generated on August 28, 2025 from multiple verified sources including The Vergecast, The AI Advantage, and How I AI.
 This episode features cross-episode synthesis with topic-based organization, multi-voice narration, and actionable insights curated by AI analysis.</itunes:summary>
       <itunes:duration>00:06:56</itunes:duration>
-      <itunes:episodeType>full</itunes:episodeType>
-    </item>
-    <item>
-      <title>Daily Tech Digest - August 28, 2025</title>
-      <description>Daily digest of tech news and insights from leading podcasts and creators, covering AI tools, product launches, and industry developments. Generated on August 28, 2025 from multiple verified sources including The Vergecast, The AI Advantage, and How I AI.
-This episode features cross-episode synthesis with topic-based organization, multi-voice narration, and actionable insights curated by AI analysis.</description>
-      <pubDate>Thu, 28 Aug 2025 05:58:03 +0000</pubDate>
-      <enclosure url="https://paulrbrown.org/audio/complete_topic_digest_20250828_055803.mp3" type="audio/mpeg" length="11419105"/>
-      <guid isPermaLink="false">d9854ea606d813ca01676a0184d583b4</guid>
-      <itunes:title>Daily Tech Digest - August 28, 2025</itunes:title>
-      <itunes:summary>Daily digest of tech news and insights from leading podcasts and creators, covering AI tools, product launches, and industry developments. Generated on August 28, 2025 from multiple verified sources including The Vergecast, The AI Advantage, and How I AI.
-This episode features cross-episode synthesis with topic-based organization, multi-voice narration, and actionable insights curated by AI analysis.</itunes:summary>
-      <itunes:duration>00:11:36</itunes:duration>
       <itunes:episodeType>full</itunes:episodeType>
     </item>
   </channel>
