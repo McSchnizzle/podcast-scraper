@@ -1,26 +1,26 @@
 # Daily Podcast Digest - Product Requirements Document
 
 ## Vision
-Automated system that monitors podcast RSS feeds and YouTube channels, processes new episodes for key announcements and insights, and generates daily AI-powered digests delivered as both text and audio content.
+Dual-database automated system with local YouTube processing and GitHub Actions RSS pipeline, featuring timestamp-synchronized TTS generation and intelligent Vercel build management for reliable daily AI-powered digest delivery.
 
 ## Core Objectives
-- **AI-First Analysis**: Claude-powered content analysis and digest generation
-- **Audio-First Consumption**: TTS-generated daily episodes for commute listening
-- **News & Innovation Focus**: Prioritize product launches, industry developments, changemaker insights  
-- **Intelligent Curation**: Cross-reference topics, sentiment analysis, priority scoring
-- **Zero Manual Effort**: Fully automated daily pipeline with web distribution
+- **Perfect TTS Synchronization**: Timestamp-matched digest markdown and MP3 files for reliable audio delivery
+- **Dual-Database Architecture**: Separate RSS and YouTube processing with synchronized Claude analysis
+- **Local YouTube Processing**: 6-hour cron job with GitHub sync for reliable transcript collection
+- **AI-First Analysis**: Claude CLI integration processing both RSS and YouTube episode sources
+- **Intelligent Infrastructure**: Vercel build skipping and GitHub Actions automation
+- **Zero Manual Effort**: Fully automated daily pipeline with robust error handling
 
 ## Implementation Status
 
-### ✅ COMPLETED - Phase 1: Feed Monitoring System
-- **Multi-Source Monitoring**: RSS feeds + YouTube channels via RSS feeds ✅
-- **Database Storage**: SQLite database for episode tracking and deduplication ✅
+### ✅ COMPLETED - Phase 1: Dual-Database Feed Monitoring
+- **RSS Pipeline**: GitHub Actions with `podcast_monitor.db` tracking ✅
+- **YouTube Pipeline**: Local cron job (6h) with `youtube_transcripts.db` tracking ✅
+- **Database Synchronization**: Local processing commits transcripts and database to GitHub ✅
+- **GitHub Integration**: Actions workflow pulls latest changes before processing ✅
+- **Feed Management**: Centralized configuration in `config.py` with type-specific processing ✅
 - **Content Detection**: 24-hour lookback with configurable time windows ✅
-- **Feed Management**: Add/remove RSS and YouTube feeds with topic categorization ✅
-- **YouTube Integration**: Channel ID resolution and RSS feed conversion ✅
-- **Date Parsing**: Robust date parsing for both RSS and YouTube Atom feeds ✅
-- **HTTP Headers**: Proper User-Agent headers for compatibility ✅
-- **Deduplication**: Prevent processing same episodes multiple times ✅
+- **Deduplication**: Dual-database episode tracking prevents reprocessing ✅
 
 ### ✅ COMPLETED - Phase 2: Content Processing Pipeline
 - **Audio Download & Conversion**: ffmpeg integration for RSS podcast files ✅
@@ -38,12 +38,12 @@ Automated system that monitors podcast RSS feeds and YouTube channels, processes
 - **Audio Chunking**: Optimized 10-minute segments for processing efficiency
 - **Error Handling**: Robust error recovery and status tracking
 
-### ✅ COMPLETED - Phase 3: Claude AI Integration
-- **Claude Code Integration**: Headless Claude integration for automated content analysis ✅
-- **Daily Digest Generation**: Automated topic-based content summarization ✅
-- **Cross-Reference Analysis**: Episode correlation and theme detection ✅
-- **Topic Organization**: Intelligent content grouping and prioritization ✅
-- **JSON Output**: Structured analysis results for further processing ✅
+### ✅ COMPLETED - Phase 3: Claude AI Integration with TTS Sync
+- **Dual-Database Processing**: Claude CLI processes both RSS and YouTube episodes simultaneously ✅
+- **Timestamp Embedding**: Claude generates digest with embedded timestamp for TTS synchronization ✅
+- **Daily Digest Generation**: Topic-based content summarization from multiple sources ✅
+- **TTS Timestamp Extraction**: Perfect filename matching using regex timestamp extraction ✅
+- **Cross-Reference Analysis**: Episode correlation across RSS and YouTube sources ✅
 
 **AI Analysis Features**:
 - **Topic-Based Organization**: Content grouped by themes rather than individual episodes
@@ -52,12 +52,13 @@ Automated system that monitors podcast RSS feeds and YouTube channels, processes
 - **Trend Detection**: Emerging topic identification and importance ranking
 - **Quote Extraction**: Key statements and insights with context
 
-### ✅ COMPLETED - Phase 4: Publishing Pipeline
-- **RSS Generation**: Automated podcast RSS feed creation with proper metadata ✅
-- **GitHub Deployment**: Automated episode publishing and release management ✅
-- **Web API**: Audio streaming and RSS serving endpoints ✅
-- **TTS Integration**: Text-to-speech audio digest generation (optional) ✅
-- **Episode Metadata**: Comprehensive metadata generation and management ✅
+### ✅ COMPLETED - Phase 4: Synchronized Publishing Pipeline
+- **TTS Timestamp Synchronization**: Perfect filename matching between digest markdown and MP3 files ✅
+- **ElevenLabs Integration**: High-quality TTS generation with timestamp-matched filenames ✅
+- **GitHub Releases**: MP3 and markdown hosting with synchronized timestamps ✅
+- **RSS Generation**: Links to GitHub-hosted MP3s via paulrbrown.org CDN URLs ✅
+- **Vercel Intelligence**: Smart build skipping prevents unnecessary deployments ✅
+- **Web API**: Optimized audio streaming and RSS serving with intelligent caching ✅
 
 **Publishing Features**:
 - **RSS Compliance**: Full RSS 2.0 specification compliance with podcast extensions
@@ -68,14 +69,15 @@ Automated system that monitors podcast RSS feeds and YouTube channels, processes
 
 ## Current Architecture
 
-### Core Components (Optimized)
-1. **`daily_podcast_pipeline.py`** - Main orchestration and automation
-2. **`feed_monitor.py`** - RSS/YouTube feed monitoring and discovery
-3. **`content_processor.py`** - Audio transcription and processing pipeline
-4. **`claude_headless_integration.py`** - Claude AI analysis and digest generation
-5. **`robust_transcriber.py`** - Advanced Parakeet MLX transcription engine (cleaned)
-6. **`config.py`** - Centralized configuration management ⭐
-7. **`claude_tts_generator.py`** - Consolidated TTS + topic compilation ⭐
+### Core Components (Dual-Database)
+1. **`daily_podcast_pipeline.py`** - RSS pipeline orchestration (GitHub Actions)
+2. **`youtube_cron_job.sh`** - Local YouTube processing automation (6-hour cron) ⭐
+3. **`feed_monitor.py`** - RSS feed monitoring with `podcast_monitor.db`
+4. **`youtube_processor.py`** - YouTube transcript processing with `youtube_transcripts.db`
+5. **`claude_headless_integration.py`** - Dual-database Claude analysis with timestamp embedding ⭐
+6. **`claude_tts_generator.py`** - TTS with perfect timestamp synchronization ⭐
+7. **`config.py`** - Centralized dual-database configuration management
+8. **`vercel-build-ignore.sh`** - Intelligent Vercel build skipping ⭐
 
 ### Supporting Infrastructure
 - **`deploy_episode.py`** - GitHub deployment automation
@@ -84,22 +86,34 @@ Automated system that monitors podcast RSS feeds and YouTube channels, processes
 
 ### Episode Processing Workflow
 ```
-RSS Audio: Feed Discovery → Download → Parakeet MLX → Claude Analysis → Generate Digest → Publish
-YouTube:   Feed Discovery → YouTube API → Claude Analysis → Generate Digest → Publish
+RSS Pipeline (GitHub Actions):
+Feed Monitor → podcast_monitor.db → Download → Parakeet MLX → transcribed → 
+Claude Analysis (dual-db) → TTS Sync → GitHub Release → digested
 
-Status Flow:
-RSS:     pre-download → downloaded → transcribed → digested
-YouTube: pre-download → transcribed → digested
+YouTube Pipeline (Local + GitHub):
+Local Cron (6h) → YouTube API → youtube_transcripts.db → Git Push → 
+GitHub Actions → Claude Analysis (combined) → TTS Sync → GitHub Release → digested
+
+TTS Synchronization:
+Claude: daily_digest_YYYYMMDD_HHMMSS.md → TTS: complete_topic_digest_YYYYMMDD_HHMMSS.mp3
 ```
 
-### Database Schema
+### Dual Database Schema
 ```sql
+-- podcast_monitor.db (RSS episodes)
 episodes (
     id, episode_id, title, audio_url, published_date,
     transcript_path, priority_score, content_type, 
     status, digest_history, failure_reason
 )
 
+-- youtube_transcripts.db (YouTube episodes)  
+episodes (
+    id, episode_id, title, transcript_path, published_date,
+    priority_score, content_type, status, failure_reason
+)
+
+-- Both databases share feed configuration
 feeds (
     id, title, url, type, topic_category,
     last_checked, active, failure_count
@@ -133,40 +147,51 @@ feeds (
 
 ### Environment Variables
 ```bash
-GITHUB_TOKEN="github_pat_..."           # Required for deployment
-ELEVENLABS_API_KEY="sk-..."            # Optional for TTS generation
+GITHUB_TOKEN="github_pat_..."           # Required for GitHub releases
+ANTHROPIC_API_KEY="sk-ant-..."          # Required for Claude CLI integration
+ELEVENLABS_API_KEY="sk-..."            # Required for TTS MP3 generation
 ```
 
-### Feed Configuration
+### Dual-Database Feed Configuration
 ```python
+# config.py - Centralized feed management
 feeds = [
     {
-        'title': 'Podcast Name',
+        'title': 'RSS Podcast',
         'url': 'https://example.com/rss',
-        'type': 'rss',  # or 'youtube'
+        'type': 'rss',  # Processed by GitHub Actions
+        'topic_category': 'technology'
+    },
+    {
+        'title': 'YouTube Channel',
+        'url': 'https://youtube.com/channel/UC...',
+        'type': 'youtube',  # Processed by local cron
         'topic_category': 'technology'
     }
 ]
 ```
 
 ### Processing Parameters
+- **YouTube Cron Schedule**: Every 6 hours (0 */6 * * *)
 - **YouTube Minimum Duration**: 3.0 minutes (filters shorts)
-- **Audio Chunking**: 10 minutes per segment  
+- **RSS Audio Chunking**: 10 minutes per segment
+- **TTS Timestamp Sync**: Regex extraction from `daily_digest_YYYYMMDD_HHMMSS.md`
+- **Database Sync**: Local commits pushed before GitHub Actions
+- **Vercel Build Control**: Intelligent skipping via `vercel-build-ignore.sh`
 - **Content Priority Threshold**: 0.3 (adjustable)
 - **Retention Period**: 7 days for processed content
-- **Max RSS Episodes**: 7 per daily run
 
 ## Success Metrics
 
 ### ✅ Achieved Metrics
-- **Episode Processing**: 62+ episodes successfully processed and digested
-- **Transcription Quality**: High accuracy with optimized RTF (~0.18x)
-- **Analysis Automation**: 100% automated Claude-powered content analysis
-- **Publishing Pipeline**: Fully automated RSS generation and GitHub deployment
-- **Code Efficiency**: Reduced from 12 to 9 core files (25% reduction)
-- **Enhanced Workflow**: Dual status workflow (RSS vs YouTube)
-- **Centralized Config**: All settings managed through config.py
-- **Consolidated TTS**: Merged 3 files into 1 comprehensive module
+- **TTS Synchronization**: 100% timestamp matching between digest markdown and MP3 files
+- **Dual-Database Success**: Separate RSS and YouTube processing with perfect sync
+- **Local YouTube Automation**: 6-hour cron job with GitHub integration
+- **GitHub Actions Reliability**: Comprehensive debugging and error handling
+- **Vercel Optimization**: Intelligent build skipping prevents unnecessary deployments
+- **Episode Processing**: 100+ episodes successfully processed across both databases
+- **Publishing Pipeline**: MP3 hosting via GitHub releases with CDN delivery
+- **Infrastructure Efficiency**: Robust error handling and database synchronization
 
 ### Operational KPIs
 - **Daily Uptime**: >99% automated pipeline success rate
@@ -209,27 +234,28 @@ feeds = [
 
 ## Conclusion
 
-The Daily Podcast Digest System has successfully achieved its core objectives with a complete end-to-end automated pipeline. The system demonstrates production-quality performance with Apple Silicon optimization, Claude AI integration, and robust publishing infrastructure.
+The Daily Podcast Digest System has evolved into a robust dual-database architecture with perfect TTS timestamp synchronization and intelligent infrastructure management. The system demonstrates production-quality reliability with local YouTube processing, GitHub Actions automation, and synchronized Claude AI analysis.
 
-**Current Status: PRODUCTION READY** ✅
+**Current Status: PRODUCTION READY WITH ENHANCED RELIABILITY** ✅
 
-The system is fully operational with all four phases completed:
-1. ✅ Feed monitoring and content discovery
-2. ✅ Advanced transcription with Apple Silicon optimization  
-3. ✅ Claude AI analysis and digest generation
-4. ✅ Automated publishing and distribution
+The system operates with advanced architecture featuring:
+1. ✅ Dual-database feed monitoring (RSS + YouTube with separate processing)
+2. ✅ TTS timestamp synchronization (perfect filename matching)
+3. ✅ Local YouTube automation (6-hour cron with GitHub sync)
+4. ✅ Intelligent infrastructure (Vercel build skipping, GitHub Actions optimization)
 
 **Key Achievements**:
-- Complete automation from feed monitoring to digest publication
-- High-performance Apple Silicon optimized transcription
-- Intelligent AI-powered content analysis and summarization
-- Robust publishing pipeline with web API endpoints
-- Streamlined codebase with comprehensive error handling
+- **Perfect TTS Synchronization**: Eliminated timestamp mismatches between digest and audio files
+- **Dual-Database Architecture**: Reliable separate processing for RSS and YouTube sources
+- **Local YouTube Processing**: 6-hour cron automation with GitHub repository synchronization
+- **GitHub Actions Integration**: Comprehensive debugging and dual-database processing
+- **Infrastructure Intelligence**: Vercel build optimization and automated deployment management
+- **Enhanced Reliability**: Robust error handling, database sync, and comprehensive troubleshooting
 
-The system is ready for daily production use and can be extended with additional feeds, enhanced features, or integration with external platforms as needed.
+The system provides reliable daily digest generation with high-quality TTS audio, GitHub-hosted MP3 delivery, and intelligent infrastructure management optimized for production use.
 
 ---
 
-**Last Updated**: August 30, 2025  
-**Version**: 4.1 - Refactored & Optimized Release  
-**Status**: All phases complete, codebase optimized and consolidated
+**Last Updated**: September 1, 2025  
+**Version**: 5.0 - Dual-Database & TTS Synchronization Release  
+**Status**: Production ready with enhanced architecture and perfect TTS timestamp matching
