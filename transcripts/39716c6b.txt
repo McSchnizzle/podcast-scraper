@@ -1,0 +1,678 @@
+[00:00] Welcome back to the AI Daily Brief. Now,
+[00:02] two quick things about today's show.
+[00:04] One, as sometimes happens when we have
+[00:06] an exciting new model, the main episode
+[00:08] got a little bit long. There really are
+[00:10] kind of two parts. The first half or so
+[00:12] is about the background context and the
+[00:14] announcement of the new Nano Banana
+[00:15] model, and then the second half is the
+[00:17] seven new use cases that it opens up.
+[00:19] Second thing to note, after recording
+[00:21] for 40 minutes, I discovered that it had
+[00:24] not been recording with my actual
+[00:26] podcast mic and instead was recording
+[00:28] directly into the laptop. However, I am
+[00:30] in Vegas for a keynote today and so am
+[00:32] not able to go back and re-record the
+[00:34] full episode. We've done our best to use
+[00:36] a variety of tools, AI and otherwise, to
+[00:38] make the sound quality as good as it can
+[00:40] be, but apologies that it's a little bit
+[00:42] lower than normal. With all that out of
+[00:43] the way, let's dive into this very
+[00:45] exciting new model. Today, we are
+[00:48] talking about the image model that has
+[00:50] had people incredibly excited for the
+[00:52] last couple of weeks. It is finally out.
+[00:54] We got confirmation who it was from and
+[00:57] already people are discovering new use
+[00:59] cases that were not possible, at least
+[01:00] in the way that they are now, before
+[01:02] this release came. It's a great reminder
+[01:04] of the fact that we still really do live
+[01:07] right on the horizon between possible
+[01:09] and impossible. And that every time
+[01:11] there's a new model, even if it's not
+[01:13] obvious at first, there are some set of
+[01:15] new things that move over into the realm
+[01:17] of the possible that simply were not
+[01:19] before. But we're getting a little bit
+[01:21] ahead of ourselves with that. A couple
+[01:22] of weeks ago, a new image generation
+[01:25] model showed up on LM Arena that was
+[01:27] called Nano Banana. I've talked about
+[01:29] this previously on the show. If you
+[01:31] spend any time on AI Twitter, you've
+[01:32] probably seen people talking about it or
+[01:34] sharing their generations with it. The
+[01:36] model quickly rose to the top of the
+[01:37] leaderboard and gathered a ton of praise
+[01:40] for its state-of-the-art performance.
+[01:41] Now, interestingly, unlike the last few
+[01:44] leaps in image model quality, people
+[01:46] weren't just talking about how realistic
+[01:47] the images were. Instead, the real
+[01:50] standout was the model's ability to edit
+[01:52] images. You could generate a single shot
+[01:55] and then modify it with seemingly
+[01:56] perfect object consistency and
+[01:58] incredible prompt adherence. Now, this
+[02:01] is one of those things that I think
+[02:02] people have always imagined as what they
+[02:04] wanted out of an AI generated image
+[02:06] model, but hadn't really been there yet.
+[02:09] If you spent any time with MidJourney or
+[02:11] the tools inside ChatgBT, you'll know
+[02:13] that it's pretty frequently a crapshoot
+[02:15] of trying to get the model to do what
+[02:16] you want to do. In fact, for some, like
+[02:18] Midjourney, I don't even recommend
+[02:20] trying to get the model to do what you
+[02:21] want to do. I basically recommend you
+[02:23] winding it up, pointing it in at a
+[02:24] direction, and letting it do what it
+[02:25] wants. Now, there have been some big
+[02:27] updates recently. For example,
+[02:29] ideoggram, which I use every day for
+[02:30] thumbnails, added a new updated
+[02:33] character consistency patch, which made
+[02:34] a huge difference. But still, the idea
+[02:36] of being able to take a base image and
+[02:38] turn it into whatever you want in a way
+[02:40] that was coherent, is something that
+[02:42] people have both wanted and simply
+[02:44] haven't had access to. DD Doss of Menllo
+[02:46] Ventures said, "This is the next
+[02:48] generation of filters that we've been
+[02:49] promised forever." In any case, once the
+[02:52] hype started building, Google folks
+[02:53] began winking at the crowd on X,
+[02:55] implying that they were in fact the ones
+[02:57] testing in stealth. Those hints,
+[02:59] however, backfired as they led many to
+[03:02] think that the Google Pixel 10 launch
+[03:03] last week was going to double as the
+[03:05] nano banana rollout. Many were
+[03:07] disappointed then when the event came
+[03:08] and went with no mention of the new
+[03:09] model. Now, in retrospect, keeping them
+[03:12] separated makes sense. These are two
+[03:14] very different launches for very
+[03:15] different audiences. The Pixel 10
+[03:17] rollout was about selling a new AI
+[03:18] enabled phone to normies. And as much as
+[03:20] it focused on some of the image
+[03:22] features, it wasn't about advanced AI
+[03:24] workflows, it was about how they could
+[03:25] do things like zoom in better. In fact,
+[03:27] although they didn't say anything about
+[03:28] Nano Banana, some of the image
+[03:30] generation features on that phone were
+[03:32] interesting enough that people
+[03:32] speculated that Google had actually put
+[03:34] the model onto the phone without really
+[03:36] drawing attention to it. In any case,
+[03:38] after weeks of anticipation, Google
+[03:40] confirmed that they were in fact the
+[03:41] ones behind Nano Banana, and we got the
+[03:43] full reveal. Officially, the model is
+[03:45] called Gemini 2.5 Flash. So, despite the
+[03:49] resonance of the meme version of the
+[03:50] name, we haven't quite escaped AI model
+[03:53] naming convention hell just yet. The
+[03:55] model is now available as a free preview
+[03:57] in Google AI Studio, in the Gemini API,
+[03:59] and in the Vert.Ex AI platforms. Now, in
+[04:02] terms of the features that Google
+[04:03] showcased, the model can edit images to
+[04:05] change backgrounds, clothing settings,
+[04:07] basically whatever you like using a
+[04:08] plain English prompt. The model is also
+[04:11] capable of blending two images together.
+[04:13] For example, combining two different
+[04:14] character images and having them
+[04:15] interact. One powerful way to use the
+[04:17] model is a workflow that Google calls
+[04:19] multi-turn editing. Once you test the
+[04:21] model, you'll realize it can easily fall
+[04:23] over if you ask for multiple edits at
+[04:25] once. So, it's far better to go one step
+[04:26] at a time. Google demonstrated this
+[04:28] feature by filling out an empty room
+[04:30] with a bookshelf, a couch, and a coffee
+[04:32] table one at a time. The final feature
+[04:34] that Google showcased was the ability to
+[04:36] take a style or a theme from one image
+[04:38] and apply it to a different context.
+[04:40] They showed the model taking the pattern
+[04:41] on a butterflyy's wing and applying it
+[04:43] to a dress. And at this point, I'm
+[04:45] realizing that I should have given you a
+[04:46] caveat earlier that while all of these
+[04:48] episodes are a little bit better using
+[04:50] video, usually this one being about an
+[04:53] image model is one where you're really
+[04:54] going to benefit from going and watching
+[04:56] it on YouTube or on Spotify. And of
+[04:59] course, as with any new model, the
+[05:01] company had to share the benchmarks.
+[05:02] Logan Kilpatrick, the product lead for
+[05:04] Google AI Studio, shared the
+[05:06] benchmarking, which was very impressive.
+[05:08] Nano Banana was unsurprisingly the best
+[05:10] model on LM Marina during the testing,
+[05:12] but the gap it opened up with rivals was
+[05:14] frankly huge. The new model was about
+[05:16] 17% better than the next ranked model.
+[05:19] Flux one context according to their ELO
+[05:21] rankings. GBT40 image, the model that
+[05:23] stormed the world with Gibli, was ranked
+[05:25] slightly below Flux, suggesting, and
+[05:27] this is something we'll talk about a
+[05:28] little bit more in just a minute, that
+[05:29] Google now has a big advantage over open
+[05:31] AI, at least when it comes to this sort
+[05:32] of image generation. Breaking down the
+[05:35] categories, Nano Banana topped the
+[05:36] rankings in character, creative,
+[05:38] infographics, object and environment,
+[05:39] and product recondextualization. The
+[05:42] only category where it didn't outperform
+[05:43] was stylization, where it fell behind
+[05:45] GPT4 image and Quen image edit. Now, as
+[05:48] always, big big caveats and grains of
+[05:50] salt when it comes to benchmarks.
+[05:52] Although frankly in some ways I'm more
+[05:54] interested in these subjective user
+[05:55] preference style of benchmarks like you
+[05:57] get in Alamarina as opposed to just
+[05:59] random tests which are a all saturated
+[06:00] and b conducted in labs by the company
+[06:02] putting out the model and wanting it to
+[06:04] do well in the first place. Now the
+[06:06] other notable technical point about this
+[06:07] model is that it's based on Gemini 2.5
+[06:10] flash. That means that it has some of
+[06:12] the same limitations. Open AI leaker
+[06:14] Jimmy apples wrote very good for what it
+[06:16] does but flash is a dumb model and it's
+[06:18] annoying for complex ideas. The flip
+[06:20] side, of course, is that the model is
+[06:22] absurdly cheap and fast for what it
+[06:23] does. Access through the API costs
+[06:25] around 4 cents per image, which is a
+[06:27] quarter of the price of GPT40 image on
+[06:29] high detail settings. Now, for most of
+[06:31] our purposes, if you were listening
+[06:32] here, cost doesn't really matter that
+[06:34] much at the moment due to the free
+[06:35] preview. The architecture also means
+[06:37] that the model inherits the reasoning
+[06:38] features of Flash, which can be used
+[06:40] during image generation. As you'd
+[06:42] expect, the model has immediately taken
+[06:44] over the discourse. X loves new model
+[06:47] releases and that goes double for a
+[06:48] visual model that really hits the sweet
+[06:50] spot for engagement. In fact, frankly,
+[06:52] you kind of think that Elon must be
+[06:53] fuming over there given how hard he has
+[06:55] tried to turn Gro's image generation
+[06:57] capabilities into a meme recently
+[06:59] without getting anywhere near the viral
+[07:00] resonance of the Nana Banana model.
+[07:02] Pretty universally, people are
+[07:04] incredibly impressed. Kevin Olivieri
+[07:06] edited a series of iconic sport scenes,
+[07:08] commenting, "Testing Gemini 2.5 flash
+[07:11] image, aka Nano Banana. Standout
+[07:13] feature, precise localized edits with
+[07:15] context preserved. I took iconic sports
+[07:17] photos and animified the athletes all
+[07:19] while maintaining the rest of the image
+[07:20] lighting, etc. My favorite is the image
+[07:22] of Jordan on his way up to dunk. AI
+[07:25] consultant hottie Khan made a four-paint
+[07:26] image of different styles of platypus.
+[07:28] Writing, Gemini Nano generating multiple
+[07:30] styles in the same image in parallel,
+[07:32] one shot, one prompt, one result was not
+[07:34] possible nor imaginable a couple of
+[07:36] years ago. Princeton CS major Chrissy
+[07:38] Cat posted, "The best thing about Gemini
+[07:40] Image Genen is that the original inputs
+[07:42] are preserved. No shiny
+[07:43] cartoonification." She shared an example
+[07:45] of using the prompt to make a romcom
+[07:47] movie poster with these two characters,
+[07:49] adding Edward Cullen from Twilight and a
+[07:51] shot of the lead from The Samurai Turn
+[07:52] Pretty and said, "You can just imagine
+[07:54] what sus things people are going to
+[07:56] make." To the extent that anyone is
+[07:58] disappointed, it seems to be on edge
+[08:00] cases. Prince wrote, "Testing Nano
+[08:02] Bananas today. Not impressed with
+[08:04] anything other than some of its image
+[08:05] editing capabilities. First, world
+[08:07] knowledge with the prompt picture of
+[08:09] Shakespeare writing the famous opening
+[08:10] line from Mark Caesar's speech at
+[08:11] Caesar's funeral and picture of Nabacov
+[08:14] writing the famous line about arcs and
+[08:15] angels. The text it generates is slop.
+[08:17] It doesn't have internal world
+[08:18] knowledge. He continues though, however,
+[08:21] unlike ChhatP, this model knows to keep
+[08:22] the text facing the author. ChachiT will
+[08:25] often have it easily readable by the
+[08:26] viewer instead so it looks like the
+[08:27] writer is writing the text upside down.
+[08:29] As to the portrait of Nabokov himself,
+[08:31] dear Nano Banana, who is this man?
+[08:33] ChachiBT gets him perfectly. Prince ran
+[08:36] through a series of other nitpicks,
+[08:37] noting in particular that the model
+[08:38] doesn't handle large quantities of text
+[08:40] very well. However, he did point out
+[08:42] that it perfectly handled editing a
+[08:43] hypnotic spectre for Magic the Gathering
+[08:45] to be holding a modern weapon perfectly,
+[08:47] including all the card text. And if
+[08:49] you've ever seen a turn one swamp into a
+[08:51] dark ritual into a hippie, the version
+[08:53] where he's carrying a massive machine
+[08:54] gun is even more intimidating. By the
+[08:56] way, kudos to any of you who got that
+[08:58] reference. We'll come back at the end to
+[09:00] some of the things that the model can't
+[09:01] do really well yet. But it is notable
+[09:03] that even the so-called critiques that I
+[09:05] could find still had nice things to say
+[09:07] about some parts of this. Now, one of
+[09:09] the big takeaways for many is that
+[09:10] Google is now firmly in the lead when it
+[09:12] comes to multimodal LLMs. AI engineer
+[09:14] Mark Cretchman wrote, "Google is
+[09:16] becoming the clear leader in multimodal
+[09:18] AI. Other labs like OpenAI will have a
+[09:20] hard time catching up. Google has the
+[09:22] hardware and TPUs and data in YouTube
+[09:24] advantage. I don't see anyone keeping up
+[09:26] with Google in the near future."
+[09:28] Investor Mark Turk wrote, "Somehow
+[09:30] Google went from being perceived as an
+[09:32] AI loser a year or two ago to releasing
+[09:34] the most exciting AI products in 2025,
+[09:37] V3, Genie 3, and now Banana, aka Gemini
+[09:40] 2.5 Flash image. So let's talk now about
+[09:44] seven new use cases that Nano Banana
+[09:46] opens up. Like I said at the beginning,
+[09:48] every time we get a new model, it tips
+[09:51] into reality some set of use cases that
+[09:53] were not possible before. Sometimes the
+[09:55] change is very small and incremental.
+[09:57] Sometimes it's a little bit more
+[09:58] dramatic. The first thing that jumped to
+[10:00] most people's mind when it came to Nano
+[10:02] Banana was that this model absolutely
+[10:05] kills Photoshop. It is of course not the
+[10:07] first model that's been capable of
+[10:08] editing images, but it's the first one
+[10:10] that has this level of quality and
+[10:12] consistency. Ethan Malik writes, "It's
+[10:14] impressive, crossing a threshold that
+[10:16] goes beyond toy, although it's a pretty
+[10:18] fun toy, too." And indeed, if you had to
+[10:20] summarize the general sentiment outside
+[10:22] of course the hype boys who are just
+[10:24] going to say this changes everything no
+[10:25] matter what was released, this notion
+[10:28] that there has been a precipice into
+[10:30] professional possibility crossed seems
+[10:32] to be where a lot of people are. One of
+[10:35] the funniest posts that I saw was from
+[10:37] AI writer Andre Burkoff who basically
+[10:39] tried to do a takedown mostly seeming
+[10:41] annoyed at those quote unquote AI
+[10:43] influencers who were screaming that this
+[10:44] was a wild model. He shared a grainy
+[10:47] black and white photo and said,
+[10:48] "Transform this black and white photo
+[10:50] into a color photo where the top half of
+[10:51] my body is visible and I'm in a nice
+[10:52] office background wearing something
+[10:54] casual but looking professional, not a
+[10:55] suit." And he said, "They screamed that
+[10:57] the model perfectly preserves your face
+[10:59] while changing everything around it. I
+[11:00] tested it and what they say is a lie.
+[11:02] The model has clear problems with
+[11:03] removing the background. The person with
+[11:05] a changed background looks photoshopped
+[11:06] into it." I don't know, man. Yes, the
+[11:08] resulting generated image looks
+[11:10] photoshopped. doesn't have the sort of
+[11:11] fidelity to reality that some of the
+[11:13] other examples that we've seen are. But
+[11:15] frankly, given that Andre gave it an
+[11:16] incredibly grainy black and white
+[11:18] picture of his face and didn't ask it to
+[11:20] preserve that style, it does a pretty
+[11:22] impressive job. And certainly to the
+[11:24] extent that we are talking about whether
+[11:26] or not this displaces taking 15 to 30
+[11:28] minutes in Photoshop to do something or
+[11:30] even much longer when it comes to a
+[11:31] comprehensive thing like this, you got
+[11:34] to think that it's going to challenge
+[11:35] those traditional methodologies.
+[11:37] Sticking with the theme of this model
+[11:39] killing entire categories of products,
+[11:41] our next use case that this enables is
+[11:43] about tryon startups where basically
+[11:45] every single one of them is now faced
+[11:47] with a very big problem. This model can
+[11:49] natively do what those apps have been
+[11:51] stringing together prompts and
+[11:52] frameworks to achieve. Which is not to
+[11:54] say that the tweaks that they can do to
+[11:56] improve the process or the UX they put
+[11:58] around it to make it more performant for
+[11:59] a specific professional use case can't
+[12:01] carry them. But this is a feature that's
+[12:03] now going to show up in a native Google
+[12:05] app for free by the end of the year.
+[12:07] writes AI for success. RIP 379 startups.
+[12:11] He tested the feature by placing a chatb
+[12:13] t-shirt on Sam Alman and noticed the
+[12:14] incredible attention to detail, saying,
+[12:16] "I can't believe it replaced the entire
+[12:18] t-shirt and still kept that tiny
+[12:20] microphone intact from the original
+[12:21] image." Now, of course, this is a much
+[12:23] broader trend that we've been seeing
+[12:25] ever since the beginning of Chat GBT's
+[12:27] release. Capabilities that once required
+[12:29] a ton of scaffolding are just getting
+[12:30] baked into foundation models. And of
+[12:32] course, in this particular case, what
+[12:33] that means is that this use case is
+[12:35] obviously going to become rapidly
+[12:37] commoditized and just total table stakes
+[12:39] when it comes to basically any sort of
+[12:41] shopping platform. AI Warper wrote,
+[12:43] "Hard to find motivation to build
+[12:44] anything right now when Nano Banana will
+[12:46] just obliterate you in a week or two."
+[12:48] This is another great reminder of what
+[12:50] Sam Alman was talking about when he said
+[12:51] that the best builders will not be
+[12:53] building in directions where
+[12:54] advancements in the foundation models
+[12:56] upend their model, but instead where new
+[12:59] updates in the underlying models
+[13:00] actually improve what they're doing.
+[13:02] Next use case is one that people have
+[13:04] been exploring again ever since the
+[13:06] early days of midjourney and stable
+[13:08] diffusion. Restoring old photos isn't
+[13:10] necessarily a hyper commercial use case,
+[13:11] but it is beloved and nano banana really
+[13:13] takes it to the next level. Rodrigo
+[13:15] Brussen, a professional photographer and
+[13:17] consultant at Freepic, wrote, "Nothing
+[13:19] has ever been like this before. I spent
+[13:20] countless hours working on photo
+[13:22] restoration and colorization solutions
+[13:24] long before AI was a thing. Nothing
+[13:26] compares to this. Truly remarkable." He
+[13:28] ran through a series of incredibly
+[13:30] impressive examples, which are worth
+[13:31] checking out if you're interested in
+[13:32] this niche. One of my favorites was this
+[13:34] classic photo of Winston Churchill. The
+[13:36] model not only nailed a realistic
+[13:38] colorization, but it also managed to
+[13:40] keep the brooding intensity of the photo
+[13:42] based on its choice of lighting and
+[13:44] saturation. In other words, the point
+[13:45] isn't just that colorization is now
+[13:47] possible when it wasn't before. It's
+[13:49] that we're now at the point where photo
+[13:50] restoration can be a one-click feature
+[13:52] with nearperfect results. Now, so far,
+[13:54] these examples have all been about doing
+[13:56] things that were already possible 10
+[13:58] times faster, 10 times cheaper, and 10
+[14:00] times better. Where things start to
+[14:01] require a little more imagination is
+[14:03] when we start to look at features that
+[14:04] simply were not possible before. Nano
+[14:07] Banana inherits Gemini's world
+[14:08] understanding. So it has a strong
+[14:10] understanding of real world facts it can
+[14:12] use in its generation. Bill Sid who
+[14:14] writes, "Since Nano Banana has Gemini's
+[14:16] world knowledge, you can just upload
+[14:18] screenshots of the real world and ask it
+[14:19] to annotate stuff for you." He included
+[14:21] his prompt, you're a location-based AR
+[14:24] experience generator. Highlight the
+[14:25] point of interest in this image and
+[14:27] annotate relevant information about it.
+[14:29] The outputs were various San Francisco
+[14:30] landmarks, including the Ferry Building,
+[14:32] the Transameric Pyramid, and the Palace
+[14:33] of the Fine Arts, all annotated with key
+[14:36] stats. There also seems to be a kind of
+[14:38] world model embedded in the training as
+[14:40] well. This makes the model
+[14:41] state-of-the-art in doing perspective
+[14:42] transitions. Peter Levelvels
+[14:44] demonstrated the model flipping the
+[14:45] perspective on a first-person image of a
+[14:47] person holding a cup to show the man
+[14:49] lying in bed with the cup. He also
+[14:50] showed that the model can take an image
+[14:52] of a face and generate a full body image
+[14:54] from every possible perspective. When
+[14:56] pushed to the limits, this capability is
+[14:57] unlike anything we've seen before.
+[14:59] Benjamin Cracker, a former XAI engineer,
+[15:01] generated an image of a city street.
+[15:03] Nano Banana was then able to change the
+[15:04] perspective to a top- down view and
+[15:06] point to the location and orientation of
+[15:08] the cameraman from the first photo. Now,
+[15:10] the specific ways in which people will
+[15:12] use this, I'm not totally sure, but it's
+[15:15] such a powerful capability, it's hard
+[15:16] not to imagine that people will find
+[15:18] ways to take advantage of it and pretty
+[15:19] quickly. Moving on to our fifth use
+[15:21] case. One of the implications of having
+[15:23] world knowledge is the capability to
+[15:24] think about 3D shapes. Linus Echinam
+[15:27] noted that Nanobanana is capable of
+[15:28] generating really capable 3D meshes. He
+[15:31] commented, "Yeah, we were already there.
+[15:33] There are many image to 3D models. What
+[15:35] I like here is if we can accurately
+[15:37] allow for multiple images of an object
+[15:38] to be uploaded, we have more control
+[15:40] over the final output." Now, it should
+[15:42] also be noted that this is the first
+[15:43] image to 3D mesh model that combines
+[15:45] reasoning and prompt adherence to the
+[15:46] level the Gemini Flash is capable of.
+[15:49] One obvious use for this is generating
+[15:50] game assets. Although there doesn't seem
+[15:52] to be an ability to export meshes so
+[15:54] far, for the moment, the best you can do
+[15:55] is combine the image generations with
+[15:57] other tools to create 3D assets for
+[15:58] games and animations. Still, the
+[16:00] incredible consistency means you can
+[16:02] generate a huge variety of poses,
+[16:04] variations, and angles, which makes a
+[16:06] big difference for this actual
+[16:07] production style use case. Here's
+[16:10] another wild example. Taking a pretty
+[16:11] lowquality image of a building at night
+[16:13] and turning it into a production quality
+[16:15] isometric game asset. DD Doss again of
+[16:18] Menllo Ventures wrote, "The best use
+[16:19] case I heard so far is taking objects
+[16:21] out of pictures and creating 3D models
+[16:23] from them for games. Anything from a
+[16:26] movie can be put into a game." Now, one
+[16:29] of the interesting things that popped up
+[16:30] looking at all these use cases was the
+[16:31] extent to which Nano Banana is just
+[16:33] taking out entire workflows. Rather than
+[16:35] just an edit here or there, some people
+[16:37] are using the model multiple times to
+[16:39] carry their ideas all the way through. A
+[16:41] filmmaker called Kevin shared his use of
+[16:42] Nano Banana to block out a scene, fiddle
+[16:44] with elements, and then run it through
+[16:45] an imagetovideo model. He wrote, "I've
+[16:48] been using Nano Banana, or Gemini 2.5
+[16:50] flash image as it's called, quite a lot
+[16:52] over the weekend. It's the best way for
+[16:53] me to achieve planned shots in a more
+[16:55] direct and faster manner with greater
+[16:56] control." Others demonstrated the
+[16:58] workflow for product photos. Because the
+[17:00] model can do perspective changes, text
+[17:02] and context shift so easily that you can
+[17:04] transform a single product shot into as
+[17:06] many different ones as you need. Nathan
+[17:08] Snell, an AI retention marketing
+[17:10] specialist, posted, "Gemini 2.5 flash
+[17:12] image is really, really good. Oneshot
+[17:15] variation of a hero. This might be the
+[17:17] breakthrough we were waiting for to get
+[17:18] the statics over the line. One of the
+[17:20] big issues with AI product images so far
+[17:22] has been generating natural looking
+[17:23] shots of the product in someone's hands
+[17:25] or of a person wearing it. But the
+[17:27] improvement with Nano Banana is a big
+[17:29] jump up in that area. The same is true
+[17:31] for other applications outside
+[17:32] advertising. VFX artist Paige Piskin
+[17:35] noted that you can now take one photo of
+[17:36] a model and generate an entire photo
+[17:38] shoot. Flowers commented on how big
+[17:40] these changes could be, writing, "AI
+[17:42] image generation isn't yet able to
+[17:43] replace fashion and editorial
+[17:45] photographers and retouchers because
+[17:46] resolution, detail, body coherence, and
+[17:48] control just aren't there yet in
+[17:50] production quality. But the first tool
+[17:52] that nails this will wipe out not one
+[17:53] job but 10 at once. Photographer,
+[17:55] creative director, art director,
+[17:57] stylist, hair, makeup model, retoucher,
+[17:59] producer, set designer, all gone. AI
+[18:01] images are a thousand to 5,000 times
+[18:03] cheaper. That's the thing with AI. Your
+[18:05] job might be safe for now, but when it
+[18:07] hits, it takes your whole industry with
+[18:09] it. Now, of course, we don't actually
+[18:11] know how this is going to play out. And
+[18:13] two things can be true at once. On the
+[18:15] one hand, directionally, it seems like
+[18:17] there is some amount of inevitability to
+[18:19] what Flowers is saying there. The cost
+[18:22] differential is going to mean that for
+[18:24] many types of photo shoot use cases, AI
+[18:26] is just going to become the default
+[18:27] option. However, what we don't know yet
+[18:30] is one, what sort of skills are going to
+[18:32] be necessary to work with the AI. We
+[18:34] have a tendency when a new model shows
+[18:35] up to share all of the random
+[18:37] generations of random people and be so
+[18:38] impressed with what it can do without
+[18:40] remembering that when it comes to actual
+[18:42] professional use cases that go into
+[18:44] production, there's going to be a wild
+[18:46] gap between the people who are actually
+[18:47] good at this, good enough to pay to do
+[18:49] it, and those who are just doing it for
+[18:50] fun. In other words, just because the
+[18:52] floor comes up for everyone in terms of
+[18:53] their ability to create, it doesn't mean
+[18:55] that the ceiling comes down and
+[18:57] companies are always going to want to go
+[18:58] with people who can use it at that
+[18:59] ceiling level. The second thing is we
+[19:01] don't know how many photo shoots to
+[19:03] continue with this example right now are
+[19:05] not happening because of cost. In other
+[19:07] words, it's really hard to predict
+[19:09] anything other than the simple fact that
+[19:11] things will change. Now, our last of
+[19:13] seven new use cases is really more of a
+[19:15] combination than an individual one on
+[19:17] its own. When you bring all of these
+[19:19] capabilities together and combine them
+[19:20] with other tools, it creates for just
+[19:22] some wild new possibilities. One of the
+[19:24] big use cases for GPT40 image when it
+[19:26] was released, for example, was making
+[19:28] infographics and posters. Given that it
+[19:30] was one of the first models that did a
+[19:31] good job on text and was attached to a
+[19:33] foundation LLM, it meant that it had
+[19:35] enough general knowledge to create
+[19:37] believable infographics and the actual
+[19:38] ability to do so. Moving back to Nano
+[19:41] Banana, AI educator Zayn Shaw posted,
+[19:43] "Wow, I asked Gemini 2.5 image aka
+[19:46] Nanobanana for interle text and images
+[19:48] using TTS to narrate the text, animated
+[19:50] the images, and in minutes I had this
+[19:52] whole animated explainer video full of
+[19:54] complex 3D graphics and diagrams
+[19:56] explaining the science end to end." He
+[19:58] showed a short video explaining how
+[19:59] Water Freeze is complete with molecule
+[20:00] animations. Now, obviously that isn't
+[20:03] strictly about Nano Banana, but it shows
+[20:04] how this big improvement in image gen
+[20:06] quality can be stitched together with
+[20:08] various other tools to produce
+[20:09] professional quality work. Now, I should
+[20:11] point out that we're at the stage with
+[20:12] this model where mostly people are just
+[20:14] focused on discovering what it does
+[20:16] really well. It won't be long before we
+[20:18] also find out where its limitations are.
+[20:20] AI consultant Newfar Gaspar, for
+[20:22] example, ran it through a set of three
+[20:23] knowledge worker tasks. Infographic
+[20:25] manipulation and data editing, a slide
+[20:27] visual fix and edit, and a complex
+[20:29] infographic generation. And while it did
+[20:31] better than many previous models, she
+[20:33] still found that some of the text
+[20:35] generation was problematic. She wrote,
+[20:36] "Bottom line, with many text captions,
+[20:38] the model struggled. It's better to
+[20:40] generate blank placeholders and add the
+[20:42] text in another app." So, yes, even with
+[20:44] all this excitement, the banana is still
+[20:46] not perfect yet. But overall, hard not
+[20:48] to be excited about this new update. I
+[20:50] certainly can't wait to dig in there and
+[20:52] try things out. For now, though, that's
+[20:53] going to do it for today's AI daily
+[20:54] brief. Appreciate you listening or
+[20:56] watching as always and until next time,
+[20:58] peace.

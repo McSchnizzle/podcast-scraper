@@ -1,0 +1,373 @@
+[00:00] Welcome back to the AI Daily Brief.
+[00:02] Today we've got an interesting topic. On
+[00:04] the one hand, we're covering a new AI
+[00:06] related backlash at YouTube after the
+[00:08] company started implementing AI in ways
+[00:10] that they weren't exactly clear about,
+[00:13] angering a number of creators. But we're
+[00:14] pairing that with some new rules of the
+[00:17] road from Netflix around Gen AI and
+[00:19] asking broadly what company's strategy
+[00:22] should be when it comes to AI and media.
+[00:25] Now I think background context for all
+[00:26] of this is that we are in this
+[00:28] interesting and frankly sort of weird
+[00:30] moment where on the one hand we are
+[00:32] seeing in general a lot more AI
+[00:34] backlash. This has been present ever
+[00:36] since the beginning of chatbt but it's
+[00:38] one of those summer moments where it
+[00:39] gets a little bit louder and where the
+[00:41] critics are jumping on a few recent
+[00:42] happenings to really amp up the anti-AI
+[00:45] narrative. At the same time, when you go
+[00:48] and spend time with anyone in sort of
+[00:50] normal society, normal work, normal
+[00:52] youth, normal school, AI has just so
+[00:54] quickly become ubiquitous and
+[00:56] commonplace that it takes a lot of the
+[00:59] heft, frankly, out of some of those
+[01:00] critiques. No one who's interacted with
+[01:02] AI or uses chatbt needs to be sold on
+[01:05] how powerful and useful this technology
+[01:07] is. And in that context, the
+[01:09] conversation necessarily shifts away
+[01:10] from whether this is going to be a thing
+[01:12] and more how we do it well. And today
+[01:15] we're getting into a couple different
+[01:16] instances of how to do it well or
+[01:18] perhaps how not to do it well. Over the
+[01:20] last few days on all the big social
+[01:22] networks, i.e. X threads, etc., a ton of
+[01:25] posts started to come up like this one
+[01:27] from Kiwi Sagas. PSA for artists on
+[01:29] YouTube. YouTube appears to be using AI
+[01:32] to upscale your content and generate
+[01:34] higher definition videos on their
+[01:35] platform. They continue, the left images
+[01:37] are my original upload on Tik Tok and
+[01:39] the right is YouTube's version of the
+[01:41] same content. You can even see the AI
+[01:43] errors. Now, by the way, if you are not
+[01:45] watching this, it's probably a little
+[01:47] bit better watching the video on either
+[01:48] YouTube or Spotify. But basically, we've
+[01:50] got two images from this creator. The
+[01:52] first in each case is a little lower
+[01:54] fidelity, a little more blurry, and then
+[01:56] the second is a much crisper image. Now,
+[01:59] it would be one thing if it was just a
+[02:00] perfect improvement in the sense of
+[02:02] higher resolution, but this is AI and
+[02:04] that means there can be weird artifacts.
+[02:06] And as you can see in the second image,
+[02:08] it's not ultimately exactly the same.
+[02:10] It's a little bit different. Jamrock
+[02:12] Hobo writes, "Looks like we can't
+[02:13] showcase artwork on YouTube shorts
+[02:15] anymore without it being automatically
+[02:16] subjected to a horrible AI sharpener.
+[02:19] The website is conditioning users to let
+[02:21] actual AI content go unnoticed." Once
+[02:23] again, we have the same thing where you
+[02:25] see a piece of art and then an
+[02:27] artificially AI enhanced version of it.
+[02:29] Pretend Mirrors writes, "YouTube is
+[02:31] applying post-processing to all shorts
+[02:33] so they look more like AI. This is
+[02:35] intentional and malicious. when their
+[02:37] generative AI shorts feature launches,
+[02:39] users will be less likely to discern
+[02:41] what's AI slop and what's not, and the
+[02:43] audience will think AI video is just as
+[02:45] good. So, what we have here is an
+[02:47] introduction of the concern. It's not
+[02:49] just that creators are annoyed about
+[02:50] YouTube doing this without their
+[02:52] permission. It's that they think that
+[02:53] it's going to train people basically to
+[02:55] not be able to tell the difference
+[02:57] between AI generations and human
+[02:59] generated videos with a host of
+[03:01] attendant consequences. Sam Abberime
+[03:03] writes, "Please be aware of what's going
+[03:05] on. If everything starts to look a
+[03:07] little off and a little fake, it's much
+[03:09] easier for bad actors to not only push
+[03:11] through actual disinformation, but also
+[03:13] attempt to discredit factual video
+[03:14] sources." Again, reinforcing this idea
+[03:17] that the problem is not just the
+[03:18] permissions, but instead that closing
+[03:20] the gap between AI and non-AI video has
+[03:22] consequences when it comes to miss and
+[03:24] disinformation. Over the weekend,
+[03:25] numerous outlets picked up the story,
+[03:27] including the BBC, who wrote a piece
+[03:28] called YouTube Secretly Used AI to edit
+[03:30] people's videos. the results could bend
+[03:32] reality. The central question in the
+[03:34] piece, as expressed in the subhead, as
+[03:36] AI quietly mediates our world, what
+[03:38] happens to our shared connection with
+[03:40] real life? The BBC writes, "In recent
+[03:42] months, YouTube has secretly used AI to
+[03:44] tweak people's videos without letting
+[03:45] them know or asking permission. Wrinkles
+[03:47] and shirts seem more defined. Skin is
+[03:49] sharper in some places and smoother in
+[03:51] others. Pay close attention to ears, and
+[03:52] you may notice them warp. These changes
+[03:54] are small, barely visible without a
+[03:56] side-by-side comparison. Yet some
+[03:58] disturbed YouTubers say it gives their
+[03:59] content a subtle and unwelcome AI
+[04:01] generated feeling. There's a larger
+[04:03] trend at play. A growing share of
+[04:04] reality is pre-processed by AI before it
+[04:07] reaches us. Eventually, the question
+[04:08] won't be whether you can tell the
+[04:09] difference, but whether it's eroding our
+[04:11] ties to the world around us. It got
+[04:13] enough buzz that YouTube had to respond.
+[04:16] The team YouTube account wrote, "We hear
+[04:18] your concerns and want to clarify the
+[04:19] enhancements on some YouTube shorts are
+[04:21] from an experiment using traditional
+[04:22] machine learning to improve video
+[04:24] clarity, not Genai." YouTube's creator
+[04:27] leaison Renee Richie wrote, "No Gen AI,
+[04:29] no upscaling. We're running an
+[04:31] experiment on select YouTube shorts that
+[04:33] uses traditional machine learning to
+[04:34] unblur, den noiseise, and improve
+[04:36] clarity in video during processing,
+[04:38] similar to what a modern smartphone does
+[04:39] when you record a video. YouTube is
+[04:41] always working on ways to provide the
+[04:43] best video quality and experience
+[04:44] possible. And we'll continue to take
+[04:46] creator and viewer feedback into
+[04:47] consideration as we iterate and improve
+[04:49] on these features. However, for some,
+[04:51] the explanation isn't good enough.
+[04:53] Samuel Woolly, who is the chair of
+[04:54] disinformation studies at the University
+[04:56] of Pittsburgh, said, "You can make
+[04:57] decisions about what you want your phone
+[04:58] to do and whether to turn on certain
+[05:00] features. What we have here is a company
+[05:02] manipulating content from leading users
+[05:04] that is then being distributed to a
+[05:05] public audience without the consent of
+[05:06] the people who produce the videos."
+[05:08] Well, he also argued that the choice of
+[05:10] words feels like, in his description, a
+[05:11] misdirection. I think using the term
+[05:13] machine learning is an attempt to
+[05:14] obscure the fact that they use AI
+[05:16] because of concerns surrounding the
+[05:17] technology. Now, the BBC points out that
+[05:19] to some extent this is just a new
+[05:21] version of an old conversation. They
+[05:23] write, "30 years ago, there was similar
+[05:25] hand ringing about the havoc Photoshop
+[05:26] would wreap on society. Decades later,
+[05:28] we have conversations about the harms of
+[05:29] airbrushing models and magazines and
+[05:31] beauty filters on social media. Perhaps
+[05:33] AI is more of the same, but it puts
+[05:34] these trends on steroids." I don't think
+[05:37] ultimately that this is in and of itself
+[05:39] a huge huge deal. Even some of the
+[05:41] creators that were quoted in these
+[05:42] articles ultimately say, "Yeah, look,
+[05:44] they're a company. They're trying to
+[05:45] improve video quality. I get it.
+[05:47] YouTube's been a good platform to me,
+[05:48] but I do think that it brings up
+[05:50] important questions around consent and
+[05:52] control, classic questions of the
+[05:54] relationship between platforms and their
+[05:55] creators, and obviously exemplifies the
+[05:57] fact that AI, despite its increasing
+[06:00] ubiquity, is going to be a cultural
+[06:01] battleground in some ways. Now, speaking
+[06:04] of that, another company that has been
+[06:05] wrestling with its approach to AI has
+[06:07] been Netflix. You might remember back in
+[06:09] July on an earnings call, Netflix CEO
+[06:12] Ted Sarandos talked about how they had
+[06:14] used Genai in one of their original
+[06:16] programmings in the Argentina market.
+[06:17] Sando said, "We remain convinced that AI
+[06:20] represents an incredible opportunity to
+[06:22] help creators make films and series
+[06:23] better, not just cheaper. There are AI
+[06:25] powered creator tools, so this is real
+[06:27] people doing real work with better
+[06:28] tools." This year we had Eltonatada.
+[06:31] It's a very big hit show for us from
+[06:32] Argentina. In that production, we
+[06:34] leveraged virtual production in AI
+[06:36] powered VFX. And in fact, that VFX
+[06:38] sequence was completed 10 times faster
+[06:39] than it could have been completed with
+[06:41] traditional VFX tools and workflows. And
+[06:43] also, the cost of it would just not have
+[06:44] been feasible for a show in that budget.
+[06:46] So, that sequence actually is the very
+[06:47] first Genai final footage to appear on
+[06:49] screen in a Netflix Inc. original series
+[06:51] or film. At the time, we discussed the
+[06:53] fact that Netflix was one clearly trying
+[06:56] to say that they're not using AI tools
+[06:58] to replace people. Instead, AI is a new
+[07:00] tool set for their people. And two, that
+[07:02] this isn't even just a cheaper way of
+[07:04] doing something that would otherwise
+[07:06] have been done with a more traditional
+[07:07] process. This is an example of where if
+[07:09] it weren't for Genai, the entire
+[07:11] sequence would have had to be scrapped
+[07:12] because it would never have been in the
+[07:13] budget in the first place. In other
+[07:14] words, a total net additive force. Even
+[07:17] before that, Netflix was no stranger to
+[07:19] the AI conversation. Back in 2024, it
+[07:22] got in a little bit of hot water when it
+[07:24] was accused of using AI generated images
+[07:25] in a true crime documentary. Futurisms
+[07:28] the bite wrote, "Resorting to the tech
+[07:30] to generate pictures of a real person,
+[07:31] especially of somebody who's still in
+[07:33] jail, and will only be eligible for
+[07:34] parole around 2040, should raise some
+[07:36] alarm bells. This isn't inventing a
+[07:38] fictional narrative for the sake of
+[07:39] entertainment. This is tinkering with
+[07:40] the fabric of reality itself to
+[07:42] manipulate a true story that actually
+[07:43] happened." Well, this week, the company
+[07:46] tried to get out ahead of these types of
+[07:47] issues by publishing a set of guidelines
+[07:49] for Genai use in its content production.
+[07:52] Posted to their partner help center, the
+[07:54] piece is called using generative AI in
+[07:56] content production. and is meant as a
+[07:57] resource for their partners. They write,
+[07:59] "This guidance helps filmmakers,
+[08:01] production partners, and vendors
+[08:02] understand when and how to use Genai
+[08:04] tools in production. It also offers a
+[08:06] practical tool for assessing and
+[08:07] enabling confident Genai use when
+[08:09] producing content for Netflix. The
+[08:11] company lists five guiding principles.
+[08:13] The first, the outputs do not replicate
+[08:15] or substantially recreate identifiable
+[08:18] characteristics of unowned or
+[08:19] copyrighted material or infringe any
+[08:21] copyrighted protected works. Two, the
+[08:23] generative tools do not store, reuse, or
+[08:25] train on production data inputs or
+[08:26] outputs. Three, where possible,
+[08:28] generative tools are used in an
+[08:30] enterprise secured environment to
+[08:31] safeguard inputs. Four, generated
+[08:33] material is temporary and not part of
+[08:35] the final deliverables. Five, Genai is
+[08:37] not used to replace or generate new
+[08:39] talent performances or union covered
+[08:41] work without consent. Basically, they
+[08:43] say, "If all five of those are met,
+[08:45] quote," socializing the intended use
+[08:47] with your Netflix contact may be
+[08:48] sufficient, but if you answer no or
+[08:50] unsure to any of them, you got to go get
+[08:52] written approval. It's clear that one of
+[08:54] the big things that they're thinking
+[08:55] about is some of those issues that we
+[08:57] were just discussing in the context of
+[08:58] YouTube. Netflix writes, "Audiences
+[09:01] should be able to trust what they see
+[09:02] and hear on screen. Genai, if used
+[09:04] without care, can blur the line between
+[09:05] fiction and reality or unintentionally
+[09:07] mislead viewers." In that same post,
+[09:09] they also share a use case matrix with a
+[09:12] red light, yellow light, green light
+[09:13] approach to help people understand some
+[09:15] examples. An example of a full green
+[09:17] light would be something like using
+[09:18] Genai for ideiation only, i.e. mood
+[09:21] boards and reference images. The
+[09:22] rationale for it not needing escalation
+[09:24] is that it's lowrisk and non-inyl. For
+[09:26] something where a company was using
+[09:27] genai to generate background elements
+[09:29] like signage or posters that appear on
+[09:31] camera, it's in that in between
+[09:33] category. They write, "Incidental
+[09:35] elements may be low risk, but if story
+[09:36] relevant, please escalate." Meanwhile,
+[09:38] the full red lights are things like
+[09:40] using Genai to create final character
+[09:42] designs or key visuals or using Genai
+[09:44] for talent replication, such as reaging
+[09:46] or synthetic voices. Now, importantly,
+[09:49] Netflix isn't saying that those things
+[09:51] are completely off the table. They're
+[09:52] saying that they have to be reviewed and
+[09:54] signed off on by Netflix, not just by a
+[09:57] third party production company. Now, to
+[09:59] many, this is just incredibly common
+[10:01] sense. Chrisal Valenuela, the co-founder
+[10:03] CEO of Runway, writes, "Really nice to
+[10:05] see this public Netflix guide for using
+[10:07] AI in content production. It makes it
+[10:09] easier for their partners to understand
+[10:10] how to adopt. This is the way." And in
+[10:13] general, I think we're going to see a
+[10:14] lot more of this. I would anticipate
+[10:16] that in 2026, there are less debates
+[10:18] around the ifs of AI and more focus on
+[10:21] the house. And frankly, I think that
+[10:22] will be all to our benefit. But of
+[10:24] course, in some ways, it still feels
+[10:26] incredibly topping relative to what the
+[10:27] ultimate impact of AI on entertainment
+[10:29] is going to be. To get a preview of
+[10:31] where that might be headed, check out
+[10:32] the new company Showrunner. Variety
+[10:34] describes it as a tool for userdirected
+[10:36] TV shows. And basically, the idea is
+[10:38] exactly what it sounds like. You type in
+[10:40] a few words and you can create entire
+[10:42] scenes or entire episodes of a TV show,
+[10:44] either from scratch or based on an
+[10:46] existing IP. It was created by Edward
+[10:48] Sachi. Variety writes, "Sachi's
+[10:50] hypothesis is that AI, instead of simply
+[10:52] being a tool for cheaper special
+[10:53] effects, represents a new entertainment
+[10:55] medium, one that more closely resembles
+[10:57] video games." He said, "Using AI purely
+[11:00] as a VFX tool is a little sad." And
+[11:02] continued, "The Toy Story of AI isn't
+[11:04] just going to be a cheap Toy Story. Our
+[11:06] idea is that Toy Story of AI would be
+[11:08] playable with millions of new scenes,
+[11:09] all owned by Disney." Now, obviously
+[11:11] with that vision, the company is in
+[11:12] talks with all the IP holders and has
+[11:14] investment from Amazon among others.
+[11:16] Whether it works remains to be seen.
+[11:18] Even Zachi said maybe nobody wants this
+[11:20] and it won't work. But I would expect a
+[11:22] lot more experiments like this in the
+[11:23] years to come. For now though, that's
+[11:25] going to do it for today's AI daily
+[11:26] brief. Appreciate you listening or
+[11:28] watching as always and until next time,
+[11:30] peace.
