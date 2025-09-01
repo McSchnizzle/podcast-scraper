@@ -27,11 +27,16 @@ class ClaudeAPIIntegration:
             logger.error("ANTHROPIC_API_KEY environment variable not set")
             self.client = None
             self.api_available = False
+        elif len(api_key.strip()) < 10:
+            logger.error(f"ANTHROPIC_API_KEY appears invalid (length: {len(api_key.strip())})")
+            self.client = None
+            self.api_available = False
         else:
             try:
-                self.client = anthropic.Anthropic(api_key=api_key)
+                # Test the key by creating the client
+                self.client = anthropic.Anthropic(api_key=api_key.strip())
                 self.api_available = True
-                logger.info("✅ Anthropic API client initialized")
+                logger.info(f"✅ Anthropic API client initialized (key length: {len(api_key.strip())})")
             except Exception as e:
                 logger.error(f"Failed to initialize Anthropic client: {e}")
                 self.client = None

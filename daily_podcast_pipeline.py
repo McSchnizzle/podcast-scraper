@@ -659,13 +659,23 @@ def main():
                 
                 # Step 8: Mark ALL processed episodes as 'digested' (both databases)
                 pipeline._mark_episodes_digested()
-            
-            # Step 9: Cleanup old files and episodes
-            pipeline._cleanup_old_files()
-            
-            logger.info("✅ GITHUB ACTIONS workflow completed successfully")
-            logger.info("🔄 Local machine will pull digest status updates on next run")
-            exit(0)
+                
+                # Step 9: Cleanup old files and episodes
+                pipeline._cleanup_old_files()
+                
+                logger.info("✅ GITHUB ACTIONS workflow completed successfully")
+                logger.info("🔄 Local machine will pull digest status updates on next run")
+                exit(0)
+            else:
+                # Digest generation failed - this is a critical error
+                logger.error("❌ CRITICAL: Daily digest generation failed")
+                logger.error("🔄 Check API credentials and transcript availability")
+                
+                # Still run cleanup for housekeeping
+                pipeline._cleanup_old_files()
+                
+                logger.error("❌ GITHUB ACTIONS workflow FAILED")
+                exit(1)
             
         except Exception as e:
             logger.error(f"❌ GITHUB ACTIONS workflow failed: {e}")

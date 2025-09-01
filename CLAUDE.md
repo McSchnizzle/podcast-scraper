@@ -18,6 +18,8 @@ This is a Daily Podcast Digest System that automatically monitors podcast RSS fe
 - **ffmpeg**: Audio processing pipeline
 - **GitHub API**: Automated deployment and RSS publishing
 
+**RSS Feed**: https://podcast.paulrbrown.org/daily-digest.xml
+
 ## Development Commands
 
 ### Main Pipeline Operations
