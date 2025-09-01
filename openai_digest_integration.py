@@ -12,6 +12,7 @@ from datetime import datetime
 from typing import Dict, List, Optional, Tuple
 import sqlite3
 import openai
+from prose_validator import ProseValidator
 
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
@@ -20,6 +21,9 @@ class OpenAIDigestIntegration:
     def __init__(self, db_path: str = "podcast_monitor.db", transcripts_dir: str = "transcripts"):
         self.db_path = db_path
         self.transcripts_dir = Path(transcripts_dir)
+        
+        # Initialize prose validator
+        self.prose_validator = ProseValidator()
         
         # Initialize OpenAI client
         api_key = os.getenv('OPENAI_API_KEY')
@@ -372,6 +376,19 @@ Format the output as clean Markdown suitable for publication. Focus on accuracy,
             
             digest_content = response.choices[0].message.content
             
+            # Validate and ensure prose quality before saving
+            logger.info(f"🔍 Validating prose quality for {topic} digest")
+            success, final_content, issues = self.prose_validator.ensure_prose_quality(digest_content)
+            
+            if not success:
+                logger.error(f"❌ Failed to create valid prose for {topic} digest: {', '.join(issues)}")
+                return False, None, f"Prose validation failed: {', '.join(issues)}"
+            
+            if final_content != digest_content:
+                logger.info(f"✅ {topic} digest was rewritten to improve prose quality")
+            else:
+                logger.info(f"✅ {topic} digest already had good prose quality")
+            
             # Save topic-specific digest
             timestamp = datetime.now().strftime('%Y%m%d_%H%M%S')
             topic_safe = topic.lower().replace(' ', '_').replace('&', 'and')
@@ -380,7 +397,7 @@ Format the output as clean Markdown suitable for publication. Focus on accuracy,
             digest_path.parent.mkdir(exist_ok=True)
             
             with open(digest_path, 'w', encoding='utf-8') as f:
-                f.write(digest_content)
+                f.write(final_content)
             
             logger.info(f"✅ {topic} digest saved to {digest_path}")
             
