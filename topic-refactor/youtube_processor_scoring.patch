@@ -1,0 +1,55 @@
+*** Begin Patch
+*** Update File: youtube_processor.py
+@@
+-import sqlite3
++import sqlite3
++import json
+@@
+ class YouTubeProcessor:
+@@
+     def _mark_transcribed(self, conn, episode_id: str, transcript_path: str, transcript_text: str, guid: str = None):
+-        cursor = conn.cursor()
+-        cursor.execute("""
+-            UPDATE episodes
+-            SET status='transcribed', transcript_path=?
+-            WHERE id=?
+-        """, (transcript_path, episode_id))
+-        conn.commit()
+-        self.logger.info(f"Marked YouTube episode {episode_id} as transcribed")
++        cursor = conn.cursor()
++        # 1) Mark as transcribed and set transcript path
++        cursor.execute(
++            """
++            UPDATE episodes
++            SET status='transcribed', transcript_path=?
++            WHERE id=?
++            """,
++            (transcript_path, episode_id),
++        )
++        conn.commit()
++        self.logger.info(f"Marked YouTube episode {episode_id} as transcribed")
++
++        # 2) Score the transcript for topic relevance (OpenAI)
++        try:
++            from openai_scorer import OpenAITopicScorer
++            scorer = OpenAITopicScorer()
++            if getattr(scorer, "api_available", True) and transcript_text:
++                scores = scorer.score_transcript(transcript_text, guid or str(episode_id))
++                if scores and not scores.get("error"):
++                    cursor.execute(
++                        """
++                        UPDATE episodes
++                        SET topic_relevance_json = ?, scores_version = ?
++                        WHERE id = ?
++                        """,
++                        (json.dumps(scores), scorer.current_scores_version(), episode_id),
++                    )
++                    conn.commit()
++                    self.logger.info(f"Saved topic_relevance_json for YouTube episode {episode_id}")
++                else:
++                    self.logger.warning(f"YouTube episode {episode_id} scoring returned an error-like payload: {scores}")
++            else:
++                self.logger.warning(f"OpenAI scorer unavailable or empty transcript for YouTube episode {episode_id}; skipping scoring")
++        except Exception as e:
++            self.logger.warning(f"YouTube episode {episode_id} topic scoring failed: {e}")
+*** End Patch

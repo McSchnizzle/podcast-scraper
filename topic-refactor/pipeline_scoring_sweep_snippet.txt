@@ -1,0 +1,3 @@
+# One-liner scoring sweep at the start of daily_podcast_pipeline.py
+# (runs a backfill to fill in topic_relevance_json for any transcribed/digested episodes missing scores)
+import subprocess, sys; subprocess.run([sys.executable, "backfill_missing_scores.py"], check=False)

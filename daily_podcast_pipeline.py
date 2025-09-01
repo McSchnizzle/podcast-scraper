@@ -63,6 +63,10 @@ class DailyPodcastPipeline:
         logger.info(f"🚀 Starting Daily Tech Digest Pipeline - {current_weekday}")
         logger.info("=" * 50)
         
+        # Self-healing: Backfill missing topic scores from previous runs
+        import subprocess, sys
+        subprocess.run([sys.executable, "backfill_missing_scores.py"], check=False)
+        
         try:
             # Step 1: Monitor RSS feeds for new episodes
             self._monitor_rss_feeds()
