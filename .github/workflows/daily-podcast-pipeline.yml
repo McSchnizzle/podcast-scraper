@@ -56,18 +56,11 @@ jobs:
         if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
         # sqlite3 is built into Python, no need to install via pip
         
-    - name: Cache system dependencies
-      uses: actions/cache@v4
+    - name: Cache system dependencies  
+      uses: awalsh128/cache-apt-pkgs-action@latest
       with:
-        path: /var/cache/apt
-        key: ${{ runner.os }}-apt-${{ hashFiles('.github/workflows/daily-podcast-pipeline.yml') }}
-        restore-keys: |
-          ${{ runner.os }}-apt-
-          
-    - name: Install system dependencies
-      run: |
-        sudo apt-get update
-        sudo apt-get install -y ffmpeg sqlite3
+        packages: ffmpeg sqlite3
+        version: 1.0
         
     # Note: Removed database caching - databases should use current repo state, not cached versions
     # This allows database changes committed to the repo to be properly used by the workflow
