@@ -17,7 +17,7 @@ The Daily Podcast Digest System continuously monitors podcast RSS feeds and YouT
 - **GitHub Actions Automation**: RSS pipeline processing with intelligent Vercel build skipping
 - **Smart Filtering**: Length-based filtering for YouTube content (>3 minutes)
 - **Automated Publishing**: GitHub releases with MP3 hosting and RSS feed generation
-- **Web API**: Vercel endpoints with intelligent build skipping for audio streaming and RSS serving
+- **Web API**: Vercel endpoints optimized for serverless deployment (<1MB functions)
 
 ## 📡 RSS Feed
 
@@ -91,7 +91,7 @@ GitHub Actions → Claude Analysis (combined) → TTS + Timestamp Sync
 brew install ffmpeg
 
 # Install Python dependencies
-pip install -r requirements.txt
+pip install -r requirements-dev.txt
 
 # Install Parakeet MLX for Apple Silicon optimization
 pip install parakeet-mlx
@@ -107,7 +107,7 @@ pip install feedparser youtube-transcript-api python-dotenv
 ```bash
 git clone https://github.com/McSchnizzle/podcast-scraper.git
 cd podcast-scraper
-pip install -r requirements.txt
+pip install -r requirements-dev.txt
 
 # Set environment variables  
 export GITHUB_TOKEN="your_github_token"           # Required for releases
@@ -200,7 +200,7 @@ podcast-scraper/
 ├── README.md                   # This file
 ├── CLAUDE.md                   # Technical documentation for Claude Code ⭐
 ├── podscraper_prd.md          # Product Requirements Document
-├── requirements.txt            # Python dependencies
+├── requirements-dev.txt        # Python dependencies (development)
 ├── config.py                   # Centralized configuration management ⭐
 ├── fix_malloc_warnings.sh     # macOS malloc warning fix
 ├── daily_podcast_pipeline.py  # Main RSS pipeline orchestration ⭐
