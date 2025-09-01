@@ -222,8 +222,8 @@ class MusicIntegrator:
                     logger.error(f"❌ Error creating static {music_type} music: {e}")
     
     def mix_audio_with_music(self, audio_file: str, topic: str, output_file: str) -> bool:
-        """Mix TTS audio with intro and outro music only (no background during speech)"""
-        logger.info(f"🎧 Adding intro/outro music for {topic}")
+        """Mix TTS audio with intro and outro music using crossfade transitions"""
+        logger.info(f"🎧 Adding intro/outro music with crossfade for {topic}")
         
         # Get music files
         intro_music = self.generate_music(topic, "intro")
@@ -239,16 +239,26 @@ class MusicIntegrator:
         self.create_static_music_files()
         
         try:
-            # Simple approach: intro + narration + outro
             settings = self.default_music_settings
+            crossfade_duration = 2  # 2 seconds of crossfade overlap
+            
+            # Create crossfade filter complex:
+            # - Intro music fades out as TTS begins
+            # - TTS audio plays at full volume in the middle
+            # - Outro music fades in as TTS ends
+            filter_complex = (
+                f"[0]volume={settings['background_volume']}[intro_low];"
+                f"[2]volume={settings['background_volume']}[outro_low];"
+                f"[intro_low][1]acrossfade=d={crossfade_duration}:c1=tri:c2=tri[intro_tts];"
+                f"[intro_tts][outro_low]acrossfade=d={crossfade_duration}:c1=tri:c2=tri[final]"
+            )
             
             cmd = [
                 'ffmpeg',
-                '-i', intro_music,  # Input 0: Intro music
+                '-i', intro_music,  # Input 0: Intro music (8 seconds)
                 '-i', audio_file,   # Input 1: Main narration
-                '-i', outro_music,  # Input 2: Outro music
-                '-filter_complex',
-                f'[0]volume={settings["background_volume"]}[intro_low];[2]volume={settings["background_volume"]}[outro_low];[intro_low][1][outro_low]concat=n=3:v=0:a=1[final]',
+                '-i', outro_music,  # Input 2: Outro music (8 seconds)
+                '-filter_complex', filter_complex,
                 '-map', '[final]',
                 '-c:a', 'libmp3lame',
                 '-b:a', '128k',
@@ -256,18 +266,48 @@ class MusicIntegrator:
                 output_file
             ]
             
-            logger.info(f"🔄 Adding intro/outro music...")
+            logger.info(f"🔄 Adding crossfade intro/outro music...")
             result = subprocess.run(cmd, capture_output=True, text=True, timeout=300)
             
             if result.returncode == 0:
-                logger.info(f"✅ Audio enhanced with intro/outro: {output_file}")
+                logger.info(f"✅ Audio enhanced with crossfade transitions: {output_file}")
                 return True
             else:
-                logger.error(f"❌ Music enhancement failed: {result.stderr}")
-                # Fallback: just copy the original file
-                subprocess.run(['cp', audio_file, output_file])
-                logger.info(f"📄 Fallback: copied original audio to {output_file}")
-                return False
+                logger.error(f"❌ Crossfade enhancement failed: {result.stderr}")
+                logger.info("🔄 Trying fallback with simple overlay...")
+                
+                # Fallback: Use overlay with fade filters instead of acrossfade
+                fallback_filter = (
+                    f"[0]volume={settings['background_volume']},afade=t=out:st=6:d=2[intro_fade];"
+                    f"[2]volume={settings['background_volume']},afade=t=in:st=0:d=2[outro_fade];"
+                    f"[intro_fade][1]concat=n=2:v=0:a=1[intro_tts];"
+                    f"[intro_tts][outro_fade]concat=n=2:v=0:a=1[final]"
+                )
+                
+                fallback_cmd = [
+                    'ffmpeg',
+                    '-i', intro_music,
+                    '-i', audio_file,
+                    '-i', outro_music,
+                    '-filter_complex', fallback_filter,
+                    '-map', '[final]',
+                    '-c:a', 'libmp3lame',
+                    '-b:a', '128k',
+                    '-y',
+                    output_file
+                ]
+                
+                fallback_result = subprocess.run(fallback_cmd, capture_output=True, text=True, timeout=300)
+                
+                if fallback_result.returncode == 0:
+                    logger.info(f"✅ Audio enhanced with fade fallback: {output_file}")
+                    return True
+                else:
+                    logger.error(f"❌ Fallback also failed: {fallback_result.stderr}")
+                    # Final fallback: just copy the original file
+                    subprocess.run(['cp', audio_file, output_file])
+                    logger.info(f"📄 Final fallback: copied original audio to {output_file}")
+                    return False
                 
         except subprocess.TimeoutExpired:
             logger.error("❌ Audio enhancement timed out")

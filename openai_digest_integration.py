@@ -211,7 +211,7 @@ class OpenAIDigestIntegration:
         for transcript in transcripts:
             summary = f"""
 ## {transcript['title']} ({transcript['published_date']})
-{transcript['content'][:12000]}...
+{transcript['content']}
 """
             transcript_summaries.append(summary)
         
@@ -484,7 +484,7 @@ Format the output as clean Markdown suitable for publication. Focus on accuracy,
             
             # Call OpenAI GPT-4 API
             response = self.client.chat.completions.create(
-                model="gpt-4",  # Use GPT-4 model
+                model="gpt-4-1106-preview",  # Use GPT-4.1 model with 1M context window
                 messages=[{
                     "role": "system",
                     "content": "You are an expert analyst creating focused, insightful digests from podcast transcripts. You excel at identifying key themes, connecting information across sources, and providing actionable insights."
@@ -687,7 +687,7 @@ Format the output as clean Markdown suitable for publication. Focus on accuracy,
         
         try:
             response = self.client.chat.completions.create(
-                model="gpt-4",
+                model="gpt-4-1106-preview",
                 messages=[{
                     "role": "user",
                     "content": "Hello, please respond with 'API connection successful'"

@@ -47,6 +47,16 @@ class MultiTopicTTSGenerator:
         
         self.base_url = "https://api.elevenlabs.io/v1"
         
+        # Default voice for unknown topics (must be defined before loading config)
+        self.default_voice = {
+            "voice_id": "21m00Tcm4TlvDq8ikWAM",  # Rachel
+            "voice_settings": {
+                "stability": 0.75,
+                "similarity_boost": 0.75,
+                "style": 0.20
+            }
+        }
+        
         # Load topic-specific voice configurations from topics.json
         self.voice_config = self._load_topic_config()
         
@@ -56,16 +66,6 @@ class MultiTopicTTSGenerator:
             logger.info("🎵 Music integration enabled")
         else:
             logger.info("🎵 Music integration disabled - TTS only")
-        
-        # Default voice for unknown topics
-        self.default_voice = {
-            "voice_id": "21m00Tcm4TlvDq8ikWAM",  # Rachel
-            "voice_settings": {
-                "stability": 0.75,
-                "similarity_boost": 0.75,
-                "style": 0.20
-            }
-        }
     
     def _load_topic_config(self) -> Dict:
         """Load topic configuration from topics.json"""
