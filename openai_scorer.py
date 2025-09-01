@@ -25,25 +25,29 @@ class OpenAITopicScorer:
     
     # Core topic definitions with scoring prompts
     TOPICS = {
-        'Technology': {
-            'description': 'Software, AI, hardware, programming, tech industry, startups, digital trends',
-            'prompt': 'technology, software development, artificial intelligence, hardware, programming, tech industry, digital innovation, cybersecurity, data science, cloud computing, mobile technology, emerging tech'
+        'AI News': {
+            'description': 'Artificial intelligence developments, AI research, machine learning breakthroughs, AI industry news, AI policy and ethics',
+            'prompt': 'artificial intelligence, AI news, machine learning, deep learning, AI research, AI breakthroughs, AI industry, AI policy, AI ethics, AI regulation, generative AI, LLMs, AI startups, AI funding'
         },
-        'Business': {
-            'description': 'Finance, economics, markets, entrepreneurship, management, corporate strategy',
-            'prompt': 'business strategy, finance, economics, markets, entrepreneurship, management, corporate governance, investment, economics policy, trade, industry analysis'
+        'Tech Product Releases': {
+            'description': 'New technology product launches, hardware releases, software updates, gadget reviews, product announcements',
+            'prompt': 'product launch, product release, new products, hardware launch, software release, gadget announcement, tech products, product reviews, device launch, tech hardware, consumer electronics'
         },
-        'Philosophy': {
-            'description': 'Ethics, logic, metaphysics, epistemology, moral philosophy, philosophical debates',
-            'prompt': 'philosophy, ethics, moral reasoning, logic, metaphysics, epistemology, philosophical arguments, critical thinking, values, meaning of life, consciousness'
+        'Tech News and Tech Culture': {
+            'description': 'Technology industry news, tech company developments, tech culture discussions, digital trends, tech policy',
+            'prompt': 'tech news, technology industry, tech companies, tech culture, digital trends, tech policy, tech regulation, tech industry analysis, tech leadership, tech innovation, startup news'
         },
-        'Politics': {
-            'description': 'Government, policy, elections, international relations, political analysis',
-            'prompt': 'politics, government policy, elections, international relations, political analysis, governance, public policy, diplomacy, political theory, current affairs'
+        'Community Organizing': {
+            'description': 'Grassroots organizing, community activism, local organizing efforts, civic engagement, community building strategies',
+            'prompt': 'community organizing, grassroots activism, local organizing, civic engagement, community building, activist organizing, community mobilization, grassroots campaigns, community advocacy, local activism'
         },
-        'Culture': {
-            'description': 'Arts, entertainment, society, media, lifestyle, cultural trends, human interest',
-            'prompt': 'culture, arts, entertainment, society, media, lifestyle, cultural trends, human interest stories, social movements, popular culture, creative expression'
+        'Social Justice': {
+            'description': 'Social justice movements, civil rights, equity and inclusion, systemic justice issues, advocacy and activism',
+            'prompt': 'social justice, civil rights, equity, inclusion, systemic justice, social equity, human rights, justice advocacy, social activism, civil rights movement, racial justice, economic justice'
+        },
+        'Societal Culture Change': {
+            'description': 'Cultural shifts, social movements, changing social norms, generational changes, cultural transformation',
+            'prompt': 'cultural change, social movements, cultural shifts, social transformation, generational change, cultural evolution, social change, cultural trends, societal transformation, cultural movements'
         }
     }
     
@@ -67,11 +71,12 @@ Content Moderation:
 
 Return your analysis as a JSON object with this exact structure:
 {
-    "Technology": 0.X,
-    "Business": 0.X,
-    "Philosophy": 0.X,
-    "Politics": 0.X,
-    "Culture": 0.X,
+    "AI News": 0.X,
+    "Tech Product Releases": 0.X,
+    "Tech News and Tech Culture": 0.X,
+    "Community Organizing": 0.X,
+    "Social Justice": 0.X,
+    "Societal Culture Change": 0.X,
     "moderation_flag": false,
     "moderation_reason": null,
     "confidence": 0.X,
@@ -159,11 +164,12 @@ Provide scores as requested in the system prompt."""
     def _create_fallback_scores(self, episode_id: str = None) -> Dict[str, Any]:
         """Create neutral fallback scores when API fails"""
         return {
-            'Technology': 0.0,
-            'Business': 0.0,
-            'Philosophy': 0.0,
-            'Politics': 0.0,
-            'Culture': 0.0,
+            'AI News': 0.0,
+            'Tech Product Releases': 0.0,
+            'Tech News and Tech Culture': 0.0,
+            'Community Organizing': 0.0,
+            'Social Justice': 0.0,
+            'Societal Culture Change': 0.0,
             'moderation_flag': False,
             'moderation_reason': None,
             'confidence': 0.0,
