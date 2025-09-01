@@ -13,6 +13,13 @@ from datetime import datetime
 from typing import Dict, List, Optional, Tuple
 import sqlite3
 import openai
+
+# Load environment variables from .env file
+try:
+    from dotenv import load_dotenv
+    load_dotenv()
+except ImportError:
+    pass
 from prose_validator import ProseValidator
 
 logging.basicConfig(level=logging.INFO)

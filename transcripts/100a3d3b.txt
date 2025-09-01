@@ -1,0 +1,599 @@
+[00:00] Today on the AI Daily Brief, the era of
+[00:02] mass intelligence arrives.
+[00:05] Well, friends, it is the end of the
+[00:08] summer. Here in the US at least, we are
+[00:10] in the midst of the Labor Day weekend,
+[00:12] the historical endmark of the summer
+[00:15] before we head back to school, back to
+[00:17] work, thinking markets are going to
+[00:18] return in September. But actually, it's
+[00:20] just a bunch of people who come back and
+[00:21] dump all the things that they didn't
+[00:22] want to sell into low liquidity during
+[00:24] the summer, leading to poor performance
+[00:25] in the stock market in September before
+[00:26] it finally comes back in October. And
+[00:28] then we get ripping again. But in
+[00:30] general, the point is that we are at one
+[00:32] of those seasonal inflection point
+[00:33] moments where I think it is useful to
+[00:35] reflect on where we've been and where
+[00:38] we're going. This has been anything but
+[00:40] a slow summer. We have had numerous
+[00:43] model announcements. GPT5 notably, but
+[00:45] then also more recently and as we'll
+[00:47] discuss today, Google's image model
+[00:49] that's affectionately known as nano
+[00:50] banana. We've had lots and lots of
+[00:52] policy announcements. We've had intrigue
+[00:54] in the geopolitics of AI. The China US
+[00:57] AI divide continues in these interesting
+[00:59] ways. We've had scuttlebutt about
+[01:02] enterprise AI. I will be talking about
+[01:04] this MIT 95% survey till the day I die,
+[01:07] it seems at this point. And so the
+[01:09] question is where this all nets out. To
+[01:12] help frame the conversation, I'm going
+[01:14] to do something that we haven't had a
+[01:16] chance to do for a while, which is read
+[01:18] a piece by Professor Ethan Malik from
+[01:20] his one useful thing blog simply called
+[01:24] mass intelligence. It is his rumination
+[01:27] on this exact question, what it means
+[01:29] when so many people have access to these
+[01:31] hyper powerful models. And so, let's go
+[01:33] read that piece, which will be me, not
+[01:35] AI, as I might skip around or add
+[01:36] annotations a little bit, and then we'll
+[01:38] come back and discuss it a bit more.
+[01:40] Ethan writes, "More than a billion
+[01:42] people use AI chatbots regularly. Chat
+[01:45] GBT has over 700 million weekly users.
+[01:48] Gemini and other leading AIs add
+[01:50] hundreds of millions more. In my posts,
+[01:52] I often focus on the advances that AI is
+[01:54] making. For example, in the past few
+[01:56] weeks, both OpenAI and Google AI
+[01:58] chatbots got gold medals in the
+[01:59] International Math Olympiad. But that
+[02:01] obscures a broader shift that's been
+[02:03] building. We're entering an era of mass
+[02:06] intelligence where powerful AI is
+[02:08] becoming as accessible as a Google
+[02:10] search. Until recently, free users of
+[02:12] these systems, the overwhelming
+[02:14] majority, had access only to older,
+[02:17] smaller AI models that frequently made
+[02:19] mistakes and had limited use for complex
+[02:21] work. The best models, like reasoners
+[02:23] that can solve very hard problems and
+[02:25] hallucinate much less often, required
+[02:27] paying somewhere between $20 and $200 a
+[02:29] month. And even then, you needed to know
+[02:31] which model to pick and how to prompt it
+[02:33] properly. But the economics and
+[02:35] interfaces are changing rapidly with
+[02:37] fairly large consequences for how all of
+[02:38] us work, learn, and think. There have
+[02:41] been two barriers to accessing powerful
+[02:43] AI for most users. The first was
+[02:45] confusion. Few people knew how to select
+[02:47] an AI model. Even fewer knew that
+[02:49] picking 03 from a menu in chat GBT would
+[02:52] get them access to an excellent reasoner
+[02:54] AI model while picking 40 which seems
+[02:56] like a higher number would give them
+[02:58] something far less capable. According to
+[03:00] OpenAI, less than 7% of paying customers
+[03:02] selected 03 on a regular basis, meaning
+[03:04] even power users were missing out on
+[03:06] what reasoners could do. Another factor
+[03:08] was cost. Because the best models are
+[03:10] expensive, free users were often not
+[03:12] given access to them or else given very
+[03:14] limited access. Google led the way in
+[03:16] giving some free access to its best
+[03:17] models, but OpenAI stated that almost
+[03:19] none of its free customers had regular
+[03:21] access to reasoning models prior to the
+[03:23] launch of GBT5.
+[03:24] GBT5 was supposed to solve both of these
+[03:27] problems, which is partially why its
+[03:28] debut was so messy and confusing. GBT5
+[03:31] is actually two things. It was the
+[03:33] overall name for a family of quite
+[03:35] different models, from the weaker GPT5
+[03:37] Nano to the powerful GPT5 Pro. It was
+[03:40] also the name given to the tool that
+[03:42] picked which model to use and how much
+[03:43] computing power the AI should use to
+[03:45] solve your problem. When you are writing
+[03:47] to GPT5, you are actually talking to a
+[03:50] router that is supposed to automatically
+[03:52] decide whether your problem can be
+[03:53] solved by a smaller, faster model or
+[03:55] needs to go to a more powerful reasoner.
+[03:57] You could see how this was supposed to
+[03:59] expand access to powerful AI to more
+[04:01] users. If you just wanted to chat, GPT5
+[04:04] was supposed to use its weaker
+[04:05] specialized chat models. If you were
+[04:07] trying to solve a math problem, GPT5 was
+[04:09] supposed to send you to its slower, more
+[04:10] expensive GPT5 thinking model. This
+[04:13] would save money and give more people
+[04:14] access to the best AIs. But the rollout
+[04:17] had issues. This practice wasn't well
+[04:20] explained and the router did not work
+[04:21] well at first. The result is that one
+[04:23] person using GD5 got a very smart answer
+[04:26] while another got a bad one. Despite
+[04:28] these issues, OpenAI reported early
+[04:29] success. Within a few days of launch,
+[04:31] the percentage of paying customers who
+[04:33] had used a reasoner went from 7% to 24%.
+[04:36] And the number of free customers using
+[04:38] the most powerful models went from
+[04:39] almost 0 to 7%. Part of this change is
+[04:42] driven by the fact that smarter models
+[04:44] are getting dramatically more efficient
+[04:45] to run. The graph below shows how fast
+[04:48] this trend is played out, mapping the
+[04:50] capability of AI on the y-axis and the
+[04:52] logarithmically decreasing cost on the
+[04:54] x-axis. When GBT4 came out, it was
+[04:56] around $50 to work with a million
+[04:58] tokens. Now, it costs around 14 cents
+[05:01] per million tokens to use GPT5 Nano, a
+[05:03] much more capable model than the
+[05:05] original GPT4. The efficiency gain isn't
+[05:08] just financial, it's also environmental.
+[05:10] Google has reported that energy
+[05:11] efficiency per prompt has improved by
+[05:13] 33x in the last year alone. The marginal
+[05:16] energy used by a standard prompt from a
+[05:17] modern LLM in 2025 is relatively
+[05:20] established at this point from both
+[05:22] independent tests and official
+[05:23] announcements. It is roughly 0.003 003
+[05:26] kwatt hours, the same energy used as 8
+[05:29] to 10 seconds of streaming Netflix, or
+[05:30] the equivalent of a Google search in
+[05:32] 2008. Interestingly, image creation
+[05:34] seems to use a similar amount of energy
+[05:36] as a text prompt. How much water these
+[05:38] models use per prompt is less clear, but
+[05:40] ranges from a few drops to a fifth of a
+[05:42] shot glass. These improvements mean that
+[05:44] even as AI gets more powerful, it's also
+[05:47] becoming visible to more people. The
+[05:49] marginal cost of serving each additional
+[05:51] user has collapsed, which means more
+[05:53] business models like ad support become
+[05:55] possible. Free users can now run prompts
+[05:58] that would have cost dollars just 2
+[05:59] years ago. This is how a billion people
+[06:01] suddenly get access to powerful AIs. Not
+[06:03] through some grand democratization
+[06:05] initiative, but because the economics
+[06:07] finally make it possible. However,
+[06:09] getting access to a powerful AI is not
+[06:11] enough. People need to actually use it
+[06:13] to get things done. Using AI well used
+[06:16] to be a pretty challenging process which
+[06:18] involved crafting a prompt using
+[06:19] techniques like chain of thought along
+[06:20] with learning tips and tricks to get the
+[06:22] most out of your AI. In a recent series
+[06:24] of experiments, however, we've
+[06:25] discovered that these techniques don't
+[06:27] really help anyone. Powerful AI models
+[06:29] are just getting better at doing what
+[06:31] you ask them or even figuring out what
+[06:32] you want and going beyond what you ask.
+[06:34] And no, threatening them or being nice
+[06:36] to them does not seem to help on
+[06:38] average. And it isn't just text models
+[06:40] that are becoming cheaper and easier to
+[06:42] use. Google released a new image model
+[06:44] with the code name Nano Banana and the
+[06:46] much more boring official name Gemini
+[06:48] 2.5 flash image generator. In addition
+[06:51] to being excellent, though better at
+[06:52] editing images than creating new ones,
+[06:54] it is also cheap enough that free users
+[06:56] can access it. And unlike previous
+[06:58] generations of AI image generators, it
+[07:01] follows instructions in plain language
+[07:02] very well. As an example of both its
+[07:04] power and ease of use, I uploaded an
+[07:07] iconic and copyright free image of the
+[07:09] Apollo 11 astronauts in a random picture
+[07:11] of a sparkly tuxedo and gave it the
+[07:13] simplest prompt. Dress Neil Armstrong on
+[07:15] the left in this tuxedo. Editors note,
+[07:18] Ethan then shows the output, which
+[07:20] indeed has Neil Armstrong in the tuxedo.
+[07:22] He continues, there are issues that
+[07:24] someone with an expert eye would spot,
+[07:26] but it's still impressive to see the
+[07:28] realistic folds of the tuxedo and how
+[07:29] it's blended into the scene. It even has
+[07:31] a NASA pin on the lapel. There is still
+[07:34] a lot of randomness in the process that
+[07:35] makes AI image editing unsuitable for
+[07:37] many professional applications, but for
+[07:39] most people, this represents a huge leap
+[07:41] in not just what they can do, but how
+[07:43] easy it is to do it. And we can go
+[07:45] further. In his next prompt, Ethan
+[07:47] writes, "Now show a photograph where
+[07:49] Neil Armstrong and Buzz Aldrin in the
+[07:51] same outfits are sitting in their seats
+[07:53] on a modern airplane. Neil looks relaxed
+[07:55] and is leaning back playing a trumpet.
+[07:57] Buzz seems nervous and is holding a
+[07:58] hamburger. In the middle seat is a
+[08:00] realistic otter sitting in a seat and
+[08:02] using a laptop. Ethan then shares the
+[08:04] picture of exactly that scenario. He
+[08:07] continues, "This is many things. A
+[08:10] pretty impressive output from the AI, a
+[08:12] distortion of the famous moment in
+[08:13] history made possible by AI, and a
+[08:16] potential warning about how weird things
+[08:18] are going to get when these sorts of
+[08:19] technologies are used widely."
+[08:22] Concluding section, the weirdness of
+[08:23] mass intelligence. When powerful AI is
+[08:26] in the hands of a billion people, a lot
+[08:28] of things are going to happen at once. A
+[08:30] lot of things are already happening at
+[08:31] once. Some people have intense
+[08:33] relationships with AI models while other
+[08:35] people are being saved from loneliness.
+[08:37] AI models may be causing mental
+[08:39] breakdowns and dangerous behavior for
+[08:40] some while being used to diagnose the
+[08:42] diseases of others. It is being used to
+[08:44] write obituaries and create scriptures
+[08:46] and cheat on homework and launch new
+[08:47] ventures and thousands of other
+[08:49] unexpected uses. These uses and both the
+[08:51] problems and benefits are likely to only
+[08:54] multiply as AI systems get more
+[08:56] powerful. And while Google's AI image
+[08:58] generator has guardrails to limit misuse
+[09:00] as well as invisible watermarks to
+[09:02] identify AI images, I expect much less
+[09:04] restrictive AI image generators will
+[09:06] likely get close to nanobanana inquality
+[09:08] in the coming months. The AI companies,
+[09:10] whether you believe their commitments to
+[09:12] safety or not, seem to be as unable to
+[09:14] absorb all of this as the rest of us
+[09:16] are. When a billion people have access
+[09:18] to advanced AI, we've entered what we
+[09:21] might call the era of mass intelligence.
+[09:23] Every institution we have, schools,
+[09:26] hospitals, courts, companies,
+[09:28] governments, was built for a world where
+[09:30] intelligence was scarce and expensive.
+[09:32] Now, every profession, every
+[09:33] institution, every community has to
+[09:36] figure out how to thrive with mass
+[09:37] intelligence. How do we harness a
+[09:39] billion people using AI while managing
+[09:41] the chaos that comes with it? How do we
+[09:43] rebuild trust when anyone can fabricate
+[09:45] anything? How do we preserve what's
+[09:46] valuable about human expertise while
+[09:48] democratizing access to knowledge? So,
+[09:50] here we are. Powerful AI is cheap enough
+[09:52] to give away, easy enough that you don't
+[09:54] need a manual, and capable enough to
+[09:56] outperform humans at a range of
+[09:57] intellectual tasks. A flood of
+[10:00] opportunities and problems are about to
+[10:01] show up in classrooms, courtrooms, and
+[10:03] boardrooms around the world. The mass
+[10:05] intelligence era is what happens when
+[10:07] you give a billion people access to an
+[10:09] unprecedented set of tools and see what
+[10:11] they do with it. We are about to find
+[10:13] out what that is like. All right, so
+[10:16] first of all, thanks to Ethan for
+[10:18] another great post. If you don't follow
+[10:20] One Useful Thing yet, you should. It's
+[10:21] at one useful thing.org. And broadly
+[10:23] speaking, I think that there's kind of
+[10:24] two posts that Ethan has. One is a sort
+[10:26] of almost in medius race fast reaction
+[10:29] to some new model or some new study that
+[10:31] has just come out. And the other is this
+[10:33] sort of much bigger zoom out kind of
+[10:35] pondering piece which as you might be
+[10:37] able to tell are the types of things
+[10:38] that I love especially for these big
+[10:40] thinky type of long reads episodes. In
+[10:42] any case, I really do think that when we
+[10:45] look back at the story of 2025 in AI,
+[10:47] the democratization of access to
+[10:49] powerful models specifically via the
+[10:52] reduced cost of models is going to be
+[10:54] the big blinking story of this era.
+[10:56] Think about it. The year kicked off with
+[10:59] the Deepseek moment where this new model
+[11:01] out of China, purportedly trained at a
+[11:03] tiny fraction of the cost of all the
+[11:05] other big frontier models, all of a
+[11:07] sudden was rocketing up the app charts.
+[11:08] In fact, beating out ChateBT as the app
+[11:11] store's top app. Now, what was
+[11:13] happening, of course, was that for the
+[11:15] first time, people were experiencing a
+[11:17] reasoning model. Despite the fact that
+[11:19] OpenAI's01 had been out for a few months
+[11:21] and that it was even at the time still
+[11:23] better by most metrics than Deepseek's
+[11:25] R1, it was hidden, as Ethan points out,
+[11:28] behind the payw wall for the vast
+[11:29] majority of people. What's more, if you
+[11:31] weren't paying attention even if you did
+[11:33] pay for Chat GBT, having to keep track
+[11:35] of what the difference between the O
+[11:37] series of models was versus the numbered
+[11:38] series of models was something that most
+[11:40] busy people just weren't willing to do.
+[11:42] In any case, in practice, what happened
+[11:44] is that all of a sudden, people had this
+[11:46] cute little app that was explaining its
+[11:48] thinking, quote unquote, as it was
+[11:50] thinking, which by the way, people love
+[11:51] that little bit of anthromorphism, and
+[11:53] then it was producing really good
+[11:54] responses because reasoning models are
+[11:56] just a step change relative to what most
+[11:58] people have experienced. Now, of course,
+[12:00] subsequent to this, Deepseek itself has
+[12:03] fallen off a little bit. We haven't
+[12:05] gotten R2. The company seems to be being
+[12:07] impacted by limited access to advanced
+[12:08] chips. And despite its popularity, which
+[12:11] continues, it's not nearly as disruptive
+[12:13] a force as some thought it might be back
+[12:14] in January. However, its legacy is
+[12:17] profound. One of the outcomes was OpenAI
+[12:20] getting less restrictive about giving
+[12:21] access in the free version to more
+[12:23] powerful models. And I think it
+[12:25] certainly impacted how they thought
+[12:26] about the launch of GPT5.
+[12:28] Now, speaking of GPT5, another big
+[12:30] story, obviously probably the biggest in
+[12:32] some ways from the summer was the
+[12:34] absolute dust up following the launch of
+[12:36] GPT5. The response to the model taught
+[12:38] us a lot of things. I think one of them
+[12:40] was simply that trying to accommodate
+[12:43] 700 million different types of users all
+[12:45] with different types of expectations and
+[12:47] different types of usage patterns is an
+[12:49] extraordinarily hard feat. Another was
+[12:51] that people have very specific devotion
+[12:54] to the models that they work with which
+[12:56] is a phenomenon that could get more
+[12:57] pronounced and more powerful over time.
+[13:00] But a third I think to me is that it
+[13:02] shows the problems of being overreiant
+[13:04] on thinking exclusively about AI
+[13:07] progress in terms of how much the latest
+[13:09] numbered GPT is obviously and clearly
+[13:11] better than the past numbered GPT. I
+[13:14] think that the launch of GPT5 revealed
+[13:16] just how limited a view of AI progress
+[13:19] that is. And I think the limitation is
+[13:21] more serious than just the ego hit for
+[13:22] the people who built the models and any
+[13:24] financial implications. I think it
+[13:26] revealed that we are fundamentally
+[13:27] misthinking about how to judge AI
+[13:30] progress right now. Specifically, our
+[13:32] obsession with just asking how much
+[13:35] better the five version is of the thing
+[13:37] than the four version, whether it's GPT
+[13:39] now or Grock in the future or Gemini 3
+[13:42] when it comes out and displaces 2.5. Our
+[13:45] obsession with that sort of strict
+[13:47] numbered foundation model progress is
+[13:49] obscuring a bunch of other versions of
+[13:51] progress that are in practice just as if
+[13:54] not more significant. The first
+[13:56] dimension that we're missing out on is
+[13:58] cost reduction. In his post, Ethan gave
+[14:01] the dramatic example of the depreciation
+[14:03] in cost of GPT4 quality tokens from $50
+[14:06] when GPT4 first came out to now 14 per
+[14:10] million tokens, around 1300th of that
+[14:13] cost for an even more performant model
+[14:15] in GPT5 Nano. Now, we've seen this year
+[14:18] with studies like Menllo's enterprise
+[14:20] update that at the moment cost is simply
+[14:23] not a huge driver of major AI behavior.
+[14:27] By which I mean right now when companies
+[14:30] or individuals are choosing the models
+[14:31] they use, they're largely focused on
+[14:34] using the state-of-the-art. Performance
+[14:36] beats out cost of ownership 61 to 36
+[14:38] when it comes to why enterprises switch
+[14:40] models, for example. And they don't do
+[14:42] that switching all that much. However, I
+[14:44] believe that this actually undersells an
+[14:47] important thing that's happening right
+[14:49] now. We are riding the frontier of
+[14:51] capability. Every new model that gets
+[14:53] released unlocks some meaningful set of
+[14:56] new opportunities and use cases that
+[14:58] wasn't really possible before. However,
+[15:01] the more performant that we get, the
+[15:03] more that it means that models that are
+[15:04] just behind the state-of-the-art, which
+[15:06] potentially have a totally different
+[15:08] economic cost structure, can be used
+[15:11] effectively for some variety of use
+[15:13] cases. And more than that, so much of
+[15:16] our usage right now, especially when you
+[15:19] look at enterprise usage is still in the
+[15:22] pilot, experimental or very early
+[15:24] singleuse kind of deployment phases. In
+[15:27] those scenarios, it makes sense that
+[15:29] companies are optimizing maximally for
+[15:31] performance, especially as they're
+[15:33] trying to think about replacing big
+[15:35] chunks of human tasks with AI or agents.
+[15:38] In many, if not most cases, companies
+[15:40] are going to want the highest performing
+[15:42] models. At the same time, we're also
+[15:44] starting to see another phenomenon,
+[15:46] which is more and more autonomously
+[15:48] capable agents doing things in the
+[15:51] background while humans do other work.
+[15:53] In other words, we're starting to see
+[15:55] the forking off of people using AI to
+[15:57] help themselves to instead setting up
+[16:00] AIs that simply work in the background
+[16:02] doing things while humans are working on
+[16:04] other tasks or simply accomplishing
+[16:06] other goals. I believe that you're
+[16:08] starting to see this pattern of
+[16:10] autonomous background agents,
+[16:11] specifically in coding, start to show up
+[16:14] in token consumption. Between May and
+[16:16] July this year, Google's monthly token
+[16:18] processing jumped from 480 trillion to
+[16:21] 980 trillion, a 104% growth in just 2
+[16:25] months. I think that that reflects this
+[16:28] mass expansion of coding workloads. And
+[16:31] I think you're going to start to see
+[16:32] that across a variety of use cases in
+[16:34] the enterprise very very soon. As that
+[16:38] happens, it is very likely to me that it
+[16:41] turns out that in practice the most
+[16:43] important frontier for enterprises will
+[16:46] not have been simply performance, but
+[16:49] the relationship between, in other
+[16:50] words, performance and cost. When you
+[16:52] are an enterprise seeking to deploy
+[16:54] millions or even billions of tokens
+[16:56] across a variety of uses, you better
+[16:58] believe that the cost profile is going
+[17:00] to start to matter. The point being that
+[17:02] by simply focusing on how much better on
+[17:05] the benchmarks GPT5 was versus GPT4.5,
+[17:08] we're really missing out on this entire
+[17:10] other dimension. Now, OpenAI even tried
+[17:12] to explain this aspect of cost in
+[17:15] interviews following the announce of
+[17:16] GBT5, but frankly, they didn't do a very
+[17:18] good job of explaining how significant
+[17:20] this was when it comes to opening up new
+[17:22] types of usage. The second problem, I
+[17:24] think, with the strict how much better
+[17:26] is 5 than 4.5 type of analysis is that
+[17:29] it misses out on how small changes can
+[17:31] open up entirely new use cases. As
+[17:34] people started to excitedly share all of
+[17:36] their nano banana generations, switching
+[17:38] out the clothes in different images like
+[17:40] you saw with Ethan's post, creating 3D
+[17:42] game asset models of real world photos,
+[17:45] or a variety of other uses like that
+[17:46] where they were editing photos. You
+[17:48] started to see some number of posts like
+[17:50] this one from David Shapiro, who wrote,
+[17:52] "I really don't get the nano banana
+[17:53] hype. It's an editor. It doesn't
+[17:55] generate breathtaking images unless it
+[17:57] looks like a stock photo. It's certainly
+[17:59] a step in an interesting direction, but
+[18:01] I was expecting an all-in-one model that
+[18:02] blasted everything else out of the
+[18:04] water. This is not that. Now, as I said,
+[18:06] this is not to pick on David at all, but
+[18:08] what's clear to me watching how people
+[18:10] are using Nano Banana is that it doesn't
+[18:12] matter that it's quote unquote just
+[18:14] editing. It's that the type of editing
+[18:15] that it enables unlocks a huge array of
+[18:18] new use cases that are extremely
+[18:20] valuable both on a personal and on an
+[18:22] economic level that were not possible in
+[18:24] any sort of efficient way before. When
+[18:26] everyone can do the most powerful type
+[18:28] of editing that Photoshop ever enabled
+[18:30] without requiring any of the learning
+[18:32] and intensive time on task that it took
+[18:33] to get good enough at Photoshop to do
+[18:35] those things, that is an economically
+[18:37] significant and impactful development.
+[18:40] I'm working on and will have a show in
+[18:41] the next couple of weeks about a new
+[18:43] benchmark proposal I'm calling the
+[18:45] unlock score. The idea is pretty simple.
+[18:48] Instead of focusing on either academic
+[18:50] benchmarks that can be gamed and that
+[18:51] are mostly saturated right now, or on
+[18:53] subjective preference benchmarks like LM
+[18:55] Marina, which I think are valuable, the
+[18:57] unlock score would basically look at
+[18:59] what new use cases a new model unlocked,
+[19:02] how valuable they were, and how
+[19:03] widespread they were in order to help
+[19:05] people understand not an overall metric
+[19:07] of a model's capabilities, but a
+[19:09] comparative metric of how much it
+[19:11] changes versus its most approximate
+[19:13] predecessors. And the broader point
+[19:15] here, I think again, is that by overly
+[19:17] focusing on how much better GPT5 was
+[19:19] versus 4.5, we're missing out on all of
+[19:22] the multimodal innovation that's
+[19:24] happening right now as well. For as much
+[19:26] as we've saturated some of the textbased
+[19:28] use cases of LLM, we've barely scratched
+[19:30] the surface on what a lot of the visual,
+[19:32] audio, and video possibilities are going
+[19:34] to be in the near future. And to bring
+[19:36] it back to Ethan's post and this idea of
+[19:38] entering into the new era of mass
+[19:40] intelligence, part of the power of this
+[19:42] moment and part of what I think will be
+[19:44] the distinct hallmark of 2025 is the
+[19:47] fact that the changes in the efficiency
+[19:50] and cost multiplied by the changes in
+[19:52] capabilities which yes, especially when
+[19:54] we take a step away have been
+[19:56] significant means that the total
+[19:57] audience of people who are using these
+[20:00] powerful tools to go create new use
+[20:01] cases and do new things is expanding
+[20:04] rapidly. Now, this is not the end of
+[20:06] year episode. This is an end of summer
+[20:08] episode. So, we'll refrain from trying
+[20:09] to make conclusions that are too big,
+[20:11] but this is certainly what I'm watching
+[20:12] heading into this fall. TLDDR, I am not
+[20:15] strictly focused on how much better the
+[20:18] next model is going to be when it comes
+[20:20] to Gro 5 or Gemini 3 or even GBT6 if
+[20:24] they really rush it. What I'm interested
+[20:26] in is how it opens up new use cases and
+[20:29] changes the cost of doing those things
+[20:31] at scale. Let me know what you think
+[20:32] about all this. Shoot me a note in the
+[20:34] comments or on YouTube. And I hope that
+[20:36] all of you are having a great weekend,
+[20:38] whether it's a long one in America or a
+[20:39] normal one somewhere else. Appreciate
+[20:41] you listening or watching as always. And
+[20:43] until next time, peace.
