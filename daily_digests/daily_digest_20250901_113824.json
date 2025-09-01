@@ -1,0 +1,20 @@
+{
+  "title": "Daily - September 01, 2025",
+  "description": "Daily digest covering daily",
+  "topic": "daily",
+  "timestamp": "20250901_113824",
+  "date": "2025-09-01T11:38:24",
+  "voice_config": {
+    "voice_id": "21m00Tcm4TlvDq8ikWAM",
+    "voice_settings": {
+      "stability": 0.75,
+      "similarity_boost": 0.75,
+      "style": 0.2
+    }
+  },
+  "generated_at": "2025-09-01T17:19:06.292907",
+  "audio_file": "daily_digest_20250901_113824.mp3",
+  "markdown_file": "daily_digest_20250901_113824.md",
+  "tts_script_file": "daily_digest_tts_20250901_113824.txt",
+  "music_enhanced": true
+}
