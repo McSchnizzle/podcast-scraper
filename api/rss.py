@@ -2,7 +2,7 @@
 Vercel Function: RSS Feed Generator  
 Serves RSS feed for Daily Tech Digest podcast
 Optimized for Android/Google Podcasts/Spotify compatibility
-Fixed dependencies for proper module loading
+Fixed dependencies for proper module loading - debug version
 """
 
 import os
@@ -32,18 +32,17 @@ class PodcastRSSAPI:
     
     def get_episode_metadata(self):
         """Get episode metadata from GitHub releases API"""
-        try:
-            import requests
-        except ImportError as e:
-            return [{"title": f"Import Error: {e}", "description": "requests module not found", "date": datetime.now(timezone.utc), "filename": "error.mp3", "size": 1000, "duration": 60, "guid": "error", "url": "https://example.com/error.mp3"}]
+        import urllib.request
+        import json as json_module
         
         try:
-            # Fetch releases from GitHub API
+            # Fetch releases from GitHub API using urllib (standard library)
             api_url = "https://api.github.com/repos/McSchnizzle/podcast-scraper/releases"
-            response = requests.get(api_url, timeout=10)
-            response.raise_for_status()
+            with urllib.request.urlopen(api_url) as response:
+                if response.status != 200:
+                    raise Exception(f"HTTP {response.status}")
+                releases = json_module.loads(response.read().decode('utf-8'))
             
-            releases = response.json()
             episodes = []
             
             for release in releases[:7]:  # Last 7 releases (7-day retention)
