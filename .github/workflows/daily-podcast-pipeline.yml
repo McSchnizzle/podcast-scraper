@@ -158,15 +158,13 @@ jobs:
           echo "No changes to commit"
         else
           # Create detailed commit message
-          commit_msg="Daily podcast digest update - $(date -u +%Y-%m-%d)
-
-RSS episodes processed and YouTube episode statuses synced
-- Updated podcast_monitor.db (RSS episodes marked as digested)
-- Updated youtube_transcripts.db (YouTube episodes marked as digested)  
-- Generated daily digest and TTS audio
-- Updated RSS feed"
-
-          git commit -m "$commit_msg"
+          git commit -m "Daily podcast digest update - $(date -u +%Y-%m-%d)
+          
+          RSS episodes processed and YouTube episode statuses synced
+          - Updated podcast_monitor.db (RSS episodes marked as digested)
+          - Updated youtube_transcripts.db (YouTube episodes marked as digested)
+          - Generated daily digest and TTS audio
+          - Updated RSS feed"
           git push
           echo "✅ Committed digest updates to both databases"
         fi
