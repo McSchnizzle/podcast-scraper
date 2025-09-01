@@ -1,6 +1,6 @@
 # Daily Podcast Digest System
 
-An automated system for monitoring, processing, and analyzing podcast content with AI-powered transcription, Claude-based content analysis, and automated digest generation.
+An automated system for monitoring, processing, and analyzing podcast content with AI-powered transcription, Claude-based content analysis, TTS generation with timestamp synchronization, and dual-database architecture.
 
 ## Overview
 
@@ -8,32 +8,35 @@ The Daily Podcast Digest System continuously monitors podcast RSS feeds and YouT
 
 ### Key Features
 
-- **Multi-Source Monitoring**: RSS feeds and YouTube channels with intelligent feed management
+- **Dual-Database Architecture**: Separate SQLite databases for RSS (`podcast_monitor.db`) and YouTube (`youtube_transcripts.db`) episodes
+- **TTS Timestamp Synchronization**: Perfect filename matching between digest markdown and generated MP3 files
+- **Local YouTube Processing**: 6-hour cron job for YouTube transcript downloads with GitHub sync
 - **Advanced Transcription**: Parakeet MLX ASR with Apple Silicon optimization (10-minute chunking)
-- **Claude AI Integration**: Automated content analysis and digest generation via Claude Code
-- **Speaker Detection**: Multi-speaker conversation detection and analysis
+- **Claude AI Integration**: Headless CLI mode for content analysis with embedded timestamps
+- **ElevenLabs TTS**: High-quality audio generation with timestamp-matched filenames
+- **GitHub Actions Automation**: RSS pipeline processing with intelligent Vercel build skipping
 - **Smart Filtering**: Length-based filtering for YouTube content (>3 minutes)
-- **Automated Publishing**: RSS generation and GitHub deployment pipeline
-- **Web API**: Endpoints for audio streaming and RSS feed serving
-- **Dual Status Workflow**: RSS (pre-download→downloaded→transcribed→digested) and YouTube (pre-download→transcribed→digested)
+- **Automated Publishing**: GitHub releases with MP3 hosting and RSS feed generation
+- **Web API**: Vercel endpoints with intelligent build skipping for audio streaming and RSS serving
 
 ## 📡 RSS Feed
 
 **Daily Tech Digest RSS Feed**: https://podcast.paulrbrown.org/daily-digest.xml
 
 Subscribe to receive automated daily digests featuring:
-- AI-powered analysis of tech podcast content
-- YouTube creator highlights and insights  
-- Product launches and industry developments
+- AI-powered analysis of tech podcast content from RSS and YouTube sources
+- High-quality TTS audio with ElevenLabs synthesis
+- Perfect timestamp synchronization between digest files and MP3 episodes
 - Cross-episode synthesis and trend identification
+- GitHub-hosted MP3 files with CDN delivery
 
 ## System Architecture
 
 ### Phase 1: Feed Monitoring ✅ COMPLETE
-- RSS feed parsing and episode discovery
-- YouTube channel monitoring via RSS
-- SQLite database for episode tracking
-- Automated feed updates and new episode detection
+- **RSS**: GitHub Actions pipeline with `podcast_monitor.db` tracking
+- **YouTube**: Local cron job (6-hour intervals) with `youtube_transcripts.db` tracking
+- **Database Sync**: Local processing commits transcripts and database to GitHub
+- **GitHub Integration**: Actions workflow pulls latest changes before processing
 
 ### Phase 2: Content Processing Pipeline ✅ COMPLETE
 - **YouTube**: Direct transcript API access with duration filtering
@@ -42,31 +45,42 @@ Subscribe to receive automated daily digests featuring:
 - **Quality Gates**: Processing validation and error handling
 
 ### Phase 3: Claude AI Analysis ✅ COMPLETE
-- **Claude Code Integration**: Headless Claude integration for content analysis
-- **Daily Digest Generation**: Automated topic-based content summarization
-- **Cross-Reference Analysis**: Episode correlation and theme detection
-- **Topic Organization**: Intelligent content grouping and prioritization
+- **Claude Code Integration**: Headless CLI mode processing both RSS and YouTube episodes
+- **Timestamp Embedding**: Claude generates digest files with embedded timestamps
+- **Daily Digest Generation**: Topic-based content summarization from dual databases
+- **TTS Synchronization**: Claude timestamp extraction for perfect MP3 filename matching
+- **Cross-Reference Analysis**: Episode correlation across RSS and YouTube sources
 
 ### Phase 4: Publishing Pipeline ✅ COMPLETE
-- **RSS Generation**: Automated podcast RSS feed creation
-- **GitHub Deployment**: Automated episode publishing and release management
-- **Web API**: Audio streaming and RSS serving endpoints
+- **TTS Generation**: ElevenLabs synthesis with timestamp-synchronized filenames
+- **GitHub Releases**: MP3 and markdown files with matching timestamps
+- **RSS Generation**: Links to GitHub-hosted MP3 files via paulrbrown.org URLs
+- **Vercel Integration**: Intelligent build skipping prevents unnecessary deployments
+- **Web API**: Audio streaming and RSS serving with smart caching
 
 ## Technical Stack
 
 ### Core Dependencies
 - **Python 3.10+**: Core runtime environment
-- **SQLite**: Episode database and metadata storage
-- **ffmpeg**: Audio format conversion and processing
-- **Parakeet MLX**: Apple Silicon optimized ASR
+- **Dual SQLite Databases**: `podcast_monitor.db` (RSS) and `youtube_transcripts.db` (YouTube)
+- **ffmpeg**: Audio format conversion and processing (RSS audio only)
+- **Parakeet MLX**: Apple Silicon optimized ASR for RSS episodes
 - **MLX Framework**: Apple Silicon native acceleration
-- **Claude Code**: AI content analysis and digest generation
-- **YouTube Transcript API**: Direct YouTube transcript access
+- **Claude Code CLI**: Headless AI content analysis with timestamp extraction
+- **ElevenLabs API**: High-quality TTS generation with timestamp synchronization
+- **YouTube Transcript API**: Direct YouTube transcript access (local cron processing)
+- **GitHub Actions**: Automated RSS pipeline and deployment
+- **Vercel**: RSS serving with intelligent build skipping
 
-### Audio Processing Pipeline
+### Processing Architecture
 ```
-RSS Audio → Download → ffmpeg conversion → Parakeet MLX (10min chunks) → Claude Analysis
-YouTube → Direct API → Transcript → Claude Analysis
+RSS Pipeline (GitHub Actions):
+Feed Monitor → Audio Download → ffmpeg → Parakeet MLX (10min chunks) → 
+podcast_monitor.db → Claude Analysis → TTS + Timestamp Sync → GitHub Release
+
+YouTube Pipeline (Local + GitHub):
+Local Cron (6h) → YouTube API → youtube_transcripts.db → Git Push →
+GitHub Actions → Claude Analysis (combined) → TTS + Timestamp Sync
 ```
 
 ## Installation
@@ -95,9 +109,14 @@ git clone https://github.com/McSchnizzle/podcast-scraper.git
 cd podcast-scraper
 pip install -r requirements.txt
 
-# Set environment variables
-export GITHUB_TOKEN="your_github_token"
-export ELEVENLABS_API_KEY="your_elevenlabs_key"  # Optional
+# Set environment variables  
+export GITHUB_TOKEN="your_github_token"           # Required for releases
+export ANTHROPIC_API_KEY="your_anthropic_key"     # Required for Claude CLI
+export ELEVENLABS_API_KEY="your_elevenlabs_key"   # Required for TTS MP3 generation
+
+# Set up YouTube cron job (local machine)
+crontab -e
+# Add: 0 */6 * * * /path/to/podcast-scraper/youtube_cron_job.sh
 ```
 
 ## Usage
@@ -119,34 +138,46 @@ python3 feed_monitor.py
 # Process pending episodes
 python3 content_processor.py
 
-# Generate Claude digest
+# Generate Claude digest (processes both databases)
 python3 claude_headless_integration.py
 
-# Generate audio digest (if TTS configured)
+# Generate TTS audio with timestamp synchronization
 python3 claude_tts_generator.py
+
+# Check database status
+python3 -c "import sqlite3; conn=sqlite3.connect('podcast_monitor.db'); print('RSS:', conn.execute('SELECT status, COUNT(*) FROM episodes GROUP BY status').fetchall()); conn.close()"
+python3 -c "import sqlite3; conn=sqlite3.connect('youtube_transcripts.db'); print('YouTube:', conn.execute('SELECT status, COUNT(*) FROM episodes GROUP BY status').fetchall()); conn.close()"
 ```
 
 ## Configuration
 
 ### Feed Configuration
-Add new podcast feeds in `feed_monitor.py`:
+Add new podcast feeds in `config.py`:
 ```python
 feeds = [
     {
         'title': 'Your Podcast Name',
         'url': 'https://example.com/rss',
-        'type': 'rss',  # or 'youtube'
+        'type': 'rss',  # RSS feeds processed by GitHub Actions
         'topic_category': 'technology'  # or 'business', 'news'
+    },
+    {
+        'title': 'YouTube Channel',
+        'url': 'https://youtube.com/channel/UC...',
+        'type': 'youtube',  # YouTube processed by local cron job
+        'topic_category': 'technology'
     }
 ]
 ```
 
 ### Processing Parameters
 - **YouTube Minimum Duration**: 3.0 minutes (configurable)
-- **Audio Chunking**: 10 minutes per chunk (updated from 5 minutes)
-- **Content Priority Threshold**: 0.3 (adjustable)
-- **Audio Cache**: Persistent storage in `audio_cache/` directory
-- **Transcript Storage**: Text files in `transcripts/` and `transcripts/digested/`
+- **YouTube Cron Schedule**: Every 6 hours (0 */6 * * *)
+- **Audio Chunking**: 10 minutes per chunk for RSS episodes
+- **TTS Timestamp Sync**: Regex extraction from `daily_digest_YYYYMMDD_HHMMSS.md`
+- **Database Tracking**: Separate status workflows for RSS and YouTube
+- **Audio Cache**: RSS downloads in `audio_cache/` (cleaned after processing)
+- **Transcript Storage**: Combined RSS+YouTube in `transcripts/` and `transcripts/digested/`
 
 ## Performance Metrics
 
@@ -167,53 +198,66 @@ feeds = [
 ```
 podcast-scraper/
 ├── README.md                   # This file
+├── CLAUDE.md                   # Technical documentation for Claude Code ⭐
 ├── podscraper_prd.md          # Product Requirements Document
-├── requirements.txt            # Python dependencies (updated)
+├── requirements.txt            # Python dependencies
 ├── config.py                   # Centralized configuration management ⭐
 ├── fix_malloc_warnings.sh     # macOS malloc warning fix
-├── daily_podcast_pipeline.py  # Main orchestration script ⭐
-├── feed_monitor.py            # RSS/YouTube feed monitoring
-├── content_processor.py       # Audio transcription and processing
-├── claude_headless_integration.py # Claude AI analysis
+├── daily_podcast_pipeline.py  # Main RSS pipeline orchestration ⭐
+├── feed_monitor.py            # RSS feed monitoring (GitHub Actions)
+├── content_processor.py       # RSS audio transcription pipeline
+├── claude_headless_integration.py # Claude AI analysis (dual database)
 ├── robust_transcriber.py      # Advanced transcription engine
-├── claude_tts_generator.py    # Consolidated TTS + topic compilation ⭐
-├── deploy_episode.py          # GitHub deployment
+├── claude_tts_generator.py    # TTS with timestamp synchronization ⭐
+├── youtube_processor.py       # YouTube transcript processing (local)
+├── youtube_cron_job.sh        # 6-hour YouTube cron automation ⭐
+├── deploy_episode.py          # GitHub release deployment
 ├── rss_generator.py           # RSS feed generation
+├── vercel.json                # Vercel configuration with build skipping ⭐
+├── vercel-build-ignore.sh     # Intelligent Vercel build skipping ⭐
+├── .github/workflows/
+│   └── daily-podcast-pipeline.yml # GitHub Actions automation ⭐
 ├── api/
-│   ├── rss.py                 # RSS endpoint
-│   └── audio/[episode].py     # Audio streaming endpoint
+│   ├── rss.py                 # RSS endpoint (Vercel)
+│   └── audio/[episode].py     # Audio streaming endpoint (Vercel)
 ├── claude_digest_instructions.md # Claude AI digest generation instructions
-├── docs/                      # Documentation and guides
-│   ├── podcast-workflow.md
-│   ├── PHASE3_TTS_GUIDE.md
-│   ├── PHASE4_DEPLOYMENT_GUIDE.md
-│   └── refactor-complete-workflow.md
-├── podcast_monitor.db          # SQLite database
-├── audio_cache/               # Downloaded audio files
-├── transcripts/               # Active transcript files
-├── transcripts/digested/      # Processed transcript files
-└── daily_digests/            # Generated audio digests
+├── podcast_monitor.db          # RSS episodes SQLite database ⭐
+├── youtube_transcripts.db      # YouTube episodes SQLite database ⭐
+├── daily-digest.xml           # Generated RSS feed
+├── audio_cache/               # Downloaded RSS audio files (temporary)
+├── transcripts/               # Active transcript files (RSS + YouTube)
+├── transcripts/digested/      # Processed transcript files (archived)
+└── daily_digests/            # Generated digest files with timestamp sync
+    ├── daily_digest_YYYYMMDD_HHMMSS.md      # Claude-generated digest
+    ├── claude_digest_full_YYYYMMDD_HHMMSS.txt # Full TTS script
+    ├── claude_digest_tts_YYYYMMDD_HHMMSS.txt  # TTS-optimized script
+    ├── complete_topic_digest_YYYYMMDD_HHMMSS.mp3 # Generated MP3 ⭐
+    └── complete_topic_digest_YYYYMMDD_HHMMSS.json # Audio metadata
 ```
 
 ## Current Status
 
 ### ✅ Completed Features
-- Multi-source feed monitoring (RSS + YouTube)
-- Advanced audio transcription with 10-minute chunking
-- Claude AI integration for content analysis
-- Automated daily digest generation
-- GitHub deployment pipeline
-- RSS feed generation and serving
-- Web API endpoints for audio and RSS
-- Database status tracking (transcribed → digested workflow)
+- **Dual-Database Architecture**: Separate RSS and YouTube episode tracking
+- **TTS Timestamp Synchronization**: Perfect filename matching between digest markdown and MP3 files
+- **Local YouTube Processing**: 6-hour cron job with GitHub synchronization
+- **GitHub Actions Integration**: Automated RSS pipeline with dual-database processing
+- **ElevenLabs TTS**: High-quality audio generation with timestamp extraction
+- **Vercel Intelligence**: Smart build skipping prevents unnecessary deployments
+- **Advanced Transcription**: Parakeet MLX with 10-minute chunking for RSS episodes
+- **Claude AI Integration**: Headless CLI mode processing both episode sources
+- **GitHub Releases**: MP3 and markdown file hosting with CDN delivery
+- **RSS Feed Generation**: Links to GitHub-hosted MP3 files via paulrbrown.org
 
 ### 🔄 Recent Updates
-- **Streamlined Codebase**: Reduced from 28 to 10 Python files
-- **Fixed Database Sync**: Resolved transcript status mismatches
-- **Improved Chunking**: Updated to 10-minute audio segments
-- **macOS Compatibility**: Added malloc warning fix script
-- **Enhanced Deployment**: Fixed GitHub release handling for existing releases
-- **RSS Feed Reliability**: Fixed episode detection and publication to podcast.paulrbrown.org
+- **TTS Timestamp Fix**: Resolved timestamp mismatch between digest markdown and MP3 files
+- **Dual-Database Implementation**: Separate tracking for RSS and YouTube episodes  
+- **Local YouTube Cron**: 6-hour automated YouTube transcript processing
+- **GitHub Actions Enhancement**: Added comprehensive TTS debugging and database sync
+- **Vercel Decoupling**: Intelligent build skipping prevents unnecessary deployments
+- **Database Sync Resolution**: Fixed GitHub Actions database caching issues
+- **Perfect TTS Integration**: ElevenLabs generation with timestamp-synchronized filenames
+- **Enhanced Error Handling**: Comprehensive debugging and troubleshooting workflows
 
 ### 📋 Future Enhancements
 - Enhanced speaker diarization with timestamps
@@ -233,24 +277,50 @@ podcast-scraper/
 
 ### Episode Processing Workflow
 ```
-RSS Audio:    pre-download → downloaded → transcribed → digested
-YouTube:      pre-download → transcribed → digested
+RSS Workflow (GitHub Actions):
+Feed Monitor → podcast_monitor.db → pre-download → downloaded → transcribed → digested
+
+YouTube Workflow (Local + GitHub):
+Local Cron → youtube_transcripts.db → transcribed → Git Push → GitHub Actions → digested
+
+TTS Synchronization:
+Claude: daily_digest_YYYYMMDD_HHMMSS.md → TTS: complete_topic_digest_YYYYMMDD_HHMMSS.mp3
 ```
 
 ## Troubleshooting
 
 ### Common Issues
 
+**Database Sync Issues**: Always `git pull` before local work
+```bash
+git pull
+sqlite3 podcast_monitor.db "SELECT status, COUNT(*) FROM episodes GROUP BY status;"
+sqlite3 youtube_transcripts.db "SELECT status, COUNT(*) FROM episodes GROUP BY status;"
+```
+
+**TTS Timestamp Mismatch**: Check digest filename format and TTS extraction
+```bash
+# Verify digest files exist with correct naming
+ls daily_digests/daily_digest_*.md
+# Check TTS script for timestamp extraction
+python3 claude_tts_generator.py
+```
+
+**YouTube Cron Failures**: Verify cron job and execution
+```bash
+crontab -l  # Check cron job exists
+./youtube_cron_job.sh  # Test manual execution
+```
+
+**Vercel Build Issues**: Configure ignore script in Vercel dashboard
+- Settings → Git → Ignored Build Step: `./vercel-build-ignore.sh`
+
 **macOS Malloc Warnings**: Run `./fix_malloc_warnings.sh`
 
 **Missing Dependencies**: 
 ```bash
-pip install parakeet-mlx feedparser youtube-transcript-api
+pip install parakeet-mlx feedparser youtube-transcript-api anthropic
 ```
-
-**Database Issues**: Episodes are automatically tracked with proper status transitions
-
-**Audio Processing**: Ensure ffmpeg is installed and accessible
 
 ## License
 
