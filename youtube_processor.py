@@ -21,7 +21,8 @@ logger = logging.getLogger(__name__)
 class YouTubeProcessor:
     def __init__(self, youtube_db_path: str = "youtube_transcripts.db"):
         self.youtube_db_path = youtube_db_path
-        self.config = Config()
+        # YouTube processor uses OpenAI, not Claude - disable Claude requirement
+        self.config = Config(require_claude=False)
         
         # Initialize YouTube-specific database
         self._init_youtube_database()

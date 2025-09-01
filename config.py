@@ -21,7 +21,7 @@ logger = logging.getLogger(__name__)
 class Config:
     """Centralized configuration management"""
     
-    def __init__(self):
+    def __init__(self, require_claude: bool = True):
         # Base paths
         self.PROJECT_ROOT = Path(__file__).parent
         self.DB_PATH = "podcast_monitor.db"
@@ -142,7 +142,7 @@ class Config:
         self.OPENAI_API_KEY = os.getenv('OPENAI_API_KEY')
         
         # Validate environment
-        self._validate_environment()
+        self._validate_environment(require_claude=require_claude)
     
     def _ensure_directories(self):
         """Create necessary directories"""
@@ -156,7 +156,7 @@ class Config:
         for directory in directories:
             Path(directory).mkdir(parents=True, exist_ok=True)
     
-    def _validate_environment(self):
+    def _validate_environment(self, require_claude: bool = True):
         """Validate environment configuration"""
         warnings = []
         errors = []
@@ -169,11 +169,19 @@ class Config:
             warnings.append("ELEVENLABS_API_KEY not set - TTS features will be disabled")
         
         # Check for required tools
-        try:
-            import subprocess
-            subprocess.run(['claude', '--version'], capture_output=True, timeout=5)
-        except (subprocess.TimeoutExpired, FileNotFoundError):
-            errors.append("Claude Code CLI not found - install from https://claude.ai/code")
+        if require_claude:
+            try:
+                import subprocess
+                subprocess.run(['claude', '--version'], capture_output=True, timeout=5)
+            except (subprocess.TimeoutExpired, FileNotFoundError):
+                errors.append("Claude Code CLI not found - install from https://claude.ai/code")
+        else:
+            # For YouTube-only processing, Claude is optional
+            try:
+                import subprocess
+                subprocess.run(['claude', '--version'], capture_output=True, timeout=5)
+            except (subprocess.TimeoutExpired, FileNotFoundError):
+                warnings.append("Claude Code CLI not found - digest generation will use OpenAI fallback")
         
         try:
             subprocess.run(['ffmpeg', '-version'], capture_output=True, timeout=5)
