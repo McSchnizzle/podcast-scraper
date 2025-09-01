@@ -1,101 +1,87 @@
 <?xml version="1.0" ?>
-<rss xmlns:itunes="http://www.itunes.com/dtds/podcast-1.0.dtd" xmlns:content="http://purl.org/rss/1.0/modules/content/" xmlns:atom="http://www.w3.org/2005/Atom" version="2.0">
+<rss xmlns:itunes="http://www.itunes.com/dtds/podcast-1.0.dtd" xmlns:content="http://purl.org/rss/1.0/modules/content/" version="2.0">
   <channel>
-    <title>Daily Tech Digest</title>
-    <description>AI-generated daily digest of tech news, product launches, and industry insights from leading podcasts and creators</description>
+    <title>Daily Tech &amp; Society Digest</title>
+    <description>AI-generated daily digest covering technology, society, and culture from leading podcasts and creators, organized by topic</description>
     <link>https://paulrbrown.org/daily-digest</link>
     <language>en-US</language>
     <copyright>© 2025 Paul Brown</copyright>
+    <managingEditor>podcast@paulrbrown.org (Paul Brown)</managingEditor>
+    <webMaster>podcast@paulrbrown.org (Paul Brown)</webMaster>
+    <lastBuildDate>Mon, 01 Sep 2025 20:20:58 +0000</lastBuildDate>
     <itunes:author>Paul Brown</itunes:author>
-    <itunes:summary>AI-generated daily digest of tech news, product launches, and industry insights from leading podcasts and creators</itunes:summary>
-    <itunes:owner>
-      <itunes:name>Paul Brown</itunes:name>
-      <itunes:email>podcast@paulrbrown.org</itunes:email>
-    </itunes:owner>
+    <itunes:summary>AI-generated daily digest covering technology, society, and culture from leading podcasts and creators, organized by topic</itunes:summary>
+    <itunes:owner>Paul Brown</itunes:owner>
     <itunes:image href="https://paulrbrown.org/podcast-artwork.jpg"/>
-    <itunes:category text="Technology">
-      <itunes:category text="News"/>
-    </itunes:category>
-    <itunes:explicit>false</itunes:explicit>
-    <atom:link href="https://paulrbrown.org/daily-digest.xml" rel="self" type="application/rss+xml"/>
-    <pubDate>Mon, 01 Sep 2025 11:55:52 +0000</pubDate>
+    <itunes:category text="Technology"/>
+    <itunes:explicit>no</itunes:explicit>
     <item>
-      <title>Daily Tech Digest - September 01, 2025</title>
-      <description>Daily digest of tech news and insights from leading podcasts and creators, covering AI tools, product launches, and industry developments. Generated on September 01, 2025 from multiple verified sources including The Vergecast, The AI Advantage, and How I AI.
-This episode features cross-episode synthesis with topic-based organization, multi-voice narration, and actionable insights curated by AI analysis.</description>
+      <title>AI News &amp; Developments - September 01, 2025</title>
+      <description>In the world of artificial intelligence, the week of September 1, 2025, has been marked by significant developments</description>
+      <link>https://paulrbrown.org/daily-digest/20250901_171631</link>
+      <guid>https://paulrbrown.org/daily-digest/20250901_171631</guid>
+      <pubDate>Mon, 01 Sep 2025 17:16:31 +0000</pubDate>
+      <enclosure url="https://paulrbrown.org/audio/ai_news_digest_20250901_171631.mp3" length="3009351" type="audio/mpeg"/>
+      <itunes:title>AI News &amp; Developments - September 01, 2025</itunes:title>
+      <itunes:summary>In the world of artificial intelligence, the week of September 1, 2025, has been marked by significant developments</itunes:summary>
+      <itunes:duration>120</itunes:duration>
+      <itunes:keywords>Technology/AI</itunes:keywords>
+    </item>
+    <item>
+      <title>AI News &amp; Developments - September 01, 2025</title>
+      <description>Due to the lack of actual content in the provided transcripts, it's not possible to provide a detailed analysis or digest</description>
+      <link>https://paulrbrown.org/daily-digest/20250901_171626</link>
+      <guid>https://paulrbrown.org/daily-digest/20250901_171626</guid>
+      <pubDate>Mon, 01 Sep 2025 17:16:26 +0000</pubDate>
+      <enclosure url="https://paulrbrown.org/audio/ai_news_digest_20250901_171626.mp3" length="2491499" type="audio/mpeg"/>
+      <itunes:title>AI News &amp; Developments - September 01, 2025</itunes:title>
+      <itunes:summary>Due to the lack of actual content in the provided transcripts, it's not possible to provide a detailed analysis or digest</itunes:summary>
+      <itunes:duration>120</itunes:duration>
+      <itunes:keywords>Technology/AI</itunes:keywords>
+    </item>
+    <item>
+      <title>Daily - September 01, 2025</title>
+      <description># Daily Tech Digest - September 01, 2025  ## 🌟 Top Stories  1</description>
+      <link>https://paulrbrown.org/daily-digest/20250901_115502</link>
+      <guid>https://paulrbrown.org/daily-digest/20250901_115502</guid>
       <pubDate>Mon, 01 Sep 2025 11:55:02 +0000</pubDate>
-      <enclosure url="https://paulrbrown.org/audio/complete_topic_digest_20250901_115502.mp3" type="audio/mpeg" length="3518843"/>
-      <guid isPermaLink="false">fb634e3602150ad7dff6b5b701c1f4d5</guid>
-      <itunes:title>Daily Tech Digest - September 01, 2025</itunes:title>
-      <itunes:summary>Daily digest of tech news and insights from leading podcasts and creators, covering AI tools, product launches, and industry developments. Generated on September 01, 2025 from multiple verified sources including The Vergecast, The AI Advantage, and How I AI.
-This episode features cross-episode synthesis with topic-based organization, multi-voice narration, and actionable insights curated by AI analysis.</itunes:summary>
-      <itunes:duration>00:03:34</itunes:duration>
-      <itunes:episodeType>full</itunes:episodeType>
+      <enclosure url="https://paulrbrown.org/audio/daily_digest_20250901_115502.mp3" length="3486242" type="audio/mpeg"/>
+      <itunes:title>Daily - September 01, 2025</itunes:title>
+      <itunes:summary># Daily Tech Digest - September 01, 2025  ## 🌟 Top Stories  1</itunes:summary>
+      <itunes:duration>180</itunes:duration>
     </item>
     <item>
-      <title>Daily Tech Digest - September 01, 2025</title>
-      <description>Daily digest of tech news and insights from leading podcasts and creators, covering AI tools, product launches, and industry developments. Generated on September 01, 2025 from multiple verified sources including The Vergecast, The AI Advantage, and How I AI.
-This episode features cross-episode synthesis with topic-based organization, multi-voice narration, and actionable insights curated by AI analysis.</description>
+      <title>Daily - September 01, 2025</title>
+      <description># Daily Tech Digest - September 01, 2025  ## 🌟 Top Stories  1</description>
+      <link>https://paulrbrown.org/daily-digest/20250901_113824</link>
+      <guid>https://paulrbrown.org/daily-digest/20250901_113824</guid>
+      <pubDate>Mon, 01 Sep 2025 11:38:24 +0000</pubDate>
+      <enclosure url="https://paulrbrown.org/audio/daily_digest_20250901_113824.mp3" length="3566490" type="audio/mpeg"/>
+      <itunes:title>Daily - September 01, 2025</itunes:title>
+      <itunes:summary># Daily Tech Digest - September 01, 2025  ## 🌟 Top Stories  1</itunes:summary>
+      <itunes:duration>180</itunes:duration>
+    </item>
+    <item>
+      <title>Daily - September 01, 2025</title>
+      <description># Daily Tech Digest - September 01, 2025  ## 🌟 Top Stories  1</description>
+      <link>https://paulrbrown.org/daily-digest/20250901_015602</link>
+      <guid>https://paulrbrown.org/daily-digest/20250901_015602</guid>
       <pubDate>Mon, 01 Sep 2025 01:56:02 +0000</pubDate>
-      <enclosure url="https://paulrbrown.org/audio/complete_topic_digest_20250901_015602.mp3" type="audio/mpeg" length="4263646"/>
-      <guid isPermaLink="false">e8c8f1c6de8fbcde162f255c9c55b77d</guid>
-      <itunes:title>Daily Tech Digest - September 01, 2025</itunes:title>
-      <itunes:summary>Daily digest of tech news and insights from leading podcasts and creators, covering AI tools, product launches, and industry developments. Generated on September 01, 2025 from multiple verified sources including The Vergecast, The AI Advantage, and How I AI.
-This episode features cross-episode synthesis with topic-based organization, multi-voice narration, and actionable insights curated by AI analysis.</itunes:summary>
-      <itunes:duration>00:04:20</itunes:duration>
-      <itunes:episodeType>full</itunes:episodeType>
+      <enclosure url="https://paulrbrown.org/audio/daily_digest_20250901_015602.mp3" length="4222686" type="audio/mpeg"/>
+      <itunes:title>Daily - September 01, 2025</itunes:title>
+      <itunes:summary># Daily Tech Digest - September 01, 2025  ## 🌟 Top Stories  1</itunes:summary>
+      <itunes:duration>240</itunes:duration>
     </item>
     <item>
-      <title>Daily Tech Digest - September 01, 2025</title>
-      <description>Daily digest of tech news and insights from leading podcasts and creators, covering AI tools, product launches, and industry developments. Generated on September 01, 2025 from multiple verified sources including The Vergecast, The AI Advantage, and How I AI.
-This episode features cross-episode synthesis with topic-based organization, multi-voice narration, and actionable insights curated by AI analysis.</description>
+      <title>Daily - September 01, 2025</title>
+      <description># Daily Tech Digest - September 01, 2025  ## 🌟 Top Stories  1</description>
+      <link>https://paulrbrown.org/daily-digest/20250901_013235</link>
+      <guid>https://paulrbrown.org/daily-digest/20250901_013235</guid>
       <pubDate>Mon, 01 Sep 2025 01:32:35 +0000</pubDate>
-      <enclosure url="https://paulrbrown.org/audio/complete_topic_digest_20250901_013235.mp3" type="audio/mpeg" length="4217253"/>
-      <guid isPermaLink="false">2e02495ebfcb789a18d51e2a788ffaa3</guid>
-      <itunes:title>Daily Tech Digest - September 01, 2025</itunes:title>
-      <itunes:summary>Daily digest of tech news and insights from leading podcasts and creators, covering AI tools, product launches, and industry developments. Generated on September 01, 2025 from multiple verified sources including The Vergecast, The AI Advantage, and How I AI.
-This episode features cross-episode synthesis with topic-based organization, multi-voice narration, and actionable insights curated by AI analysis.</itunes:summary>
-      <itunes:duration>00:04:17</itunes:duration>
-      <itunes:episodeType>full</itunes:episodeType>
-    </item>
-    <item>
-      <title>Daily Tech Digest - August 29, 2025</title>
-      <description>Daily digest of tech news and insights from leading podcasts and creators, covering AI tools, product launches, and industry developments. Generated on August 29, 2025 from multiple verified sources including The Vergecast, The AI Advantage, and How I AI.
-This episode features cross-episode synthesis with topic-based organization, multi-voice narration, and actionable insights curated by AI analysis.</description>
-      <pubDate>Fri, 29 Aug 2025 22:22:59 +0000</pubDate>
-      <enclosure url="https://paulrbrown.org/audio/complete_topic_digest_20250829_222259.mp3" type="audio/mpeg" length="6447065"/>
-      <guid isPermaLink="false">f7e26ff4ed0e12a74844c6896e327593</guid>
-      <itunes:title>Daily Tech Digest - August 29, 2025</itunes:title>
-      <itunes:summary>Daily digest of tech news and insights from leading podcasts and creators, covering AI tools, product launches, and industry developments. Generated on August 29, 2025 from multiple verified sources including The Vergecast, The AI Advantage, and How I AI.
-This episode features cross-episode synthesis with topic-based organization, multi-voice narration, and actionable insights curated by AI analysis.</itunes:summary>
-      <itunes:duration>00:06:33</itunes:duration>
-      <itunes:episodeType>full</itunes:episodeType>
-    </item>
-    <item>
-      <title>Daily Tech Digest - August 29, 2025</title>
-      <description>Daily digest of tech news and insights from leading podcasts and creators, covering AI tools, product launches, and industry developments. Generated on August 29, 2025 from multiple verified sources including The Vergecast, The AI Advantage, and How I AI.
-This episode features cross-episode synthesis with topic-based organization, multi-voice narration, and actionable insights curated by AI analysis.</description>
-      <pubDate>Fri, 29 Aug 2025 21:55:51 +0000</pubDate>
-      <enclosure url="https://paulrbrown.org/audio/complete_topic_digest_20250829_215551.mp3" type="audio/mpeg" length="5130494"/>
-      <guid isPermaLink="false">8aa713084b50dcb410e35569a55dc00c</guid>
-      <itunes:title>Daily Tech Digest - August 29, 2025</itunes:title>
-      <itunes:summary>Daily digest of tech news and insights from leading podcasts and creators, covering AI tools, product launches, and industry developments. Generated on August 29, 2025 from multiple verified sources including The Vergecast, The AI Advantage, and How I AI.
-This episode features cross-episode synthesis with topic-based organization, multi-voice narration, and actionable insights curated by AI analysis.</itunes:summary>
-      <itunes:duration>00:05:13</itunes:duration>
-      <itunes:episodeType>full</itunes:episodeType>
-    </item>
-    <item>
-      <title>Daily Tech Digest - August 28, 2025</title>
-      <description>Daily digest of tech news and insights from leading podcasts and creators, covering AI tools, product launches, and industry developments. Generated on August 28, 2025 from multiple verified sources including The Vergecast, The AI Advantage, and How I AI.
-This episode features cross-episode synthesis with topic-based organization, multi-voice narration, and actionable insights curated by AI analysis.</description>
-      <pubDate>Thu, 28 Aug 2025 21:53:02 +0000</pubDate>
-      <enclosure url="https://paulrbrown.org/audio/complete_topic_digest_20250828_215302.mp3" type="audio/mpeg" length="6826990"/>
-      <guid isPermaLink="false">744b1242deace10a5f78ba0c943ab9de</guid>
-      <itunes:title>Daily Tech Digest - August 28, 2025</itunes:title>
-      <itunes:summary>Daily digest of tech news and insights from leading podcasts and creators, covering AI tools, product launches, and industry developments. Generated on August 28, 2025 from multiple verified sources including The Vergecast, The AI Advantage, and How I AI.
-This episode features cross-episode synthesis with topic-based organization, multi-voice narration, and actionable insights curated by AI analysis.</itunes:summary>
-      <itunes:duration>00:06:56</itunes:duration>
-      <itunes:episodeType>full</itunes:episodeType>
+      <enclosure url="https://paulrbrown.org/audio/daily_digest_20250901_013235.mp3" length="4241076" type="audio/mpeg"/>
+      <itunes:title>Daily - September 01, 2025</itunes:title>
+      <itunes:summary># Daily Tech Digest - September 01, 2025  ## 🌟 Top Stories  1</itunes:summary>
+      <itunes:duration>240</itunes:duration>
     </item>
   </channel>
 </rss>
