@@ -66,7 +66,7 @@ python3 rss_generator.py
 ### Requirements Management
 ```bash
 # Install dependencies
-pip install -r requirements.txt
+pip install -r requirements-dev.txt
 
 # Install Apple Silicon optimizations
 pip install parakeet-mlx
@@ -303,11 +303,11 @@ tail -f /var/log/cron.log  # Check execution logs
 ./youtube_cron_job.sh  # Manual test run
 ```
 
-### Vercel Build Failures
-**Symptoms**: Vercel builds triggered on every commit
-**Solution**: Verify ignore script is configured in Vercel dashboard
-- Settings → Git → Ignored Build Step: `./vercel-build-ignore.sh`
-- Or use nuclear option: `exit 0` to skip all auto-builds
+### Vercel Deployment Issues
+**250MB Function Size Error**: Heavy dependencies causing deployment failures
+**Solution**: Use `api/requirements.txt` with minimal deps (requests, python-dateutil only)
+- Root `requirements-dev.txt` excluded via `.vercelignore` 
+- Serverless functions optimized to <1MB vs 250MB+ limit
 
 ### GitHub Actions Database Caching
 **Symptoms**: Database changes not reflected in workflow

@@ -59,6 +59,7 @@ Dual-database automated system with local YouTube processing and GitHub Actions 
 - **RSS Generation**: Links to GitHub-hosted MP3s via paulrbrown.org CDN URLs ✅
 - **Vercel Intelligence**: Smart build skipping prevents unnecessary deployments ✅
 - **Web API**: Optimized audio streaming and RSS serving with intelligent caching ✅
+- **Vercel Optimization**: Serverless functions under 1MB via minimal dependencies and smart exclusions ✅
 
 **Publishing Features**:
 - **RSS Compliance**: Full RSS 2.0 specification compliance with podcast extensions
