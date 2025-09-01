@@ -1,0 +1,86 @@
+{
+  "AI News": {
+    "threshold": 0.7,
+    "voice_id": "21m00Tcm4TlvDq8ikWAM",
+    "voice_name": "Rachel",
+    "voice_settings": {
+      "stability": 0.75,
+      "similarity_boost": 0.75,
+      "style": 0.15
+    },
+    "music_prompt": "Upbeat tech-focused instrumental background music with electronic elements, suitable for AI and technology news",
+    "display_name": "AI News & Developments",
+    "description": "Latest artificial intelligence news, breakthroughs, and industry developments",
+    "category": "Technology/AI"
+  },
+  "Tech Product Releases": {
+    "threshold": 0.6,
+    "voice_id": "AZnzlk1XvdvUeBnXmlld",
+    "voice_name": "Domi",
+    "voice_settings": {
+      "stability": 0.70,
+      "similarity_boost": 0.80,
+      "style": 0.25
+    },
+    "music_prompt": "Energetic and modern background music with tech-product showcase feel, upbeat and engaging",
+    "display_name": "Tech Product Releases",
+    "description": "New product launches, updates, and technology announcements",
+    "category": "Technology/Products"
+  },
+  "Tech News and Tech Culture": {
+    "threshold": 0.6,
+    "voice_id": "EXAVITQu4vr4xnSDxMaL",
+    "voice_name": "Bella",
+    "voice_settings": {
+      "stability": 0.65,
+      "similarity_boost": 0.75,
+      "style": 0.35
+    },
+    "music_prompt": "Creative and thoughtful background music with cultural depth, warm and engaging for discussion content",
+    "display_name": "Tech News & Culture",
+    "description": "Technology industry news, trends, and cultural developments",
+    "category": "Technology/News"
+  },
+  "Community Organizing": {
+    "threshold": 0.6,
+    "voice_id": "ErXwobaYiN019PkySvjV",
+    "voice_name": "Antoni",
+    "voice_settings": {
+      "stability": 0.80,
+      "similarity_boost": 0.70,
+      "style": 0.10
+    },
+    "music_prompt": "Inspiring and hopeful background music with community and grassroots organizing feel, motivational",
+    "display_name": "Community Organizing",
+    "description": "Grassroots organizing, community building, and civic engagement",
+    "category": "Society/Community"
+  },
+  "Social Justice": {
+    "threshold": 0.65,
+    "voice_id": "VR6AewLTigWG4xSOukaG",
+    "voice_name": "Arnold",
+    "voice_settings": {
+      "stability": 0.85,
+      "similarity_boost": 0.75,
+      "style": 0.20
+    },
+    "music_prompt": "Serious and dignified background music appropriate for social justice content, respectful and purposeful",
+    "display_name": "Social Justice",
+    "description": "Social justice issues, advocacy, and systemic change initiatives",
+    "category": "Society/Justice"
+  },
+  "Societal Culture Change": {
+    "threshold": 0.6,
+    "voice_id": "pNInz6obpgDQGcFmaJgB",
+    "voice_name": "Adam",
+    "voice_settings": {
+      "stability": 0.75,
+      "similarity_boost": 0.80,
+      "style": 0.30
+    },
+    "music_prompt": "Thoughtful and contemplative background music for cultural discussion, reflective and nuanced",
+    "display_name": "Societal Culture Change",
+    "description": "Cultural shifts, social movements, and societal transformation",
+    "category": "Society/Culture"
+  }
+}

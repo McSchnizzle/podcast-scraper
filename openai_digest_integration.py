@@ -7,6 +7,7 @@ Complete replacement for Claude integration using OpenAI GPT-4 for consistency
 import os
 import json
 import logging
+import re
 from pathlib import Path
 from datetime import datetime
 from typing import Dict, List, Optional, Tuple
@@ -47,8 +48,8 @@ class OpenAIDigestIntegration:
                 self.client = None
                 self.api_available = False
 
-    def get_transcripts_for_analysis(self, include_youtube: bool = True, topic: str = None) -> List[Dict]:
-        """Get transcripts ready for API analysis from both databases, optionally filtered by topic"""
+    def get_transcripts_for_analysis(self, include_youtube: bool = True, topic: str = None, threshold: float = 0.6) -> List[Dict]:
+        """Get transcripts ready for API analysis from both databases, filtered by topic relevance scores"""
         transcripts = []
         
         # Get RSS transcripts from main database
@@ -56,24 +57,26 @@ class OpenAIDigestIntegration:
             conn = sqlite3.connect(self.db_path)
             cursor = conn.cursor()
             
-            # Updated query to only include episodes approved for digest with specific topic assignment
+            # Updated query to use relevance scores instead of digest_topic
             if topic:
                 query = """
-                SELECT id, title, transcript_path, episode_id, published_date, status, digest_topic
+                SELECT id, title, transcript_path, episode_id, published_date, status, topic_relevance_json
                 FROM episodes 
                 WHERE transcript_path IS NOT NULL 
                 AND status = 'transcribed'
-                AND digest_topic = ?
+                AND topic_relevance_json IS NOT NULL
+                AND topic_relevance_json != ''
                 ORDER BY published_date DESC
                 """
-                cursor.execute(query, (topic,))
+                cursor.execute(query)
             else:
                 query = """
-                SELECT id, title, transcript_path, episode_id, published_date, status, digest_topic
+                SELECT id, title, transcript_path, episode_id, published_date, status, topic_relevance_json
                 FROM episodes 
                 WHERE transcript_path IS NOT NULL 
                 AND status = 'transcribed'
-                AND digest_topic IS NOT NULL
+                AND topic_relevance_json IS NOT NULL
+                AND topic_relevance_json != ''
                 ORDER BY published_date DESC
                 """
                 cursor.execute(query)
@@ -81,13 +84,31 @@ class OpenAIDigestIntegration:
             rss_episodes = cursor.fetchall()
             conn.close()
             
-            for episode_id, title, transcript_path, ep_id, published_date, status, digest_topic in rss_episodes:
+            for episode_id, title, transcript_path, ep_id, published_date, status, topic_relevance_json in rss_episodes:
                 transcript_file = Path(transcript_path)
                 
                 if transcript_file.exists():
                     try:
                         with open(transcript_file, 'r', encoding='utf-8') as f:
                             content = f.read().strip()
+                        
+                        # Parse topic relevance scores
+                        try:
+                            scores = json.loads(topic_relevance_json) if topic_relevance_json else {}
+                        except (json.JSONDecodeError, TypeError):
+                            logger.warning(f"Invalid topic scores for episode {ep_id}")
+                            scores = {}
+                        
+                        # Filter by topic relevance if specific topic requested
+                        if topic:
+                            topic_score = scores.get(topic, 0.0)
+                            if topic_score < threshold:
+                                continue  # Skip episodes below threshold
+                        else:
+                            # For general query, check if any topic exceeds threshold
+                            max_score = max((score for score in scores.values() if isinstance(score, (int, float))), default=0.0)
+                            if max_score < threshold:
+                                continue
                         
                         if content:
                             transcripts.append({
@@ -98,7 +119,7 @@ class OpenAIDigestIntegration:
                                 'transcript_path': str(transcript_path),
                                 'content': content[:50000],  # Limit content for API
                                 'source': 'rss',
-                                'digest_topic': digest_topic
+                                'topic_scores': scores
                             })
                     except Exception as e:
                         logger.error(f"Error reading RSS transcript {transcript_path}: {e}")
@@ -117,21 +138,36 @@ class OpenAIDigestIntegration:
                     cursor = conn.cursor()
                     
                     # Use the same query logic for YouTube database
-                    if topic:
-                        cursor.execute(query, (topic,))
-                    else:
-                        cursor.execute(query)
+                    cursor.execute(query)
                     youtube_episodes = cursor.fetchall()
                     conn.close()
                     
                     youtube_count = 0
-                    for episode_id, title, transcript_path, ep_id, published_date, status, digest_topic in youtube_episodes:
+                    for episode_id, title, transcript_path, ep_id, published_date, status, topic_relevance_json in youtube_episodes:
                         transcript_file = Path(transcript_path)
                         
                         if transcript_file.exists():
                             try:
                                 with open(transcript_file, 'r', encoding='utf-8') as f:
                                     content = f.read().strip()
+                                
+                                # Parse topic relevance scores
+                                try:
+                                    scores = json.loads(topic_relevance_json) if topic_relevance_json else {}
+                                except (json.JSONDecodeError, TypeError):
+                                    logger.warning(f"Invalid topic scores for YouTube episode {ep_id}")
+                                    scores = {}
+                                
+                                # Filter by topic relevance if specific topic requested
+                                if topic:
+                                    topic_score = scores.get(topic, 0.0)
+                                    if topic_score < threshold:
+                                        continue  # Skip episodes below threshold
+                                else:
+                                    # For general query, check if any topic exceeds threshold
+                                    max_score = max((score for score in scores.values() if isinstance(score, (int, float))), default=0.0)
+                                    if max_score < threshold:
+                                        continue
                                 
                                 if content:
                                     transcripts.append({
@@ -142,7 +178,7 @@ class OpenAIDigestIntegration:
                                         'transcript_path': str(transcript_path),
                                         'content': content[:50000],
                                         'source': 'youtube',
-                                        'digest_topic': digest_topic
+                                        'topic_scores': scores
                                     })
                                     youtube_count += 1
                             except Exception as e:
@@ -174,7 +210,66 @@ class OpenAIDigestIntegration:
         
         combined_content = "\n".join(transcript_summaries)
         
-        # Topic-specific prompts with focused analysis - same structure as Claude version
+        # Load topic-specific instructions from files
+        instructions_path = Path("digest_instructions") / f"{topic}.md"
+        if topic and instructions_path.exists():
+            try:
+                with open(instructions_path, 'r', encoding='utf-8') as f:
+                    instructions_content = f.read()
+                
+                # Extract the key sections from instructions for prompt
+                focus_match = re.search(r'## Topic Focus\n(.+?)(?=\n##|$)', instructions_content, re.DOTALL)
+                focus_area = focus_match.group(1).strip() if focus_match else f"{topic} topics"
+                
+                structure_match = re.search(r'## Content Structure\n(.+?)(?=\n## Style Guidelines|$)', instructions_content, re.DOTALL)
+                structure_content = structure_match.group(1).strip() if structure_match else ""
+                
+                # Load topic config for display info
+                topics_config_path = Path("topics.json")
+                if topics_config_path.exists():
+                    try:
+                        with open(topics_config_path, 'r', encoding='utf-8') as f:
+                            topics_config = json.load(f)
+                        topic_info = topics_config.get(topic, {})
+                        title = f"{topic_info.get('display_name', topic)} - {datetime.now().strftime('%B %d, %Y')}"
+                    except (json.JSONDecodeError, Exception) as e:
+                        logger.warning(f"Could not load topics config: {e}")
+                        title = f"{topic} - {datetime.now().strftime('%B %d, %Y')}"
+                else:
+                    title = f"{topic} - {datetime.now().strftime('%B %d, %Y')}"
+                
+            except Exception as e:
+                logger.warning(f"Could not load instructions for {topic}: {e}")
+                # Fallback to embedded instructions
+                return self._prepare_fallback_prompt(transcripts, topic, combined_content)
+        else:
+            # Fallback to embedded instructions
+            return self._prepare_fallback_prompt(transcripts, topic, combined_content)
+        
+        prompt = f"""You are an expert analyst creating a focused digest from podcast transcripts.
+
+Please analyze the following {len(transcripts)} podcast transcripts and create a structured digest following these specific instructions:
+
+TOPIC FOCUS:
+{focus_area}
+
+TRANSCRIPT CONTENT:
+{combined_content}
+
+CONTENT STRUCTURE TO FOLLOW:
+{structure_content}
+
+Create a comprehensive digest with the title: {title}
+
+Follow the content structure provided above exactly, maintaining the same section headers and focus areas. Ensure the content is formatted as clean Markdown suitable for publication and TTS generation (avoid bullet points, use prose format).
+
+Focus on accuracy, insight, and connecting information specifically related to the topic focus area."""
+
+        return prompt
+    
+    def _prepare_fallback_prompt(self, transcripts: List[Dict], topic: str, combined_content: str) -> str:
+        """Fallback to embedded prompts when files are not available"""
+        # Topic-specific prompts with focused analysis - same structure as before
         topic_descriptions = {
             'AI News': {
                 'title': 'AI News Digest',
@@ -297,23 +392,35 @@ Format the output as clean Markdown suitable for publication. Focus on accuracy,
 
         return prompt
 
-    def get_available_topics(self) -> List[str]:
-        """Get list of topics that have episodes ready for digest"""
+    def get_available_topics(self, threshold: float = 0.6) -> List[str]:
+        """Get list of topics that have episodes ready for digest based on relevance scores"""
         topics_with_episodes = set()
+        
+        # Define available topics (from OpenAI scorer)
+        all_topics = ['AI News', 'Tech Product Releases', 'Tech News and Tech Culture', 
+                     'Community Organizing', 'Social Justice', 'Societal Culture Change']
         
         # Check RSS database
         try:
             conn = sqlite3.connect(self.db_path)
             cursor = conn.cursor()
             cursor.execute("""
-                SELECT DISTINCT digest_topic 
+                SELECT topic_relevance_json 
                 FROM episodes 
-                WHERE digest_topic IS NOT NULL 
+                WHERE topic_relevance_json IS NOT NULL 
+                AND topic_relevance_json != ''
                 AND status = 'transcribed'
                 AND transcript_path IS NOT NULL
             """)
-            rss_topics = [row[0] for row in cursor.fetchall()]
-            topics_with_episodes.update(rss_topics)
+            
+            for (scores_json,) in cursor.fetchall():
+                try:
+                    scores = json.loads(scores_json)
+                    for topic in all_topics:
+                        if scores.get(topic, 0.0) >= threshold:
+                            topics_with_episodes.add(topic)
+                except (json.JSONDecodeError, TypeError):
+                    continue
             conn.close()
         except Exception as e:
             logger.error(f"Error getting RSS topics: {e}")
@@ -325,14 +432,22 @@ Format the output as clean Markdown suitable for publication. Focus on accuracy,
                 conn = sqlite3.connect(youtube_db_path)
                 cursor = conn.cursor()
                 cursor.execute("""
-                    SELECT DISTINCT digest_topic 
+                    SELECT topic_relevance_json 
                     FROM episodes 
-                    WHERE digest_topic IS NOT NULL 
+                    WHERE topic_relevance_json IS NOT NULL 
+                    AND topic_relevance_json != ''
                     AND status = 'transcribed'
                     AND transcript_path IS NOT NULL
                 """)
-                youtube_topics = [row[0] for row in cursor.fetchall()]
-                topics_with_episodes.update(youtube_topics)
+                
+                for (scores_json,) in cursor.fetchall():
+                    try:
+                        scores = json.loads(scores_json)
+                        for topic in all_topics:
+                            if scores.get(topic, 0.0) >= threshold:
+                                topics_with_episodes.add(topic)
+                    except (json.JSONDecodeError, TypeError):
+                        continue
                 conn.close()
         except Exception as e:
             logger.error(f"Error getting YouTube topics: {e}")
@@ -401,8 +516,8 @@ Format the output as clean Markdown suitable for publication. Focus on accuracy,
             
             logger.info(f"✅ {topic} digest saved to {digest_path}")
             
-            # Update databases - mark episodes as digested  
-            self._mark_episodes_as_digested(transcripts)
+            # Update databases - mark episodes as digested and stamp with topic/date
+            self._mark_episodes_as_digested(transcripts, topic, timestamp)
             
             # Move transcripts to digested folder
             self._move_transcripts_to_digested(transcripts)
@@ -484,8 +599,8 @@ Format the output as clean Markdown suitable for publication. Focus on accuracy,
                 error_summary = f"All {len(failed_digests)} topic digests failed"
                 return False, None, error_summary
 
-    def _mark_episodes_as_digested(self, transcripts: List[Dict]):
-        """Mark episodes as digested in both databases"""
+    def _mark_episodes_as_digested(self, transcripts: List[Dict], topic: str, timestamp: str):
+        """Mark episodes as digested in both databases and stamp with topic/date"""
         rss_episodes = []
         youtube_episodes = []
         
@@ -498,6 +613,9 @@ Format the output as clean Markdown suitable for publication. Focus on accuracy,
                 original_id = int(transcript['id'].replace('yt_', ''))
                 youtube_episodes.append(original_id)
         
+        # Format date for database storage
+        digest_date = datetime.now().strftime('%Y-%m-%d')
+        
         # Update RSS episodes in main database
         if rss_episodes:
             try:
@@ -507,13 +625,13 @@ Format the output as clean Markdown suitable for publication. Focus on accuracy,
                 for episode_id in rss_episodes:
                     cursor.execute("""
                         UPDATE episodes 
-                        SET status = 'digested'
+                        SET status = 'digested', digest_topic = ?, digest_date = ?
                         WHERE id = ?
-                    """, (episode_id,))
+                    """, (topic, digest_date, episode_id))
                 
                 conn.commit()
                 conn.close()
-                logger.info(f"✅ Marked {len(rss_episodes)} RSS episodes as digested")
+                logger.info(f"✅ Marked {len(rss_episodes)} RSS episodes as digested for {topic}")
                 
             except Exception as e:
                 logger.error(f"Error updating RSS database: {e}")
@@ -529,13 +647,13 @@ Format the output as clean Markdown suitable for publication. Focus on accuracy,
                     for episode_id in youtube_episodes:
                         cursor.execute("""
                             UPDATE episodes 
-                            SET status = 'digested'
+                            SET status = 'digested', digest_topic = ?, digest_date = ?
                             WHERE id = ?
-                        """, (episode_id,))
+                        """, (topic, digest_date, episode_id))
                     
                     conn.commit()
                     conn.close()
-                    logger.info(f"✅ Marked {len(youtube_episodes)} YouTube episodes as digested")
+                    logger.info(f"✅ Marked {len(youtube_episodes)} YouTube episodes as digested for {topic}")
                 
             except Exception as e:
                 logger.error(f"Error updating YouTube database: {e}")

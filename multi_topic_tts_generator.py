@@ -14,6 +14,14 @@ from pathlib import Path
 from datetime import datetime
 from typing import Dict, List, Optional, Tuple
 
+# Import music integration
+try:
+    from music_integration import MusicIntegrator
+except ImportError:
+    logger = logging.getLogger(__name__)
+    logger.warning("Music integration not available - TTS will generate without music")
+    MusicIntegrator = None
+
 # Load environment variables
 try:
     from dotenv import load_dotenv
@@ -39,8 +47,57 @@ class MultiTopicTTSGenerator:
         
         self.base_url = "https://api.elevenlabs.io/v1"
         
-        # Topic-specific voice configurations
-        self.voice_config = {
+        # Load topic-specific voice configurations from topics.json
+        self.voice_config = self._load_topic_config()
+        
+        # Initialize music integrator if available
+        self.music_integrator = MusicIntegrator() if MusicIntegrator else None
+        if self.music_integrator:
+            logger.info("🎵 Music integration enabled")
+        else:
+            logger.info("🎵 Music integration disabled - TTS only")
+        
+        # Default voice for unknown topics
+        self.default_voice = {
+            "voice_id": "21m00Tcm4TlvDq8ikWAM",  # Rachel
+            "voice_settings": {
+                "stability": 0.75,
+                "similarity_boost": 0.75,
+                "style": 0.20
+            }
+        }
+    
+    def _load_topic_config(self) -> Dict:
+        """Load topic configuration from topics.json"""
+        try:
+            topics_config_path = Path("topics.json")
+            if topics_config_path.exists():
+                with open(topics_config_path, 'r', encoding='utf-8') as f:
+                    topics_config = json.load(f)
+                
+                # Convert to format expected by TTS generator
+                voice_config = {}
+                for topic, config in topics_config.items():
+                    # Convert topic name to snake_case for internal use
+                    topic_key = topic.lower().replace(' ', '_').replace('&', 'and')
+                    voice_config[topic_key] = {
+                        "voice_id": config.get("voice_id", self.default_voice["voice_id"]),
+                        "display_name": config.get("display_name", topic),
+                        **config.get("voice_settings", self.default_voice["voice_settings"])
+                    }
+                
+                logger.info(f"✅ Loaded voice config for {len(voice_config)} topics")
+                return voice_config
+            else:
+                logger.warning("topics.json not found, using default voice configuration")
+                return self._get_default_voice_config()
+        except Exception as e:
+            logger.error(f"Error loading topics.json: {e}, using default configuration")
+            return self._get_default_voice_config()
+    
+    def _get_default_voice_config(self) -> Dict:
+        """Fallback voice configuration"""
+        return {
             "ai_news": {
                 "voice_id": "21m00Tcm4TlvDq8ikWAM",  # Rachel - clear, professional
                 "display_name": "AI News & Developments",
@@ -83,14 +140,6 @@ class MultiTopicTTSGenerator:
                 "similarity_boost": 0.80,
                 "style": 0.30
             }
-        }
-        
-        # Default voice for unknown topics
-        self.default_voice = {
-            "voice_id": "21m00Tcm4TlvDq8ikWAM",  # Rachel
-            "stability": 0.75,
-            "similarity_boost": 0.75,
-            "style": 0.20
         }
     
     def find_unprocessed_digests(self) -> List[Dict]:
@@ -239,6 +288,22 @@ class MultiTopicTTSGenerator:
             generated_audio = self.generate_tts_audio(tts_optimized, voice_config, audio_filename)
             
             if generated_audio:
+                # Enhance with music if available
+                final_audio_path = generated_audio
+                if self.music_integrator:
+                    try:
+                        logger.info(f"🎵 Adding music enhancement for {topic}")
+                        enhanced_audio = self.music_integrator.enhance_tts_with_music(generated_audio, topic)
+                        if enhanced_audio != generated_audio:
+                            # Replace original with enhanced version
+                            enhanced_path = Path(enhanced_audio)
+                            original_path = Path(generated_audio)
+                            enhanced_path.rename(original_path)
+                            logger.info(f"✅ Audio enhanced with music")
+                        final_audio_path = generated_audio
+                    except Exception as e:
+                        logger.warning(f"⚠️  Music enhancement failed: {e}, using TTS-only audio")
+                
                 # Generate metadata
                 topic_display = voice_config.get('display_name', topic.replace('_', ' ').title())
                 date_display = digest_info['date'].strftime('%B %d, %Y')
@@ -254,7 +319,8 @@ class MultiTopicTTSGenerator:
                     "generated_at": datetime.now().isoformat(),
                     "audio_file": f"{audio_filename}.mp3",
                     "markdown_file": md_file.name,
-                    "tts_script_file": tts_script_path.name
+                    "tts_script_file": tts_script_path.name,
+                    "music_enhanced": self.music_integrator is not None
                 }
                 
                 with open(metadata_path, 'w', encoding='utf-8') as f:
