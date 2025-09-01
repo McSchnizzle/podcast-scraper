@@ -32,7 +32,10 @@ class PodcastRSSAPI:
     
     def get_episode_metadata(self):
         """Get episode metadata from GitHub releases API"""
-        import requests
+        try:
+            import requests
+        except ImportError as e:
+            return [{"title": f"Import Error: {e}", "description": "requests module not found", "date": datetime.now(timezone.utc), "filename": "error.mp3", "size": 1000, "duration": 60, "guid": "error", "url": "https://example.com/error.mp3"}]
         
         try:
             # Fetch releases from GitHub API
