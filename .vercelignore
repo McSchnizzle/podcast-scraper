@@ -63,8 +63,8 @@ youtube_processor.py
 deploy_episode.py
 rss_generator.py
 
-# Heavy dependencies not needed for API (exclude root requirements.txt only)
-/requirements.txt
+# Heavy dependencies not needed for API
+requirements-dev.txt
 
 # GitHub workflows
 .github/
