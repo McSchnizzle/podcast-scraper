@@ -22,7 +22,7 @@ from retention_cleanup import RetentionCleanup
 
 # Configuration
 CONFIG = {
-    'RETENTION_DAYS': 7,
+    'RETENTION_DAYS': 14,  # Aligned with retention_cleanup.py default
     'MAX_RSS_EPISODES': 7,
     'CLEANUP_AUDIO_CACHE': True,
     'CLEANUP_INTERMEDIATE_FILES': True,
@@ -51,8 +51,9 @@ class DailyPodcastPipeline:
         )
         
     def run_daily_workflow(self):
-        """Execute complete daily workflow"""
-        logger.info("🚀 Starting Daily Tech Digest Pipeline")
+        """Execute complete daily workflow with weekday logic"""
+        current_weekday = datetime.now().strftime('%A')
+        logger.info(f"🚀 Starting Daily Tech Digest Pipeline - {current_weekday}")
         logger.info("=" * 50)
         
         try:
@@ -65,8 +66,16 @@ class DailyPodcastPipeline:
             # Step 3: Process pending episodes
             self._process_pending_episodes()
             
-            # Step 4: Generate daily digest from ONLY 'transcribed' episodes
-            digest_success = self._generate_daily_digest()
+            # Step 4: Generate digest based on weekday logic
+            if current_weekday == 'Friday':
+                logger.info("📅 Friday detected - generating daily + weekly digests")
+                digest_success = self._generate_weekly_digest()
+            elif current_weekday == 'Monday':
+                logger.info("📅 Monday detected - generating catch-up digest")
+                digest_success = self._generate_catchup_digest()
+            else:
+                logger.info(f"📅 {current_weekday} - generating standard daily digest")
+                digest_success = self._generate_daily_digest()
             
             if digest_success:
                 # Step 5: Create TTS audio
@@ -352,6 +361,115 @@ class DailyPodcastPipeline:
             logger.error("❌ Failed to generate daily digest")
             return False
     
+    def _generate_weekly_digest(self):
+        """Generate Friday digest with weekly summary (7-day window)"""
+        logger.info("📅 Generating FRIDAY digest with weekly overview...")
+        
+        # First generate regular daily digest
+        daily_success = self._generate_daily_digest()
+        if not daily_success:
+            logger.error("❌ Failed to generate daily digest component")
+            return False
+        
+        # Get episodes from the past 7 days that were already digested
+        seven_days_ago = datetime.now() - timedelta(days=7)
+        
+        conn = sqlite3.connect(self.db_path)
+        cursor = conn.cursor()
+        
+        cursor.execute("""
+            SELECT COUNT(*) FROM episodes 
+            WHERE digest_date IS NOT NULL 
+            AND datetime(digest_date) >= datetime(?)
+        """, (seven_days_ago.strftime('%Y-%m-%d'),))
+        rss_weekly_count = cursor.fetchone()[0]
+        
+        conn.close()
+        
+        # Check YouTube database for weekly episodes  
+        youtube_weekly_count = 0
+        youtube_db_path = "youtube_transcripts.db"
+        if Path(youtube_db_path).exists():
+            try:
+                conn = sqlite3.connect(youtube_db_path)
+                cursor = conn.cursor()
+                
+                cursor.execute("""
+                    SELECT COUNT(*) FROM episodes 
+                    WHERE digest_date IS NOT NULL 
+                    AND datetime(digest_date) >= datetime(?)
+                """, (seven_days_ago.strftime('%Y-%m-%d'),))
+                youtube_weekly_count = cursor.fetchone()[0]
+                
+                conn.close()
+            except Exception as e:
+                logger.warning(f"Could not check YouTube weekly episodes: {e}")
+        
+        total_weekly = rss_weekly_count + youtube_weekly_count
+        logger.info(f"📊 Weekly digest coverage: {total_weekly} episodes over 7 days")
+        
+        return True
+    
+    def _generate_catchup_digest(self):
+        """Generate Monday catch-up digest (Friday 06:00 → Monday run)"""
+        logger.info("📅 Generating MONDAY catch-up digest...")
+        
+        # Calculate window: Previous Friday 6 AM to now
+        now = datetime.now()
+        
+        # Find last Friday
+        days_since_friday = (now.weekday() + 3) % 7  # Monday=0, Friday=4
+        if days_since_friday == 0:  # Today is Friday
+            days_since_friday = 7  # Last Friday was a week ago
+        
+        last_friday_6am = now - timedelta(days=days_since_friday)
+        last_friday_6am = last_friday_6am.replace(hour=6, minute=0, second=0, microsecond=0)
+        
+        logger.info(f"🕰️ Catch-up window: {last_friday_6am.strftime('%Y-%m-%d %H:%M')} to {now.strftime('%Y-%m-%d %H:%M')}")
+        
+        # Check for episodes in catch-up window
+        conn = sqlite3.connect(self.db_path)
+        cursor = conn.cursor()
+        
+        # Look for episodes published since Friday 6 AM that haven't been digested
+        cursor.execute("""
+            SELECT COUNT(*) FROM episodes 
+            WHERE datetime(published_date) >= datetime(?)
+            AND (digest_date IS NULL OR status = 'transcribed')
+        """, (last_friday_6am.isoformat(),))
+        rss_catchup_count = cursor.fetchone()[0]
+        
+        conn.close()
+        
+        # Check YouTube database for catch-up episodes
+        youtube_catchup_count = 0
+        youtube_db_path = "youtube_transcripts.db"
+        if Path(youtube_db_path).exists():
+            try:
+                conn = sqlite3.connect(youtube_db_path)
+                cursor = conn.cursor()
+                
+                cursor.execute("""
+                    SELECT COUNT(*) FROM episodes 
+                    WHERE datetime(published_date) >= datetime(?)
+                    AND (digest_date IS NULL OR status = 'transcribed')
+                """, (last_friday_6am.isoformat(),))
+                youtube_catchup_count = cursor.fetchone()[0]
+                
+                conn.close()
+            except Exception as e:
+                logger.warning(f"Could not check YouTube catch-up episodes: {e}")
+        
+        total_catchup = rss_catchup_count + youtube_catchup_count
+        logger.info(f"📊 Catch-up digest coverage: {total_catchup} episodes since Friday 6 AM")
+        
+        if total_catchup == 0:
+            logger.info("✅ No catch-up needed - no new episodes since Friday")
+            return True
+        
+        # Generate digest from available transcribed episodes
+        return self._generate_daily_digest()
+    
     def _create_tts_audio(self):
         """Create TTS audio for the daily digest - CRITICAL FUNCTION"""
         logger.info("🎙️ Creating TTS audio...")
@@ -509,11 +627,12 @@ class DailyPodcastPipeline:
         logger.info(f"✅ Marked episodes as digested: {rss_updated_count} RSS + {youtube_updated_count} YouTube = {total_updated} total")
     
     def _cleanup_old_files(self):
-        """Clean up old files and transcripts using 14-day retention system"""
-        logger.info("🧹 Running 14-day retention cleanup...")
+        """Clean up old files and transcripts using configured retention system"""
+        retention_days = CONFIG['RETENTION_DAYS']
+        logger.info(f"🧹 Running {retention_days}-day retention cleanup...")
         
         try:
-            cleanup = RetentionCleanup(retention_days=14)
+            cleanup = RetentionCleanup(retention_days=retention_days)
             results = cleanup.run_full_cleanup()
             
             total_files = results['transcript_files_removed'] + results['digest_files_removed']

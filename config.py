@@ -193,7 +193,11 @@ class Config:
             logger.info("✅ Environment validation passed")
     
     def get_feed_config(self) -> list:
-        """Get complete feed configuration with all monitored feeds"""
+        """Get complete feed configuration with all monitored feeds
+        
+        Note: topic_category is informational only. Content selection is 100% score-based
+        using AI relevance scoring against the 6 defined topics in topics.json.
+        """
         return [
             # Technology RSS Feeds
             {

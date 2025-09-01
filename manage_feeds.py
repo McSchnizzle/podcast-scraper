@@ -14,6 +14,7 @@ def list_feeds():
     
     print(f"\n📊 Active Feeds ({len(feeds)} total):")
     print("=" * 60)
+    print("Note: Categories are informational only. Content selection is based on AI relevance scoring.")
     
     if not feeds:
         print("No feeds configured.")
@@ -22,13 +23,13 @@ def list_feeds():
     # Group by category
     categories = {}
     for feed in feeds:
-        category = feed['topic_category']
+        category = feed['topic_category'] or "general"
         if category not in categories:
             categories[category] = []
         categories[category].append(feed)
     
     for category, category_feeds in sorted(categories.items()):
-        print(f"\n🏷️  {category.upper()}:")
+        print(f"\n🏷️  {category.upper()} (informational):")
         for feed in category_feeds:
             feed_type_emoji = "📺" if feed['type'] == 'youtube' else "📻"
             print(f"  {feed['id']:2d}. {feed_type_emoji} {feed['title']}")
@@ -52,16 +53,18 @@ def add_feed():
     else:
         feed_type = input("Feed type (rss/youtube): ").strip().lower()
     
-    # Get category
-    print("\nAvailable categories: technology, business, philosophy, politics, culture")
-    topic_category = input("Topic category: ").strip().lower()
+    # Get category (informational only - selection is now 100% score-based)
+    print("\nTopic categories are informational only. Content selection is based on AI relevance scoring.")
+    print("Available categories: technology, business, philosophy, politics, culture")
+    topic_category = input("Topic category (optional): ").strip().lower() or "general"
     
     # Confirm
     print(f"\n📋 Review:")
     print(f"Title: {title}")
     print(f"URL: {url}")
     print(f"Type: {feed_type}")
-    print(f"Category: {topic_category}")
+    print(f"Category: {topic_category} (informational only)")
+    print("\nNote: Episodes will be selected for digests based on AI-powered relevance scoring, not category.")
     
     if input("\nAdd this feed? (y/N): ").lower() == 'y':
         if config.add_feed_to_db(url, title, feed_type, topic_category):
