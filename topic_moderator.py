@@ -69,7 +69,7 @@ class TopicModerator:
                         
                         # Find the top topic and score
                         topic_scores = {}
-                        for topic in ['Technology', 'Business', 'Philosophy', 'Politics', 'Culture']:
+                        for topic in ['AI News', 'Tech Product Releases', 'Tech News and Tech Culture', 'Community Organizing', 'Social Justice', 'Societal Culture Change']:
                             if topic in scores and isinstance(scores[topic], (int, float)):
                                 topic_scores[topic] = scores[topic]
                         
@@ -150,7 +150,7 @@ class TopicModerator:
         print(f"{len(flagged_episodes)} episodes flagged for moderation review")
         
         # Show episodes by topic
-        for topic in ['Technology', 'Business', 'Philosophy', 'Politics', 'Culture']:
+        for topic in ['AI News', 'Tech Product Releases', 'Tech News and Tech Culture', 'Community Organizing', 'Social Justice', 'Societal Culture Change']:
             if topic not in topics:
                 continue
                 
@@ -194,9 +194,9 @@ class TopicModerator:
         """
         Manually reassign an episode to a different topic
         """
-        if new_topic not in ['Technology', 'Business', 'Philosophy', 'Politics', 'Culture', 'EXCLUDE']:
+        if new_topic not in ['AI News', 'Tech Product Releases', 'Tech News and Tech Culture', 'Community Organizing', 'Social Justice', 'Societal Culture Change', 'EXCLUDE']:
             print(f"❌ Invalid topic: {new_topic}")
-            print("Valid topics: Technology, Business, Philosophy, Politics, Culture, EXCLUDE")
+            print("Valid topics: AI News, Tech Product Releases, Tech News and Tech Culture, Community Organizing, Social Justice, Societal Culture Change, EXCLUDE")
             return False
         
         # Try both databases if db_type not specified
@@ -289,7 +289,7 @@ class TopicModerator:
                             best_topic = None
                             best_score = 0
                             
-                            for t in ['Technology', 'Business', 'Philosophy', 'Politics', 'Culture']:
+                            for t in ['AI News', 'Tech Product Releases', 'Tech News and Tech Culture', 'Community Organizing', 'Social Justice', 'Societal Culture Change']:
                                 if t in scores and isinstance(scores[t], (int, float)):
                                     if scores[t] > best_score and scores[t] >= self.RELEVANCE_THRESHOLD:
                                         best_topic = t
@@ -357,7 +357,7 @@ class TopicModerator:
                             
                             # Sort topics by score
                             topic_scores = []
-                            for topic in ['Technology', 'Business', 'Philosophy', 'Politics', 'Culture']:
+                            for topic in ['AI News', 'Tech Product Releases', 'Tech News and Tech Culture', 'Community Organizing', 'Social Justice', 'Societal Culture Change']:
                                 if topic in scores and isinstance(scores[topic], (int, float)):
                                     topic_scores.append((topic, scores[topic]))
                             
@@ -426,7 +426,7 @@ def main():
         print("python topic_moderator.py --approve [topic]")
         print("python topic_moderator.py --details <episode_id>")
         print("python topic_moderator.py --exclude <episode_id>")
-        print("\nValid topics: Technology, Business, Philosophy, Politics, Culture, EXCLUDE")
+        print("\nValid topics: AI News, Tech Product Releases, Tech News and Tech Culture, Community Organizing, Social Justice, Societal Culture Change, EXCLUDE")
     
     elif args.reassign:
         episode_id, topic = args.reassign

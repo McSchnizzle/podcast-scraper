@@ -77,10 +77,11 @@ jobs:
     - name: Set up environment variables
       env:
         ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+        OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
         ELEVENLABS_API_KEY: ${{ secrets.ELEVENLABS_API_KEY }}
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       run: |
-        # Validate API keys are present before setting
+        # Validate required API keys are present before setting
         if [ -z "$ANTHROPIC_API_KEY" ]; then
           echo "❌ ANTHROPIC_API_KEY secret is not set or empty"
           exit 1
@@ -89,7 +90,14 @@ jobs:
           echo "✅ ANTHROPIC_API_KEY is set (length: ${#ANTHROPIC_API_KEY})"
         fi
         
+        if [ -n "$OPENAI_API_KEY" ]; then
+          echo "✅ OPENAI_API_KEY is set (length: ${#OPENAI_API_KEY})"
+        else
+          echo "⚠️ OPENAI_API_KEY secret is not set - topic scoring will be skipped"
+        fi
+        
         echo "ANTHROPIC_API_KEY=$ANTHROPIC_API_KEY" >> $GITHUB_ENV
+        echo "OPENAI_API_KEY=$OPENAI_API_KEY" >> $GITHUB_ENV
         echo "ELEVENLABS_API_KEY=$ELEVENLABS_API_KEY" >> $GITHUB_ENV
         echo "GITHUB_TOKEN=$GITHUB_TOKEN" >> $GITHUB_ENV
         

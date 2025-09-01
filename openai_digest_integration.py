@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """
-Claude API Integration - GitHub Actions Compatible
-Direct API integration replacing CLI dependency
+OpenAI Digest Integration - Multi-Topic Digest Generator
+Complete replacement for Claude integration using OpenAI GPT-4 for consistency
 """
 
 import os
@@ -11,34 +11,35 @@ from pathlib import Path
 from datetime import datetime
 from typing import Dict, List, Optional, Tuple
 import sqlite3
-import anthropic
+import openai
 
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
-class ClaudeAPIIntegration:
+class OpenAIDigestIntegration:
     def __init__(self, db_path: str = "podcast_monitor.db", transcripts_dir: str = "transcripts"):
         self.db_path = db_path
         self.transcripts_dir = Path(transcripts_dir)
         
-        # Initialize Anthropic client
-        api_key = os.getenv('ANTHROPIC_API_KEY')
+        # Initialize OpenAI client
+        api_key = os.getenv('OPENAI_API_KEY')
         if not api_key:
-            logger.error("ANTHROPIC_API_KEY environment variable not set")
+            logger.error("OPENAI_API_KEY environment variable not set")
             self.client = None
             self.api_available = False
         elif len(api_key.strip()) < 10:
-            logger.error(f"ANTHROPIC_API_KEY appears invalid (length: {len(api_key.strip())})")
+            logger.error(f"OPENAI_API_KEY appears invalid (length: {len(api_key.strip())})")
             self.client = None
             self.api_available = False
         else:
             try:
-                # Test the key by creating the client
-                self.client = anthropic.Anthropic(api_key=api_key.strip())
+                # Initialize OpenAI client
+                openai.api_key = api_key.strip()
+                self.client = openai
                 self.api_available = True
-                logger.info(f"✅ Anthropic API client initialized (key length: {len(api_key.strip())})")
+                logger.info(f"✅ OpenAI API client initialized (key length: {len(api_key.strip())})")
             except Exception as e:
-                logger.error(f"Failed to initialize Anthropic client: {e}")
+                logger.error(f"Failed to initialize OpenAI client: {e}")
                 self.client = None
                 self.api_available = False
 
@@ -157,19 +158,19 @@ class ClaudeAPIIntegration:
         return transcripts
 
     def prepare_digest_prompt(self, transcripts: List[Dict], topic: str = None) -> str:
-        """Prepare topic-specific digest prompt for Claude API"""
+        """Prepare topic-specific digest prompt for OpenAI GPT-4"""
         
         transcript_summaries = []
         for transcript in transcripts:
             summary = f"""
 ## {transcript['title']} ({transcript['published_date']})
-{transcript['content'][:8000]}...
+{transcript['content'][:12000]}...
 """
             transcript_summaries.append(summary)
         
         combined_content = "\n".join(transcript_summaries)
         
-        # Topic-specific prompts with focused analysis
+        # Topic-specific prompts with focused analysis - same structure as Claude version
         topic_descriptions = {
             'AI News': {
                 'title': 'AI News Digest',
@@ -335,12 +336,12 @@ Format the output as clean Markdown suitable for publication. Focus on accuracy,
         return sorted(list(topics_with_episodes))
 
     def generate_topic_digest(self, topic: str) -> Tuple[bool, Optional[str], Optional[str]]:
-        """Generate digest for a specific topic using Anthropic API"""
+        """Generate digest for a specific topic using OpenAI GPT-5"""
         
-        logger.info(f"🧠 Starting {topic} digest generation with Anthropic API")
+        logger.info(f"🧠 Starting {topic} digest generation with OpenAI GPT-5")
         
         if not self.api_available:
-            logger.error("Anthropic API not available - cannot generate digest")
+            logger.error("OpenAI API not available - cannot generate digest")
             return False, None, None
         
         # Get transcripts for this topic
@@ -355,18 +356,21 @@ Format the output as clean Markdown suitable for publication. Focus on accuracy,
             # Prepare topic-specific prompt
             prompt = self.prepare_digest_prompt(transcripts, topic=topic)
             
-            # Call Anthropic API
-            message = self.client.messages.create(
-                model="claude-3-5-sonnet-20241022",
-                max_tokens=4000,
-                temperature=0.7,
+            # Call OpenAI GPT-5 API
+            response = self.client.ChatCompletion.create(
+                model="gpt-5",  # Use latest GPT-5 model
                 messages=[{
+                    "role": "system",
+                    "content": "You are an expert analyst creating focused, insightful digests from podcast transcripts. You excel at identifying key themes, connecting information across sources, and providing actionable insights."
+                }, {
                     "role": "user",
                     "content": prompt
-                }]
+                }],
+                max_tokens=4000,
+                temperature=0.7
             )
             
-            digest_content = message.content[0].text
+            digest_content = response.choices[0].message.content
             
             # Save topic-specific digest
             timestamp = datetime.now().strftime('%Y%m%d_%H%M%S')
@@ -389,8 +393,8 @@ Format the output as clean Markdown suitable for publication. Focus on accuracy,
             return True, str(digest_path), None
             
         except Exception as e:
-            logger.error(f"Error generating {topic} digest with Anthropic API: {e}")
-            return False, None, None
+            logger.error(f"Error generating {topic} digest with OpenAI GPT-5: {e}")
+            return False, None, str(e)
 
     def generate_all_topic_digests(self) -> Dict[str, Tuple[bool, Optional[str], Optional[str]]]:
         """Generate digests for all available topics"""
@@ -421,8 +425,8 @@ Format the output as clean Markdown suitable for publication. Focus on accuracy,
         
         return results
 
-    def generate_api_digest(self, topic: str = None) -> Tuple[bool, Optional[str], Optional[str]]:
-        """Generate digest using Anthropic API - supports single topic or all topics"""
+    def generate_digest(self, topic: str = None) -> Tuple[bool, Optional[str], Optional[str]]:
+        """Generate digest using OpenAI GPT-4 - supports single topic or all topics"""
         
         if topic:
             # Generate single topic digest
@@ -535,22 +539,22 @@ Format the output as clean Markdown suitable for publication. Focus on accuracy,
                 logger.error(f"Error moving transcript {transcript['transcript_path']}: {e}")
 
     def test_api_connection(self) -> bool:
-        """Test Anthropic API connection"""
+        """Test OpenAI API connection"""
         if not self.api_available:
             return False
         
         try:
-            message = self.client.messages.create(
-                model="claude-3-5-sonnet-20241022",
-                max_tokens=50,
+            response = self.client.ChatCompletion.create(
+                model="gpt-5",
                 messages=[{
                     "role": "user",
                     "content": "Hello, please respond with 'API connection successful'"
-                }]
+                }],
+                max_tokens=50
             )
             
-            response = message.content[0].text
-            return "successful" in response.lower()
+            response_text = response.choices[0].message.content
+            return "successful" in response_text.lower()
             
         except Exception as e:
             logger.error(f"API connection test failed: {e}")
@@ -558,22 +562,22 @@ Format the output as clean Markdown suitable for publication. Focus on accuracy,
 
 
 def main():
-    """CLI interface for Claude API digest generation"""
+    """CLI interface for OpenAI digest generation"""
     import argparse
     
-    parser = argparse.ArgumentParser(description='Claude API Integration - Multi-Topic Digest Generator')
+    parser = argparse.ArgumentParser(description='OpenAI Digest Integration - Multi-Topic Digest Generator')
     parser.add_argument('--topic', type=str, help='Generate digest for specific topic only')
     parser.add_argument('--list-topics', action='store_true', help='List available topics with episodes')
-    parser.add_argument('--test-api', action='store_true', help='Test Anthropic API connection')
+    parser.add_argument('--test-api', action='store_true', help='Test OpenAI API connection')
     parser.add_argument('--db', type=str, default='podcast_monitor.db', help='Database path (default: podcast_monitor.db)')
     
     args = parser.parse_args()
     
-    # Initialize Claude API integration
-    integration = ClaudeAPIIntegration(db_path=args.db)
+    # Initialize OpenAI integration
+    integration = OpenAIDigestIntegration(db_path=args.db)
     
     if args.test_api:
-        logger.info("🧪 Testing Anthropic API connection...")
+        logger.info("🧪 Testing OpenAI API connection...")
         if integration.test_api_connection():
             logger.info("✅ API connection successful")
         else:
@@ -594,7 +598,7 @@ def main():
     # Generate digest(s)
     if args.topic:
         logger.info(f"🎯 Generating digest for topic: {args.topic}")
-        success, path, error = integration.generate_api_digest(topic=args.topic)
+        success, path, error = integration.generate_digest(topic=args.topic)
         
         if success:
             logger.info(f"✅ Topic digest generated successfully: {path}")
@@ -602,7 +606,7 @@ def main():
             logger.error(f"❌ Topic digest generation failed: {error}")
     else:
         logger.info("🚀 Generating digests for all available topics...")
-        success, path, error = integration.generate_api_digest()
+        success, path, error = integration.generate_digest()
         
         if success:
             logger.info(f"✅ Multi-topic digest generation completed")

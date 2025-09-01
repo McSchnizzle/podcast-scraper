@@ -17,7 +17,7 @@ import tempfile
 # Import existing modules
 from feed_monitor import FeedMonitor
 from content_processor import ContentProcessor
-from claude_api_integration import ClaudeAPIIntegration
+from openai_digest_integration import OpenAIDigestIntegration
 
 # Configuration
 CONFIG = {
@@ -44,7 +44,7 @@ class DailyPodcastPipeline:
             db_path=self.db_path, 
             audio_dir=CONFIG['AUDIO_CACHE_DIR']
         )
-        self.claude_integration = ClaudeAPIIntegration(
+        self.openai_integration = OpenAIDigestIntegration(
             db_path=self.db_path,
             transcripts_dir=CONFIG['TRANSCRIPTS_DIR']
         )
@@ -341,8 +341,8 @@ class DailyPodcastPipeline:
             logger.warning("No 'transcribed' episodes available from either database")
             return False
         
-        # Generate Claude-powered digest (reads from both databases automatically)
-        success, digest_path, cross_refs_path = self.claude_integration.generate_api_digest()
+        # Generate OpenAI GPT-5 powered digest (reads from both databases automatically)
+        success, digest_path, cross_refs_path = self.openai_integration.generate_digest()
         
         if success:
             logger.info(f"✅ Daily digest generated: {digest_path}")
@@ -676,7 +676,7 @@ def main():
         # Test each component
         print("Feed monitor:", "✅" if pipeline.feed_monitor else "❌")
         print("Content processor:", "✅" if pipeline.content_processor.asr_model else "❌")
-        print("Claude integration:", "✅" if pipeline.claude_integration.api_available else "❌")
+        print("OpenAI integration:", "✅" if pipeline.openai_integration.api_available else "❌")
         return
     
     if args.run:

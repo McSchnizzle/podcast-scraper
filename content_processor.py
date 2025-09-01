@@ -223,7 +223,7 @@ class ContentProcessor:
                             print(f"✅ Topic scoring completed")
                             # Show top 2 scoring topics
                             topic_items = [(k, v) for k, v in topic_scores.items() 
-                                         if k in ['Technology', 'Business', 'Philosophy', 'Politics', 'Culture']
+                                         if k in ['AI News', 'Tech Product Releases', 'Tech News and Tech Culture', 'Community Organizing', 'Social Justice', 'Societal Culture Change']
                                          and isinstance(v, (int, float))]
                             if topic_items:
                                 top_topics = sorted(topic_items, key=lambda x: x[1], reverse=True)[:2]
