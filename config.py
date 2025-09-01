@@ -234,7 +234,7 @@ class Config:
             },
             {
                 'title': 'Matt Wolfe',
-                'url': 'https://www.youtube.com/feeds/videos.xml?channel_id=UCKLOLiEJbPy3-oOhm6Hq1xw',
+                'url': 'https://www.youtube.com/feeds/videos.xml?channel_id=UCbUXAm7XBrwD_6MqKw9jIzQ',
                 'type': 'youtube',
                 'topic_category': 'technology'
             },

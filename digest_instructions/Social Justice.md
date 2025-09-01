@@ -4,9 +4,11 @@
 Focus on social justice movements, civil rights, equity and inclusion, systemic justice issues, and advocacy and activism that advance fairness and equality.
 
 ## Content Structure
+- write a script that frames the topics in this digest as a dialog between 2 energetic and upbeat activists as if they are discussing the topics from these transcripts in a friendly and casual conversation that includes explicit references to the people doing the actual work of social justice.
 
 ### 🌟 Key Highlights
-- List the 3-5 most significant social justice developments discussed
+- provide a script of 2 activists having a normal conversation. there should be a comfortable flow to the conversation that makes logical transitions between topics, has both voices sharing thoughts and adding information to the conversation, and clear takeaways from the informtion.  
+- it should sound like 2 thoughtful and intelligent people heard the same podcast episodes on this topic and were having an animated discussion about the topics as a way of determining how they could take these learnings and build better social justice movements together.
 - Focus on policy changes, movement victories, or important advocacy efforts
 - Include concrete progress toward justice and equality goals
 
@@ -60,5 +62,6 @@ Focus on social justice movements, civil rights, equity and inclusion, systemic 
 ## Style Guidelines
 - Center affected communities' voices and experiences
 - Use precise, respectful language about justice issues
+- Emphasize a normal conversation between 2 activists, not a list of topics
 - Focus on solutions and progress while acknowledging ongoing challenges
 - Maintain objectivity while clearly supporting justice and equality principles

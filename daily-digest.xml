@@ -8,13 +8,25 @@
     <copyright>© 2025 Paul Brown</copyright>
     <managingEditor>podcast@paulrbrown.org (Paul Brown)</managingEditor>
     <webMaster>podcast@paulrbrown.org (Paul Brown)</webMaster>
-    <lastBuildDate>Mon, 01 Sep 2025 20:20:58 +0000</lastBuildDate>
+    <lastBuildDate>Mon, 01 Sep 2025 20:54:50 +0000</lastBuildDate>
     <itunes:author>Paul Brown</itunes:author>
     <itunes:summary>AI-generated daily digest covering technology, society, and culture from leading podcasts and creators, organized by topic</itunes:summary>
     <itunes:owner>Paul Brown</itunes:owner>
     <itunes:image href="https://paulrbrown.org/podcast-artwork.jpg"/>
     <itunes:category text="Technology"/>
     <itunes:explicit>no</itunes:explicit>
+    <item>
+      <title>AI News &amp; Developments - September 01, 2025</title>
+      <description>As we delve into the world of artificial intelligence and machine learning, we find ourselves in a landscape that is constantly and rapidly evolving</description>
+      <link>https://paulrbrown.org/daily-digest/20250901_175357</link>
+      <guid>https://paulrbrown.org/daily-digest/20250901_175357</guid>
+      <pubDate>Mon, 01 Sep 2025 17:53:57 +0000</pubDate>
+      <enclosure url="https://paulrbrown.org/audio/ai_news_digest_20250901_175357.mp3" length="3872436" type="audio/mpeg"/>
+      <itunes:title>AI News &amp; Developments - September 01, 2025</itunes:title>
+      <itunes:summary>As we delve into the world of artificial intelligence and machine learning, we find ourselves in a landscape that is constantly and rapidly evolving</itunes:summary>
+      <itunes:duration>180</itunes:duration>
+      <itunes:keywords>Technology/AI</itunes:keywords>
+    </item>
     <item>
       <title>AI News &amp; Developments - September 01, 2025</title>
       <description>In the world of artificial intelligence, the week of September 1, 2025, has been marked by significant developments</description>

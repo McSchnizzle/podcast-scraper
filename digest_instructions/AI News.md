@@ -6,9 +6,11 @@ Focus specifically on artificial intelligence developments, machine learning bre
 ## Content Structure
 
 ### 🌟 Key Highlights
-- List the 3-5 most important AI developments from these episodes
+- Emphasize the key AI developments that are referenced in more than one episode transcript
 - Focus on breakthrough research, major product launches, or industry-changing announcements
 - Include brief explanations of technical significance and potential impact
+- For any new product or technology, give an overview of how it is different than what came before it
+- Write this script as if it is a news broadcast that includes clear, objective evaluation and both AI optimistic reaction to the news as well as AI antagonist reaction to the news
 
 ### 📊 Detailed Analysis
 
