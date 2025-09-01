@@ -4,6 +4,7 @@ Podcast & YouTube Feed Monitor
 Monitors RSS feeds and YouTube channels for new content in the last 24 hours
 """
 
+import os
 import feedparser
 import sqlite3
 import json
@@ -172,15 +173,36 @@ class FeedMonitor:
         print("Please provide the channel ID manually or use the full channel URL")
         return None
     
-    def check_new_episodes(self, hours_back=24):
-        """Check all feeds for new episodes in the last N hours"""
+    def check_new_episodes(self, hours_back=24, feed_types=None):
+        """Check feeds for new episodes in the last N hours
+        
+        Args:
+            hours_back: How many hours to look back for new episodes
+            feed_types: List of feed types to check ('rss', 'youtube'). 
+                       If None, checks all types. In GitHub Actions, should be ['rss']
+        """
         cutoff_time = datetime.now() - timedelta(hours=hours_back)
         new_episodes = []
+        
+        # Check if running in GitHub Actions
+        is_github_actions = os.getenv('GITHUB_ACTIONS') == 'true'
+        
+        # In GitHub Actions, only check RSS feeds (YouTube processed locally)
+        if is_github_actions and feed_types is None:
+            feed_types = ['rss']
+            print("🔧 GitHub Actions mode: Only checking RSS feeds (YouTube processed locally)")
         
         conn = sqlite3.connect(self.db_path)
         cursor = conn.cursor()
         
-        cursor.execute('SELECT id, url, title, type, topic_category FROM feeds WHERE active = 1')
+        # Build query with feed type filter if specified
+        if feed_types:
+            placeholders = ', '.join('?' for _ in feed_types)
+            query = f'SELECT id, url, title, type, topic_category FROM feeds WHERE active = 1 AND type IN ({placeholders})'
+            cursor.execute(query, feed_types)
+        else:
+            cursor.execute('SELECT id, url, title, type, topic_category FROM feeds WHERE active = 1')
+            
         feeds = cursor.fetchall()
         
         for feed_id, url, title, feed_type, topic_category in feeds:

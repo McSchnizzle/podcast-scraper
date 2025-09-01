@@ -17,6 +17,16 @@ The Daily Podcast Digest System continuously monitors podcast RSS feeds and YouT
 - **Web API**: Endpoints for audio streaming and RSS feed serving
 - **Dual Status Workflow**: RSS (pre-download→downloaded→transcribed→digested) and YouTube (pre-download→transcribed→digested)
 
+## 📡 RSS Feed
+
+**Daily Tech Digest RSS Feed**: https://podcast.paulrbrown.org/daily-digest.xml
+
+Subscribe to receive automated daily digests featuring:
+- AI-powered analysis of tech podcast content
+- YouTube creator highlights and insights  
+- Product launches and industry developments
+- Cross-episode synthesis and trend identification
+
 ## System Architecture
 
 ### Phase 1: Feed Monitoring ✅ COMPLETE

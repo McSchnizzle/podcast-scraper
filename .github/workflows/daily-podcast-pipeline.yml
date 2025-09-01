@@ -56,14 +56,6 @@ jobs:
         if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
         # sqlite3 is built into Python, no need to install via pip
         
-    - name: Cache system dependencies
-      uses: actions/cache@v4
-      with:
-        path: /var/cache/apt
-        key: ${{ runner.os }}-apt-cache-v1
-        restore-keys: |
-          ${{ runner.os }}-apt-cache-
-          
     - name: Install system dependencies
       run: |
         sudo apt-get update
@@ -97,6 +89,15 @@ jobs:
         ELEVENLABS_API_KEY: ${{ secrets.ELEVENLABS_API_KEY }}
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       run: |
+        # Validate API keys are present before setting
+        if [ -z "$ANTHROPIC_API_KEY" ]; then
+          echo "❌ ANTHROPIC_API_KEY secret is not set or empty"
+          exit 1
+        fi
+        if [ -n "$ANTHROPIC_API_KEY" ]; then
+          echo "✅ ANTHROPIC_API_KEY is set (length: ${#ANTHROPIC_API_KEY})"
+        fi
+        
         echo "ANTHROPIC_API_KEY=$ANTHROPIC_API_KEY" >> $GITHUB_ENV
         echo "ELEVENLABS_API_KEY=$ELEVENLABS_API_KEY" >> $GITHUB_ENV
         echo "GITHUB_TOKEN=$GITHUB_TOKEN" >> $GITHUB_ENV

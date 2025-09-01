@@ -156,6 +156,40 @@ class ClaudeTTSGenerator:
             }
         }
 
+    def find_most_recent_digest(self) -> Optional[Tuple[str, str]]:
+        """Find the most recent digest file and extract its content and timestamp
+        
+        Returns:
+            Tuple of (digest_content, timestamp) or None if no digest found
+        """
+        try:
+            digest_files = list(self.output_dir.glob("daily_digest_*.md"))
+            if not digest_files:
+                logger.warning("No digest files found in daily_digests directory")
+                return None
+            
+            # Sort by filename (which includes timestamp) to get most recent
+            most_recent_file = sorted(digest_files, key=lambda x: x.name)[-1]
+            
+            # Extract timestamp from filename: daily_digest_20250901_013235.md
+            timestamp_match = re.search(r'daily_digest_(\d{8}_\d{6})\.md', most_recent_file.name)
+            if not timestamp_match:
+                logger.error(f"Could not extract timestamp from filename: {most_recent_file.name}")
+                return None
+            
+            timestamp = timestamp_match.group(1)
+            
+            # Read the digest content
+            with open(most_recent_file, 'r', encoding='utf-8') as f:
+                digest_content = f.read()
+            
+            logger.info(f"📄 Found recent digest: {most_recent_file.name} (timestamp: {timestamp})")
+            return digest_content, timestamp
+            
+        except Exception as e:
+            logger.error(f"Error finding recent digest: {e}")
+            return None
+
     # ======================
     # TOPIC COMPILATION METHODS
     # ======================
@@ -470,14 +504,23 @@ class ClaudeTTSGenerator:
             logger.error(f"Error generating TTS audio: {e}")
             return None
 
-    def generate_complete_digest_audio(self, digest_content: str) -> Optional[str]:
-        """Generate complete audio digest with metadata"""
+    def generate_complete_digest_audio(self, digest_content: str, timestamp: str = None) -> Optional[str]:
+        """Generate complete audio digest with metadata
+        
+        Args:
+            digest_content: The digest content to convert to audio
+            timestamp: Optional timestamp to use for consistent naming (if None, generates new one)
+        """
         if not digest_content:
             logger.error("No digest content to convert")
             return None
         
-        # Generate timestamp for consistent naming
-        timestamp = datetime.now().strftime('%Y%m%d_%H%M%S')
+        # Use provided timestamp or generate new one for consistent naming
+        if timestamp is None:
+            timestamp = datetime.now().strftime('%Y%m%d_%H%M%S')
+            logger.info(f"🕐 Generated new timestamp: {timestamp}")
+        else:
+            logger.info(f"🕐 Using provided timestamp: {timestamp}")
         
         # ALWAYS save the full human-readable script first
         full_script_path = self.output_dir / f"claude_digest_full_{timestamp}.txt"
@@ -535,66 +578,27 @@ class ClaudeTTSGenerator:
     # ======================
 
     def generate_daily_digest(self) -> Optional[str]:
-        """Complete workflow: get transcripts, analyze with Claude, generate audio"""
-        logger.info("🚀 Starting daily digest generation workflow")
+        """Generate TTS audio from existing digest file"""
+        logger.info("🚀 Starting TTS generation from existing digest")
         
-        # Step 1: Get transcripts for analysis
-        transcripts = self.get_transcripts_for_claude()
-        if not transcripts:
-            logger.warning("No transcripts available for digest generation")
+        # Step 1: Find the most recent digest file
+        digest_result = self.find_most_recent_digest()
+        if not digest_result:
+            logger.error("No existing digest file found - TTS generation requires pre-existing digest")
             return None
         
-        logger.info(f"📚 Found {len(transcripts)} transcripts for analysis")
+        digest_content, timestamp = digest_result
+        logger.info("✅ Found existing digest content")
         
-        # Step 2: Create Claude prompt
-        prompt = self.create_claude_prompt(transcripts)
-        logger.info("📝 Generated Claude analysis prompt")
-        
-        # Step 3: Run Claude analysis
-        digest_content = self.run_claude_analysis(prompt)
-        if not digest_content:
-            logger.error("Failed to generate digest content")
-            return None
-        
-        logger.info("✅ Claude analysis completed")
-        
-        # Step 4: Generate TTS audio
-        audio_path = self.generate_complete_digest_audio(digest_content)
+        # Step 2: Generate TTS audio using the existing digest content and timestamp
+        audio_path = self.generate_complete_digest_audio(digest_content, timestamp)
         
         if audio_path:
-            logger.info(f"🎵 Complete digest generated: {audio_path}")
-            
-            # Update episode statuses to 'digested'
-            self._mark_episodes_as_digested(transcripts)
-            
+            logger.info(f"🎵 TTS audio generated successfully: {audio_path}")
             return audio_path
         else:
-            logger.warning("Audio generation failed, but text digest was created")
-            return digest_content
-
-    def _mark_episodes_as_digested(self, transcripts: List[Dict]):
-        """Mark processed episodes as digested in database"""
-        try:
-            conn = sqlite3.connect(self.db_path)
-            cursor = conn.cursor()
-            
-            episode_ids = [t['episode_id'] for t in transcripts]
-            placeholders = ','.join(['?' for _ in episode_ids])
-            
-            cursor.execute(f"""
-                UPDATE episodes 
-                SET status = 'digested' 
-                WHERE episode_id IN ({placeholders})
-            """, episode_ids)
-            
-            rows_updated = cursor.rowcount
-            conn.commit()
-            conn.close()
-            
-            logger.info(f"📋 Marked {rows_updated} episodes as digested")
-            
-        except Exception as e:
-            logger.error(f"Error updating episode statuses: {e}")
+            logger.error("❌ TTS audio generation failed")
+            return None
 
 if __name__ == "__main__":
     generator = ClaudeTTSGenerator()
