@@ -352,25 +352,87 @@ class DailyPodcastPipeline:
             return False
     
     def _create_tts_audio(self):
-        """Create TTS audio for the daily digest"""
+        """Create TTS audio for the daily digest - CRITICAL FUNCTION"""
         logger.info("🎙️ Creating TTS audio...")
+        logger.info("========================================")
+        logger.info("🔥 TTS GENERATION - CRITICAL DEBUG INFO")
+        logger.info("========================================")
+        
+        # Check environment variables
+        elevenlabs_key = os.getenv('ELEVENLABS_API_KEY')
+        if elevenlabs_key:
+            logger.info(f"✅ ELEVENLABS_API_KEY found (length: {len(elevenlabs_key)})")
+        else:
+            logger.error("❌ ELEVENLABS_API_KEY is missing or empty!")
+        
+        # Check for existing digest files
+        digest_files = list(Path('daily_digests').glob('daily_digest_*.md'))
+        logger.info(f"📄 Found {len(digest_files)} digest files: {[f.name for f in digest_files]}")
+        
+        # Check current directory contents
+        logger.info("📁 Current directory contents:")
+        for item in Path('.').iterdir():
+            if item.is_file():
+                logger.info(f"   📄 {item.name}")
         
         try:
-            # Run TTS generation
+            logger.info("🚀 Running TTS generation subprocess...")
+            logger.info("Command: python3 claude_tts_generator.py")
+            
+            # Run TTS generation with enhanced logging
             result = subprocess.run([
                 'python3', 'claude_tts_generator.py'
             ], capture_output=True, text=True, timeout=600)
             
-            if result.returncode == 0:
-                logger.info("✅ TTS audio generated successfully")
-                return True
+            logger.info(f"🔍 TTS subprocess return code: {result.returncode}")
+            logger.info(f"🔍 TTS subprocess stdout length: {len(result.stdout)}")
+            logger.info(f"🔍 TTS subprocess stderr length: {len(result.stderr)}")
+            
+            if result.stdout:
+                logger.info("📝 TTS subprocess STDOUT:")
+                for line in result.stdout.split('\n'):
+                    if line.strip():
+                        logger.info(f"   STDOUT: {line}")
+            
+            if result.stderr:
+                logger.error("📝 TTS subprocess STDERR:")  
+                for line in result.stderr.split('\n'):
+                    if line.strip():
+                        logger.error(f"   STDERR: {line}")
+            
+            # Check what files were created after TTS
+            logger.info("📁 Post-TTS daily_digests directory:")
+            if Path('daily_digests').exists():
+                for item in Path('daily_digests').iterdir():
+                    logger.info(f"   📄 {item.name} ({item.stat().st_size} bytes)")
             else:
-                logger.error(f"❌ TTS generation failed: {result.stderr}")
+                logger.error("❌ daily_digests directory does not exist!")
+            
+            # Look for expected audio files
+            audio_files = list(Path('daily_digests').glob('complete_topic_digest_*.mp3'))
+            logger.info(f"🎵 Found {len(audio_files)} audio files: {[f.name for f in audio_files]}")
+            
+            if result.returncode == 0:
+                if audio_files:
+                    logger.info("✅ TTS audio generated successfully with audio files!")
+                    return True
+                else:
+                    logger.error("❌ TTS subprocess succeeded but NO AUDIO FILES found!")
+                    return False
+            else:
+                logger.error(f"❌ TTS generation failed with return code {result.returncode}")
                 return False
                 
-        except Exception as e:
-            logger.error(f"Error creating TTS audio: {e}")
+        except subprocess.TimeoutExpired:
+            logger.error("❌ TTS generation timed out after 600 seconds")
             return False
+        except Exception as e:
+            logger.error(f"❌ Exception during TTS generation: {e}")
+            import traceback
+            logger.error(f"❌ Full traceback: {traceback.format_exc()}")
+            return False
+        finally:
+            logger.info("========================================")
     
     def _deploy_to_github(self):
         """Deploy latest episode to GitHub releases"""

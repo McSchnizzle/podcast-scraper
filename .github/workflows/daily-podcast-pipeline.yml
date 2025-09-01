@@ -108,6 +108,75 @@ jobs:
           python3 daily_podcast_pipeline.py --rss-only
         fi
         
+    - name: Debug TTS Generation (CRITICAL)
+      if: always()
+      run: |
+        echo "=========================================="
+        echo "🎵 TTS GENERATION DEBUGGING (CRITICAL)"
+        echo "=========================================="
+        
+        echo "=== Environment Variables ==="
+        echo "ELEVENLABS_API_KEY length: ${#ELEVENLABS_API_KEY}"
+        echo "ANTHROPIC_API_KEY length: ${#ANTHROPIC_API_KEY}"
+        if [ -z "$ELEVENLABS_API_KEY" ]; then
+          echo "❌ ELEVENLABS_API_KEY is EMPTY or UNSET"
+        else
+          echo "✅ ELEVENLABS_API_KEY is set"
+        fi
+        
+        echo "=== Daily Digests Directory ==="
+        ls -la daily_digests/ || echo "❌ No daily_digests/ directory"
+        
+        echo "=== All Digest Files ==="
+        find daily_digests/ -name "daily_digest_*.md" -exec echo "📄 Found digest: {}" \; 2>/dev/null || echo "❌ No digest files found"
+        
+        echo "=== All TTS Text Files ==="
+        find daily_digests/ -name "claude_digest_*.txt" -exec echo "📝 Found TTS text: {}" \; 2>/dev/null || echo "⚠️ No TTS text files found"
+        
+        echo "=== All Audio Files ==="
+        find daily_digests/ -name "complete_topic_digest_*.mp3" -exec echo "🎵 Found audio: {}" \; 2>/dev/null || echo "❌ No audio files found"
+        
+        echo "=== All JSON Metadata Files ==="
+        find daily_digests/ -name "complete_topic_digest_*.json" -exec echo "📊 Found metadata: {}" \; 2>/dev/null || echo "⚠️ No metadata files found"
+        
+        echo "=== Manual TTS Generation Test ==="
+        echo "🧪 Testing TTS script directly..."
+        python3 claude_tts_generator.py 2>&1 || echo "❌ TTS script failed"
+        
+        echo "=== Post-TTS Directory Check ==="
+        ls -la daily_digests/ | grep -E "\.(mp3|json|txt|md)$" || echo "❌ No files after TTS test"
+        
+        echo "=== TTS Script Output Analysis ==="
+        if [ -f daily_digests/claude_digest_full_*.txt ]; then
+          echo "✅ TTS full script found"
+        else
+          echo "❌ TTS full script missing"
+        fi
+        
+        if [ -f daily_digests/claude_digest_tts_*.txt ]; then
+          echo "✅ TTS optimized script found"  
+        else
+          echo "❌ TTS optimized script missing"
+        fi
+        
+        LATEST_DIGEST=$(find daily_digests/ -name "daily_digest_*.md" -printf '%T@ %p\n' | sort -n | tail -1 | cut -d' ' -f2- 2>/dev/null || echo "")
+        if [ -n "$LATEST_DIGEST" ]; then
+          DIGEST_TIMESTAMP=$(basename "$LATEST_DIGEST" .md | sed 's/daily_digest_//')
+          echo "📄 Latest digest timestamp: $DIGEST_TIMESTAMP"
+          EXPECTED_AUDIO="daily_digests/complete_topic_digest_${DIGEST_TIMESTAMP}.mp3"
+          echo "🎯 Expected audio file: $EXPECTED_AUDIO"
+          if [ -f "$EXPECTED_AUDIO" ]; then
+            echo "✅ MATCHING AUDIO FILE FOUND!"
+            ls -la "$EXPECTED_AUDIO"
+          else
+            echo "❌ MATCHING AUDIO FILE MISSING!"
+          fi
+        else
+          echo "❌ No digest file found for timestamp matching"
+        fi
+        
+        echo "=========================================="
+        
     - name: Debug transcript status
       if: always()
       run: |

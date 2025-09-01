@@ -1,0 +1,248 @@
+[00:00] Welcome back to the AI daily brief
+[00:01] headlines edition. All the daily AI news
+[00:03] you need in around 5 minutes. And boy,
+[00:06] we have a lot today. This is our last
+[00:08] normal weekly episode of the summer.
+[00:10] Obviously in the US on Monday we have
+[00:12] Labor Day and that really kicks off the
+[00:14] fall and back to school, back to work,
+[00:16] all of the new energy that that brings.
+[00:18] But this has been anything but a quiet
+[00:20] summer when it comes to AI. And so
+[00:21] appropriately, we are bursting at the
+[00:22] seams. And we start today with the
+[00:24] latest reports that Apple might finally
+[00:26] be getting serious about an acquisition
+[00:28] to solve how woefully behind they are in
+[00:31] AI. The information reports that
+[00:33] acquisitions have become a serious topic
+[00:35] of conversation among the seauite with
+[00:36] senior VP of services Eddie Q
+[00:38] championing the idea. Apparently rather
+[00:41] than just licensing with Google to
+[00:42] create AI Siri, Eddie wants to go much
+[00:44] further. Sources say that as we've heard
+[00:46] in the past, the targets include mistral
+[00:48] AI and perplexity. And those
+[00:50] conversations have been far more than
+[00:52] just theoretical. Now, I will remind you
+[00:54] that the reason that we talk about this
+[00:56] is that historically, Apple has not used
+[00:58] acquisitions as a solution to get ahead
+[01:00] in a new industry. In fact, to date,
+[01:02] their largest acquisition is still Beats
+[01:04] headphones in 2014, which was just a $3
+[01:07] billion deal. In other words, like a
+[01:09] quarter of what Meta paid for less than
+[01:11] half of scale recently. Of course, money
+[01:14] isn't a big issue. Apple has about 75
+[01:16] billion in cash on hand, and so has a
+[01:18] credible path to buy just about any AI
+[01:20] company besides OpenAI, Anthropic, or
+[01:22] XAI. Based on the reporting, it seems
+[01:25] that Mistl has been seriously considered
+[01:26] at the $10 billion valuation they're
+[01:28] currently seeking in a venture round.
+[01:29] The information sources said that Eddie
+[01:31] Hugh has been asking people inside and
+[01:33] outside of Apple what they think of a
+[01:34] Mistl deal. However, he has reportedly
+[01:36] been dissuaded because Mistl is quote,
+[01:38] "not among the top AI model makers." I
+[01:40] tend to agree with that. I think at this
+[01:42] point a mistral deal would not be
+[01:43] enough. I think markets would in fact
+[01:45] reject it. I continue to think that if
+[01:47] they really want to play, Anthropic is
+[01:49] where they would need to set their
+[01:50] sights. However, at this point, I think
+[01:51] that Anthropic's growth just might be
+[01:53] too much for them to find a workable
+[01:54] deal. What's more, while I don't think
+[01:56] Anthropic was ever particularly keen to
+[01:58] sell, I think now they have some serious
+[02:00] wind in their sales and are even less
+[02:02] likely to than before. Still, it is very
+[02:04] much the case that every day that Apple
+[02:06] waits, their options get more
+[02:08] constricted and the amount that they're
+[02:09] going to have to pay does nothing but
+[02:11] increase. As Be Jesus puts it, they got
+[02:14] to stop talking and start writing
+[02:15] checks. Speaking of big, lumbering tech
+[02:18] giants updating their strategy,
+[02:20] Microsoft has taken a big step towards
+[02:22] AI independence, unveiling a set of new
+[02:25] in-house models. The two models are MAI
+[02:27] Voice 1, which is a texttospech model,
+[02:29] and MAI1 preview, which is a
+[02:31] non-reasoning LLM. Mi Voice 1 is the
+[02:34] focus of the press release and seems
+[02:36] state-of-the-artish.
+[02:37] We don't have any benchmarks so far, but
+[02:38] the samples are reasonably impressive.
+[02:40] Microsoft says the model can generate up
+[02:42] to a minute of audio in under a second
+[02:43] running on a single GPU, making it
+[02:46] quote, "one of the most efficient speech
+[02:47] systems available today." MA1 Preview,
+[02:50] meanwhile, is just a standard chatbot
+[02:51] LLM. Really not much to say about it.
+[02:53] The model is currently being benchmarked
+[02:55] on LM Arena, and about the best you can
+[02:57] say is that it's putting up a decent
+[02:59] performance. It's currently ranked at
+[03:00] number 13, which is below GPT41 and Gro
+[03:04] 3, but ahead of Gemini Flash01 and
+[03:06] Claude Sonnet 4 thinking, so essentially
+[03:08] middle of the pack. Still,
+[03:10] realistically, the notable part is that
+[03:11] it exists at all with Microsoft writing,
+[03:13] "This represents MAI's first foundation
+[03:15] model trained end to end and offers a
+[03:17] glimpse of future offerings inside
+[03:19] Copilot." Overall, Microsoft said,
+[03:21] "We're actively spinning the flywheel to
+[03:22] deliver improved models. We'll have much
+[03:24] more to share in the coming months."
+[03:26] Frankly, I think Microsoft is playing a
+[03:28] dangerous game here. I understand why in
+[03:30] the wake of the absolute chaos of a
+[03:32] couple years ago's board meeting and
+[03:34] firing and rehiring of Sam Alman, they
+[03:36] feel the need to get more independence
+[03:37] from OpenAI. But for their core business
+[03:40] users, there is already a gap between
+[03:42] the chat GBT that they're using with
+[03:44] their Gmail accounts at home after hours
+[03:46] and what's available to them as
+[03:47] enterprise buyers using Copilot. And
+[03:49] unless they can seriously move quickly
+[03:51] and get these models up to snuff
+[03:53] relative to OpenAI's offerings and
+[03:55] Google's offerings, etc., I think
+[03:57] they're are going to have a very
+[03:58] difficult time.
+[04:00] Speaking of Anthropic, a bunch of
+[04:02] stories from them. First, they've
+[04:03] released a new agent that lives in a
+[04:05] Chrome plug-in called Cloud for Chrome.
+[04:07] The product is a browser using agent
+[04:08] that does pretty much all the things you
+[04:10] would expect. In their announcement blog
+[04:12] post, the company writes, "Within
+[04:13] Anthropic, we've seen appreciable
+[04:15] improvements using early versions of
+[04:16] Claude for Chrome to manage calendars,
+[04:18] schedule meetings, draft email
+[04:19] responses, handle routine expense
+[04:21] reports, and test new website features.
+[04:23] The company is treating this as a pilot
+[04:25] test, releasing the agent to a selection
+[04:26] of 1,000 Claude Max subscribers."
+[04:29] Anthropic does note that they're still
+[04:30] very concerned with inherent security
+[04:31] issues with web use agents, discussing
+[04:33] the risk, for example, of prompt
+[04:35] injection attacks. This is something, by
+[04:37] the way, that has started to manifest in
+[04:38] other web browsing agents that were
+[04:39] released earlier. Earlier this month,
+[04:41] Brave published a security notice
+[04:42] describing a functional attack vector,
+[04:44] for example, in Perplexity's comet
+[04:46] browser. Still, ultimately, Anthropic
+[04:48] says that they view aic web browsing as
+[04:50] inevitable, and so they are attempting
+[04:51] to strike a balance between safety and
+[04:53] keeping up with the race. Maybe even
+[04:55] bigger news from Anthropic is that the
+[04:57] company has settled a copyright class
+[04:59] action lawsuit with a group of authors.
+[05:01] In a legal filing on Tuesday, Anthropic
+[05:03] said that they had negotiated a proposed
+[05:05] class settlement. We don't know the
+[05:06] terms, but best guessing is that
+[05:08] affected authors will see some sort of
+[05:09] payout, and Anthropic, for their part,
+[05:11] gets to avoid going to a potentially
+[05:12] costly trial. This lawsuit was filed
+[05:15] last year and claimed that Anthropic
+[05:16] used millions of books to build out
+[05:18] their training data. In June, the judge
+[05:20] ruled that Enthropic's use of
+[05:21] copyrighted books in training data was
+[05:22] fair use, which was a hugely impactful
+[05:24] first- of its kind ruling. At the same
+[05:26] time, the judge also found that
+[05:28] Anthropic had pirated millions of books
+[05:30] from the internet rather than purchasing
+[05:31] them. Anthropic was set to go to trial
+[05:33] over the issue in December, which had
+[05:35] them facing fines that could have
+[05:36] reached into the hundreds of billions of
+[05:37] dollars due to sheer volume. The
+[05:39] settlement is expected to be finalized
+[05:40] next week, so we will soon learn of the
+[05:42] terms, but Justin Nelson, an attorney
+[05:44] for the author, said, "This historic
+[05:46] settlement will benefit all class
+[05:47] members." Now it is worth noting that
+[05:49] when it comes to broader implications,
+[05:51] settlements can't be used as precedents
+[05:53] in other cases, meaning that the direct
+[05:55] impact is fairly minimal. At the same
+[05:57] time, in practice, one settlement begets
+[05:59] another, and so there could be some
+[06:01] impacts there. IP scholars v Rosen
+[06:04] writes, "Big news and a win for authors.
+[06:06] I think it doesn't resolve the legal
+[06:07] issues, of course, but I suspect we're
+[06:09] going to end up with a licensingoriented
+[06:10] data rather than a clear legal rule."
+[06:14] Last anthropic story. For the first
+[06:16] time, the company will be using user
+[06:17] data to train their next generation of
+[06:19] models. Coming after a big change to
+[06:21] their terms of service, the new terms
+[06:23] will apply to free pro and max plans,
+[06:25] but not the variety of enterprise and
+[06:26] education plans or API access. Users can
+[06:29] also opt out if they don't want clawed
+[06:31] training on their data. Anthropic said,
+[06:33] "By participating, you'll help us
+[06:34] improve model safety, making our systems
+[06:36] for detecting harmful content more
+[06:37] accurate and less likely to flag
+[06:39] harmless conversations. You'll also help
+[06:41] future cloud models improve its skills
+[06:43] like coding, analysis, and reasoning,
+[06:44] ultimately leading to better models for
+[06:46] all users. Now, the tech press ran
+[06:48] stories about how naive users might not
+[06:50] read the fine print and accidentally opt
+[06:52] into data sharing. I think, however, a
+[06:54] more interesting question is what it
+[06:55] means that Anthropic is shifting their
+[06:57] policy at this stage in the game. OpenAI
+[06:59] insider Rune recently brought up the
+[07:00] point that quote, "All model companies
+[07:02] were pre-training on the same internet."
+[07:04] Of course, Grock has access to Twitter
+[07:06] data set and Gemini can pre-train on
+[07:07] YouTube and so on, but mostly it's the
+[07:09] same internet. On the other hand,
+[07:11] reinforcement learning environments will
+[07:12] be whatever the lab chooses to
+[07:14] prioritize. So you should expect more
+[07:15] speciation. Indeed, Princeton professor
+[07:18] Aravven Naran writes, "In an essay a
+[07:20] year ago, we observed that more capable
+[07:22] models don't necessarily mean more
+[07:23] useful products and that real world
+[07:25] usefulness will require training on user
+[07:27] data. In retrospect, I'm surprised
+[07:29] Anthropic held out this long." Speaking
+[07:31] of this long, that is where we are going
+[07:33] to wrap today's headlines. With that, we
+[07:35] will move over to the main
