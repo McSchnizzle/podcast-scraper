@@ -1,0 +1,1325 @@
+[00:00] Now that's a high stakes meeting. They
+[00:01] want something in their mind. Most
+[00:03] productled or more salesled CEOs are
+[00:05] very clear in terms of what they want.
+[00:07] You wore this AI recording device in
+[00:11] your meeting with your CEO. Basically
+[00:13] recorded this meeting. Then you're just
+[00:15] taking the transcript of that meeting
+[00:18] and you are pasting it into chat GBT to
+[00:21] generate this product. And at the end of
+[00:23] this, you know, I have a fully
+[00:24] functional now drag and drop canvas
+[00:26] builder that could build a full entire
+[00:28] user journey. And the goal here is not
+[00:30] to say something is easy. It's more so
+[00:33] to are they all aligned and can be more
+[00:35] fast, which I think is the next
+[00:36] superpower as all these tools come out
+[00:39] and what could be possible.
+[00:41] [Music]
+[00:44] Welcome back to How I AI. I'm Claire Vo,
+[00:47] product leader and AI obsessive here on
+[00:50] a mission to help you build better with
+[00:51] these new tools. Today I have an episode
+[00:54] that's both going to inspire product
+[00:56] managers and CEOs and maybe strike some
+[00:59] fear in the heart of product managers
+[01:01] and engineers. I'm speaking to Anjan
+[01:04] Paneer Selam, CPTO of Acolyte Health,
+[01:07] who is using AI in every stakeholder
+[01:10] interaction, giving customers access and
+[01:13] free reign to all the prototypes on
+[01:15] their road map and solving debates with
+[01:18] engineering by building products. This
+[01:21] is a fun episode. It tells us a lot
+[01:23] about both tools and culture and I think
+[01:25] it's a must listen for product
+[01:27] engineering and startup executives out
+[01:29] there. Let's get to it. This episode is
+[01:32] brought to you by Notion. Notion is now
+[01:34] your do everything AI tool for work.
+[01:38] With new AI meeting notes, enterprise
+[01:40] search, and research mode, everyone on
+[01:43] your team gets a notetaker, researcher,
+[01:46] doc, drafter, brainstormer. Your new AI
+[01:49] team is here right where your team
+[01:51] already works. I've been a longtime
+[01:53] Notion user and have been using the new
+[01:55] Notion AI features for the last few
+[01:57] weeks. I can't imagine working without
+[02:00] them. AI meeting notes are a gamecher.
+[02:03] The summaries are accurate and
+[02:04] extracting action items is super useful
+[02:07] for standups, team meetings, one-on-
+[02:09] ones, customer interviews, and yes,
+[02:11] podcast prep. Notion's AI meeting notes
+[02:14] are now an essential part of my team's
+[02:16] workflow. The fastest growing companies
+[02:19] like OpenAI, Ramp, Verscell, and Cursor
+[02:23] all use Notion to get more done. Try all
+[02:26] of Notion's new AI features for free by
+[02:29] signing up with your work email at
+[02:32] notion.com/howi
+[02:35] AI. Anjan, welcome to how I AI.
+[02:39] Thank you so much, Claire. Very happy to
+[02:41] be here. Big fan of everything that you
+[02:43] do and also a big user of chat purity.
+[02:46] So really thanks for putting it out
+[02:48] there and helping a lot of us. Well,
+[02:50] what I really like is you and I have
+[02:53] something in common, which is we have
+[02:55] this fairly rare but more common title
+[02:59] CPTO,
+[03:02] thinking and caring for the product and
+[03:05] engineering organizations. And before we
+[03:07] dive into your use cases, I'm curious
+[03:09] how that specific point of view has
+[03:11] really changed how you think about AI or
+[03:15] how you've adopted AI inside your
+[03:18] startup. For a long time I was jumping
+[03:21] between CTO CPO and eventually I found
+[03:23] this kind of um role and I think um it's
+[03:27] really big thanks to AI that the roles
+[03:29] are now starting to the lines are
+[03:31] starting to blur for the roles and it's
+[03:33] now one role um and you know early stage
+[03:35] startups specifically love the CPTTO
+[03:38] because they have one person to go ask
+[03:41] everything to there's like no two people
+[03:42] in the room now um and I think AI
+[03:46] definitely has made it much more
+[03:47] bearable and much more easier to manage
+[03:50] the responsibilities that come with
+[03:52] being being both responsible for the
+[03:54] product and the technology side of
+[03:56] things and most importantly it cuts down
+[04:00] the time required to that's spent in
+[04:02] transitioning ideas transitioning
+[04:04] information and now directly goes into
+[04:07] how things could be made possible. What
+[04:09] I really like about this role is that
+[04:11] you get rid of this false conflict
+[04:14] between product and engineering, but
+[04:16] unfortunately you do not get rid of I
+[04:19] wouldn't call it a conflict, but the
+[04:22] debates and negotiations that happen
+[04:24] between the product and engineering team
+[04:26] and the CEO. And so I would love to dive
+[04:29] into your first uh workflow which is
+[04:32] really about how to guide maybe an
+[04:34] executive whether they're your CEO or
+[04:37] another leader through an idea and
+[04:40] really solicit out kind of use cases,
+[04:43] user experience, all that stuff in a
+[04:45] single meeting using AI. So let's dive
+[04:47] into that.
+[04:47] I work in B2B enterprise applications
+[04:49] mostly. So um um a very simple idea that
+[04:53] came up which I think um I've built this
+[04:55] over the years like the last 17 years in
+[04:57] my tech career five different startups
+[04:59] I've built it at every startup and the
+[05:01] timeline always shortened. First it took
+[05:03] like 6 months then it took a few months
+[05:05] then a few weeks but now it's like in a
+[05:08] matter of 30 minutes to two days we're
+[05:10] actually building it and also putting it
+[05:12] into production and that's how fast it's
+[05:14] become. So there's this one idea that's
+[05:16] there's a problem that I love a lot. How
+[05:18] can we build a user journey map within
+[05:20] the application? So a lot of
+[05:22] applications that I work on is where
+[05:24] customers want to be able to tailor how
+[05:26] the experience gets delivered to users.
+[05:29] Normally this just imagine this if we
+[05:31] had no logic we have to write down all
+[05:33] the logic. A Figma designer has to go
+[05:35] and design everything in Figma. Then
+[05:37] they have to think through all the
+[05:39] possibilities. Next engineering has to
+[05:41] understand all the different
+[05:42] permutations and combinations.
+[05:44] Everything's written on document.
+[05:46] impossible to think of how much has to
+[05:48] be done before we can even have
+[05:50] something functional. So in this case we
+[05:53] are in a meeting um multiple
+[05:54] stakeholders um and then the
+[05:56] conversation comes up can we build like
+[05:58] a journey builder within our
+[05:59] application. So first step where I
+[06:02] always start um I love starting with
+[06:04] chat GPT because this kind of has become
+[06:06] my brain dump of what I'm thinking
+[06:08] through and then it helps me
+[06:09] consolidate. Um so start here work
+[06:12] through a very simple idea. So, I want
+[06:15] to be able to build a prototype here.
+[06:17] Very simple explanations, right? Natural
+[06:18] language that we're just conversing.
+[06:20] There's no complex like here's like a
+[06:22] structured PRD or a structured
+[06:23] statement. Just a pure brain dump of
+[06:25] what everybody's talking.
+[06:27] Yeah. One thing I'd like to call out
+[06:29] here is, as much as I'd like to say, of
+[06:32] course, that AI can do a lot of the
+[06:34] product job, one thing that experienced
+[06:36] product managers are very good at that
+[06:38] you've shown you're good at is taking
+[06:41] probably an idea from your CEO that's
+[06:43] like, I want a journey builder. Like, I
+[06:45] want people to be able to like build
+[06:46] whatever journey they want. And you've
+[06:48] actually given some pretty precise
+[06:50] language to that. So there is still a
+[06:52] job out there for us despite perhaps my
+[06:56] my past um
+[06:58] my past forecasts of the death of PM. I
+[07:02] do think the ability to clearly
+[07:04] articulate either for a human partner or
+[07:07] AI something a little bit more specific
+[07:10] which I think you've done here help you
+[07:12] know a single page canvas userf facing
+[07:13] tool map out personalized workflows like
+[07:15] that's all very specific language that I
+[07:17] think a great product manager can
+[07:19] translate in very short order. So that's
+[07:22] what you're putting into this prompt.
+[07:24] And then what are you trying to get out
+[07:25] of it? So out of this I want actually a
+[07:28] simple structured um prompt that could
+[07:30] go into another tool like Lovable Vzero
+[07:33] or Magic Patterns any of those. Um and
+[07:36] uh the idea here is I'm starting with
+[07:38] something and AI does a great job of
+[07:41] understanding what else is needed
+[07:42] because I'm saying I want it to be a
+[07:44] lovable prompt or a vzero prompt. AI
+[07:46] understands what else might be needed.
+[07:48] So as we go in it starts to summarize
+[07:50] everything that's needed automatically
+[07:52] picks like a pattern like it's a left
+[07:54] side vertical toolbar that could have
+[07:55] some and the great thing it does is AI
+[07:59] helps normalize every good product
+[08:01] managers uh product sense or product
+[08:03] feeling into very structured
+[08:05] information. So that's what typically
+[08:07] differentiates different product
+[08:08] managers they have each a different way
+[08:10] of explaining how they want it. AI
+[08:12] doesn't judge you. It's like okay I get
+[08:14] it and I'm going to help you. And I
+[08:15] think this is where the biggest shift
+[08:17] has been even product managers who
+[08:20] initially want to think a lot. My push
+[08:22] always to them is just jump in and start
+[08:24] typing. Don't think about what anybody's
+[08:27] going to think, what AI is going to
+[08:28] think because it's very kind, very nice.
+[08:30] Just jump in, start putting in. So one
+[08:33] prompt later, not even too complex, we
+[08:35] have a very nice prompt that I could
+[08:37] then use um you know um into lovable orb
+[08:40] zero. So from here that's all straight
+[08:43] goes to um directly we go into LAR v0ero
+[08:46] we put it in and start convers um start
+[08:49] building the prototype. One thing I want
+[08:51] to also mention here is it's not just
+[08:54] limited to um something I type here um I
+[08:57] wanted to actually show in this use case
+[08:59] I was using the limitless pendant um
+[09:01] something I was just experimenting with.
+[09:03] This is actually live transcript that's
+[09:05] coming from the conversation that we're
+[09:07] having in the room. And I could go from
+[09:09] this directly into chat GPT as well. So,
+[09:12] helps normalize it. Or this could be a
+[09:14] copy.
+[09:15] I have to I have to pause you. I have to
+[09:16] pause you. Do you have the Limitless
+[09:17] Pendant right now? Do you have it close?
+[09:20] Yeah, I have.
+[09:20] Wait, you got to you got to show it.
+[09:21] Show it to us.
+[09:22] Give me one sec. I'm just
+[09:24] Yeah. Yeah. Um, while you're while
+[09:25] you're looking um at it or looking for
+[09:28] it, I have to shout out my old pal Dan
+[09:31] um who's the CEO and founder of
+[09:33] Limitless and we'll be thrilled to see
+[09:37] um the pendant in real life.
+[09:39] Yep. This is my Limitless pendant. Um I
+[09:43] was actually one of the first few people
+[09:44] to pre-order this.
+[09:46] Um I I worked with pendants my entire
+[09:49] life because I used to work in senior
+[09:50] living. So we used to build like the
+[09:52] medical alert buttons. So when this form
+[09:55] factor came on I'm like I'm trying this
+[09:56] and this has been like such a gamecher
+[10:00] especially like you know you're sitting
+[10:02] in a coffee shop you're talking with you
+[10:04] know stakeholders partners colleagues
+[10:06] ideas flow right there should be no
+[10:08] friction oh let me take a paper and
+[10:09] write it down oh let me remember it so
+[10:12] this just completely changed the game
+[10:14] there so this is like transcript for
+[10:15] example from a meeting we start here and
+[10:18] then directly go into AI so
+[10:20] straightforward and simple so thanks for
+[10:22] building
+[10:25] Thanks. Thanks, Dan and other friends
+[10:27] over at Limitless. I have to say, you
+[10:30] did not tell me about the Limitless
+[10:31] pendant in our prep. And this has been a
+[10:33] how I AI first. So, just to recap for
+[10:36] folks that are maybe not watching or
+[10:38] don't know what this pendant is. Um, you
+[10:41] wore this basically AI recording device
+[10:46] in your meeting with your CEO, I'm sure.
+[10:49] um ascribing to all applicable
+[10:51] disclosure laws about about recording.
+[10:53] Of course, of course, of course. Yes.
+[10:55] And you basically recorded this meeting
+[10:57] and then that's streaming into the
+[10:58] Limitless AI app. Then you're just
+[11:01] taking the transcript of that meeting
+[11:04] and you are pasting it into chat GBT to
+[11:07] generate this prompt. We totally buried
+[11:09] the lead on the like new how I AI
+[11:12] workflow here. So again, it'll be
+[11:14] interesting to see. I think we've seen a
+[11:16] lot of, you know, desktop driven meeting
+[11:19] recording apps. Um, it'll be really
+[11:22] interesting to see as these like
+[11:23] wearables and devices come into the
+[11:25] workplace, right,
+[11:26] how that might shift. And I just had to
+[11:28] ask you, you know, why why the pendant?
+[11:31] Why a hardware device or or wearable
+[11:34] versus like turning on something like
+[11:36] granola or another meeting recording
+[11:38] kind of um product?
+[11:41] I think, you know, sometimes you want it
+[11:42] to be non-intrusive. I think that's, you
+[11:45] know, um I'm I'm a big fan of also the
+[11:47] Meta Glasses. I'm waiting for better
+[11:49] versions, lighter versions to come out,
+[11:51] but this this is such such a
+[11:53] non-intrusive device. Has amazing
+[11:55] transcription. Um and the great thing is
+[11:58] it's not limited by language, too. So,
+[12:00] you know, sometimes we have voice
+[12:02] recorders. You have to open your phone.
+[12:04] You have to set it on the table. Oh, let
+[12:05] me make sure I do it. So, that's not
+[12:07] always possible. When you're talking,
+[12:09] you just want to talk. You're thinking
+[12:10] through and you're naturally conversing.
+[12:13] So, it does a great that that's one, you
+[12:16] know, great reason why I think I'm very
+[12:18] bullish about hardware um that's going
+[12:21] to carry AI and, you know, it's going to
+[12:23] completely change what's possible.
+[12:25] Okay, quick quick request for folks
+[12:27] watching or listening in the comments,
+[12:29] if you are also a hardware afficionado
+[12:32] or have a use case around that, I would
+[12:34] love to hear from you. Um I too love the
+[12:36] meta the meta glasses. They are my daily
+[12:39] drivers for um headphones and things
+[12:41] like that and I would love to hear more
+[12:42] about how people are using um hardware
+[12:44] on how I AI because this has been a
+[12:47] first. Okay.
+[12:48] Yes.
+[12:48] So side detour through through recording
+[12:50] but you're basically taking these
+[12:52] meeting transcripts in the meeting.
+[12:54] You're saying great, let's get it to a
+[12:55] prototype. And then you're getting it
+[12:56] into lovable, for example. And this is
+[13:00] an example of what you're getting out of
+[13:02] it, which is this nice, beautiful
+[13:04] workflow builder with a lefth hand kind
+[13:06] of card nav, which we had seen in the
+[13:09] prompt, and some interactivity, I
+[13:11] suppose.
+[13:12] Yep. Um, fully interactive. So here now,
+[13:15] I started with um, you know, this prompt
+[13:17] in uh, Chad GPT. As I thought through
+[13:20] this, and again, this is one of the
+[13:22] great things, right? when you're doing
+[13:23] product and technology, you're
+[13:24] constantly thinking of how this idea is
+[13:27] going to evolve. So, chat GPT gave me a
+[13:30] good starting point. I then b into
+[13:32] lovable and as I was pasting and I'm
+[13:34] adding few more points there. So, hey, I
+[13:36] remembered I, you know, ran into a
+[13:39] library called React Flow that does
+[13:40] great job at making like a canvas-based
+[13:43] builder. So, I put that in here. And I
+[13:45] did not expect Lovable to know what
+[13:47] React Flow is. There's always this like,
+[13:49] oh, maybe it doesn't know. But AI always
+[13:52] surprises me here. Somehow they it it
+[13:54] knew React flow and exactly that's what
+[13:56] it went ahead to implement and you know
+[13:59] u one of the things I always recommend
+[14:01] is break down your concepts for AI and
+[14:04] you'll have a lot more success. So I
+[14:06] broke it down first starting with the
+[14:08] basic idea and slowly as things progress
+[14:10] keep building on it. Um, and at the end
+[14:13] of this, you know, I have a fully
+[14:15] functional now drag and drop canvas
+[14:18] builder that could build a full entire
+[14:20] user journey. And this, as I mentioned,
+[14:23] I've I've built this so many times in my
+[14:25] career. And it has literally been like
+[14:28] 17, 18 page documents that fully
+[14:30] summarize what's possible. pencil
+[14:32] sketches, then then UX designers go put
+[14:34] it in Figma, all of that stuff, which
+[14:37] which is still okay to do now, but I
+[14:39] think nobody wants to spend time reading
+[14:41] 17 pages and then arriving at a
+[14:43] conclusion. They would rather see. And
+[14:46] this this exactly does that. So very
+[14:48] easy to do and most importantly talk
+[14:51] about. So just imagine going to your
+[14:53] engineering team, you're not giving them
+[14:54] an 18page document, but you're rather
+[14:56] standing, let me show a demo of what I'm
+[14:58] thinking. Now we're moving from oh let's
+[15:02] spend a week aligning to here's the
+[15:04] alignment in less than 30 minutes to an
+[15:06] hour. And it's the same with the CEO
+[15:08] too. Now that's a high stakes meeting.
+[15:10] They want something in their mind and
+[15:12] they're very you know u most productled
+[15:14] or more salesled CEOs are very clear in
+[15:16] terms of what they want. They might not
+[15:18] explain it always but now here they are
+[15:20] visually seeing this and they might say
+[15:22] you know what I want something else here
+[15:24] that'll make it possible. So, for
+[15:26] example, I don't want too many variables
+[15:28] or I want to be able to edit each part
+[15:30] of whatever block that you have. And
+[15:33] that's the great thing with these
+[15:34] prototypes that we generate. Everything
+[15:36] is editable. It's no longer just static
+[15:38] images that like, okay, let me put it on
+[15:40] a board and explain it. It's fully
+[15:42] explanatory. It's fully interactive. And
+[15:44] then we go from this to first alignment
+[15:47] with the stakeholders, which is like the
+[15:49] leaders of the business. Everybody's on
+[15:51] the page. Let's now move on to the next
+[15:53] step. So
+[15:54] yeah, I I really love this. I want to
+[15:56] call out a couple things for folks that
+[15:58] are listening or maybe not watching. One
+[16:00] is this is really it looks great and
+[16:04] Lovable's been a wonderful sponsor of
+[16:05] the show, so I have to have to shout
+[16:07] them out. We do love them. And I do tend
+[16:10] to pick Lovable when I want something to
+[16:12] look nice, you know, like it tends to be
+[16:16] out of the box,
+[16:17] you know, it it uses color
+[16:18] intelligently. it has it tends to have
+[16:21] you know kind of beautiful pretty modern
+[16:23] user experience. So I do tend to pick
+[16:26] this particular tool for something like
+[16:28] this especially where visual design is a
+[16:31] differentiator. I think you know
+[16:33] sometimes people ask me what what
+[16:34] prototyping tool should I pick and
+[16:36] you're probably like me it's like well
+[16:38] which whichever one I feel like is going
+[16:40] to do the job of the day and you know
+[16:42] when I need something that uh where UX
+[16:44] is maybe a little bit of the
+[16:45] differentiator or it's highly
+[16:47] interactive like data visualizations or
+[16:49] a workflow builder
+[16:51] I've also found that lovable does quite
+[16:53] quite a nice job. So that's one thing I
+[16:55] wanted to call out. The second thing is,
+[16:58] you know, I I did a little little tour
+[17:00] in healthcare once and these rules
+[17:03] builders, flow builders are like
+[17:05] everybody's built one or they built 10.
+[17:08] Yeah.
+[17:08] And what's really hard for a product
+[17:10] manager is in the past is you're exactly
+[17:12] right. You have to sit there and write
+[17:14] bullet points for every piece of logic,
+[17:17] every customizable field. You have to go
+[17:20] in here and say, "Okay, if I send an
+[17:21] SMS, I have to check that the SMS has
+[17:24] been like opted in. I can't send too
+[17:27] many SMSs in a row." Like, you have to
+[17:29] do all this logic.
+[17:30] It's very hard to document. It's very
+[17:33] hard to test. And what I like about
+[17:36] prototypes as sort of the source of
+[17:38] truth for something that is this complex
+[17:41] is you can actually just click through
+[17:42] and go, "Oh, you're not supposed to put
+[17:44] two SMS components in a row. That goes
+[17:47] back into the prototype code." or you
+[17:49] know you shouldn't do a delay on a delay
+[17:51] and so I think these are particularly
+[17:53] effective for highly complex products
+[17:57] because the alignment on the
+[17:58] requirements and the testing becomes
+[18:00] much more natural it's very unnatural to
+[18:02] read rule sets um it's much more natural
+[18:06] to interact with something something
+[18:08] like this so I think it's a really
+[18:10] effective tool and then the third thing
+[18:11] I want to call out that in case people
+[18:13] missed because they're going to be very
+[18:14] mad at you they're like oh no you've
+[18:16] given my CEO the idea one, I can get a
+[18:19] prototype in 30 minutes. Two, that I can
+[18:21] ship it in two days. But I actually
+[18:23] think the thing that you called out was
+[18:25] really important, which is
+[18:27] those are high stakes meetings and
+[18:28] they're high stakes products when your
+[18:29] CEO is asking for something.
+[18:31] And the worst thing is you say, "Okay,
+[18:34] I'm going to come back here two or three
+[18:35] weeks and show it to you." And you show
+[18:37] it to them and it's totally wrong.
+[18:38] They're like, "No, that is not at all
+[18:40] what I wanted.
+[18:42] Not at all what I was thinking. Um, the
+[18:44] team is angry. the CEO is frustrated, no
+[18:47] one feels good. And so this is like a
+[18:49] cheap path to failure, too, which is
+[18:52] like if you get this and CEO is like,
+[18:54] she's like, "No, not it." Um, it it cost
+[18:59] you what, 15 minutes. It's not a big not
+[19:01] a big deal. Move on with your life. So,
+[19:04] I think those three things are worth
+[19:05] worth noting in this particular
+[19:06] workflow. But let's go to what you were
+[19:08] talking about next, which is great. We
+[19:12] have we have something like this. You
+[19:14] know, CEO is going to be like, "When can
+[19:15] I have it?" And sales is going to be
+[19:16] like, "When can I sell it, right?"
+[19:18] And a product manager is going to ask
+[19:20] their favorite question, which is why?
+[19:22] Like, do people actually want this? So,
+[19:24] exactly.
+[19:25] Um, how do you do kind of testing? I'm
+[19:27] I'm curious what what the next part of
+[19:29] your flow is,
+[19:30] right? So, next part from here is three
+[19:32] things. Um, I try to put together some
+[19:35] slides. Um, thanks GMA here or gamma.
+[19:38] The same prompt that we were just using.
+[19:40] Um I start here um with the chat um same
+[19:44] chat GPD prompt whatever came out I go
+[19:47] and iterate on this. So the next
+[19:49] question um and again all of this can be
+[19:51] done with a custom GPD tool that you can
+[19:53] build for yourself but I think um the
+[19:56] new models have gotten good where it
+[19:58] understands what your persona is where
+[20:00] you're asking from. So we don't even
+[20:02] have to go through that effort anymore.
+[20:04] I just start like I want to be able to
+[20:05] do some market research. Can you now
+[20:07] make this a little bit better? I can put
+[20:09] it into perplexity or do some research
+[20:12] um on it. So that's the next step that I
+[20:14] start here try to build a very simple
+[20:16] just statement of what we're trying to
+[20:18] do what is a little bit more about the
+[20:21] actual use cases what the customer types
+[20:23] are. So on one side I can use the same
+[20:26] prompt go into perplexity this
+[20:28] particular use case that I just did. So
+[20:30] here one of the great things to do is
+[20:32] deep research um which cuts down the
+[20:34] time analysis time by like 3 brings it
+[20:37] down to 3 minutes from whatever it used
+[20:39] to take. Um I think I think the main
+[20:41] advantage with a lot of this is it
+[20:43] reduces the immediate emotional or
+[20:46] cognitive burden on product managers or
+[20:48] leaders um in general to focus on what
+[20:51] makes strategic value and forget about
+[20:53] every other thing that's involved. So if
+[20:55] we have to do an analysis, every product
+[20:58] manager has their way of what all they
+[20:59] want to analyze, put into a competitive
+[21:01] matrix or any of this. We get past all
+[21:03] of that. That's what deep research for
+[21:05] example in this case does for us. We
+[21:07] give it some information. Again, as I
+[21:09] come in here, I put in some more
+[21:10] information. I want to build a market
+[21:12] analysis on the following feature I'm
+[21:13] working on. Paste the rest of the
+[21:15] prompt. It goes and builds everything
+[21:17] that's needed as a starting point. So
+[21:19] review this. So now your market analysis
+[21:22] to a certain extent is done. This is
+[21:24] again to build conviction within first
+[21:26] the PM or the technology leader that I
+[21:29] want I know what I'm working on is of
+[21:31] meaningful value and I can monetize it.
+[21:34] Very important in an early stage startup
+[21:35] even in late stage but I think even more
+[21:37] important early stage because if we're
+[21:39] not seeing ROI immediately that's more
+[21:41] money we're burning building products
+[21:43] that don't generate immediate ROI. So
+[21:46] once that's done um exported as a PDF or
+[21:49] goes into kind of gamma from here build
+[21:52] very basic slides uh makes it look
+[21:54] pretty. So when we're talking to other
+[21:56] PMs, other stakeholders, it's like work
+[21:59] is already done that immediately you
+[22:01] know attracts them makes them bring to
+[22:04] the understanding that we have thought
+[22:05] this through which is true which is all
+[22:07] happening in our minds but now AI is
+[22:09] helping implement it and then very basic
+[22:12] slides to be able to talk through um
+[22:14] talks about what are competitive
+[22:15] advantages strategic benefits and then
+[22:18] what the product is supposed to do.
+[22:20] This episode is brought to you by
+[22:22] lovable. If you've ever had an idea for
+[22:24] an app, but didn't know where to start,
+[22:26] Lovable is for you. Lovable lets you
+[22:29] build working apps and websites by
+[22:31] simply chatting with AI. Then you can
+[22:33] customize it, add automations, and
+[22:35] deploy it to a live domain. It's perfect
+[22:37] for marketers spinning up tools, product
+[22:40] managers prototyping new ideas, or
+[22:42] founders launching their next business.
+[22:44] Unlike Noode tools, Lovable isn't about
+[22:47] static pages. It builds full apps with
+[22:50] real functionality. And it's fast. What
+[22:53] used to take weeks, months, or even
+[22:55] years, you can now do over the weekend.
+[22:58] So, if you've been sitting on an idea,
+[23:00] now's the time to bring it to life. Get
+[23:02] started for free at lovable.dev.
+[23:06] That's lovable.dev.
+[23:09] One of the things that I find
+[23:10] challenging working with AI um exciting
+[23:13] and challenging is AI has tends to have
+[23:15] an abundance mindset in that it tends to
+[23:18] think all my ideas are great and
+[23:20] everything is opportunity. And so I'm
+[23:23] curious if you've gotten a critical
+[23:25] market analysis out of AI or if it's
+[23:28] always sort of seeking the data that
+[23:30] tells you something is a good idea
+[23:32] versus figuring out reasons why it might
+[23:35] not work or it's not the right
+[23:36] investment. And I'm curious what your
+[23:37] experience has been there.
+[23:38] Yeah. Uh I I mean one of the things
+[23:40] always as you said AI is bullish about
+[23:42] everything that needs to happen. So I
+[23:45] think some follow-ups are critical here.
+[23:47] So in Perplexity for example when I'm
+[23:49] doing it I always have a follow-up at
+[23:51] the end saying can you play devil's
+[23:53] advocate and tell me if it's really
+[23:54] worth it or can you um do you see really
+[23:57] value in any of this? In other words, if
+[24:00] you're going to ask AI once more to just
+[24:02] make sure it is right, it is going to be
+[24:05] accurate then to say compare it to all
+[24:07] of these other things that are
+[24:08] generated. I think this is the reasons
+[24:10] why it might be unique. And a procon
+[24:12] analysis is again so easy, right? So you
+[24:14] could just build it into your prompt or
+[24:16] ask it. And I'll tell you there are more
+[24:19] features that AI has helped me say no to
+[24:22] because it's all in front of me and the
+[24:25] data is readily available which I think
+[24:27] is again what is the most critical
+[24:28] right? You want to save your time for
+[24:30] the ones that are really valuable,
+[24:33] really meaningful, but now you're no
+[24:35] longer carrying the burden that oh my
+[24:37] god, I spent 3 weeks working on this
+[24:38] just to say no. It's done in an hour.
+[24:41] And now you can feel more, you know, you
+[24:43] can more freely say no to things and
+[24:44] only focus on the things that are
+[24:46] important. So I think it goes back to
+[24:48] the earlier point you mentioned to good
+[24:50] product sense is still critical. Product
+[24:52] managers are still critical. It doesn't
+[24:54] replace PMs or what they do. it just
+[24:56] makes them to focus on what the outcomes
+[24:59] to be rather than the entire process. So
+[25:02] that's that's that's where I have seen
+[25:04] it be useful and helpful.
+[25:06] Okay. So in our stakeholder Olympics,
+[25:08] you have you know crossed the hurdle of
+[25:11] the CEO. We've got the CEO excited. You
+[25:13] made a deck. So now all the product
+[25:15] managers and executives are you a deck
+[25:18] with numbers. That's the thing that
+[25:19] makes product managers and executives
+[25:21] happy.
+[25:22] What what's your next stakeholder you go
+[25:24] after? um more details, right? So,
+[25:27] there's always going to be a junior PM
+[25:29] or the engineering leader who's going to
+[25:31] ask, "Okay, tell me more. Um I want to
+[25:33] know what exactly you mean by this."
+[25:36] This is where chat PRD is like extremely
+[25:38] great for me because I use chat purity
+[25:40] almost like a gate to to the point that
+[25:43] you mentioned. Are you sure you want to
+[25:45] do this? Are you sure you have
+[25:46] everything? That's where I find the tool
+[25:48] to be extremely helpful because while
+[25:50] chat GPD is there, it's a generic unless
+[25:52] you give it like a huge persona overload
+[25:54] of what it needs to do. It's very
+[25:56] generic. But chat purity on the other
+[25:58] side is geared towards a requirements
+[26:00] document or a product sense um that
+[26:03] needs to be validated. And this is where
+[26:05] I use the same prompt, but now rather
+[26:07] than chat purity going and saying let me
+[26:09] generate everything for you just because
+[26:11] you asked me, it goes through a series
+[26:13] of validations. Have you thought through
+[26:14] this? Have you t thought about what
+[26:17] could be the disadvantages if you're
+[26:18] building something? Do you have any
+[26:20] specific inspirations?
+[26:22] This is where I find chat PR
+[26:24] specifically helpful. Um I have a
+[26:26] template that I've built for myself. Um
+[26:28] I call it like the CPTO stack where
+[26:31] there is a particular type of uh PRD
+[26:34] that my team likes. So I sat with them,
+[26:36] discussed with them, came to alignment
+[26:38] and then I went forward. Now I validate
+[26:41] all the questions here. This is kind of
+[26:43] core as or the last step before it's
+[26:45] handed over to the engineering
+[26:46] counterparts. Now they're going to spend
+[26:47] actual mental time thinking through the
+[26:49] details. So all of it is done. It goes
+[26:52] through a series of discussions and we
+[26:55] have now a fully functional PRD. Um easy
+[26:58] to read, very small bullet points, no
+[27:00] large paragraphs, no large tickets yet.
+[27:04] And then it's now ready. And this is one
+[27:07] that caught me by surprise. This future
+[27:09] ideas and enhancements, right? So this
+[27:11] is something I've been dumping into the
+[27:12] chats as I go through chat GPT
+[27:15] perplexity all of it but chat did a good
+[27:18] job of pulling this separately what are
+[27:20] feature ideas and enhancements what
+[27:21] could be possible almost like a teaser
+[27:23] to let your engineering team know hey
+[27:25] I'm going to come back with a v2 that's
+[27:27] going to be all this too but it's a very
+[27:31] subtle hint that gets their you know uh
+[27:34] creative juices flowing and I think uh
+[27:36] makes makes the job easier
+[27:38] it's a it's a very strange experience
+[27:40] experience as a as a founder or as a
+[27:42] product person to have somebody explain
+[27:44] your own product back to you. But I will
+[27:46] say for folks that have not experienced
+[27:48] this product that I made. It really is
+[27:50] just a replica of going through a
+[27:52] product review with me, my poor my poor
+[27:54] product teams, which is I've done so
+[27:57] many like what we call be called PRDR.
+[27:59] We have a little song. It's like PR
+[28:01] PRDR. Um it's very fun. But we have this
+[28:04] product requirements design or a product
+[28:06] requirements document review meeting.
+[28:08] And I just found myself consistently
+[28:10] asking like who else is doing this?
+[28:12] Well, are there other products that we
+[28:14] we like here? What's next? Like is this
+[28:16] V0? If this is V 0, what's V1? Vitz B2
+[28:20] and I do think this idea of using AI no
+[28:22] matter what your function is as a gate
+[28:26] to make sure that you've checked all the
+[28:28] boxes of the next step without having to
+[28:31] go to your boss or having to go to
+[28:33] you know your other stakeholders is is a
+[28:35] really effective way to sort of bring AI
+[28:37] into the loop um in a way that
+[28:39] ultimately saves everybody time
+[28:41] right yep definitely and I think you
+[28:44] know the one thing I would love which
+[28:47] you're building already is integration
+[28:48] So from here it goes now to v 0 which
+[28:51] makes the job a lot more easier to keep
+[28:53] iterating and refining. But I think as
+[28:55] time progresses more tools become
+[28:57] integrated. It's going to be a big game
+[28:59] changer for everything PMs and CTOs are
+[29:02] doing um dayto-day.
+[29:03] Yeah I'm I'm sorry to the engineers out
+[29:05] there but we will be building a Ajira
+[29:08] integration to turn all of this into
+[29:10] tickets. Um sad sad to say. Okay, so
+[29:12] you've gotten again through a couple key
+[29:14] stakeholders, your CEO, your PM cohort,
+[29:17] your AI CPTO here in chat PRD,
+[29:22] you know, let's get to customers. What
+[29:23] do we do when we want to actually get
+[29:25] this in the hands of customers and
+[29:27] validate it? What's your next AIdriven
+[29:29] next step?
+[29:30] Yeah, so customers access teams love
+[29:32] this as well. So we built what is almost
+[29:35] called like a living product library or
+[29:37] demo library of pages especially which
+[29:39] are like close to the design language of
+[29:41] our actual platform and have these all
+[29:44] as individual micro sites that we
+[29:45] deployed. So now um either sales teams
+[29:49] or customer success teams because it's
+[29:50] intuitive there's no you know um there's
+[29:52] no places where it's going to fail
+[29:54] suddenly or I can't click because the
+[29:56] Figma interaction was not done. No
+[29:58] challenges of that nature. They have now
+[30:01] the flexibility to be able to completely
+[30:03] take this and show it to customers, get
+[30:05] real-time feedback. So, they're no
+[30:07] longer worried about how to navigate.
+[30:08] This is a fully interactive prototype.
+[30:10] So, in this situation, as soon as I
+[30:13] built this, um it was so funny. We had a
+[30:15] stakeholder meeting in one meeting room.
+[30:17] 30 minutes later, we're with the
+[30:18] customer actually demoing this because,
+[30:21] you know, they wanted to see it. And
+[30:24] what would have taken again like 2 3
+[30:26] months of discussions going back and
+[30:28] forth, especially if they're a high
+[30:29] stakes customer is now done almost
+[30:32] immediately. And it does two things,
+[30:33] right? Customers see it, they align and
+[30:35] say, you know what, this would be really
+[30:36] helpful for me. They're no longer
+[30:38] reviewing slides. They're no longer
+[30:40] having to just listen to long talks
+[30:42] about what a product could do. They're
+[30:44] seeing what it's going to be. And if
+[30:46] they don't like something, they're right
+[30:48] there telling us, you know what, I think
+[30:49] something could be different. And I
+[30:51] think the outcome of all of this is like
+[30:53] extremely fast alignment which in my
+[30:55] view is kind of what is super critical
+[30:57] now as long as you're aligned with your
+[31:00] stakeholders with your customers
+[31:02] building anything else is easier is more
+[31:04] tangible because there is no longer an
+[31:07] uncertaintity of okay let me put it into
+[31:09] build will this work or not so that's
+[31:12] what we do next take it to customers
+[31:13] show them anybody on the team can do it
+[31:15] even I could trust my CEO to do it
+[31:17] because you know it's a demo library
+[31:19] it's restricted to that there's no page
+[31:21] he has to go to where it's like suddenly
+[31:23] going to give a 404. So all of it is
+[31:26] very well bounded and this living demo
+[31:29] library keeps growing and you know um it
+[31:33] most importantly doesn't put any burden
+[31:35] on the engineering team which is what I
+[31:36] love about being a CBTO. I can almost do
+[31:39] my entire product function without
+[31:41] worrying the engineering team. Oh please
+[31:43] build this demo two days time one day
+[31:45] time. I just want this one button to
+[31:47] work. It's all now gone.
+[31:50] Well, and so I think this is worth
+[31:52] repeating because I think it's both very
+[31:54] inspirational and also is going to give
+[31:56] a whole bunch of teams a big heart
+[31:58] attack. And so the thing that you've
+[32:00] done here is you've taken not just this
+[32:01] prototype, but basically your library of
+[32:05] good ideas, fairly highfidelity
+[32:07] prototypes. You've put them in a kind of
+[32:10] companywide live demo library.
+[32:14] So, anybody has access to these links
+[32:16] and then you're like customer se success
+[32:19] go ahead like sales go ahead CEOs go
+[32:22] ahead and I know that you work for a
+[32:24] relatively small company and so that
+[32:26] cultural change is a little easier for
+[32:28] you but I see so many product teams
+[32:31] being like oh my god don't don't tell
+[32:33] customers we're working on this or don't
+[32:35] show them the Figma it's not going to be
+[32:36] like that and I do think it's worth
+[32:39] reconsidering
+[32:41] how tightly we hold product ideas in the
+[32:44] product organization and I do think
+[32:46] you're showing a different model which
+[32:47] is customers are understanding that
+[32:50] things are in prototype phase and
+[32:51] they're not live yet.
+[32:53] Your team is intelligent and capable
+[32:55] enough to manage customer expectations
+[32:57] around things that may or may not come
+[32:59] soon or later and it's overall better
+[33:02] for the product. It's overall better for
+[33:04] the teams and it's overall better for
+[33:06] customers to just see what we're working
+[33:09] on versus kind of keep it keep it
+[33:12] secret. And so I think the AI side of
+[33:14] this is interesting because it becomes
+[33:16] cheap to sort of show customers stuff
+[33:18] which I have also worked in the past
+[33:21] where sales needs a demo of this or a
+[33:23] prototype of that and you're scrambling
+[33:25] two or three engineers to just try to
+[33:26] make something happen. That's not great.
+[33:28] So now you've changed the cost of that.
+[33:30] But then you've also changed the culture
+[33:33] around just being more generous with
+[33:36] showing your road map, showing your
+[33:37] prototype, showing your things things to
+[33:39] customers. And so I think it's something
+[33:41] that folks generally should consider is
+[33:43] going to become a shift in how product
+[33:45] and sales teams work together and I
+[33:49] think you're totally leading leading the
+[33:51] way here in terms of collaboration and
+[33:52] openness.
+[33:53] Yep. Yep. Yeah. That's totally the
+[33:56] product and sales collaboration. You
+[33:57] know um I had uh my all my previous
+[34:00] sales leaders always said like if only
+[34:02] you could show me what's possible I can
+[34:04] make this happen. So for the longest
+[34:06] time what was friction it could easily
+[34:09] now be converted to a partnership and I
+[34:11] think that's where AI is playing a big
+[34:13] role how can you reduce friction across
+[34:15] different teams how can you make the
+[34:17] impossible possible and you know
+[34:20] yeah and one thing I want to say which
+[34:22] is probably the fear in the back of
+[34:24] product team's minds or engineering
+[34:26] team's minds is they say if I give this
+[34:28] to sales and a customer likes it I'm
+[34:30] going to be asked to build it like I'm
+[34:33] going to be stressed because all of a
+[34:34] sudden we're going to have demand and I
+[34:36] as a product leader I will tell you this
+[34:37] this is before AI I have always said
+[34:40] wouldn't that be a great problem to have
+[34:42] like wouldn't it be a great problem to
+[34:44] have that a customer wants to buy
+[34:46] something so much for us that there's
+[34:49] like demand on our time to build
+[34:51] something very specific I'm like the
+[34:53] most likely outcome of all of this is a
+[34:55] customer looks at it and goes eh like
+[34:57] maybe you know like they're like eh kind
+[35:00] of and I just I think people are so
+[35:02] afraid of preserving
+[35:04] product energy and engineering energy
+[35:07] that they forget that those are like
+[35:08] what I call rich people problems. Like
+[35:10] having too many customers ask you for
+[35:12] too much product is like the best
+[35:14] problem a product manager can have.
+[35:16] Yeah.
+[35:16] And so I love this idea of just like
+[35:18] getting in there and creating that
+[35:20] problem for yourself which is ultimately
+[35:22] a good one
+[35:23] right I mean I like it's almost like you
+[35:26] would rather have this prototype and
+[35:27] alignment rather than randomly finding
+[35:30] it on a quote that has already been
+[35:31] signed and executed. Right?
+[35:34] Okay, you're you're talking about the
+[35:35] other thing, which is the well, I had to
+[35:37] close it for Q1, right? Uh feature
+[35:40] feature commit uh tied to to revenue
+[35:43] recognition, which you know, as as a
+[35:45] good old B2B girl. I have been I have
+[35:47] been there. I've been there as well.
+[35:50] We've all been there. Okay, great. So,
+[35:52] you're not only you as a product manager
+[35:54] getting this front of customers, but you
+[35:57] are letting your team get this in front
+[35:59] of customers. Um, so I think you've
+[36:02] you've managed stakeholders. It all
+[36:04] sounds great. It sounds lovely to me,
+[36:05] but we know there's still there's still
+[36:08] conflicts, there's still debates. So
+[36:10] tell me a little bit more about how
+[36:12] you're breaking deadlocks with with AI.
+[36:15] Yeah. So one one other situation where
+[36:18] um we we we ran into a particular
+[36:22] challenge was an idea um again that is
+[36:26] where it required almost like a mobile
+[36:28] app to be built. Um and the whole idea
+[36:30] there was we have this concept could it
+[36:34] work and now we have never done it for
+[36:37] mobile there is no mobile developer on
+[36:38] the team and now the team is stuck
+[36:40] engineering is like nope I don't want to
+[36:42] even hear about this don't even tell me
+[36:43] about this and all we want to do is okay
+[36:46] can we validate if it's possible rather
+[36:49] than like going hiring that's the first
+[36:51] step to do before we even start
+[36:52] something so what we did in this
+[36:55] situation was um a particular use case
+[36:58] again um to kind of also show that there
+[37:00] is no limit to what could be possible.
+[37:02] Um is where we went into building a
+[37:05] mobile app. Um this was an idea where we
+[37:08] specifically wanted to be able to
+[37:10] capture and just a selfie of a person.
+[37:13] And we were working with avatars. So we
+[37:15] want to be able to test Cappy, capture
+[37:17] them in a happy way, in a sad way, in a
+[37:20] normal way. And one of the big
+[37:22] challenges we saw was enterprise
+[37:25] customers or enterprise laptops always
+[37:27] don't have the best webcam. So now how
+[37:29] do we bring the solution to the customer
+[37:32] with whatever they have rather than
+[37:34] shipping expensive kits. So we're like
+[37:37] okay mobile phones are always great the
+[37:39] cameras are great. Now how do we build
+[37:41] something very quick? So this is where
+[37:43] again ROR comes into play. Um I think uh
+[37:46] they're an underdog in this game or a
+[37:48] lot of people are using it. Um but when
+[37:50] I found it I was like okay this is like
+[37:52] another frontier completely unlocked
+[37:54] because what was previously not possible
+[37:56] was mobile apps with generative AI. So
+[37:59] same prompt right um similar concept
+[38:01] started with chat GPT um a discussion in
+[38:04] a coffee room where they're like okay
+[38:06] what if we bring the mobile experience
+[38:08] to the customers and have them just
+[38:10] capture an avatar. I'm like, "Sure." And
+[38:12] then I go off 10 minutes later, just one
+[38:15] prompt here, we're able to now have a
+[38:17] fully functional iOS app um or like an
+[38:20] Expo app that does only two things,
+[38:23] right? This is not a production app
+[38:25] again, but it does the main thing of
+[38:27] building something that you could test
+[38:28] on your phones now and shows what could
+[38:31] be possible. And this is where a little
+[38:34] bit of sensitiveness is critical, too.
+[38:35] Um, which requires understanding what
+[38:38] engineering needs. We're not saying
+[38:39] engineering here, I built it. I think
+[38:41] that's not the right explanation to this
+[38:43] or what we're doing here. It's more
+[38:45] about it's possible. I think let's look
+[38:47] at what is required to take this to
+[38:49] production. So now this deadlock where
+[38:51] there is a lack of knowledge of what
+[38:53] could be possible is suddenly lifted to
+[38:56] say here's what could be possible. Could
+[38:58] we explore more? Right.
+[39:00] Okay.
+[39:02] So I I'm laughing because I and I'm
+[39:05] making this face. Usually when I'm
+[39:07] excited, I make this face, but I'm
+[39:08] making I'm making this face, which is I
+[39:11] I love this. This is like Clairvo
+[39:14] playbook. No lanes, like do whatever you
+[39:17] want. Sure, why don't we ship the CEO's
+[39:20] idea? Like, yes, let's show it to like
+[39:23] let's give it to sales. And everything
+[39:26] you're recommending, I can see the flip
+[39:28] side of like a product manager being
+[39:30] like, why in the world would you give
+[39:32] the CEO a prototype? Why in the world
+[39:34] would you tell sales we can do that? And
+[39:36] then an engineer be like, great, this
+[39:38] guy just like whipped up a mobile app
+[39:41] and told me that he can code something
+[39:42] that I can't code. And what I want to
+[39:44] call out here is you know your
+[39:47] intentions and you know some someone
+[39:50] like me that's really AI trying to adopt
+[39:52] AI like our intentions are good which is
+[39:55] there are sort of these like artificial
+[39:57] rules and blocks that we in
+[39:59] organizations have put into place like
+[40:02] you're supposed to argue with the CEO
+[40:03] about the road map. You're supposed to
+[40:05] never overpromise to sales. You're
+[40:07] supposed to like trust that engineering
+[40:10] will always tell you what's possible and
+[40:12] what's not possible. And the reality is
+[40:15] like we're all human. We're limited in
+[40:18] cognitive capacity. We have good days.
+[40:20] We have bad days. We have experience. We
+[40:23] lack experience in places. And there's
+[40:25] just so much more access now to overcome
+[40:29] those like misunderstandings,
+[40:31] get more creative, be more inspired. And
+[40:34] so, you know, what I would encourage
+[40:36] folks to maybe take away from this or
+[40:38] what I'm taking away is one, there's a
+[40:40] different way you can show up to your
+[40:42] team and it may like it may frazzle them
+[40:44] a little bit, but I think on the net,
+[40:47] it's pretty inspiring and very
+[40:49] generative and you can see how this is
+[40:51] going to deliver real value for
+[40:53] customers first and then I would say on
+[40:55] the other side of the table, let's be
+[40:57] gentle, friends, which is like
+[40:59] yes,
+[41:00] I think people that are trying these new
+[41:01] tools and trying these new technologies
+[41:03] you know, like you maybe like me are
+[41:06] genuinely builders, like genuinely get
+[41:10] excited about creating solutions,
+[41:13] genuinely want to solve problems. And
+[41:16] so, it's not about threatening people's
+[41:18] expertise or, you know, trying to take
+[41:20] their role or questioning them. It's
+[41:22] really about like, I think this could be
+[41:24] pretty cool to build for our customers.
+[41:25] I think this would be great for our
+[41:26] users and I've found something that
+[41:29] maybe can inspire us to do that. And so
+[41:31] I think there's like a very important
+[41:33] cultural takeaway from this episode that
+[41:36] I don't want people to miss. In addition
+[41:38] to I got to call out. Um I have not used
+[41:40] ROR. So now you can AI prototype mobile
+[41:43] apps. Did not know. Now I know. Um to
+[41:45] kind of figure out things that are
+[41:47] possible with consumer devices. So I I
+[41:49] appreciate you bringing sort of both
+[41:50] sides, the tool sides and the workflow
+[41:52] sides as well as the culture side to to
+[41:54] this conversation.
+[41:56] Yeah, definitely. I think the the one
+[41:58] word I would use is um to echo what
+[42:00] you're saying is alignment. The goal
+[42:01] here is not to say something is easy.
+[42:04] It's more so to are we all aligned and
+[42:06] can we move fast? Um which I think is a
+[42:09] is the next superpower as all these
+[42:11] tools come out and what could be
+[42:13] possible right and uh to you know all
+[42:17] the big unicorns today that are coming
+[42:19] out or small teams that are moving
+[42:21] extremely fast and I think we're all
+[42:23] seeing living proof of that with
+[42:24] everything that's going on. So yes,
+[42:28] nothing to displace good old production
+[42:30] resilient code and processes, but this
+[42:33] is all before that.
+[42:34] Well, and I'll also say I mean annoying
+[42:36] PMs have been doing this from the
+[42:38] beginning of time, which is I have been
+[42:41] I have been guilty of being told no and
+[42:43] saying like I set up a an an Excel
+[42:46] script that like kind of did the thing
+[42:48] that I want or I set up like a zap that
+[42:51] is basically the flow I want. Can we and
+[42:53] at least now you get code. I mean, you
+[42:55] know, you get code and something to
+[42:56] click. So, you know, we will forever
+[42:58] perpetually as product managers find
+[43:00] very annoying ways to ask engineering to
+[43:03] build two complicated things and scope
+[43:05] creep. It will just happen till the end
+[43:07] of time and now we just have more tools.
+[43:10] Okay, so let's let's stay on this topic.
+[43:12] Let's get to lightning questions. We've
+[43:13] been here a while. You know, zooming
+[43:16] zooming way out. I think the big
+[43:18] takeaway from for me from this
+[43:19] conversation is roles are changing and
+[43:22] the way companies work is changing. So
+[43:25] I'm just curious sort of what are your
+[43:26] meta you know predictions on not how is
+[43:29] this going to change for an individual
+[43:30] product manager but really how are
+[43:32] companies going to start to operate
+[43:33] differently when they have access to
+[43:35] these tools?
+[43:36] I mean I think companies are going to
+[43:39] figure out a process that helps them
+[43:41] validate things faster and move faster
+[43:44] very much early on. I think whatever
+[43:46] used to be the bottleneck of let's take
+[43:48] time let's wait for something to come
+[43:50] back let's wait for more analysis to be
+[43:52] done is going to shrink which I think in
+[43:55] in turn is really good because you don't
+[43:57] want confusion after you ship a product
+[44:00] which is what causes the most issues
+[44:02] right a good PM is now stuck managing
+[44:05] disconnects rather than what should have
+[44:07] gone out to be successful after spending
+[44:09] all the time so I think companies are
+[44:12] going to evolve to where they're
+[44:13] spending more time with these tools up
+[44:15] front and then being very sure of what
+[44:18] they want as they move into building um
+[44:21] alignment is going to be faster. I think
+[44:23] these prototypes from a perspective of
+[44:26] aligning all the different departments.
+[44:29] I think about also customer support,
+[44:30] right? Enterprise applications. You want
+[44:32] to be able to support your customers.
+[44:33] You have a customer support team. Rather
+[44:35] than them reading booklets of
+[44:36] information and preparing manual guides,
+[44:39] they can now have a prototype. You could
+[44:41] explain it to them with that. They are
+[44:43] then training like other hundreds of
+[44:44] team members like, "Oh, this is how we
+[44:46] would support if something happens."
+[44:48] This is like super valuable for large
+[44:50] organizations. They don't have to wait
+[44:52] until a product is done to be able to
+[44:54] train. Now they can train on the fly and
+[44:57] you're no longer using obsolete
+[44:58] technology, right? You're always staying
+[44:59] cutting edge, which could be a big
+[45:01] differentiator for a lot of large
+[45:03] companies, too. So, I think that's
+[45:05] that's where I see companies evolving
+[45:07] alignment fast and then being able to
+[45:09] ship uh with a ship with I would say
+[45:12] precision after that.
+[45:14] Okay. I I love it. It's like I'm smiling
+[45:16] ear to ear. Let's move faster. Let's
+[45:18] build better things. Let's enable, you
+[45:20] know, our peers in the company a little
+[45:22] earlier, um, have them more prepared and
+[45:25] give our customers a better experience.
+[45:26] Okay. And then you've shown us nothing
+[45:28] but perfect outputs. So, I've seen a
+[45:31] perfect lovable prototype. I've seen a
+[45:33] perfect complexity analysis, gamma
+[45:36] presentation, a chef's kiss, uh, chat PR
+[45:39] analysis. I've seen all these beautiful
+[45:41] things.
+[45:42] Please tell me AI sometimes steers you
+[45:44] wrong. And so what do you do when AI is
+[45:49] not giving you giving you what you want?
+[45:51] I think one take a break. Um sometimes
+[45:53] it's like you just need to take a break
+[45:55] and stop, you know, prompting until the
+[45:57] end of credits. Um so yeah, I could be
+[46:01] wrong. I mean for you know the one demo
+[46:03] that I showed, I have at least three
+[46:04] demos that did not work um in terms of
+[46:07] building when we're building something
+[46:08] to perfection. That's where initially I
+[46:11] was doing all of this inside vzero or
+[46:13] lovable and then I realized okay I'm
+[46:15] spending way too much time iterating
+[46:17] inside the tool which should not be. So
+[46:18] I think naturally found chat GPD to be
+[46:21] the first starting point. So when AI
+[46:23] doesn't work you'll take a step back and
+[46:25] use something else more broader to be
+[46:27] patient because um AI can make mistakes.
+[46:30] It's still a developing field but the
+[46:32] benefits you know far outweigh um the
+[46:35] failures.
+[46:36] Yeah. And we were we were joking a
+[46:37] little bit before the show saying that
+[46:39] how people answer that question is often
+[46:41] a reflection of their parenting
+[46:42] strategy. And so I like the idea.
+[46:44] Honestly, I need to hear this. Sometimes
+[46:46] when you're like kid is not doing what
+[46:48] you want, like just walk away is usually
+[46:50] is usually the answer. You're probably
+[46:53] not going to win the argument with the
+[46:54] the 5-year-old. Uh so sometimes you just
+[46:57] got to go, we're gonna we're gonna take
+[46:58] a little break. And so I'm I'm going to
+[47:00] take that into my into my AI strategies
+[47:02] as well. Well, this has been such a
+[47:04] great episode. I've just really enjoyed
+[47:06] the conversation top to bottom. Where
+[47:08] can we find you and how can we be
+[47:09] helpful?
+[47:10] Yeah, I'm on LinkedIn um Twitter as well
+[47:12] um or X I'm on both platforms. Um
+[47:15] LinkedIn is the best place to reach. Um
+[47:17] I'll leave my email um here and uh happy
+[47:20] to also talk you know um if anybody
+[47:22] needs insights on how to advocate for
+[47:24] more AI in your product or technology
+[47:26] workflows, happy to always support with
+[47:28] that. Um but you know I think u we as a
+[47:31] community uh need to step together to do
+[47:33] this. um and not not overselling your
+[47:36] tool, but like the chat purity community
+[47:38] or Lenny's community is where I've had
+[47:40] very meaningful discussions. You know,
+[47:42] I've had a lot of PMs talk about what
+[47:44] could be done different and I think uh
+[47:47] yeah, that's where you can find me.
+[47:49] Yeah. Okay. So, find you on LinkedIn and
+[47:52] let's all chat about how we managed this
+[47:54] transition together. Well, thank you so
+[47:56] much. I really appreciate this PMs. This
+[47:57] is one that I hope you've listened to
+[47:59] the very end. Thank you so much. I'll
+[48:01] see you later.
+[48:02] Thank you.
+[48:04] Thanks so much for watching. If you
+[48:06] enjoyed this show, please like and
+[48:08] subscribe here on YouTube, or even
+[48:09] better, leave us a comment with your
+[48:11] thoughts. You can also find this podcast
+[48:13] on Apple Podcasts, Spotify, or your
+[48:16] favorite podcast app. Please consider
+[48:18] leaving us a rating and review, which
+[48:20] will help others find the show. You can
+[48:23] see all our episodes and learn more
+[48:25] about the show at howiaipod.com.
+[48:29] See you next time.

@@ -14,6 +14,13 @@ from datetime import datetime, timedelta
 import logging
 import tempfile
 
+# Load environment variables from .env file
+try:
+    from dotenv import load_dotenv
+    load_dotenv()
+except ImportError:
+    pass
+
 # Import existing modules
 from feed_monitor import FeedMonitor
 from content_processor import ContentProcessor
