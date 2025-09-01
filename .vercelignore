@@ -1,0 +1,86 @@
+# Audio files - served from GitHub releases, not needed in serverless functions
+*.mp3
+*.wav
+*.m4a
+*.aac
+daily_digests/
+audio_cache/
+public/audio/
+
+# Database files - not needed for API endpoints
+*.db
+podcast_monitor.db
+youtube_transcripts.db
+podcast_data.db
+
+# Transcripts - not needed for API endpoints  
+transcripts/
+*.txt
+
+# Python cache and build artifacts
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.Python
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+
+# Development files
+.env
+.venv
+venv/
+ENV/
+env/
+.pytest_cache/
+
+# Documentation - not needed for API
+*.md
+docs/
+
+# Scripts not needed for API
+*.sh
+daily_podcast_pipeline.py
+feed_monitor.py  
+content_processor.py
+claude_headless_integration.py
+robust_transcriber.py
+claude_tts_generator.py
+youtube_processor.py
+deploy_episode.py
+rss_generator.py
+
+# Heavy dependencies not needed for API
+requirements.txt
+
+# GitHub workflows
+.github/
+
+# IDE and editor files
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# macOS
+.DS_Store
+.AppleDouble
+.LSOverride
+
+# Logs
+*.log
+logs/
