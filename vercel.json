@@ -15,5 +15,11 @@
     "env": {
       "PYTHON_VERSION": "3.9"
     }
-  }
+  },
+  "git": {
+    "deploymentEnabled": {
+      "main": false
+    }
+  },
+  "ignoreCommand": "./vercel-build-ignore.sh"
 }
