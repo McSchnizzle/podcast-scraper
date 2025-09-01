@@ -45,9 +45,9 @@ class OpenAIDigestIntegration:
             self.api_available = False
         else:
             try:
-                # Initialize OpenAI client
-                openai.api_key = api_key.strip()
-                self.client = openai
+                # Initialize OpenAI client (v1.0+ format)
+                from openai import OpenAI
+                self.client = OpenAI(api_key=api_key.strip())
                 self.api_available = True
                 logger.info(f"✅ OpenAI API client initialized (key length: {len(api_key.strip())})")
             except Exception as e:
@@ -482,9 +482,9 @@ Format the output as clean Markdown suitable for publication. Focus on accuracy,
             # Prepare topic-specific prompt
             prompt = self.prepare_digest_prompt(transcripts, topic=topic)
             
-            # Call OpenAI GPT-5 API
-            response = self.client.ChatCompletion.create(
-                model="gpt-5",  # Use latest GPT-5 model
+            # Call OpenAI GPT-4 API
+            response = self.client.chat.completions.create(
+                model="gpt-4",  # Use GPT-4 model
                 messages=[{
                     "role": "system",
                     "content": "You are an expert analyst creating focused, insightful digests from podcast transcripts. You excel at identifying key themes, connecting information across sources, and providing actionable insights."
@@ -686,8 +686,8 @@ Format the output as clean Markdown suitable for publication. Focus on accuracy,
             return False
         
         try:
-            response = self.client.ChatCompletion.create(
-                model="gpt-5",
+            response = self.client.chat.completions.create(
+                model="gpt-4",
                 messages=[{
                     "role": "user",
                     "content": "Hello, please respond with 'API connection successful'"

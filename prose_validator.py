@@ -21,8 +21,8 @@ class ProseValidator:
         api_key = os.getenv('OPENAI_API_KEY')
         if api_key and len(api_key.strip()) >= 10:
             try:
-                openai.api_key = api_key.strip()
-                self.client = openai
+                from openai import OpenAI
+                self.client = OpenAI(api_key=api_key.strip())
                 self.api_available = True
                 logger.info("✅ Prose validator OpenAI client initialized")
             except Exception as e:
@@ -140,7 +140,7 @@ Original content:
 
 Rewritten prose:"""
 
-                response = self.client.ChatCompletion.create(
+                response = self.client.chat.completions.create(
                     model="gpt-4",
                     messages=[{"role": "user", "content": prompt}],
                     max_tokens=4000,
