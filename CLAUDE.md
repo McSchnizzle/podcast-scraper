@@ -4,22 +4,24 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Project Overview
 
-This is a Daily Podcast Digest System that automatically monitors podcast RSS feeds and YouTube channels, processes audio content using Apple Silicon-optimized transcription, and generates AI-powered daily digests using Claude integration.
+This is a Multi-Topic Podcast Digest System that automatically monitors podcast RSS feeds and YouTube channels, processes audio content using Apple Silicon-optimized transcription, and generates AI-powered topic-specific daily digests with prose validation and comprehensive retention management.
 
-**Core Architecture**: Dual-database system with timestamp-synchronized TTS generation:
-- **RSS Episodes**: `podcast_monitor.db` → RSS Audio: `pre-download` → `downloaded` → `transcribed` → `digested`  
-- **YouTube Episodes**: `youtube_transcripts.db` → Local processing: `transcribed` → `digested`
-- **TTS Synchronization**: Perfect timestamp matching between digest markdown and MP3 files
+**Core Architecture**: Multi-topic system with specialized processing per content area:
+- **6 Topics**: AI News, Tech Product Releases, Tech News & Culture, Community Organizing, Social Justice, Societal Culture Change
+- **RSS Episodes**: `podcast_monitor.db` → `pre-download` → `downloaded` → `transcribed` → `topic-scored` → `digested`  
+- **YouTube Episodes**: `youtube_transcripts.db` → `transcribed` → `topic-scored` → `digested`
+- **Multi-Topic Output**: Individual `{topic}_digest_{timestamp}.md/mp3` files per topic
+- **Prose Validation**: Automatic rewriting to ensure TTS-suitable content (no bullet points/markdown)
 
 **Key Technologies**:
-- **Parakeet MLX**: Apple Silicon-optimized ASR with 10-minute chunking
-- **Faster-Whisper**: Cross-platform ASR (4x faster than OpenAI Whisper) for non-Apple Silicon
-- **Claude Code Integration**: Headless CLI mode for content analysis with timestamp extraction
-- **Dual SQLite Databases**: Separate tracking for RSS (`podcast_monitor.db`) and YouTube (`youtube_transcripts.db`) episodes
-- **ElevenLabs TTS**: Timestamp-synchronized MP3 generation with perfect filename matching
-- **ffmpeg**: Audio processing pipeline
-- **GitHub API**: Automated deployment and RSS publishing
-- **Vercel**: RSS feed serving with intelligent build skipping
+- **OpenAI Integration**: GPT-4 for digest generation, GPT-4o-mini for topic scoring
+- **Prose Validator**: Comprehensive validation and automatic rewriting for TTS optimization
+- **Multi-Topic TTS**: Topic-specific voice configurations using ElevenLabs
+- **Parakeet MLX**: Apple Silicon-optimized ASR with 10-minute chunking and cross-platform fallbacks
+- **14-Day Retention**: Intelligent cleanup with database field optimization and VACUUM operations
+- **Mon-Fri Scheduling**: Weekday-only processing with Friday weekly and Monday catch-up modes
+- **Batch Deployment**: Multiple topic releases per day with enhanced RSS multi-episode support
+- **Dual SQLite Databases**: Cross-database processing with synchronized status updates
 
 **RSS Feed**: https://podcast.paulrbrown.org/daily-digest.xml
 **GitHub Releases**: MP3 files hosted at https://github.com/McSchnizzle/podcast-scraper/releases
@@ -50,17 +52,20 @@ python3 feed_monitor.py
 # Process pending transcriptions
 python3 content_processor.py
 
-# Generate Claude-powered digest
-python3 claude_headless_integration.py
+# Generate OpenAI-powered multi-topic digests
+python3 openai_digest_integration.py
 
-# Generate TTS audio digest
-python3 claude_tts_generator.py
+# Generate multi-topic TTS audio files
+python3 multi_topic_tts_generator.py
 
-# Deploy to GitHub releases
-python3 deploy_episode.py
+# Deploy multiple topic episodes to GitHub releases
+python3 deploy_multi_topic.py
 
-# Update RSS feed
-python3 rss_generator.py
+# Update RSS feed with multi-topic support
+python3 rss_generator_multi_topic.py
+
+# Run 14-day retention cleanup
+python3 retention_cleanup.py
 ```
 
 ### Requirements Management

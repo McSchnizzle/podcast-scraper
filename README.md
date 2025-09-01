@@ -1,6 +1,6 @@
-# Daily Podcast Digest System
+# Daily Tech & Society Digest System
 
-An automated system for monitoring, processing, and analyzing podcast content with AI-powered transcription, Claude-based content analysis, TTS generation with timestamp synchronization, and dual-database architecture.
+An automated multi-topic podcast analysis system with AI-powered transcription, OpenAI content analysis, topic-specific TTS generation, prose validation, and comprehensive retention management.
 
 ## Overview
 
@@ -8,16 +8,17 @@ The Daily Podcast Digest System continuously monitors podcast RSS feeds and YouT
 
 ### Key Features
 
-- **Dual-Database Architecture**: Separate SQLite databases for RSS (`podcast_monitor.db`) and YouTube (`youtube_transcripts.db`) episodes
-- **TTS Timestamp Synchronization**: Perfect filename matching between digest markdown and generated MP3 files
-- **Local YouTube Processing**: 6-hour cron job for YouTube transcript downloads with GitHub sync
-- **Advanced Transcription**: Parakeet MLX ASR with Apple Silicon optimization (10-minute chunking)
-- **Claude AI Integration**: Headless CLI mode for content analysis with embedded timestamps
-- **ElevenLabs TTS**: High-quality audio generation with timestamp-matched filenames
-- **GitHub Actions Automation**: RSS pipeline processing with intelligent Vercel build skipping
-- **Smart Filtering**: Length-based filtering for YouTube content (>3 minutes)
-- **Automated Publishing**: GitHub releases with MP3 hosting and RSS feed generation
-- **Web API**: Vercel endpoints optimized for serverless deployment (<1MB functions)
+- **Multi-Topic Architecture**: 6 specialized topics (AI News, Tech Products, Tech Culture, Community Organizing, Social Justice, Societal Culture Change)
+- **Prose Validation System**: Ensures TTS-suitable content with automatic rewriting of bullet lists/markdown
+- **Topic-Specific Processing**: Individual digests per topic with specialized voice configurations
+- **OpenAI Integration**: GPT-4 for content analysis and digest generation with cost-effective scoring
+- **14-Day Retention Management**: Intelligent cleanup of files and database fields with space reclamation
+- **Mon-Fri Scheduling**: Weekday-only processing with Friday weekly digests and Monday catch-up
+- **Dual-Database Architecture**: Separate SQLite databases for RSS and YouTube with synchronized processing
+- **Advanced Transcription**: Parakeet MLX ASR with Apple Silicon optimization and cross-platform fallbacks
+- **Multi-Topic TTS**: Voice specialization per topic using ElevenLabs with perfect timestamp matching
+- **Batch Deployment**: GitHub releases with multiple topic-specific MP3 files per day
+- **Enhanced RSS**: Multi-episode feed supporting multiple topics with individual episode metadata
 
 ## 📡 RSS Feed
 

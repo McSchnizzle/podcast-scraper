@@ -2,8 +2,8 @@ name: Daily Tech Digest Pipeline
 
 on:
   schedule:
-    # Run daily at 6 AM UTC (adjust timezone as needed)
-    - cron: '0 6 * * *'
+    # Run Monday-Friday at 6 AM UTC (weekdays only)
+    - cron: '0 6 * * 1-5'
   workflow_dispatch:  # Allow manual triggering
     inputs:
       mode:
@@ -14,6 +14,8 @@ on:
         options:
         - normal
         - test-run
+        - friday-weekly
+        - monday-catchup
       debug:
         description: 'Enable debug output'
         required: false
@@ -65,13 +67,27 @@ jobs:
     # Note: Removed database caching - databases should use current repo state, not cached versions
     # This allows database changes committed to the repo to be properly used by the workflow
           
-    - name: Show workflow configuration
+    - name: Show workflow configuration  
       run: |
         echo "🎯 Workflow Mode: ${{ github.event.inputs.mode || 'normal (scheduled)' }}"
         echo "🐛 Debug Mode: ${{ github.event.inputs.debug || 'false' }}"
         echo "⚡ Trigger: ${{ github.event_name }}"
-        if [ "${{ github.event.inputs.mode }}" == "test-run" ]; then
+        echo "📅 Current day: $(date -u +%A)"
+        
+        # Determine workflow behavior based on day and mode
+        WORKFLOW_MODE="${{ github.event.inputs.mode }}"
+        CURRENT_DAY=$(date -u +%u)  # 1=Monday, 5=Friday
+        
+        if [ "$WORKFLOW_MODE" == "test-run" ]; then
           echo "🧪 TEST MODE: No commits, pushes, or releases will be made"
+        elif [ "$WORKFLOW_MODE" == "friday-weekly" ] || [ "$CURRENT_DAY" == "5" ]; then
+          echo "🗓️  FRIDAY MODE: Daily + Weekly digest generation"
+          echo "FRIDAY_WEEKLY=true" >> $GITHUB_ENV
+        elif [ "$WORKFLOW_MODE" == "monday-catchup" ] || [ "$CURRENT_DAY" == "1" ]; then
+          echo "📅 MONDAY MODE: Catch-up processing since Friday 06:00"
+          echo "MONDAY_CATCHUP=true" >> $GITHUB_ENV
+        else
+          echo "📆 REGULAR WEEKDAY: Standard daily processing"
         fi
         
     - name: Set up environment variables
@@ -101,7 +117,7 @@ jobs:
         echo "ELEVENLABS_API_KEY=$ELEVENLABS_API_KEY" >> $GITHUB_ENV
         echo "GITHUB_TOKEN=$GITHUB_TOKEN" >> $GITHUB_ENV
         
-    - name: Run RSS-only podcast pipeline (GitHub Actions mode)
+    - name: Run Multi-Topic Podcast Pipeline (GitHub Actions mode)
       run: |
         if [ "${{ github.event.inputs.debug }}" == "true" ]; then
           echo "🐛 Debug mode enabled"
@@ -111,8 +127,14 @@ jobs:
         if [ "${{ github.event.inputs.mode }}" == "test-run" ]; then
           echo "🧪 Test run mode - will not deploy or update feeds"
           python3 daily_podcast_pipeline.py --rss-only --test
+        elif [ "$FRIDAY_WEEKLY" == "true" ]; then
+          echo "🗓️  Friday mode - generating daily + weekly digests"
+          python3 daily_podcast_pipeline.py --rss-only --weekly
+        elif [ "$MONDAY_CATCHUP" == "true" ]; then
+          echo "📅 Monday catch-up mode - processing since Friday"
+          python3 daily_podcast_pipeline.py --rss-only --catchup
         else
-          echo "🚀 Normal processing mode"
+          echo "🚀 Regular weekday processing mode"
           python3 daily_podcast_pipeline.py --rss-only
         fi
         
@@ -135,21 +157,21 @@ jobs:
         echo "=== Daily Digests Directory ==="
         ls -la daily_digests/ || echo "❌ No daily_digests/ directory"
         
-        echo "=== All Digest Files ==="
-        find daily_digests/ -name "daily_digest_*.md" -exec echo "📄 Found digest: {}" \; 2>/dev/null || echo "❌ No digest files found"
+        echo "=== Topic-Specific Digest Files ==="
+        find daily_digests/ -name "*_digest_*.md" -exec echo "📄 Found digest: {}" \; 2>/dev/null || echo "❌ No topic digest files found"
         
         echo "=== All TTS Text Files ==="
-        find daily_digests/ -name "claude_digest_*.txt" -exec echo "📝 Found TTS text: {}" \; 2>/dev/null || echo "⚠️ No TTS text files found"
+        find daily_digests/ -name "*_digest_tts_*.txt" -exec echo "📝 Found TTS text: {}" \; 2>/dev/null || echo "⚠️ No TTS text files found"
         
-        echo "=== All Audio Files ==="
-        find daily_digests/ -name "complete_topic_digest_*.mp3" -exec echo "🎵 Found audio: {}" \; 2>/dev/null || echo "❌ No audio files found"
+        echo "=== Topic-Specific Audio Files ==="
+        find daily_digests/ -name "*_digest_*.mp3" -exec echo "🎵 Found audio: {}" \; 2>/dev/null || echo "❌ No audio files found"
         
         echo "=== All JSON Metadata Files ==="
-        find daily_digests/ -name "complete_topic_digest_*.json" -exec echo "📊 Found metadata: {}" \; 2>/dev/null || echo "⚠️ No metadata files found"
+        find daily_digests/ -name "*_digest_*.json" -exec echo "📊 Found metadata: {}" \; 2>/dev/null || echo "⚠️ No metadata files found"
         
-        echo "=== Manual TTS Generation Test ==="
-        echo "🧪 Testing TTS script directly..."
-        python3 claude_tts_generator.py 2>&1 || echo "❌ TTS script failed"
+        echo "=== Manual Multi-Topic TTS Generation Test ==="
+        echo "🧪 Testing multi-topic TTS script directly..."
+        python3 multi_topic_tts_generator.py 2>&1 || echo "❌ Multi-topic TTS script failed"
         
         echo "=== Post-TTS Directory Check ==="
         ls -la daily_digests/ | grep -E "\.(mp3|json|txt|md)$" || echo "❌ No files after TTS test"
@@ -167,17 +189,23 @@ jobs:
           echo "❌ TTS optimized script missing"
         fi
         
-        LATEST_DIGEST=$(find daily_digests/ -name "daily_digest_*.md" -printf '%T@ %p\n' | sort -n | tail -1 | cut -d' ' -f2- 2>/dev/null || echo "")
+        echo "=== Topic Digest Timestamp Matching ==="
+        LATEST_DIGEST=$(find daily_digests/ -name "*_digest_*.md" -printf '%T@ %p\n' | sort -n | tail -1 | cut -d' ' -f2- 2>/dev/null || echo "")
         if [ -n "$LATEST_DIGEST" ]; then
-          DIGEST_TIMESTAMP=$(basename "$LATEST_DIGEST" .md | sed 's/daily_digest_//')
-          echo "📄 Latest digest timestamp: $DIGEST_TIMESTAMP"
-          EXPECTED_AUDIO="daily_digests/complete_topic_digest_${DIGEST_TIMESTAMP}.mp3"
+          DIGEST_BASENAME=$(basename "$LATEST_DIGEST" .md)
+          echo "📄 Latest digest file: $DIGEST_BASENAME"
+          EXPECTED_AUDIO="daily_digests/${DIGEST_BASENAME}.mp3"
           echo "🎯 Expected audio file: $EXPECTED_AUDIO"
           if [ -f "$EXPECTED_AUDIO" ]; then
             echo "✅ MATCHING AUDIO FILE FOUND!"
             ls -la "$EXPECTED_AUDIO"
           else
             echo "❌ MATCHING AUDIO FILE MISSING!"
+            echo "🔍 Checking for all audio files with similar timestamp..."
+            TIMESTAMP_PATTERN=$(echo "$DIGEST_BASENAME" | grep -o '[0-9]\{8\}_[0-9]\{6\}' || echo "")
+            if [ -n "$TIMESTAMP_PATTERN" ]; then
+              find daily_digests/ -name "*${TIMESTAMP_PATTERN}*" -type f || echo "No files found with timestamp $TIMESTAMP_PATTERN"
+            fi
           fi
         else
           echo "❌ No digest file found for timestamp matching"

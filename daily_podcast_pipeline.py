@@ -18,6 +18,7 @@ import tempfile
 from feed_monitor import FeedMonitor
 from content_processor import ContentProcessor
 from openai_digest_integration import OpenAIDigestIntegration
+from retention_cleanup import RetentionCleanup
 
 # Configuration
 CONFIG = {
@@ -376,12 +377,12 @@ class DailyPodcastPipeline:
                 logger.info(f"   📄 {item.name}")
         
         try:
-            logger.info("🚀 Running TTS generation subprocess...")
-            logger.info("Command: python3 claude_tts_generator.py")
+            logger.info("🚀 Running multi-topic TTS generation subprocess...")
+            logger.info("Command: python3 multi_topic_tts_generator.py")
             
             # Run TTS generation with enhanced logging
             result = subprocess.run([
-                'python3', 'claude_tts_generator.py'
+                'python3', 'multi_topic_tts_generator.py'
             ], capture_output=True, text=True, timeout=600)
             
             logger.info(f"🔍 TTS subprocess return code: {result.returncode}")
@@ -440,7 +441,7 @@ class DailyPodcastPipeline:
         
         try:
             result = subprocess.run([
-                'python3', 'deploy_episode.py'
+                'python3', 'deploy_multi_topic.py'
             ], capture_output=True, text=True, timeout=300)
             
             if result.returncode == 0:
@@ -460,7 +461,7 @@ class DailyPodcastPipeline:
         
         try:
             result = subprocess.run([
-                'python3', 'rss_generator.py'
+                'python3', 'rss_generator_multi_topic.py'
             ], capture_output=True, text=True, timeout=120)
             
             if result.returncode == 0:
@@ -508,113 +509,24 @@ class DailyPodcastPipeline:
         logger.info(f"✅ Marked episodes as digested: {rss_updated_count} RSS + {youtube_updated_count} YouTube = {total_updated} total")
     
     def _cleanup_old_files(self):
-        """Clean up old files and transcripts"""
-        logger.info("🧹 Cleaning up old files...")
+        """Clean up old files and transcripts using 14-day retention system"""
+        logger.info("🧹 Running 14-day retention cleanup...")
         
-        cutoff_date = datetime.now() - timedelta(days=CONFIG['RETENTION_DAYS'])
-        
-        # Clean old transcripts in digested folder
-        self._cleanup_old_transcripts(cutoff_date)
-        
-        # Clean old audio files from daily_digests
-        self._cleanup_old_audio_digests()
-        
-        # Clean audio_cache if configured
-        if CONFIG['CLEANUP_AUDIO_CACHE']:
-            self._cleanup_audio_cache()
-        
-        # Clean intermediate files
-        if CONFIG['CLEANUP_INTERMEDIATE_FILES']:
-            self._cleanup_intermediate_files()
-        
-        # Clean old failed episodes from database
-        self._cleanup_old_failed_episodes(cutoff_date)
-    
-    def _cleanup_old_transcripts(self, cutoff_date):
-        """Delete old transcripts from digested folder"""
-        digested_dir = Path(CONFIG['TRANSCRIPTS_DIR']) / 'digested'
-        
-        if not digested_dir.exists():
-            return
-        
-        cleaned_count = 0
-        for transcript_file in digested_dir.glob("*.txt"):
-            if transcript_file.stat().st_mtime < cutoff_date.timestamp():
-                transcript_file.unlink()
-                cleaned_count += 1
-        
-        logger.info(f"Cleaned {cleaned_count} old transcript files")
-    
-    def _cleanup_old_audio_digests(self):
-        """Keep only latest 3 audio digests"""
-        daily_digests_dir = Path(CONFIG['DAILY_DIGESTS_DIR'])
-        
-        if not daily_digests_dir.exists():
-            return
-        
-        # Find all complete digest files
-        audio_files = list(daily_digests_dir.glob("complete_topic_digest_*.mp3"))
-        audio_files.sort(key=lambda x: x.stat().st_mtime, reverse=True)
-        
-        # Keep only latest 3
-        for old_file in audio_files[3:]:
-            old_file.unlink()
-            logger.info(f"Deleted old audio digest: {old_file.name}")
-    
-    def _cleanup_audio_cache(self):
-        """Clean up audio_cache after processing"""
-        audio_cache = Path(CONFIG['AUDIO_CACHE_DIR'])
-        
-        if not audio_cache.exists():
-            return
-        
-        # Remove chunk directories
-        for chunk_dir in audio_cache.glob("*_chunks/"):
-            shutil.rmtree(chunk_dir)
-            logger.info(f"Cleaned chunk directory: {chunk_dir.name}")
-        
-        # Remove processed MP3 files (only after they're marked as transcribed)
-        conn = sqlite3.connect(self.db_path)
-        cursor = conn.cursor()
-        
-        for mp3_file in audio_cache.glob("*.mp3"):
-            episode_id = mp3_file.stem  # Use filename as episode_id (8-char hash)
-            cursor.execute("SELECT status FROM episodes WHERE episode_id = ?", (episode_id,))
-            result = cursor.fetchone()
+        try:
+            cleanup = RetentionCleanup(retention_days=14)
+            results = cleanup.run_full_cleanup()
             
-            if result and result[0] in ('transcribed', 'digested'):
-                mp3_file.unlink()
-                logger.info(f"Cleaned processed audio: {mp3_file.name}")
-        
-        conn.close()
+            total_files = results['transcript_files_removed'] + results['digest_files_removed']
+            total_episodes = results['rss_episodes_cleaned'] + results['youtube_episodes_cleaned']
+            
+            if total_files > 0 or total_episodes > 0:
+                logger.info(f"✅ Retention cleanup completed: {total_files} files removed, {total_episodes} episodes cleaned")
+            else:
+                logger.info("✅ No cleanup needed - all files within retention period")
+                
+        except Exception as e:
+            logger.warning(f"⚠️  Retention cleanup failed: {e}")
     
-    def _cleanup_intermediate_files(self):
-        """Clean up intermediate files"""
-        # Clean temp TTS files
-        for temp_file in Path('.').glob("intro_*.mp3"):
-            temp_file.unlink()
-        for temp_file in Path('.').glob("outro_*.mp3"):
-            temp_file.unlink()
-        for temp_file in Path('.').glob("topic_*.mp3"):
-            temp_file.unlink()
-        
-        logger.info("Cleaned intermediate TTS files")
-    
-    def _cleanup_old_failed_episodes(self, cutoff_date):
-        """Remove old failed episodes from database"""
-        conn = sqlite3.connect(self.db_path)
-        cursor = conn.cursor()
-        
-        cursor.execute("""
-            DELETE FROM episodes 
-            WHERE status = 'failed' AND failure_timestamp < ?
-        """, (cutoff_date.strftime('%Y-%m-%d %H:%M:%S'),))
-        
-        deleted_count = cursor.rowcount
-        conn.commit()
-        conn.close()
-        
-        logger.info(f"Cleaned {deleted_count} old failed episodes from database")
     
     def get_status_summary(self):
         """Get current system status summary"""
