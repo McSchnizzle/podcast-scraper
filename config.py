@@ -84,6 +84,39 @@ class Config:
             'max_text_length': 50000
         }
         
+        # OpenAI topic scoring settings
+        self.OPENAI_SETTINGS = {
+            'model': 'gpt-4o-mini',
+            'temperature': 0.1,
+            'max_tokens': 500,
+            'timeout_seconds': 60,
+            'batch_size': 5,  # Number of episodes to score in one batch
+            'rate_limit_delay': 1,  # Seconds between API calls
+            'relevance_threshold': 0.6,  # Minimum score to include in topic digest
+            'topics': {
+                'Technology': {
+                    'description': 'Software, AI, hardware, programming, tech industry, startups, digital trends',
+                    'prompt': 'technology, software development, artificial intelligence, hardware, programming, tech industry, digital innovation, cybersecurity, data science, cloud computing, mobile technology, emerging tech'
+                },
+                'Business': {
+                    'description': 'Finance, economics, markets, entrepreneurship, management, corporate strategy',
+                    'prompt': 'business strategy, finance, economics, markets, entrepreneurship, management, corporate governance, investment, economics policy, trade, industry analysis'
+                },
+                'Philosophy': {
+                    'description': 'Ethics, logic, metaphysics, epistemology, moral philosophy, philosophical debates',
+                    'prompt': 'philosophy, ethics, moral reasoning, logic, metaphysics, epistemology, philosophical arguments, critical thinking, values, meaning of life, consciousness'
+                },
+                'Politics': {
+                    'description': 'Government, policy, elections, international relations, political analysis',
+                    'prompt': 'politics, government policy, elections, international relations, political analysis, governance, public policy, diplomacy, political theory, current affairs'
+                },
+                'Culture': {
+                    'description': 'Arts, entertainment, society, media, lifestyle, cultural trends, human interest',
+                    'prompt': 'culture, arts, entertainment, society, media, lifestyle, cultural trends, human interest stories, social movements, popular culture, creative expression'
+                }
+            }
+        }
+        
         # Pipeline settings
         self.PIPELINE_SETTINGS = {
             'retention_days': 7,
@@ -102,6 +135,7 @@ class Config:
         # Environment variables
         self.GITHUB_TOKEN = os.getenv('GITHUB_TOKEN')
         self.ELEVENLABS_API_KEY = os.getenv('ELEVENLABS_API_KEY')
+        self.OPENAI_API_KEY = os.getenv('OPENAI_API_KEY')
         
         # Validate environment
         self._validate_environment()
