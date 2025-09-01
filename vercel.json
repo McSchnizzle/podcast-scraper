@@ -18,7 +18,8 @@
   },
   "git": {
     "deploymentEnabled": {
-      "main": true
+      "main": false
     }
-  }
+  },
+  "ignoreCommand": "./vercel-build-ignore.sh"
 }
