@@ -2,6 +2,7 @@
 Vercel Function: RSS Feed Generator  
 Serves RSS feed for Daily Tech Digest podcast
 Optimized for Android/Google Podcasts/Spotify compatibility
+Fixed dependencies for proper module loading
 """
 
 import os
