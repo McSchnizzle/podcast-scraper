@@ -52,6 +52,16 @@ class MultiTopicRSSGenerator:
                 "display_name": "Societal Culture Change",
                 "description": "Cultural shifts, social movements, and societal transformation",
                 "category": "Society/Culture"
+            },
+            "daily": {
+                "display_name": "Daily Tech Digest",
+                "description": "Comprehensive daily technology and society digest",
+                "category": "Technology/General"
+            },
+            "general": {
+                "display_name": "Daily Tech Digest",
+                "description": "Comprehensive daily technology and society digest", 
+                "category": "Technology/General"
             }
         }
         
@@ -76,12 +86,15 @@ class MultiTopicRSSGenerator:
         if not digest_dir.exists():
             return []
         
-        # Pattern for topic-specific digests: {topic}_digest_{timestamp}.md
-        topic_pattern = re.compile(r'^([a-zA-Z_]+)_digest_(\d{8}_\d{6})\.md$')
-        
         cutoff_date = datetime.now()
         cutoff_date = cutoff_date.replace(hour=0, minute=0, second=0, microsecond=0)
         cutoff_timestamp = cutoff_date.timestamp() - (days * 24 * 3600)
+        
+        # Track processed files to avoid duplicates
+        processed_timestamps = set()
+        
+        # First pass: Process MD files with corresponding MP3s
+        topic_pattern = re.compile(r'^([a-zA-Z_]+)_digest_(\d{8}_\d{6})\.md$')
         
         for md_file in digest_dir.glob("*_digest_*.md"):
             match = topic_pattern.match(md_file.name)
@@ -90,13 +103,17 @@ class MultiTopicRSSGenerator:
                 
             topic, timestamp_str = match.groups()
             
-            # Check if we have a corresponding MP3 file
-            mp3_file = digest_dir / f"{topic}_digest_{timestamp_str}.mp3"
+            # Check if we have a corresponding MP3 file (prefer enhanced version)
+            mp3_file = digest_dir / f"{topic}_digest_{timestamp_str}_enhanced.mp3"
             if not mp3_file.exists():
-                # Also check for old naming convention
-                mp3_file = digest_dir / f"complete_topic_digest_{timestamp_str}.mp3"
+                mp3_file = digest_dir / f"{topic}_digest_{timestamp_str}.mp3"
                 if not mp3_file.exists():
-                    continue
+                    # Also check for old naming convention
+                    mp3_file = digest_dir / f"complete_topic_digest_{timestamp_str}_enhanced.mp3"
+                    if not mp3_file.exists():
+                        mp3_file = digest_dir / f"complete_topic_digest_{timestamp_str}.mp3"
+                        if not mp3_file.exists():
+                            continue
             
             # Parse timestamp and filter by date
             try:
@@ -124,6 +141,61 @@ class MultiTopicRSSGenerator:
                 'description': description,
                 'title': self._generate_episode_title(topic, file_date)
             })
+            processed_timestamps.add(timestamp_str)
+        
+        # Second pass: Process MP3-only files (without MD files)
+        mp3_patterns = [
+            re.compile(r'^([a-zA-Z_]+)_digest_(\d{8}_\d{6})(_enhanced)?\.mp3$'),
+            re.compile(r'^complete_topic_digest_(\d{8}_\d{6})(_enhanced)?\.mp3$')
+        ]
+        
+        for mp3_file in digest_dir.glob("*.mp3"):
+            # Prioritize enhanced versions (skip non-enhanced if enhanced exists)
+            if "_enhanced" not in mp3_file.name:
+                # Check if enhanced version exists
+                enhanced_path = mp3_file.parent / (mp3_file.stem + "_enhanced" + mp3_file.suffix)
+                if enhanced_path.exists():
+                    continue  # Skip non-enhanced if enhanced version exists
+                
+            timestamp_str = None
+            topic = "general"  # default topic for complete_topic_digest files
+            
+            # Try to match patterns
+            for i, pattern in enumerate(mp3_patterns):
+                match = pattern.match(mp3_file.name)
+                if match:
+                    if i == 0:  # topic_digest pattern
+                        topic, timestamp_str = match.groups()[:2]  # Ignore _enhanced group
+                    else:  # complete_topic_digest pattern
+                        timestamp_str = match.groups()[0]
+                        topic = "general"
+                    break
+            
+            if not timestamp_str or timestamp_str in processed_timestamps:
+                continue
+            
+            # Parse timestamp and filter by date
+            try:
+                file_date = datetime.strptime(timestamp_str, "%Y%m%d_%H%M%S")
+                if file_date.timestamp() < cutoff_timestamp:
+                    continue
+            except ValueError:
+                continue
+            
+            # Generate description for MP3-only files
+            description = f"Daily tech digest episode from {file_date.strftime('%B %d, %Y')}"
+            
+            digest_files.append({
+                'topic': topic,
+                'timestamp': timestamp_str,
+                'date': file_date,
+                'md_file': None,
+                'mp3_file': mp3_file,
+                'content': '',
+                'description': description,
+                'title': self._generate_episode_title(topic, file_date)
+            })
+            processed_timestamps.add(timestamp_str)
         
         # Sort by date (newest first)
         digest_files.sort(key=lambda x: x['date'], reverse=True)
