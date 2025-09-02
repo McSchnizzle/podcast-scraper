@@ -177,13 +177,13 @@ jobs:
         ls -la daily_digests/ | grep -E "\.(mp3|json|txt|md)$" || echo "❌ No files after TTS test"
         
         echo "=== TTS Script Output Analysis ==="
-        if [ -f daily_digests/claude_digest_full_*.txt ]; then
+        if ls daily_digests/claude_digest_full_*.txt 1> /dev/null 2>&1; then
           echo "✅ TTS full script found"
         else
           echo "❌ TTS full script missing"
         fi
         
-        if [ -f daily_digests/claude_digest_tts_*.txt ]; then
+        if ls daily_digests/claude_digest_tts_*.txt 1> /dev/null 2>&1; then
           echo "✅ TTS optimized script found"  
         else
           echo "❌ TTS optimized script missing"
