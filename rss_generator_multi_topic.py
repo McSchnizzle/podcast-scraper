@@ -14,12 +14,16 @@ from xml.dom import minidom
 import hashlib
 from pathlib import Path
 from typing import List, Dict, Tuple, Optional
+from episode_summary_generator import EpisodeSummaryGenerator
 
 class MultiTopicRSSGenerator:
     def __init__(self, db_path="podcast_monitor.db", base_url="https://paulrbrown.org"):
         self.db_path = db_path
         self.base_url = base_url
         self.audio_base_url = f"{base_url}/audio"
+        
+        # Initialize AI summary generator
+        self.summary_generator = EpisodeSummaryGenerator()
         
         # Topic configuration for RSS metadata
         self.topic_config = {
@@ -123,12 +127,20 @@ class MultiTopicRSSGenerator:
             except ValueError:
                 continue
             
-            # Read content for description
+            # Read content for AI-powered description
             try:
                 with open(md_file, 'r', encoding='utf-8') as f:
                     content = f.read()
-                    description = self._extract_description(content, topic)
-            except Exception:
+                    # Generate AI-powered summary
+                    fallback_desc = self._extract_fallback_description(content, topic)
+                    description = self.summary_generator.generate_summary(
+                        content=content,
+                        topic=topic,
+                        timestamp=timestamp_str,
+                        fallback_desc=fallback_desc
+                    )
+            except Exception as e:
+                print(f"⚠️ Error reading content for {md_file.name}: {e}")
                 description = f"Daily digest for {self.topic_config.get(topic, {}).get('display_name', topic)}"
             
             digest_files.append({
@@ -182,8 +194,11 @@ class MultiTopicRSSGenerator:
             except ValueError:
                 continue
             
-            # Generate description for MP3-only files
-            description = f"Daily tech digest episode from {file_date.strftime('%B %d, %Y')}"
+            # Generate enhanced description for MP3-only files
+            topic_info = self.topic_config.get(topic, {})
+            topic_display = topic_info.get('display_name', topic.replace('_', ' ').title())
+            date_formatted = file_date.strftime('%B %d, %Y')
+            description = f"{topic_display} digest from {date_formatted}. {topic_info.get('description', 'Covering the latest developments and insights.')}"
             
             digest_files.append({
                 'topic': topic,
@@ -201,19 +216,36 @@ class MultiTopicRSSGenerator:
         digest_files.sort(key=lambda x: x['date'], reverse=True)
         return digest_files
     
-    def _extract_description(self, content: str, topic: str) -> str:
-        """Extract a meaningful description from digest content"""
-        # Get first few sentences, limit to ~200 chars
-        sentences = content.replace('\n', ' ').split('. ')
-        description = sentences[0] if sentences else ""
+    def _extract_fallback_description(self, content: str, topic: str) -> str:
+        """Extract a meaningful fallback description from digest content (used when AI generation fails)"""
+        # Get first meaningful sentence, limit to ~200 chars
+        sentences = content.replace('\n', ' ').replace('\r', ' ').split('. ')
         
+        # Find the first substantial sentence (skip headers and short fragments)
+        description = ""
+        for sentence in sentences:
+            sentence = sentence.strip()
+            if len(sentence) > 30 and not sentence.startswith('#'):
+                description = sentence
+                break
+        
+        # If no good sentence found, use first non-empty line
+        if not description:
+            lines = [line.strip() for line in content.split('\n') if line.strip()]
+            for line in lines:
+                if len(line) > 20 and not line.startswith('#'):
+                    description = line
+                    break
+        
+        # Ensure reasonable length
         if len(description) > 200:
             description = description[:197] + "..."
         
-        # Fallback to topic-based description
+        # Final fallback to topic-based description
         if len(description) < 20:
             topic_info = self.topic_config.get(topic, {})
-            description = topic_info.get('description', f"Daily digest covering {topic}")
+            topic_display = topic_info.get('display_name', topic.replace('_', ' ').title())
+            description = f"Daily {topic_display} digest covering the latest developments and insights"
         
         return description
     
@@ -323,6 +355,19 @@ class MultiTopicRSSGenerator:
                 f.write(pretty_xml)
             
             print(f"✅ RSS feed generated: {output_file}")
+            
+            # Show summary generation statistics
+            try:
+                stats = self.summary_generator.get_summary_stats()
+                if stats.get('total_summaries', 0) > 0:
+                    print(f"📊 Episode summaries: {stats['total_summaries']} cached, {stats['unique_topics']} topics")
+                    if stats.get('topic_distribution'):
+                        top_topics = list(stats['topic_distribution'].items())[:3]
+                        topic_list = ", ".join([f"{topic} ({count})" for topic, count in top_topics])
+                        print(f"🏷️  Top topics: {topic_list}")
+            except Exception as e:
+                print(f"⚠️ Could not retrieve summary stats: {e}")
+            
             return True
             
         except Exception as e:
