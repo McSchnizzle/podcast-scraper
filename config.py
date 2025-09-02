@@ -21,7 +21,7 @@ logger = logging.getLogger(__name__)
 class Config:
     """Centralized configuration management"""
     
-    def __init__(self):
+    def __init__(self, require_claude: bool = True):
         # Base paths
         self.PROJECT_ROOT = Path(__file__).parent
         self.DB_PATH = "podcast_monitor.db"
@@ -84,6 +84,43 @@ class Config:
             'max_text_length': 50000
         }
         
+        # OpenAI topic scoring settings
+        self.OPENAI_SETTINGS = {
+            'model': 'gpt-4o-mini',
+            'temperature': 0.1,
+            'max_tokens': 500,
+            'timeout_seconds': 60,
+            'batch_size': 5,  # Number of episodes to score in one batch
+            'rate_limit_delay': 1,  # Seconds between API calls
+            'relevance_threshold': 0.6,  # Minimum score to include in topic digest
+            'topics': {
+                'AI News': {
+                    'description': 'Artificial intelligence developments, AI research, machine learning breakthroughs, AI industry news, AI policy and ethics',
+                    'prompt': 'artificial intelligence, AI news, machine learning, deep learning, AI research, AI breakthroughs, AI industry, AI policy, AI ethics, AI regulation, generative AI, LLMs, AI startups, AI funding'
+                },
+                'Tech Product Releases': {
+                    'description': 'New technology product launches, hardware releases, software updates, gadget reviews, product announcements',
+                    'prompt': 'product launch, product release, new products, hardware launch, software release, gadget announcement, tech products, product reviews, device launch, tech hardware, consumer electronics'
+                },
+                'Tech News and Tech Culture': {
+                    'description': 'Technology industry news, tech company developments, tech culture discussions, digital trends, tech policy',
+                    'prompt': 'tech news, technology industry, tech companies, tech culture, digital trends, tech policy, tech regulation, tech industry analysis, tech leadership, tech innovation, startup news'
+                },
+                'Community Organizing': {
+                    'description': 'Grassroots organizing, community activism, local organizing efforts, civic engagement, community building strategies',
+                    'prompt': 'community organizing, grassroots activism, local organizing, civic engagement, community building, activist organizing, community mobilization, grassroots campaigns, community advocacy, local activism'
+                },
+                'Social Justice': {
+                    'description': 'Social justice movements, civil rights, equity and inclusion, systemic justice issues, advocacy and activism',
+                    'prompt': 'social justice, civil rights, equity, inclusion, systemic justice, social equity, human rights, justice advocacy, social activism, civil rights movement, racial justice, economic justice'
+                },
+                'Societal Culture Change': {
+                    'description': 'Cultural shifts, social movements, changing social norms, generational changes, cultural transformation',
+                    'prompt': 'cultural change, social movements, cultural shifts, social transformation, generational change, cultural evolution, social change, cultural trends, societal transformation, cultural movements'
+                }
+            }
+        }
+        
         # Pipeline settings
         self.PIPELINE_SETTINGS = {
             'retention_days': 7,
@@ -102,9 +139,10 @@ class Config:
         # Environment variables
         self.GITHUB_TOKEN = os.getenv('GITHUB_TOKEN')
         self.ELEVENLABS_API_KEY = os.getenv('ELEVENLABS_API_KEY')
+        self.OPENAI_API_KEY = os.getenv('OPENAI_API_KEY')
         
         # Validate environment
-        self._validate_environment()
+        self._validate_environment(require_claude=require_claude)
     
     def _ensure_directories(self):
         """Create necessary directories"""
@@ -118,7 +156,7 @@ class Config:
         for directory in directories:
             Path(directory).mkdir(parents=True, exist_ok=True)
     
-    def _validate_environment(self):
+    def _validate_environment(self, require_claude: bool = True):
         """Validate environment configuration"""
         warnings = []
         errors = []
@@ -131,11 +169,19 @@ class Config:
             warnings.append("ELEVENLABS_API_KEY not set - TTS features will be disabled")
         
         # Check for required tools
-        try:
-            import subprocess
-            subprocess.run(['claude', '--version'], capture_output=True, timeout=5)
-        except (subprocess.TimeoutExpired, FileNotFoundError):
-            errors.append("Claude Code CLI not found - install from https://claude.ai/code")
+        if require_claude:
+            try:
+                import subprocess
+                subprocess.run(['claude', '--version'], capture_output=True, timeout=5)
+            except (subprocess.TimeoutExpired, FileNotFoundError):
+                errors.append("Claude Code CLI not found - install from https://claude.ai/code")
+        else:
+            # For YouTube-only processing, Claude is optional
+            try:
+                import subprocess
+                subprocess.run(['claude', '--version'], capture_output=True, timeout=5)
+            except (subprocess.TimeoutExpired, FileNotFoundError):
+                warnings.append("Claude Code CLI not found - digest generation will use OpenAI fallback")
         
         try:
             subprocess.run(['ffmpeg', '-version'], capture_output=True, timeout=5)
@@ -155,7 +201,11 @@ class Config:
             logger.info("✅ Environment validation passed")
     
     def get_feed_config(self) -> list:
-        """Get complete feed configuration with all monitored feeds"""
+        """Get complete feed configuration with all monitored feeds
+        
+        Note: topic_category is informational only. Content selection is 100% score-based
+        using AI relevance scoring against the 6 defined topics in topics.json.
+        """
         return [
             # Technology RSS Feeds
             {
@@ -192,7 +242,7 @@ class Config:
             },
             {
                 'title': 'Matt Wolfe',
-                'url': 'https://www.youtube.com/feeds/videos.xml?channel_id=UCKLOLiEJbPy3-oOhm6Hq1xw',
+                'url': 'https://www.youtube.com/feeds/videos.xml?channel_id=UCbUXAm7XBrwD_6MqKw9jIzQ',
                 'type': 'youtube',
                 'topic_category': 'technology'
             },

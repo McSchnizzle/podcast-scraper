@@ -1,0 +1,19 @@
+{
+  "title": "AI News & Developments - September 01, 2025",
+  "description": "Daily digest covering ai news & developments",
+  "topic": "ai_news",
+  "timestamp": "20250901_204213",
+  "date": "2025-09-01T20:42:13",
+  "voice_config": {
+    "voice_id": "21m00Tcm4TlvDq8ikWAM",
+    "display_name": "AI News & Developments",
+    "stability": 0.75,
+    "similarity_boost": 0.75,
+    "style": 0.15
+  },
+  "generated_at": "2025-09-01T20:48:44.582022",
+  "audio_file": "ai_news_digest_20250901_204213.mp3",
+  "markdown_file": "ai_news_digest_20250901_204213.md",
+  "tts_script_file": "ai_news_digest_tts_20250901_204213.txt",
+  "music_enhanced": true
+}

@@ -24,8 +24,8 @@ echo "=== YouTube Cron Job Completed: $(date) ===" >> "$LOG_FILE"
 echo "Exit Code: $?" >> "$LOG_FILE"
 echo "" >> "$LOG_FILE"
 
-# Keep only last 10 log files to prevent disk space issues
-find "/Users/paulbrown/Desktop/podcast-scraper/logs" -name "youtube_cron_*.log" -type f | sort | head -n -10 | xargs -r rm
+# Keep only last 10 log files to prevent disk space issues (macOS compatible)
+find "/Users/paulbrown/Desktop/podcast-scraper/logs" -name "youtube_cron_*.log" -type f | sort -r | tail -n +11 | xargs rm -f
 
 # Optional: Send notification on failure (uncomment if needed)
 # if [ $? -ne 0 ]; then

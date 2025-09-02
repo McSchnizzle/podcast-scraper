@@ -42,8 +42,8 @@ class ClaudeAPIIntegration:
                 self.client = None
                 self.api_available = False
 
-    def get_transcripts_for_analysis(self, include_youtube: bool = True) -> List[Dict]:
-        """Get transcripts ready for API analysis from both databases"""
+    def get_transcripts_for_analysis(self, include_youtube: bool = True, topic: str = None) -> List[Dict]:
+        """Get transcripts ready for API analysis from both databases, optionally filtered by topic"""
         transcripts = []
         
         # Get RSS transcripts from main database
@@ -51,19 +51,32 @@ class ClaudeAPIIntegration:
             conn = sqlite3.connect(self.db_path)
             cursor = conn.cursor()
             
-            query = """
-            SELECT id, title, transcript_path, episode_id, published_date, status
-            FROM episodes 
-            WHERE transcript_path IS NOT NULL 
-            AND status = 'transcribed'
-            ORDER BY published_date DESC
-            """
+            # Updated query to only include episodes approved for digest with specific topic assignment
+            if topic:
+                query = """
+                SELECT id, title, transcript_path, episode_id, published_date, status, digest_topic
+                FROM episodes 
+                WHERE transcript_path IS NOT NULL 
+                AND status = 'transcribed'
+                AND digest_topic = ?
+                ORDER BY published_date DESC
+                """
+                cursor.execute(query, (topic,))
+            else:
+                query = """
+                SELECT id, title, transcript_path, episode_id, published_date, status, digest_topic
+                FROM episodes 
+                WHERE transcript_path IS NOT NULL 
+                AND status = 'transcribed'
+                AND digest_topic IS NOT NULL
+                ORDER BY published_date DESC
+                """
+                cursor.execute(query)
             
-            cursor.execute(query)
             rss_episodes = cursor.fetchall()
             conn.close()
             
-            for episode_id, title, transcript_path, ep_id, published_date, status in rss_episodes:
+            for episode_id, title, transcript_path, ep_id, published_date, status, digest_topic in rss_episodes:
                 transcript_file = Path(transcript_path)
                 
                 if transcript_file.exists():
@@ -79,7 +92,8 @@ class ClaudeAPIIntegration:
                                 'published_date': published_date,
                                 'transcript_path': str(transcript_path),
                                 'content': content[:50000],  # Limit content for API
-                                'source': 'rss'
+                                'source': 'rss',
+                                'digest_topic': digest_topic
                             })
                     except Exception as e:
                         logger.error(f"Error reading RSS transcript {transcript_path}: {e}")
@@ -97,12 +111,16 @@ class ClaudeAPIIntegration:
                     conn = sqlite3.connect(youtube_db_path)
                     cursor = conn.cursor()
                     
-                    cursor.execute(query)  # Same query
+                    # Use the same query logic for YouTube database
+                    if topic:
+                        cursor.execute(query, (topic,))
+                    else:
+                        cursor.execute(query)
                     youtube_episodes = cursor.fetchall()
                     conn.close()
                     
                     youtube_count = 0
-                    for episode_id, title, transcript_path, ep_id, published_date, status in youtube_episodes:
+                    for episode_id, title, transcript_path, ep_id, published_date, status, digest_topic in youtube_episodes:
                         transcript_file = Path(transcript_path)
                         
                         if transcript_file.exists():
@@ -118,7 +136,8 @@ class ClaudeAPIIntegration:
                                         'published_date': published_date,
                                         'transcript_path': str(transcript_path),
                                         'content': content[:50000],
-                                        'source': 'youtube'
+                                        'source': 'youtube',
+                                        'digest_topic': digest_topic
                                     })
                                     youtube_count += 1
                             except Exception as e:
@@ -137,8 +156,8 @@ class ClaudeAPIIntegration:
         
         return transcripts
 
-    def prepare_digest_prompt(self, transcripts: List[Dict]) -> str:
-        """Prepare comprehensive digest prompt for Claude API"""
+    def prepare_digest_prompt(self, transcripts: List[Dict], topic: str = None) -> str:
+        """Prepare topic-specific digest prompt for Claude API"""
         
         transcript_summaries = []
         for transcript in transcripts:
@@ -150,72 +169,191 @@ class ClaudeAPIIntegration:
         
         combined_content = "\n".join(transcript_summaries)
         
-        prompt = f"""You are an expert tech analyst creating a comprehensive daily digest from podcast transcripts. 
+        # Topic-specific prompts with focused analysis
+        topic_descriptions = {
+            'AI News': {
+                'title': 'AI News Digest',
+                'focus': 'artificial intelligence developments, machine learning breakthroughs, AI product launches, research updates, industry announcements',
+                'sections': [
+                    '### 🤖 AI Model Releases & Updates',
+                    '### 🔬 Research Breakthroughs',
+                    '### 🏢 Industry Developments',
+                    '### 🛠️ Developer Tools & Platforms',
+                    '### 📈 Market Impact & Analysis'
+                ]
+            },
+            'Tech Product Releases': {
+                'title': 'Tech Product Releases Digest',
+                'focus': 'new technology product launches, hardware releases, software updates, gadget reviews, product announcements',
+                'sections': [
+                    '### 📱 Consumer Electronics',
+                    '### 💻 Computing & Hardware',
+                    '### 🎮 Gaming & Entertainment',
+                    '### 🏠 Smart Home & IoT',
+                    '### 🚗 Automotive Tech'
+                ]
+            },
+            'Tech News and Tech Culture': {
+                'title': 'Tech News & Culture Digest',
+                'focus': 'technology industry news, tech company developments, tech culture discussions, digital trends, tech policy',
+                'sections': [
+                    '### 📰 Industry News',
+                    '### 🏛️ Policy & Regulation',
+                    '### 🌐 Digital Culture & Trends',
+                    '### 💼 Business & Leadership',
+                    '### 🔮 Future Outlook'
+                ]
+            },
+            'Community Organizing': {
+                'title': 'Community Organizing Digest',
+                'focus': 'grassroots organizing, community activism, local organizing efforts, civic engagement, community building strategies',
+                'sections': [
+                    '### 🤝 Grassroots Campaigns',
+                    '### 🗳️ Civic Engagement',
+                    '### 🏘️ Community Building',
+                    '### 📢 Advocacy Strategies',
+                    '### 🌱 Local Impact Stories'
+                ]
+            },
+            'Social Justice': {
+                'title': 'Social Justice Digest',
+                'focus': 'social justice movements, civil rights, equity and inclusion, systemic justice issues, advocacy and activism',
+                'sections': [
+                    '### ⚖️ Civil Rights Updates',
+                    '### 🌈 Equity & Inclusion',
+                    '### 📊 Systemic Change',
+                    '### 🔊 Advocacy Highlights',
+                    '### 💪 Movement Building'
+                ]
+            },
+            'Societal Culture Change': {
+                'title': 'Societal Culture Change Digest',
+                'focus': 'cultural shifts, social movements, changing social norms, generational changes, cultural transformation',
+                'sections': [
+                    '### 🌊 Cultural Shifts',
+                    '### 👥 Generational Changes',
+                    '### 🔄 Social Transformation',
+                    '### 📱 Digital Culture Impact',
+                    '### 🌍 Global Perspectives'
+                ]
+            }
+        }
+        
+        # Get topic info or use generic if not specified
+        if topic and topic in topic_descriptions:
+            topic_info = topic_descriptions[topic]
+            title = topic_info['title']
+            focus_area = topic_info['focus']
+            sections = '\n'.join(topic_info['sections'])
+        else:
+            title = 'Daily Tech Digest'
+            focus_area = 'technology and innovation developments'
+            sections = """### 🤖 AI & Machine Learning
+### 📱 Consumer Tech
+### 💼 Business & Industry
+### 🔒 Security & Privacy
+### 🛠️ Open Source & Development"""
+        
+        prompt = f"""You are an expert analyst creating a focused digest from podcast transcripts.
 
-Please analyze the following {len(transcripts)} podcast transcripts and create a structured daily digest:
+Please analyze the following {len(transcripts)} podcast transcripts focused on {focus_area} and create a structured digest:
 
 {combined_content}
 
-Create a comprehensive daily digest with the following structure:
+Create a comprehensive digest with the following structure:
 
-# Daily Tech Digest - {datetime.now().strftime('%B %d, %Y')}
+# {title} - {datetime.now().strftime('%B %d, %Y')}
 
-## 🌟 Top Stories
-- List the 3-5 most important developments mentioned across episodes
-- Include brief explanations of why they matter
+## 🌟 Key Highlights
+- List the 3-5 most important developments from these episodes
+- Focus specifically on {focus_area}
+- Include brief explanations of significance
 
-## 📊 Key Developments by Category
+## 📊 Detailed Analysis
 
-### AI & Machine Learning
-- Summarize AI-related news, breakthroughs, and industry developments
+{sections}
 
-### Consumer Tech
-- Cover new product launches, reviews, and consumer-focused news
-
-### Business & Industry
-- Include mergers, acquisitions, funding news, and business developments
-
-### Security & Privacy
-- Highlight cybersecurity news, privacy concerns, and regulatory updates
-
-### Open Source & Development
-- Cover new tools, frameworks, and developer-focused news
-
-## 💡 Analysis & Insights
+## 💡 Insights & Connections
 - Provide 2-3 deeper insights connecting themes across episodes
-- Identify emerging trends or patterns
+- Identify emerging trends or patterns within {focus_area}
+- Highlight unique perspectives or expert opinions
 
-## 🔗 Cross-References
-- Note when multiple episodes cover the same topic
-- Highlight conflicting viewpoints or different perspectives
+## 🔗 Cross-References & Context
+- Note when multiple episodes discuss the same topic
+- Connect developments to broader industry/social trends
+- Highlight different viewpoints or approaches
 
-## 📅 Looking Ahead
-- Mention upcoming events, releases, or developments discussed
+## 🎯 Actionable Takeaways
+- What should listeners know or do based on these insights?
+- Key questions or areas to watch
+- Implications for the future
 
-Format the output as clean Markdown suitable for publication. Focus on accuracy, insight, and connecting information across sources."""
+Format the output as clean Markdown suitable for publication. Focus on accuracy, insight, and connecting information specifically related to {focus_area}."""
 
         return prompt
 
-    def generate_api_digest(self) -> Tuple[bool, Optional[str], Optional[str]]:
-        """Generate daily digest using Anthropic API"""
+    def get_available_topics(self) -> List[str]:
+        """Get list of topics that have episodes ready for digest"""
+        topics_with_episodes = set()
         
-        logger.info("🧠 Starting Anthropic API digest generation")
+        # Check RSS database
+        try:
+            conn = sqlite3.connect(self.db_path)
+            cursor = conn.cursor()
+            cursor.execute("""
+                SELECT DISTINCT digest_topic 
+                FROM episodes 
+                WHERE digest_topic IS NOT NULL 
+                AND status = 'transcribed'
+                AND transcript_path IS NOT NULL
+            """)
+            rss_topics = [row[0] for row in cursor.fetchall()]
+            topics_with_episodes.update(rss_topics)
+            conn.close()
+        except Exception as e:
+            logger.error(f"Error getting RSS topics: {e}")
+        
+        # Check YouTube database
+        try:
+            youtube_db_path = "youtube_transcripts.db"
+            if Path(youtube_db_path).exists():
+                conn = sqlite3.connect(youtube_db_path)
+                cursor = conn.cursor()
+                cursor.execute("""
+                    SELECT DISTINCT digest_topic 
+                    FROM episodes 
+                    WHERE digest_topic IS NOT NULL 
+                    AND status = 'transcribed'
+                    AND transcript_path IS NOT NULL
+                """)
+                youtube_topics = [row[0] for row in cursor.fetchall()]
+                topics_with_episodes.update(youtube_topics)
+                conn.close()
+        except Exception as e:
+            logger.error(f"Error getting YouTube topics: {e}")
+        
+        return sorted(list(topics_with_episodes))
+
+    def generate_topic_digest(self, topic: str) -> Tuple[bool, Optional[str], Optional[str]]:
+        """Generate digest for a specific topic using Anthropic API"""
+        
+        logger.info(f"🧠 Starting {topic} digest generation with Anthropic API")
         
         if not self.api_available:
             logger.error("Anthropic API not available - cannot generate digest")
             return False, None, None
         
-        # Get transcripts
-        transcripts = self.get_transcripts_for_analysis()
+        # Get transcripts for this topic
+        transcripts = self.get_transcripts_for_analysis(topic=topic)
         if not transcripts:
-            logger.error("No transcripts available for analysis")
+            logger.warning(f"No transcripts available for topic: {topic}")
             return False, None, None
         
-        logger.info(f"📊 Analyzing {len(transcripts)} transcripts with Anthropic API")
+        logger.info(f"📊 Analyzing {len(transcripts)} transcripts for {topic}")
         
         try:
-            # Prepare prompt
-            prompt = self.prepare_digest_prompt(transcripts)
+            # Prepare topic-specific prompt
+            prompt = self.prepare_digest_prompt(transcripts, topic=topic)
             
             # Call Anthropic API
             message = self.client.messages.create(
@@ -230,16 +368,17 @@ Format the output as clean Markdown suitable for publication. Focus on accuracy,
             
             digest_content = message.content[0].text
             
-            # Save digest
+            # Save topic-specific digest
             timestamp = datetime.now().strftime('%Y%m%d_%H%M%S')
-            digest_filename = f"daily_digest_{timestamp}.md"
+            topic_safe = topic.lower().replace(' ', '_').replace('&', 'and')
+            digest_filename = f"{topic_safe}_digest_{timestamp}.md"
             digest_path = Path('daily_digests') / digest_filename
             digest_path.parent.mkdir(exist_ok=True)
             
             with open(digest_path, 'w', encoding='utf-8') as f:
                 f.write(digest_content)
             
-            logger.info(f"✅ Digest saved to {digest_path}")
+            logger.info(f"✅ {topic} digest saved to {digest_path}")
             
             # Update databases - mark episodes as digested  
             self._mark_episodes_as_digested(transcripts)
@@ -250,8 +389,79 @@ Format the output as clean Markdown suitable for publication. Focus on accuracy,
             return True, str(digest_path), None
             
         except Exception as e:
-            logger.error(f"Error generating digest with Anthropic API: {e}")
+            logger.error(f"Error generating {topic} digest with Anthropic API: {e}")
             return False, None, None
+
+    def generate_all_topic_digests(self) -> Dict[str, Tuple[bool, Optional[str], Optional[str]]]:
+        """Generate digests for all available topics"""
+        
+        available_topics = self.get_available_topics()
+        if not available_topics:
+            logger.warning("No topics with episodes ready for digest")
+            return {}
+        
+        logger.info(f"🚀 Starting multi-topic digest generation for {len(available_topics)} topics")
+        logger.info(f"Topics: {', '.join(available_topics)}")
+        
+        results = {}
+        for topic in available_topics:
+            logger.info(f"\n📝 Processing topic: {topic}")
+            result = self.generate_topic_digest(topic)
+            results[topic] = result
+            
+            success, path, error = result
+            if success:
+                logger.info(f"✅ {topic} digest completed: {path}")
+            else:
+                logger.error(f"❌ {topic} digest failed: {error}")
+        
+        # Summary
+        successful = sum(1 for _, (success, _, _) in results.items() if success)
+        logger.info(f"\n🏁 Multi-topic digest generation complete: {successful}/{len(available_topics)} topics successful")
+        
+        return results
+
+    def generate_api_digest(self, topic: str = None) -> Tuple[bool, Optional[str], Optional[str]]:
+        """Generate digest using Anthropic API - supports single topic or all topics"""
+        
+        if topic:
+            # Generate single topic digest
+            logger.info(f"🧠 Starting single topic digest generation: {topic}")
+            return self.generate_topic_digest(topic)
+        else:
+            # Generate all topic digests (new default behavior)
+            logger.info("🧠 Starting multi-topic digest generation")
+            results = self.generate_all_topic_digests()
+            
+            if not results:
+                logger.error("No topics available for digest generation")
+                return False, None, "No topics with episodes ready for digest"
+            
+            # Check if any digests were successful
+            successful_digests = []
+            failed_digests = []
+            
+            for topic, (success, path, error) in results.items():
+                if success:
+                    successful_digests.append((topic, path))
+                else:
+                    failed_digests.append((topic, error))
+            
+            if successful_digests:
+                # Return success with summary of all generated digests
+                digest_list = [f"{topic}: {path}" for topic, path in successful_digests]
+                summary = f"Generated {len(successful_digests)} topic digests:\n" + "\n".join(digest_list)
+                
+                if failed_digests:
+                    failed_list = [f"{topic}: {error or 'Unknown error'}" for topic, error in failed_digests]
+                    summary += f"\n\nFailed {len(failed_digests)} digests:\n" + "\n".join(failed_list)
+                
+                # Return the path of the first successful digest for compatibility
+                return True, successful_digests[0][1], None
+            else:
+                # All failed
+                error_summary = f"All {len(failed_digests)} topic digests failed"
+                return False, None, error_summary
 
     def _mark_episodes_as_digested(self, transcripts: List[Dict]):
         """Mark episodes as digested in both databases"""
@@ -345,3 +555,60 @@ Format the output as clean Markdown suitable for publication. Focus on accuracy,
         except Exception as e:
             logger.error(f"API connection test failed: {e}")
             return False
+
+
+def main():
+    """CLI interface for Claude API digest generation"""
+    import argparse
+    
+    parser = argparse.ArgumentParser(description='Claude API Integration - Multi-Topic Digest Generator')
+    parser.add_argument('--topic', type=str, help='Generate digest for specific topic only')
+    parser.add_argument('--list-topics', action='store_true', help='List available topics with episodes')
+    parser.add_argument('--test-api', action='store_true', help='Test Anthropic API connection')
+    parser.add_argument('--db', type=str, default='podcast_monitor.db', help='Database path (default: podcast_monitor.db)')
+    
+    args = parser.parse_args()
+    
+    # Initialize Claude API integration
+    integration = ClaudeAPIIntegration(db_path=args.db)
+    
+    if args.test_api:
+        logger.info("🧪 Testing Anthropic API connection...")
+        if integration.test_api_connection():
+            logger.info("✅ API connection successful")
+        else:
+            logger.error("❌ API connection failed")
+        return
+    
+    if args.list_topics:
+        logger.info("📂 Available topics with episodes ready for digest:")
+        topics = integration.get_available_topics()
+        if topics:
+            for topic in topics:
+                transcripts = integration.get_transcripts_for_analysis(topic=topic)
+                logger.info(f"  📄 {topic}: {len(transcripts)} episodes")
+        else:
+            logger.info("  No topics with episodes ready for digest")
+        return
+    
+    # Generate digest(s)
+    if args.topic:
+        logger.info(f"🎯 Generating digest for topic: {args.topic}")
+        success, path, error = integration.generate_api_digest(topic=args.topic)
+        
+        if success:
+            logger.info(f"✅ Topic digest generated successfully: {path}")
+        else:
+            logger.error(f"❌ Topic digest generation failed: {error}")
+    else:
+        logger.info("🚀 Generating digests for all available topics...")
+        success, path, error = integration.generate_api_digest()
+        
+        if success:
+            logger.info(f"✅ Multi-topic digest generation completed")
+        else:
+            logger.error(f"❌ Multi-topic digest generation failed: {error}")
+
+
+if __name__ == '__main__':
+    main()
