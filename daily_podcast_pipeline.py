@@ -14,14 +14,22 @@ from datetime import datetime, timedelta
 import logging
 import tempfile
 
+# Load environment variables from .env file
+try:
+    from dotenv import load_dotenv
+    load_dotenv()
+except ImportError:
+    pass
+
 # Import existing modules
 from feed_monitor import FeedMonitor
 from content_processor import ContentProcessor
-from claude_api_integration import ClaudeAPIIntegration
+from openai_digest_integration import OpenAIDigestIntegration
+from retention_cleanup import RetentionCleanup
 
 # Configuration
 CONFIG = {
-    'RETENTION_DAYS': 7,
+    'RETENTION_DAYS': 14,  # Aligned with retention_cleanup.py default
     'MAX_RSS_EPISODES': 7,
     'CLEANUP_AUDIO_CACHE': True,
     'CLEANUP_INTERMEDIATE_FILES': True,
@@ -44,15 +52,20 @@ class DailyPodcastPipeline:
             db_path=self.db_path, 
             audio_dir=CONFIG['AUDIO_CACHE_DIR']
         )
-        self.claude_integration = ClaudeAPIIntegration(
+        self.openai_integration = OpenAIDigestIntegration(
             db_path=self.db_path,
             transcripts_dir=CONFIG['TRANSCRIPTS_DIR']
         )
         
     def run_daily_workflow(self):
-        """Execute complete daily workflow"""
-        logger.info("🚀 Starting Daily Tech Digest Pipeline")
+        """Execute complete daily workflow with weekday logic"""
+        current_weekday = datetime.now().strftime('%A')
+        logger.info(f"🚀 Starting Daily Tech Digest Pipeline - {current_weekday}")
         logger.info("=" * 50)
+        
+        # Self-healing: Backfill missing topic scores from previous runs
+        import subprocess, sys
+        subprocess.run([sys.executable, "backfill_missing_scores.py"], check=False)
         
         try:
             # Step 1: Monitor RSS feeds for new episodes
@@ -64,8 +77,16 @@ class DailyPodcastPipeline:
             # Step 3: Process pending episodes
             self._process_pending_episodes()
             
-            # Step 4: Generate daily digest from ONLY 'transcribed' episodes
-            digest_success = self._generate_daily_digest()
+            # Step 4: Generate digest based on weekday logic
+            if current_weekday == 'Friday':
+                logger.info("📅 Friday detected - generating daily + weekly digests")
+                digest_success = self._generate_weekly_digest()
+            elif current_weekday == 'Monday':
+                logger.info("📅 Monday detected - generating catch-up digest")
+                digest_success = self._generate_catchup_digest()
+            else:
+                logger.info(f"📅 {current_weekday} - generating standard daily digest")
+                digest_success = self._generate_daily_digest()
             
             if digest_success:
                 # Step 5: Create TTS audio
@@ -341,8 +362,8 @@ class DailyPodcastPipeline:
             logger.warning("No 'transcribed' episodes available from either database")
             return False
         
-        # Generate Claude-powered digest (reads from both databases automatically)
-        success, digest_path, cross_refs_path = self.claude_integration.generate_api_digest()
+        # Generate OpenAI GPT-5 powered digest (reads from both databases automatically)
+        success, digest_path, cross_refs_path = self.openai_integration.generate_digest()
         
         if success:
             logger.info(f"✅ Daily digest generated: {digest_path}")
@@ -350,6 +371,115 @@ class DailyPodcastPipeline:
         else:
             logger.error("❌ Failed to generate daily digest")
             return False
+    
+    def _generate_weekly_digest(self):
+        """Generate Friday digest with weekly summary (7-day window)"""
+        logger.info("📅 Generating FRIDAY digest with weekly overview...")
+        
+        # First generate regular daily digest
+        daily_success = self._generate_daily_digest()
+        if not daily_success:
+            logger.error("❌ Failed to generate daily digest component")
+            return False
+        
+        # Get episodes from the past 7 days that were already digested
+        seven_days_ago = datetime.now() - timedelta(days=7)
+        
+        conn = sqlite3.connect(self.db_path)
+        cursor = conn.cursor()
+        
+        cursor.execute("""
+            SELECT COUNT(*) FROM episodes 
+            WHERE digest_date IS NOT NULL 
+            AND datetime(digest_date) >= datetime(?)
+        """, (seven_days_ago.strftime('%Y-%m-%d'),))
+        rss_weekly_count = cursor.fetchone()[0]
+        
+        conn.close()
+        
+        # Check YouTube database for weekly episodes  
+        youtube_weekly_count = 0
+        youtube_db_path = "youtube_transcripts.db"
+        if Path(youtube_db_path).exists():
+            try:
+                conn = sqlite3.connect(youtube_db_path)
+                cursor = conn.cursor()
+                
+                cursor.execute("""
+                    SELECT COUNT(*) FROM episodes 
+                    WHERE digest_date IS NOT NULL 
+                    AND datetime(digest_date) >= datetime(?)
+                """, (seven_days_ago.strftime('%Y-%m-%d'),))
+                youtube_weekly_count = cursor.fetchone()[0]
+                
+                conn.close()
+            except Exception as e:
+                logger.warning(f"Could not check YouTube weekly episodes: {e}")
+        
+        total_weekly = rss_weekly_count + youtube_weekly_count
+        logger.info(f"📊 Weekly digest coverage: {total_weekly} episodes over 7 days")
+        
+        return True
+    
+    def _generate_catchup_digest(self):
+        """Generate Monday catch-up digest (Friday 06:00 → Monday run)"""
+        logger.info("📅 Generating MONDAY catch-up digest...")
+        
+        # Calculate window: Previous Friday 6 AM to now
+        now = datetime.now()
+        
+        # Find last Friday
+        days_since_friday = (now.weekday() + 3) % 7  # Monday=0, Friday=4
+        if days_since_friday == 0:  # Today is Friday
+            days_since_friday = 7  # Last Friday was a week ago
+        
+        last_friday_6am = now - timedelta(days=days_since_friday)
+        last_friday_6am = last_friday_6am.replace(hour=6, minute=0, second=0, microsecond=0)
+        
+        logger.info(f"🕰️ Catch-up window: {last_friday_6am.strftime('%Y-%m-%d %H:%M')} to {now.strftime('%Y-%m-%d %H:%M')}")
+        
+        # Check for episodes in catch-up window
+        conn = sqlite3.connect(self.db_path)
+        cursor = conn.cursor()
+        
+        # Look for episodes published since Friday 6 AM that haven't been digested
+        cursor.execute("""
+            SELECT COUNT(*) FROM episodes 
+            WHERE datetime(published_date) >= datetime(?)
+            AND (digest_date IS NULL OR status = 'transcribed')
+        """, (last_friday_6am.isoformat(),))
+        rss_catchup_count = cursor.fetchone()[0]
+        
+        conn.close()
+        
+        # Check YouTube database for catch-up episodes
+        youtube_catchup_count = 0
+        youtube_db_path = "youtube_transcripts.db"
+        if Path(youtube_db_path).exists():
+            try:
+                conn = sqlite3.connect(youtube_db_path)
+                cursor = conn.cursor()
+                
+                cursor.execute("""
+                    SELECT COUNT(*) FROM episodes 
+                    WHERE datetime(published_date) >= datetime(?)
+                    AND (digest_date IS NULL OR status = 'transcribed')
+                """, (last_friday_6am.isoformat(),))
+                youtube_catchup_count = cursor.fetchone()[0]
+                
+                conn.close()
+            except Exception as e:
+                logger.warning(f"Could not check YouTube catch-up episodes: {e}")
+        
+        total_catchup = rss_catchup_count + youtube_catchup_count
+        logger.info(f"📊 Catch-up digest coverage: {total_catchup} episodes since Friday 6 AM")
+        
+        if total_catchup == 0:
+            logger.info("✅ No catch-up needed - no new episodes since Friday")
+            return True
+        
+        # Generate digest from available transcribed episodes
+        return self._generate_daily_digest()
     
     def _create_tts_audio(self):
         """Create TTS audio for the daily digest - CRITICAL FUNCTION"""
@@ -376,12 +506,12 @@ class DailyPodcastPipeline:
                 logger.info(f"   📄 {item.name}")
         
         try:
-            logger.info("🚀 Running TTS generation subprocess...")
-            logger.info("Command: python3 claude_tts_generator.py")
+            logger.info("🚀 Running multi-topic TTS generation subprocess...")
+            logger.info("Command: python3 multi_topic_tts_generator.py")
             
             # Run TTS generation with enhanced logging
             result = subprocess.run([
-                'python3', 'claude_tts_generator.py'
+                'python3', 'multi_topic_tts_generator.py'
             ], capture_output=True, text=True, timeout=600)
             
             logger.info(f"🔍 TTS subprocess return code: {result.returncode}")
@@ -440,7 +570,7 @@ class DailyPodcastPipeline:
         
         try:
             result = subprocess.run([
-                'python3', 'deploy_episode.py'
+                'python3', 'deploy_multi_topic.py'
             ], capture_output=True, text=True, timeout=300)
             
             if result.returncode == 0:
@@ -460,7 +590,7 @@ class DailyPodcastPipeline:
         
         try:
             result = subprocess.run([
-                'python3', 'rss_generator.py'
+                'python3', 'rss_generator_multi_topic.py'
             ], capture_output=True, text=True, timeout=120)
             
             if result.returncode == 0:
@@ -508,113 +638,25 @@ class DailyPodcastPipeline:
         logger.info(f"✅ Marked episodes as digested: {rss_updated_count} RSS + {youtube_updated_count} YouTube = {total_updated} total")
     
     def _cleanup_old_files(self):
-        """Clean up old files and transcripts"""
-        logger.info("🧹 Cleaning up old files...")
+        """Clean up old files and transcripts using configured retention system"""
+        retention_days = CONFIG['RETENTION_DAYS']
+        logger.info(f"🧹 Running {retention_days}-day retention cleanup...")
         
-        cutoff_date = datetime.now() - timedelta(days=CONFIG['RETENTION_DAYS'])
-        
-        # Clean old transcripts in digested folder
-        self._cleanup_old_transcripts(cutoff_date)
-        
-        # Clean old audio files from daily_digests
-        self._cleanup_old_audio_digests()
-        
-        # Clean audio_cache if configured
-        if CONFIG['CLEANUP_AUDIO_CACHE']:
-            self._cleanup_audio_cache()
-        
-        # Clean intermediate files
-        if CONFIG['CLEANUP_INTERMEDIATE_FILES']:
-            self._cleanup_intermediate_files()
-        
-        # Clean old failed episodes from database
-        self._cleanup_old_failed_episodes(cutoff_date)
-    
-    def _cleanup_old_transcripts(self, cutoff_date):
-        """Delete old transcripts from digested folder"""
-        digested_dir = Path(CONFIG['TRANSCRIPTS_DIR']) / 'digested'
-        
-        if not digested_dir.exists():
-            return
-        
-        cleaned_count = 0
-        for transcript_file in digested_dir.glob("*.txt"):
-            if transcript_file.stat().st_mtime < cutoff_date.timestamp():
-                transcript_file.unlink()
-                cleaned_count += 1
-        
-        logger.info(f"Cleaned {cleaned_count} old transcript files")
-    
-    def _cleanup_old_audio_digests(self):
-        """Keep only latest 3 audio digests"""
-        daily_digests_dir = Path(CONFIG['DAILY_DIGESTS_DIR'])
-        
-        if not daily_digests_dir.exists():
-            return
-        
-        # Find all complete digest files
-        audio_files = list(daily_digests_dir.glob("complete_topic_digest_*.mp3"))
-        audio_files.sort(key=lambda x: x.stat().st_mtime, reverse=True)
-        
-        # Keep only latest 3
-        for old_file in audio_files[3:]:
-            old_file.unlink()
-            logger.info(f"Deleted old audio digest: {old_file.name}")
-    
-    def _cleanup_audio_cache(self):
-        """Clean up audio_cache after processing"""
-        audio_cache = Path(CONFIG['AUDIO_CACHE_DIR'])
-        
-        if not audio_cache.exists():
-            return
-        
-        # Remove chunk directories
-        for chunk_dir in audio_cache.glob("*_chunks/"):
-            shutil.rmtree(chunk_dir)
-            logger.info(f"Cleaned chunk directory: {chunk_dir.name}")
-        
-        # Remove processed MP3 files (only after they're marked as transcribed)
-        conn = sqlite3.connect(self.db_path)
-        cursor = conn.cursor()
-        
-        for mp3_file in audio_cache.glob("*.mp3"):
-            episode_id = mp3_file.stem  # Use filename as episode_id (8-char hash)
-            cursor.execute("SELECT status FROM episodes WHERE episode_id = ?", (episode_id,))
-            result = cursor.fetchone()
+        try:
+            cleanup = RetentionCleanup(retention_days=retention_days)
+            results = cleanup.run_full_cleanup()
             
-            if result and result[0] in ('transcribed', 'digested'):
-                mp3_file.unlink()
-                logger.info(f"Cleaned processed audio: {mp3_file.name}")
-        
-        conn.close()
+            total_files = results['transcript_files_removed'] + results['digest_files_removed']
+            total_episodes = results['rss_episodes_cleaned'] + results['youtube_episodes_cleaned']
+            
+            if total_files > 0 or total_episodes > 0:
+                logger.info(f"✅ Retention cleanup completed: {total_files} files removed, {total_episodes} episodes cleaned")
+            else:
+                logger.info("✅ No cleanup needed - all files within retention period")
+                
+        except Exception as e:
+            logger.warning(f"⚠️  Retention cleanup failed: {e}")
     
-    def _cleanup_intermediate_files(self):
-        """Clean up intermediate files"""
-        # Clean temp TTS files
-        for temp_file in Path('.').glob("intro_*.mp3"):
-            temp_file.unlink()
-        for temp_file in Path('.').glob("outro_*.mp3"):
-            temp_file.unlink()
-        for temp_file in Path('.').glob("topic_*.mp3"):
-            temp_file.unlink()
-        
-        logger.info("Cleaned intermediate TTS files")
-    
-    def _cleanup_old_failed_episodes(self, cutoff_date):
-        """Remove old failed episodes from database"""
-        conn = sqlite3.connect(self.db_path)
-        cursor = conn.cursor()
-        
-        cursor.execute("""
-            DELETE FROM episodes 
-            WHERE status = 'failed' AND failure_timestamp < ?
-        """, (cutoff_date.strftime('%Y-%m-%d %H:%M:%S'),))
-        
-        deleted_count = cursor.rowcount
-        conn.commit()
-        conn.close()
-        
-        logger.info(f"Cleaned {deleted_count} old failed episodes from database")
     
     def get_status_summary(self):
         """Get current system status summary"""
@@ -676,7 +718,7 @@ def main():
         # Test each component
         print("Feed monitor:", "✅" if pipeline.feed_monitor else "❌")
         print("Content processor:", "✅" if pipeline.content_processor.asr_model else "❌")
-        print("Claude integration:", "✅" if pipeline.claude_integration.api_available else "❌")
+        print("OpenAI integration:", "✅" if pipeline.openai_integration.api_available else "❌")
         return
     
     if args.run:

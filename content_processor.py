@@ -15,6 +15,7 @@ from datetime import datetime
 from youtube_transcript_api import YouTubeTranscriptApi
 import re
 import hashlib
+from openai_scorer import OpenAITopicScorer
 
 # ASR backend detection and imports
 import platform
@@ -75,6 +76,9 @@ class ContentProcessor:
         self.audio_dir = Path(audio_dir)
         self.audio_dir.mkdir(exist_ok=True)
         self.min_youtube_minutes = min_youtube_minutes
+        
+        # Initialize OpenAI scorer for topic relevance
+        self.openai_scorer = OpenAITopicScorer(db_path)
         
         # Initialize ASR models based on environment
         self.asr_model = None
@@ -209,13 +213,47 @@ class ContentProcessor:
                 # Analyze content
                 analysis = self._analyze_content(transcript, topic_category)
                 
-                # Update database
-                cursor.execute('''
-                    UPDATE episodes 
-                    SET transcript_path = ?, status = 'transcribed', 
-                        priority_score = ?, content_type = ?
-                    WHERE id = ?
-                ''', (transcript_path, analysis['priority_score'], analysis['content_type'], ep_id))
+                # Score episode with OpenAI for topic relevance
+                topic_scores = None
+                if self.openai_scorer.api_available:
+                    print(f"🤖 Scoring episode topics with OpenAI...")
+                    try:
+                        topic_scores = self.openai_scorer.score_transcript(transcript, episode_guid)
+                        if topic_scores and not topic_scores.get('error'):
+                            print(f"✅ Topic scoring completed")
+                            # Show top 2 scoring topics
+                            topic_items = [(k, v) for k, v in topic_scores.items() 
+                                         if k in ['AI News', 'Tech Product Releases', 'Tech News and Tech Culture', 'Community Organizing', 'Social Justice', 'Societal Culture Change']
+                                         and isinstance(v, (int, float))]
+                            if topic_items:
+                                top_topics = sorted(topic_items, key=lambda x: x[1], reverse=True)[:2]
+                                for topic, score in top_topics:
+                                    print(f"   {topic}: {score:.2f}")
+                        else:
+                            print("⚠️ Topic scoring failed, proceeding without scores")
+                    except Exception as e:
+                        print(f"⚠️ Topic scoring error: {e}")
+                        topic_scores = None
+                else:
+                    print("⏭️ OpenAI API not available, skipping topic scoring")
+                
+                # Update database with transcript and analysis
+                if topic_scores:
+                    cursor.execute('''
+                        UPDATE episodes 
+                        SET transcript_path = ?, status = 'transcribed', 
+                            priority_score = ?, content_type = ?, 
+                            topic_relevance_json = ?, scores_version = ?
+                        WHERE id = ?
+                    ''', (transcript_path, analysis['priority_score'], analysis['content_type'], 
+                         json.dumps(topic_scores), topic_scores.get('version', '1.0'), ep_id))
+                else:
+                    cursor.execute('''
+                        UPDATE episodes 
+                        SET transcript_path = ?, status = 'transcribed', 
+                            priority_score = ?, content_type = ?
+                        WHERE id = ?
+                    ''', (transcript_path, analysis['priority_score'], analysis['content_type'], ep_id))
                 
                 conn.commit()
                 print(f"✅ Processed successfully - Priority: {analysis['priority_score']:.2f}")

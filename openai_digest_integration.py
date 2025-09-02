@@ -1,49 +1,62 @@
 #!/usr/bin/env python3
 """
-Claude API Integration - GitHub Actions Compatible
-Direct API integration replacing CLI dependency
+OpenAI Digest Integration - Multi-Topic Digest Generator
+Complete replacement for Claude integration using OpenAI GPT-4 for consistency
 """
 
 import os
 import json
 import logging
+import re
 from pathlib import Path
 from datetime import datetime
 from typing import Dict, List, Optional, Tuple
 import sqlite3
-import anthropic
+import openai
+
+# Load environment variables from .env file
+try:
+    from dotenv import load_dotenv
+    load_dotenv()
+except ImportError:
+    pass
+from prose_validator import ProseValidator
 
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
-class ClaudeAPIIntegration:
+class OpenAIDigestIntegration:
     def __init__(self, db_path: str = "podcast_monitor.db", transcripts_dir: str = "transcripts"):
         self.db_path = db_path
         self.transcripts_dir = Path(transcripts_dir)
         
-        # Initialize Anthropic client
-        api_key = os.getenv('ANTHROPIC_API_KEY')
+        # Initialize prose validator
+        self.prose_validator = ProseValidator()
+        
+        # Initialize OpenAI client
+        api_key = os.getenv('OPENAI_API_KEY')
         if not api_key:
-            logger.error("ANTHROPIC_API_KEY environment variable not set")
+            logger.error("OPENAI_API_KEY environment variable not set")
             self.client = None
             self.api_available = False
         elif len(api_key.strip()) < 10:
-            logger.error(f"ANTHROPIC_API_KEY appears invalid (length: {len(api_key.strip())})")
+            logger.error(f"OPENAI_API_KEY appears invalid (length: {len(api_key.strip())})")
             self.client = None
             self.api_available = False
         else:
             try:
-                # Test the key by creating the client
-                self.client = anthropic.Anthropic(api_key=api_key.strip())
+                # Initialize OpenAI client (v1.0+ format)
+                from openai import OpenAI
+                self.client = OpenAI(api_key=api_key.strip())
                 self.api_available = True
-                logger.info(f"✅ Anthropic API client initialized (key length: {len(api_key.strip())})")
+                logger.info(f"✅ OpenAI API client initialized (key length: {len(api_key.strip())})")
             except Exception as e:
-                logger.error(f"Failed to initialize Anthropic client: {e}")
+                logger.error(f"Failed to initialize OpenAI client: {e}")
                 self.client = None
                 self.api_available = False
 
-    def get_transcripts_for_analysis(self, include_youtube: bool = True, topic: str = None) -> List[Dict]:
-        """Get transcripts ready for API analysis from both databases, optionally filtered by topic"""
+    def get_transcripts_for_analysis(self, include_youtube: bool = True, topic: str = None, threshold: float = 0.6) -> List[Dict]:
+        """Get transcripts ready for API analysis from both databases, filtered by topic relevance scores"""
         transcripts = []
         
         # Get RSS transcripts from main database
@@ -51,24 +64,26 @@ class ClaudeAPIIntegration:
             conn = sqlite3.connect(self.db_path)
             cursor = conn.cursor()
             
-            # Updated query to only include episodes approved for digest with specific topic assignment
+            # Updated query to use relevance scores instead of digest_topic
             if topic:
                 query = """
-                SELECT id, title, transcript_path, episode_id, published_date, status, digest_topic
+                SELECT id, title, transcript_path, episode_id, published_date, status, topic_relevance_json
                 FROM episodes 
                 WHERE transcript_path IS NOT NULL 
                 AND status = 'transcribed'
-                AND digest_topic = ?
+                AND topic_relevance_json IS NOT NULL
+                AND topic_relevance_json != ''
                 ORDER BY published_date DESC
                 """
-                cursor.execute(query, (topic,))
+                cursor.execute(query)
             else:
                 query = """
-                SELECT id, title, transcript_path, episode_id, published_date, status, digest_topic
+                SELECT id, title, transcript_path, episode_id, published_date, status, topic_relevance_json
                 FROM episodes 
                 WHERE transcript_path IS NOT NULL 
                 AND status = 'transcribed'
-                AND digest_topic IS NOT NULL
+                AND topic_relevance_json IS NOT NULL
+                AND topic_relevance_json != ''
                 ORDER BY published_date DESC
                 """
                 cursor.execute(query)
@@ -76,13 +91,31 @@ class ClaudeAPIIntegration:
             rss_episodes = cursor.fetchall()
             conn.close()
             
-            for episode_id, title, transcript_path, ep_id, published_date, status, digest_topic in rss_episodes:
+            for episode_id, title, transcript_path, ep_id, published_date, status, topic_relevance_json in rss_episodes:
                 transcript_file = Path(transcript_path)
                 
                 if transcript_file.exists():
                     try:
                         with open(transcript_file, 'r', encoding='utf-8') as f:
                             content = f.read().strip()
+                        
+                        # Parse topic relevance scores
+                        try:
+                            scores = json.loads(topic_relevance_json) if topic_relevance_json else {}
+                        except (json.JSONDecodeError, TypeError):
+                            logger.warning(f"Invalid topic scores for episode {ep_id}")
+                            scores = {}
+                        
+                        # Filter by topic relevance if specific topic requested
+                        if topic:
+                            topic_score = scores.get(topic, 0.0)
+                            if topic_score < threshold:
+                                continue  # Skip episodes below threshold
+                        else:
+                            # For general query, check if any topic exceeds threshold
+                            max_score = max((score for score in scores.values() if isinstance(score, (int, float))), default=0.0)
+                            if max_score < threshold:
+                                continue
                         
                         if content:
                             transcripts.append({
@@ -93,7 +126,7 @@ class ClaudeAPIIntegration:
                                 'transcript_path': str(transcript_path),
                                 'content': content[:50000],  # Limit content for API
                                 'source': 'rss',
-                                'digest_topic': digest_topic
+                                'topic_scores': scores
                             })
                     except Exception as e:
                         logger.error(f"Error reading RSS transcript {transcript_path}: {e}")
@@ -112,21 +145,36 @@ class ClaudeAPIIntegration:
                     cursor = conn.cursor()
                     
                     # Use the same query logic for YouTube database
-                    if topic:
-                        cursor.execute(query, (topic,))
-                    else:
-                        cursor.execute(query)
+                    cursor.execute(query)
                     youtube_episodes = cursor.fetchall()
                     conn.close()
                     
                     youtube_count = 0
-                    for episode_id, title, transcript_path, ep_id, published_date, status, digest_topic in youtube_episodes:
+                    for episode_id, title, transcript_path, ep_id, published_date, status, topic_relevance_json in youtube_episodes:
                         transcript_file = Path(transcript_path)
                         
                         if transcript_file.exists():
                             try:
                                 with open(transcript_file, 'r', encoding='utf-8') as f:
                                     content = f.read().strip()
+                                
+                                # Parse topic relevance scores
+                                try:
+                                    scores = json.loads(topic_relevance_json) if topic_relevance_json else {}
+                                except (json.JSONDecodeError, TypeError):
+                                    logger.warning(f"Invalid topic scores for YouTube episode {ep_id}")
+                                    scores = {}
+                                
+                                # Filter by topic relevance if specific topic requested
+                                if topic:
+                                    topic_score = scores.get(topic, 0.0)
+                                    if topic_score < threshold:
+                                        continue  # Skip episodes below threshold
+                                else:
+                                    # For general query, check if any topic exceeds threshold
+                                    max_score = max((score for score in scores.values() if isinstance(score, (int, float))), default=0.0)
+                                    if max_score < threshold:
+                                        continue
                                 
                                 if content:
                                     transcripts.append({
@@ -137,7 +185,7 @@ class ClaudeAPIIntegration:
                                         'transcript_path': str(transcript_path),
                                         'content': content[:50000],
                                         'source': 'youtube',
-                                        'digest_topic': digest_topic
+                                        'topic_scores': scores
                                     })
                                     youtube_count += 1
                             except Exception as e:
@@ -157,19 +205,78 @@ class ClaudeAPIIntegration:
         return transcripts
 
     def prepare_digest_prompt(self, transcripts: List[Dict], topic: str = None) -> str:
-        """Prepare topic-specific digest prompt for Claude API"""
+        """Prepare topic-specific digest prompt for OpenAI GPT-4"""
         
         transcript_summaries = []
         for transcript in transcripts:
             summary = f"""
 ## {transcript['title']} ({transcript['published_date']})
-{transcript['content'][:8000]}...
+{transcript['content']}
 """
             transcript_summaries.append(summary)
         
         combined_content = "\n".join(transcript_summaries)
         
-        # Topic-specific prompts with focused analysis
+        # Load topic-specific instructions from files
+        instructions_path = Path("digest_instructions") / f"{topic}.md"
+        if topic and instructions_path.exists():
+            try:
+                with open(instructions_path, 'r', encoding='utf-8') as f:
+                    instructions_content = f.read()
+                
+                # Extract the key sections from instructions for prompt
+                focus_match = re.search(r'## Topic Focus\n(.+?)(?=\n##|$)', instructions_content, re.DOTALL)
+                focus_area = focus_match.group(1).strip() if focus_match else f"{topic} topics"
+                
+                structure_match = re.search(r'## Content Structure\n(.+?)(?=\n## Style Guidelines|$)', instructions_content, re.DOTALL)
+                structure_content = structure_match.group(1).strip() if structure_match else ""
+                
+                # Load topic config for display info
+                topics_config_path = Path("topics.json")
+                if topics_config_path.exists():
+                    try:
+                        with open(topics_config_path, 'r', encoding='utf-8') as f:
+                            topics_config = json.load(f)
+                        topic_info = topics_config.get(topic, {})
+                        title = f"{topic_info.get('display_name', topic)} - {datetime.now().strftime('%B %d, %Y')}"
+                    except (json.JSONDecodeError, Exception) as e:
+                        logger.warning(f"Could not load topics config: {e}")
+                        title = f"{topic} - {datetime.now().strftime('%B %d, %Y')}"
+                else:
+                    title = f"{topic} - {datetime.now().strftime('%B %d, %Y')}"
+                
+            except Exception as e:
+                logger.warning(f"Could not load instructions for {topic}: {e}")
+                # Fallback to embedded instructions
+                return self._prepare_fallback_prompt(transcripts, topic, combined_content)
+        else:
+            # Fallback to embedded instructions
+            return self._prepare_fallback_prompt(transcripts, topic, combined_content)
+        
+        prompt = f"""You are an expert analyst creating a focused digest from podcast transcripts.
+
+Please analyze the following {len(transcripts)} podcast transcripts and create a structured digest following these specific instructions:
+
+TOPIC FOCUS:
+{focus_area}
+
+TRANSCRIPT CONTENT:
+{combined_content}
+
+CONTENT STRUCTURE TO FOLLOW:
+{structure_content}
+
+Create a comprehensive digest with the title: {title}
+
+Follow the content structure provided above exactly, maintaining the same section headers and focus areas. Ensure the content is formatted as clean Markdown suitable for publication and TTS generation (avoid bullet points, use prose format).
+
+Focus on accuracy, insight, and connecting information specifically related to the topic focus area."""
+
+        return prompt
+    
+    def _prepare_fallback_prompt(self, transcripts: List[Dict], topic: str, combined_content: str) -> str:
+        """Fallback to embedded prompts when files are not available"""
+        # Topic-specific prompts with focused analysis - same structure as before
         topic_descriptions = {
             'AI News': {
                 'title': 'AI News Digest',
@@ -292,23 +399,35 @@ Format the output as clean Markdown suitable for publication. Focus on accuracy,
 
         return prompt
 
-    def get_available_topics(self) -> List[str]:
-        """Get list of topics that have episodes ready for digest"""
+    def get_available_topics(self, threshold: float = 0.6) -> List[str]:
+        """Get list of topics that have episodes ready for digest based on relevance scores"""
         topics_with_episodes = set()
+        
+        # Define available topics (from OpenAI scorer)
+        all_topics = ['AI News', 'Tech Product Releases', 'Tech News and Tech Culture', 
+                     'Community Organizing', 'Social Justice', 'Societal Culture Change']
         
         # Check RSS database
         try:
             conn = sqlite3.connect(self.db_path)
             cursor = conn.cursor()
             cursor.execute("""
-                SELECT DISTINCT digest_topic 
+                SELECT topic_relevance_json 
                 FROM episodes 
-                WHERE digest_topic IS NOT NULL 
+                WHERE topic_relevance_json IS NOT NULL 
+                AND topic_relevance_json != ''
                 AND status = 'transcribed'
                 AND transcript_path IS NOT NULL
             """)
-            rss_topics = [row[0] for row in cursor.fetchall()]
-            topics_with_episodes.update(rss_topics)
+            
+            for (scores_json,) in cursor.fetchall():
+                try:
+                    scores = json.loads(scores_json)
+                    for topic in all_topics:
+                        if scores.get(topic, 0.0) >= threshold:
+                            topics_with_episodes.add(topic)
+                except (json.JSONDecodeError, TypeError):
+                    continue
             conn.close()
         except Exception as e:
             logger.error(f"Error getting RSS topics: {e}")
@@ -320,14 +439,22 @@ Format the output as clean Markdown suitable for publication. Focus on accuracy,
                 conn = sqlite3.connect(youtube_db_path)
                 cursor = conn.cursor()
                 cursor.execute("""
-                    SELECT DISTINCT digest_topic 
+                    SELECT topic_relevance_json 
                     FROM episodes 
-                    WHERE digest_topic IS NOT NULL 
+                    WHERE topic_relevance_json IS NOT NULL 
+                    AND topic_relevance_json != ''
                     AND status = 'transcribed'
                     AND transcript_path IS NOT NULL
                 """)
-                youtube_topics = [row[0] for row in cursor.fetchall()]
-                topics_with_episodes.update(youtube_topics)
+                
+                for (scores_json,) in cursor.fetchall():
+                    try:
+                        scores = json.loads(scores_json)
+                        for topic in all_topics:
+                            if scores.get(topic, 0.0) >= threshold:
+                                topics_with_episodes.add(topic)
+                    except (json.JSONDecodeError, TypeError):
+                        continue
                 conn.close()
         except Exception as e:
             logger.error(f"Error getting YouTube topics: {e}")
@@ -335,12 +462,12 @@ Format the output as clean Markdown suitable for publication. Focus on accuracy,
         return sorted(list(topics_with_episodes))
 
     def generate_topic_digest(self, topic: str) -> Tuple[bool, Optional[str], Optional[str]]:
-        """Generate digest for a specific topic using Anthropic API"""
+        """Generate digest for a specific topic using OpenAI GPT-5"""
         
-        logger.info(f"🧠 Starting {topic} digest generation with Anthropic API")
+        logger.info(f"🧠 Starting {topic} digest generation with OpenAI GPT-5")
         
         if not self.api_available:
-            logger.error("Anthropic API not available - cannot generate digest")
+            logger.error("OpenAI API not available - cannot generate digest")
             return False, None, None
         
         # Get transcripts for this topic
@@ -355,18 +482,34 @@ Format the output as clean Markdown suitable for publication. Focus on accuracy,
             # Prepare topic-specific prompt
             prompt = self.prepare_digest_prompt(transcripts, topic=topic)
             
-            # Call Anthropic API
-            message = self.client.messages.create(
-                model="claude-3-5-sonnet-20241022",
-                max_tokens=4000,
-                temperature=0.7,
+            # Call OpenAI GPT-4 API
+            response = self.client.chat.completions.create(
+                model="gpt-4-1106-preview",  # Use GPT-4.1 model with 1M context window
                 messages=[{
+                    "role": "system",
+                    "content": "You are an expert analyst creating focused, insightful digests from podcast transcripts. You excel at identifying key themes, connecting information across sources, and providing actionable insights."
+                }, {
                     "role": "user",
                     "content": prompt
-                }]
+                }],
+                max_tokens=4000,
+                temperature=0.7
             )
             
-            digest_content = message.content[0].text
+            digest_content = response.choices[0].message.content
+            
+            # Validate and ensure prose quality before saving
+            logger.info(f"🔍 Validating prose quality for {topic} digest")
+            success, final_content, issues = self.prose_validator.ensure_prose_quality(digest_content)
+            
+            if not success:
+                logger.error(f"❌ Failed to create valid prose for {topic} digest: {', '.join(issues)}")
+                return False, None, f"Prose validation failed: {', '.join(issues)}"
+            
+            if final_content != digest_content:
+                logger.info(f"✅ {topic} digest was rewritten to improve prose quality")
+            else:
+                logger.info(f"✅ {topic} digest already had good prose quality")
             
             # Save topic-specific digest
             timestamp = datetime.now().strftime('%Y%m%d_%H%M%S')
@@ -376,12 +519,12 @@ Format the output as clean Markdown suitable for publication. Focus on accuracy,
             digest_path.parent.mkdir(exist_ok=True)
             
             with open(digest_path, 'w', encoding='utf-8') as f:
-                f.write(digest_content)
+                f.write(final_content)
             
             logger.info(f"✅ {topic} digest saved to {digest_path}")
             
-            # Update databases - mark episodes as digested  
-            self._mark_episodes_as_digested(transcripts)
+            # Update databases - mark episodes as digested and stamp with topic/date
+            self._mark_episodes_as_digested(transcripts, topic, timestamp)
             
             # Move transcripts to digested folder
             self._move_transcripts_to_digested(transcripts)
@@ -389,8 +532,8 @@ Format the output as clean Markdown suitable for publication. Focus on accuracy,
             return True, str(digest_path), None
             
         except Exception as e:
-            logger.error(f"Error generating {topic} digest with Anthropic API: {e}")
-            return False, None, None
+            logger.error(f"Error generating {topic} digest with OpenAI GPT-5: {e}")
+            return False, None, str(e)
 
     def generate_all_topic_digests(self) -> Dict[str, Tuple[bool, Optional[str], Optional[str]]]:
         """Generate digests for all available topics"""
@@ -421,8 +564,8 @@ Format the output as clean Markdown suitable for publication. Focus on accuracy,
         
         return results
 
-    def generate_api_digest(self, topic: str = None) -> Tuple[bool, Optional[str], Optional[str]]:
-        """Generate digest using Anthropic API - supports single topic or all topics"""
+    def generate_digest(self, topic: str = None) -> Tuple[bool, Optional[str], Optional[str]]:
+        """Generate digest using OpenAI GPT-4 - supports single topic or all topics"""
         
         if topic:
             # Generate single topic digest
@@ -463,8 +606,8 @@ Format the output as clean Markdown suitable for publication. Focus on accuracy,
                 error_summary = f"All {len(failed_digests)} topic digests failed"
                 return False, None, error_summary
 
-    def _mark_episodes_as_digested(self, transcripts: List[Dict]):
-        """Mark episodes as digested in both databases"""
+    def _mark_episodes_as_digested(self, transcripts: List[Dict], topic: str, timestamp: str):
+        """Mark episodes as digested in both databases and stamp with topic/date"""
         rss_episodes = []
         youtube_episodes = []
         
@@ -477,6 +620,9 @@ Format the output as clean Markdown suitable for publication. Focus on accuracy,
                 original_id = int(transcript['id'].replace('yt_', ''))
                 youtube_episodes.append(original_id)
         
+        # Format date for database storage
+        digest_date = datetime.now().strftime('%Y-%m-%d')
+        
         # Update RSS episodes in main database
         if rss_episodes:
             try:
@@ -486,13 +632,13 @@ Format the output as clean Markdown suitable for publication. Focus on accuracy,
                 for episode_id in rss_episodes:
                     cursor.execute("""
                         UPDATE episodes 
-                        SET status = 'digested'
+                        SET status = 'digested', digest_topic = ?, digest_date = ?
                         WHERE id = ?
-                    """, (episode_id,))
+                    """, (topic, digest_date, episode_id))
                 
                 conn.commit()
                 conn.close()
-                logger.info(f"✅ Marked {len(rss_episodes)} RSS episodes as digested")
+                logger.info(f"✅ Marked {len(rss_episodes)} RSS episodes as digested for {topic}")
                 
             except Exception as e:
                 logger.error(f"Error updating RSS database: {e}")
@@ -508,13 +654,13 @@ Format the output as clean Markdown suitable for publication. Focus on accuracy,
                     for episode_id in youtube_episodes:
                         cursor.execute("""
                             UPDATE episodes 
-                            SET status = 'digested'
+                            SET status = 'digested', digest_topic = ?, digest_date = ?
                             WHERE id = ?
-                        """, (episode_id,))
+                        """, (topic, digest_date, episode_id))
                     
                     conn.commit()
                     conn.close()
-                    logger.info(f"✅ Marked {len(youtube_episodes)} YouTube episodes as digested")
+                    logger.info(f"✅ Marked {len(youtube_episodes)} YouTube episodes as digested for {topic}")
                 
             except Exception as e:
                 logger.error(f"Error updating YouTube database: {e}")
@@ -535,22 +681,22 @@ Format the output as clean Markdown suitable for publication. Focus on accuracy,
                 logger.error(f"Error moving transcript {transcript['transcript_path']}: {e}")
 
     def test_api_connection(self) -> bool:
-        """Test Anthropic API connection"""
+        """Test OpenAI API connection"""
         if not self.api_available:
             return False
         
         try:
-            message = self.client.messages.create(
-                model="claude-3-5-sonnet-20241022",
-                max_tokens=50,
+            response = self.client.chat.completions.create(
+                model="gpt-4-1106-preview",
                 messages=[{
                     "role": "user",
                     "content": "Hello, please respond with 'API connection successful'"
-                }]
+                }],
+                max_tokens=50
             )
             
-            response = message.content[0].text
-            return "successful" in response.lower()
+            response_text = response.choices[0].message.content
+            return "successful" in response_text.lower()
             
         except Exception as e:
             logger.error(f"API connection test failed: {e}")
@@ -558,22 +704,22 @@ Format the output as clean Markdown suitable for publication. Focus on accuracy,
 
 
 def main():
-    """CLI interface for Claude API digest generation"""
+    """CLI interface for OpenAI digest generation"""
     import argparse
     
-    parser = argparse.ArgumentParser(description='Claude API Integration - Multi-Topic Digest Generator')
+    parser = argparse.ArgumentParser(description='OpenAI Digest Integration - Multi-Topic Digest Generator')
     parser.add_argument('--topic', type=str, help='Generate digest for specific topic only')
     parser.add_argument('--list-topics', action='store_true', help='List available topics with episodes')
-    parser.add_argument('--test-api', action='store_true', help='Test Anthropic API connection')
+    parser.add_argument('--test-api', action='store_true', help='Test OpenAI API connection')
     parser.add_argument('--db', type=str, default='podcast_monitor.db', help='Database path (default: podcast_monitor.db)')
     
     args = parser.parse_args()
     
-    # Initialize Claude API integration
-    integration = ClaudeAPIIntegration(db_path=args.db)
+    # Initialize OpenAI integration
+    integration = OpenAIDigestIntegration(db_path=args.db)
     
     if args.test_api:
-        logger.info("🧪 Testing Anthropic API connection...")
+        logger.info("🧪 Testing OpenAI API connection...")
         if integration.test_api_connection():
             logger.info("✅ API connection successful")
         else:
@@ -594,7 +740,7 @@ def main():
     # Generate digest(s)
     if args.topic:
         logger.info(f"🎯 Generating digest for topic: {args.topic}")
-        success, path, error = integration.generate_api_digest(topic=args.topic)
+        success, path, error = integration.generate_digest(topic=args.topic)
         
         if success:
             logger.info(f"✅ Topic digest generated successfully: {path}")
@@ -602,7 +748,7 @@ def main():
             logger.error(f"❌ Topic digest generation failed: {error}")
     else:
         logger.info("🚀 Generating digests for all available topics...")
-        success, path, error = integration.generate_api_digest()
+        success, path, error = integration.generate_digest()
         
         if success:
             logger.info(f"✅ Multi-topic digest generation completed")

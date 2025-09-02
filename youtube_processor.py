@@ -6,6 +6,7 @@ Designed to run locally via cron/launchctl to avoid GitHub Actions IP blocking
 
 import os
 import sqlite3
+import json
 import argparse
 import logging
 from pathlib import Path
@@ -20,7 +21,8 @@ logger = logging.getLogger(__name__)
 class YouTubeProcessor:
     def __init__(self, youtube_db_path: str = "youtube_transcripts.db"):
         self.youtube_db_path = youtube_db_path
-        self.config = Config()
+        # YouTube processor uses OpenAI, not Claude - disable Claude requirement
+        self.config = Config(require_claude=False)
         
         # Initialize YouTube-specific database
         self._init_youtube_database()
@@ -148,6 +150,26 @@ class YouTubeProcessor:
                             priority_score = 0.8, content_type = 'discussion'
                         WHERE id = ?
                     ''', (transcript_path, episode_id))
+                    
+                    # Score the transcript for topic relevance (OpenAI)
+                    try:
+                        from openai_scorer import OpenAITopicScorer
+                        scorer = OpenAITopicScorer(self.youtube_db_path)
+                        if getattr(scorer, "api_available", True) and transcript:
+                            scores = scorer.score_transcript(transcript, episode_guid or str(episode_id))
+                            if scores and not scores.get("error"):
+                                cursor.execute('''
+                                    UPDATE episodes
+                                    SET topic_relevance_json = ?, scores_version = ?
+                                    WHERE id = ?
+                                ''', (json.dumps(scores), scores.get('version', '1.0'), episode_id))
+                                logger.info(f"✅ Saved topic_relevance_json for YouTube episode {episode_id}")
+                            else:
+                                logger.warning(f"⚠️ YouTube episode {episode_id} scoring returned error: {scores}")
+                        else:
+                            logger.warning(f"⚠️ OpenAI scorer unavailable or empty transcript for YouTube episode {episode_id}")
+                    except Exception as e:
+                        logger.warning(f"⚠️ YouTube episode {episode_id} topic scoring failed: {e}")
                     
                     processed_count += 1
                     logger.info(f"✅ Transcribed YouTube episode: {title}")
