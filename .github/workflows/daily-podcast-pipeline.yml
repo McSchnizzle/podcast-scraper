@@ -190,8 +190,8 @@ jobs:
         fi
         
         echo "=== Topic Digest Timestamp Matching ==="
-        LATEST_DIGEST=$(find daily_digests/ -name "*_digest_*.md" -printf '%T@ %p\n' | sort -n | tail -1 | cut -d' ' -f2- 2>/dev/null || echo "")
-        if [ -n "$LATEST_DIGEST" ]; then
+        LATEST_DIGEST=$(find daily_digests/ -name "*_digest_*.md" -printf '%T@ %p\n' 2>/dev/null | sort -n | tail -1 | cut -d' ' -f2- || echo "")
+        if [ ! -z "$LATEST_DIGEST" ] && [ -f "$LATEST_DIGEST" ]; then
           DIGEST_BASENAME=$(basename "$LATEST_DIGEST" .md)
           echo "📄 Latest digest file: $DIGEST_BASENAME"
           EXPECTED_AUDIO="daily_digests/${DIGEST_BASENAME}.mp3"
@@ -203,8 +203,8 @@ jobs:
             echo "❌ MATCHING AUDIO FILE MISSING!"
             echo "🔍 Checking for all audio files with similar timestamp..."
             TIMESTAMP_PATTERN=$(echo "$DIGEST_BASENAME" | grep -o '[0-9]\{8\}_[0-9]\{6\}' || echo "")
-            if [ -n "$TIMESTAMP_PATTERN" ]; then
-              find daily_digests/ -name "*${TIMESTAMP_PATTERN}*" -type f || echo "No files found with timestamp $TIMESTAMP_PATTERN"
+            if [ ! -z "$TIMESTAMP_PATTERN" ]; then
+              find daily_digests/ -name "*${TIMESTAMP_PATTERN}*" -type f 2>/dev/null || echo "No files found with timestamp $TIMESTAMP_PATTERN"
             fi
           fi
         else
