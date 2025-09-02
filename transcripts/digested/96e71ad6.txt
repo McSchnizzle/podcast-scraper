@@ -1,0 +1,310 @@
+[00:00] Welcome back to the AI daily brief.
+[00:02] Today we are digging into Andre
+[00:05] Horowitz's just released top 100 Gen AI
+[00:08] consumer apps. Now this is a study they
+[00:11] do about every 6 months. They're on
+[00:13] their fifth edition since 2023 and they
+[00:16] use data from Similar Web and Sense
+[00:18] Tower to get a sense of which Genai apps
+[00:21] are getting the most traffic. So this is
+[00:23] generally speaking not about revenue.
+[00:25] It's about raw usage which has
+[00:26] limitations in terms of a methodology.
+[00:28] Of course, there are, I believe, some AI
+[00:30] apps that have fewer users but much more
+[00:32] usage from a revenue standpoint, but
+[00:34] still, especially because they do this
+[00:36] every 6 months, it creates a pretty good
+[00:38] mechanism to see how things are
+[00:40] changing. Now, before we get into this
+[00:42] list, if you go back to 6 months ago in
+[00:45] March of this year, there were a few
+[00:47] things that were pretty notable from
+[00:48] that particular list. The first was that
+[00:50] we were still very much in the midst of
+[00:53] the Deepsee moment. You'll remember back
+[00:55] in January, Deepseek launched its app,
+[00:58] which was for many people the first time
+[01:00] that they had used a reasoning model,
+[01:02] which blew a lot of minds. Yes, ChatBT
+[01:05] already had 01, and 01 was at the time
+[01:08] better than R1, at least based on a
+[01:10] variety of different benchmarks, but 01
+[01:12] was pretty buried behind paid accounts.
+[01:14] I think at the time, in fact, it wasn't
+[01:16] available at all in the free version of
+[01:18] Chat GBT. And so when consumers had
+[01:21] access to this reasoning model which
+[01:23] inherently has some pretty huge
+[01:24] advantages over what was available in
+[01:26] the free chatbt and it had the fun
+[01:28] revealed thought experience where people
+[01:30] could actually see how the model was
+[01:32] quote unquote thinking through the
+[01:33] problem. It became a bit of a phenomenon
+[01:36] and back then you could see this massive
+[01:38] uptick where deepseek just raced ahead
+[01:40] of claude perplexity and basically
+[01:41] everything but chatgbt and even for a
+[01:43] time ahead of the chat GBT app really
+[01:46] making its mark on the industry. Another
+[01:48] theme from 6 months ago was that AI
+[01:50] video had recently reached a new level
+[01:52] of proficiency, placing a bunch of
+[01:54] companies on the list as well. The last
+[01:56] trend worth noting from that previous
+[01:57] edition was that we were just starting
+[01:59] to see the vibe coding apps start to
+[02:01] take hold. Cursor had just debuted on
+[02:03] that list at number 41 in their web
+[02:05] rankings. Bolt was at 48 and Lovable was
+[02:08] on their brink list just outside the top
+[02:10] 50. So that was the story in March. But
+[02:12] what's the story now? We'll get into a
+[02:14] bunch of their different conclusions,
+[02:16] but I think by and large, what this list
+[02:18] feels like to me is a bit of a settling.
+[02:21] If you go back through the entire
+[02:22] history of these charts, you can often
+[02:25] find some really weird or surprising
+[02:27] entries on the list. In other words,
+[02:29] apps that you've never heard of somehow
+[02:31] being in the top 50 either in web
+[02:33] products or in mobile apps. Things feel
+[02:35] like they're starting to settle down a
+[02:37] little bit with leaders starting to get
+[02:39] more comfortably into their leading
+[02:40] role. You see, for example, a higher
+[02:43] concentration of the core LLM apps at
+[02:46] the top of both of the charts. The top
+[02:48] four web products, for example, are Chat
+[02:50] GPT, Gemini, Deepseek, and Grock in that
+[02:53] order. Next is Character, but then it's
+[02:55] Perplexity and Claude. Google has
+[02:57] another entry, number 10 at Google AI
+[02:59] Studio, and another at 13 with Notebook
+[03:01] LM. And then in the top 25, you also
+[03:03] have a number of the international LLMs
+[03:05] like Duba, Kimmy, Quen 3. Again, kind of
+[03:08] anchoring themselves there at the top of
+[03:10] the list.
+[03:11] But before I dig more into my analysis,
+[03:13] let's see what A16Z thought was worth
+[03:15] noting. First, and this won't surprise
+[03:17] you given that I just mentioned a bunch
+[03:18] of Google AI properties on that list.
+[03:20] Their number one trend is Google making
+[03:22] big moves. They write, "Google saw four
+[03:24] entrance on the web list. For the first
+[03:26] time, were able to rank their traffic
+[03:27] and include them independently. Gemini
+[03:30] was, as we just mentioned, second place
+[03:32] behind Chat GBT, but Google AI Studio,
+[03:34] Notebook LM, and Google Labs all made
+[03:36] appearances on the list. Now, it is
+[03:38] worth noting that although Gemini has
+[03:40] risen up to number two behind chatbt,
+[03:42] there is still an absolute chasm between
+[03:44] the two. According to this data, Gemini
+[03:47] gets about 12% of ChatBT's visits on the
+[03:50] web. So, literally just a little over
+[03:52] onetenth of the number one. It is just
+[03:54] incredible how big ChatBT's first mover
+[03:57] advantage was and the name recognition
+[03:59] that has associated them with AI for so
+[04:01] many people. Still, Google's ascendancy
+[04:04] is really impressive, and the fact that
+[04:05] they've got this diversity of products
+[04:07] definitely matches the general sentiment
+[04:08] that we see right now with Google
+[04:10] resurging to a leadership role in the AI
+[04:12] space overall. I was interested to see
+[04:14] Notebook LM so high, especially given
+[04:16] that a lot of the hype wave of that has
+[04:17] faded from the end of last year. It
+[04:19] certainly suggests that the people who
+[04:21] are using it are finding it to be
+[04:22] durably valuable, not just a one-off
+[04:23] type of intrigue. But still maybe the
+[04:25] most notable to me was that Google Labs,
+[04:27] which is their experimental home for new
+[04:29] models, actually made the list at number
+[04:31] 39. Labs is where you can find things
+[04:34] like Project Mariner, which is Google's
+[04:35] agentic browser. But the real driver, it
+[04:38] appears to be, is their dominant video
+[04:39] model, V3. A6Z writes that Google Apps
+[04:42] traffic spiked more than 13% following
+[04:44] V3's launch back in May. I think that as
+[04:47] V3 moves out into its own space, you're
+[04:50] going to see that do nothing but rise.
+[04:52] A16Z's next notable trend is that while
+[04:55] Elon might be out there suing Apple and
+[04:56] Open AAI for collusion, Grock is in fact
+[04:59] making gains when it comes to its place
+[05:01] relative to Chad GPT. Grock is now up to
+[05:03] number four on the web and number 23 on
+[05:05] mobile. And as A6Z writes, the company's
+[05:08] jump on mobile has been particularly
+[05:10] striking, going from a cold start with
+[05:11] no app at the end of 2024 to upwards of
+[05:14] 20 million monthly active users. Now,
+[05:15] Grock's mobile usage really kicked up in
+[05:17] July in the wake of the release of Gro
+[05:19] 4, jumping up nearly 40%. That said, it
+[05:23] looks like from the numbers that at
+[05:24] least some meaningful part of that was
+[05:26] not just the superior reasoning of Gro
+[05:28] 4, but in fact the introduction of the
+[05:30] AI companion avatars, which included not
+[05:33] safe for work options. The number three
+[05:36] trend that Andre identifies is about the
+[05:38] rise of China. Now, the interesting
+[05:40] thing that they explore is to what
+[05:41] extent their placement on this list
+[05:43] reflects the China market just being
+[05:44] large and not having access to the
+[05:46] Western models versus China actually
+[05:48] infiltrating the Western models. They do
+[05:51] know that number nine Quark which is
+[05:52] Alibaba's AI assistant, number 12 Duba
+[05:55] which is Bite Dance's LLM and number 17
+[05:58] Kimmy all saw more than 75% of their
+[06:00] traffic coming from China. However, they
+[06:02] also noted that many entrance on this
+[06:04] list are, as they put it, developed in
+[06:06] China but now exported globally with the
+[06:08] vast majority of their usage in other
+[06:10] countries. They even pointed out that
+[06:11] some of the so-called Chinese tools are
+[06:13] blocked in China. They specifically note
+[06:15] video models. Chinese video models in
+[06:17] particular have tended to have an
+[06:18] advantage over western developed models
+[06:20] both because there are more researchers
+[06:22] focused on video in China and there are
+[06:24] fewer IP regulations with likely
+[06:25] training on copyrighted data. V3 was the
+[06:28] first US model to break this trend which
+[06:30] is partially trained on YouTube data.
+[06:32] Now maybe most interesting is that 22 of
+[06:35] the 50 apps on the mobile charts were
+[06:38] developed in China although only three
+[06:41] of those 22 are primarily used in China.
+[06:44] One of the big differences between web
+[06:45] and mobile is that there's still in the
+[06:47] mobile apps chart a huge concentration
+[06:49] around discrete specific AI applications
+[06:52] that interact with mobile native
+[06:53] features like the camera. For example,
+[06:55] me too all on its own had five entries
+[06:57] on the list including their photo and
+[06:58] video editor, beauty plus, beauty cam,
+[07:00] wink, and airbrush. Next trend from
+[07:03] A16Z, which is certainly one that stood
+[07:04] out to me as well, is that if in the
+[07:06] last edition we saw the early emergence
+[07:08] of vibe coding, it has now come on as a
+[07:10] full force. Bolt has actually fallen
+[07:13] now. Remember, it had just snuck on the
+[07:15] list at 48 before, but it is now on the
+[07:17] brink list, just missing the cut. While
+[07:19] both Lovable and Replet surged onto the
+[07:22] main list, the top four Vive coding apps
+[07:24] are now getting over 50 million monthly
+[07:25] web visits all combined. Interestingly,
+[07:28] A16Z also looked at data from credit
+[07:30] card panel provider Consumer Edge and
+[07:32] showed that vibe coding platforms are
+[07:34] seeing much stronger revenue retention
+[07:36] than some might have imagined. In other
+[07:37] words, it appears that people aren't
+[07:39] just trying these things out once and
+[07:40] then abandoning them. In many cases, in
+[07:42] fact, they're growing their monthly
+[07:43] spend in the several months following
+[07:45] their first usage. As the platforms get
+[07:47] more mature and people are building more
+[07:49] sophisticated things, you're also seeing
+[07:51] a division between web visits that are
+[07:53] going to the core application versus web
+[07:56] visits that are going to sites where
+[07:58] things built on those apps are housed.
+[08:00] In other words, both lovable and replet
+[08:02] have their primary URLs, lovable.dev and
+[08:05] replet.com, where people go to sign in
+[08:07] to actually use the vibe coding tools.
+[08:09] But then if they publish an application
+[08:11] that's going to live on lovable.app or
+[08:13] replet.app, unless of course they use
+[08:14] their own domain, both lovable.app and
+[08:16] replet.app are starting to see some
+[08:18] meaningful traffic. Replet.app
+[08:20] applications are somewhere around 2 to 3
+[08:22] million monthly visitors and lovable.app
+[08:24] creations are up over 10 million.
+[08:26] Overall, Lovable is 23 on the web list
+[08:28] and Replet is 41. It will surprise you
+[08:31] not at all to learn that I think that
+[08:32] this is going to be an area that just
+[08:33] continues to see massive growth. I would
+[08:35] be shocked if either Lovable or Replet
+[08:37] aren't in the top 20 6 months from now,
+[08:39] the next time A16Z looks at this. The
+[08:42] last note going with this theme of
+[08:43] stabilization is that Andre identifies
+[08:45] that there are 14 companies now who have
+[08:48] appeared every time on all five
+[08:50] iterations of their web top 50. They
+[08:53] write these companies represent a true
+[08:55] cross-section of consumer behavior with
+[08:57] AI. General assistance like Chat GBT,
+[08:59] Perplexity, and Poe. companionship like
+[09:01] character AI, image generation with
+[09:04] midjourney and Leonardo, image and video
+[09:06] editing with feed and cutout, voice
+[09:08] generation with 11 Labs, productivity
+[09:10] tools with photo room, gamma and
+[09:12] Quillbot, and model hosting with CVI and
+[09:14] hugging face. Overall, like I said, it
+[09:17] feels to me like we're starting to see a
+[09:19] settling in these lists. There still is
+[09:21] a little bit more noise and chaos, I
+[09:23] think, in the mobile apps, which makes
+[09:24] sense given how much discovery happens
+[09:26] just based on app stores, but especially
+[09:28] when you look at the web list, you're
+[09:30] really starting to see what you would
+[09:32] imagine to be the core themes start to
+[09:34] emerge and really assert themselves.
+[09:36] General purpose LLMs are near the top.
+[09:38] Vibe coding tools are on the rise.
+[09:40] Companionship apps continue to make an
+[09:41] appearance. Mediabased productivity
+[09:44] tools continue to be strong. And if
+[09:46] there is one thing that I think is worth
+[09:47] putting a finger on to watch for the
+[09:49] future, it's the entry at number 31 of
+[09:51] Manis. As far as I can tell looking over
+[09:54] this list, Manist is the only pure play
+[09:56] general agent platform on the list. Now,
+[09:58] we've talked a lot on this show about to
+[10:00] what extent agents are going to come
+[10:02] online in a general form versus a very
+[10:04] specific or vertical form. The fact that
+[10:06] Manis is all the way up there at 31
+[10:08] suggests that there might be room or at
+[10:10] least interest in a general purpose
+[10:12] agent and even outside of the core
+[10:14] foundation model companies. So when we
+[10:16] come back in 6 months, that is one that
+[10:18] I think will be worth checking back in
+[10:19] on. Will Manis be higher? Will there be
+[10:21] other general purpose agents on the
+[10:22] list? Will Google have moved, for
+[10:24] example, Project Mariner out of labs
+[10:26] into its own space? All questions for
+[10:28] the future. But for now, that is going
+[10:30] to do it for today's AI daily brief.
+[10:32] Appreciate you listening or watching as
+[10:33] always. And until next time, peace.

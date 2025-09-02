@@ -1,0 +1,403 @@
+[00:00] Welcome back to the AI daily brief.
+[00:02] Today we are talking about the new
+[00:04] politics of AI. And I will make note
+[00:06] that in general I have found that most
+[00:09] of this audience seems to be
+[00:11] proportionally more interested to the
+[00:13] practical and business aspects of AI
+[00:15] than you are to the general macro issues
+[00:18] around AI or the politics of AI. And I
+[00:20] try to keep that in mind when it comes
+[00:22] to designing the content of the show.
+[00:24] However, we hit one of those balances of
+[00:25] stories where it was enough that it felt
+[00:28] relevant and appropriate to do the main
+[00:30] this time about this. I promise I will
+[00:32] balance it out later this week with some
+[00:33] more hyper practical content, including
+[00:36] an actual rubric for judging how your
+[00:38] company is advancing in AI just to even
+[00:40] out the scorecard a little bit. But
+[00:42] today, we're going to talk about the new
+[00:43] politics of AI and specifically it
+[00:45] coming into its place as just a major
+[00:48] salient national and international
+[00:50] geopolitical issue. As you might not be
+[00:52] surprised to learn, part of the context
+[00:54] for this is the completion of this deal
+[00:56] for the US to take a 10% stake in Intel.
+[01:00] This is something that had been possible
+[01:01] in the headlines for a little while now
+[01:03] and is the latest in the very frankly
+[01:06] belleaguered story of Intel. On Friday,
+[01:09] Commerce Secretary Howard Lutnik
+[01:10] announced, "The United States of America
+[01:12] now owns 10% of Intel, one of our great
+[01:15] American technology companies. The
+[01:17] historic agreement strengthens US
+[01:18] leadership in semiconductors, which will
+[01:20] both grow our economy and help secure
+[01:22] America's technological edge. Thanks to
+[01:24] Intel CEO Le Bhutan for striking a deal
+[01:26] that's fair to Intel and fair to the
+[01:28] American people. As Bloomberg writes,
+[01:30] the deal represents a dramatic reversal
+[01:32] from earlier this month when Trump
+[01:34] called for Tan's ouster and accused him
+[01:36] of being highly conflicted because of
+[01:37] concerns over his earlier ties to China.
+[01:40] It was those remarks that led to an
+[01:42] ultimate sitdown between President Trump
+[01:44] and the Intel CEO, which ultimately led
+[01:46] to this deal. Trump told reporters at
+[01:48] the White House, "They've agreed to do
+[01:49] it, and I think it's a great deal for
+[01:50] them." Now, under the terms of the deal,
+[01:52] the government will receive a 9.9% stake
+[01:55] made up of newly issued non- voting
+[01:56] shares. The government won't be taking a
+[01:58] board seat and will have no formal say
+[02:00] in any governance of the company. Still,
+[02:02] this means that the US government will
+[02:04] be Intel's single largest shareholder
+[02:05] and will have, of course, significant
+[02:07] soft power to align the company with the
+[02:09] government's priorities. In exchange,
+[02:11] the government has agreed to release the
+[02:12] remaining 8.9 billion in chips act
+[02:14] funding, combined with the 2.2 billion
+[02:17] already distributed, the
+[02:18] administration's logic is that the deal
+[02:19] is paid in full using the previously
+[02:21] committed funding. Most people involved
+[02:23] in financial markets didn't see it that
+[02:25] way, writes Bloomberg. By the way, not
+[02:27] in their opinion piece, but just in
+[02:28] their general story. The US taking
+[02:30] partial ownership marks a stunning level
+[02:32] of intervention in an American company,
+[02:34] cutting against the principles of free
+[02:36] market capitalism that investors and
+[02:37] policymakers have long considered
+[02:39] sacrosanked, except in the most
+[02:41] extraordinary situations such as war or
+[02:43] a systemic economic crisis. Commentators
+[02:45] on X variously referred to the deal as
+[02:47] fascism, communism, or just straight up
+[02:49] extortion. California Governor Gavin
+[02:51] Newsome shared a meme of Chinese
+[02:53] chairman Trump and noted, "The Socialist
+[02:55] Republic of America enters a bold new
+[02:57] era of governmentrun businesses."
+[02:59] Meanwhile, Democratic Socialist Senator
+[03:01] Bernie Sanders saw no problem with the
+[03:02] deal, stating, "If microchip companies
+[03:04] make a profit from the generous grants
+[03:05] they receive from the federal
+[03:06] government, the taxpayers of America
+[03:08] have a right to a reasonable return on
+[03:10] that investment." Squigger from the
+[03:11] Young Turk says, "Old school
+[03:13] conservatives are saying Trump's plan to
+[03:14] take a 10% stake in intel for American
+[03:16] taxpayers in exchange for our financial
+[03:18] help is socialism. Truth is exactly the
+[03:20] opposite. In capitalism, if you invest
+[03:21] in a company, you get equity." This is
+[03:23] one of the best things Trump is doing.
+[03:25] Both parties have given endless
+[03:26] subsidies to their corporate buddies out
+[03:27] of our pockets and only gotten campaign
+[03:29] contributions back. That's why sellouts
+[03:31] in DC are panicking about their beloved
+[03:33] donors. They expect our money for
+[03:34] nothing. No, we want shares like any
+[03:36] investor. Now, this was a little
+[03:38] tongue-in-cheek, but not totally. To
+[03:40] refine the argument a little bit from
+[03:42] picking your favorite ism and labeling
+[03:44] this that, the deal was explicitly done
+[03:47] to accelerate the grant timelines in
+[03:48] hopes of Intel completing their new fab
+[03:50] in Ohio. The company has struggled to
+[03:52] get private funding off the ground in
+[03:54] part due to leadership squables around
+[03:56] fundraising at the board level. Chips
+[03:57] Act funds were previously tied to
+[03:59] progress milestones, so pulling it all
+[04:01] forward is a significant gratuitity.
+[04:04] Still, it's of course understandable why
+[04:05] there's so much unease around requiring
+[04:07] an equity stake in exchange for
+[04:08] government funding. There's been a bit
+[04:10] of variable discussion around whether
+[04:12] the administration would seek a similar
+[04:13] deal with other CHIPS beneficiaries like
+[04:15] TSMC or Micron. Compounding these
+[04:18] concerns, earlier in the year, Commerce
+[04:19] Secretary Lutnik pushed to establish a
+[04:21] sovereign wealth fund by taking equity
+[04:22] stakes in exchange for government
+[04:24] contracts. While this deal is a pretty
+[04:26] mild version of that concept, it
+[04:27] suggests that this is a broader
+[04:29] government strategy rather than a
+[04:30] one-off emergency measure. Stepping back
+[04:32] from the ideological argument, analysts
+[04:34] also noted that Intel doesn't just need
+[04:36] capital, they need customers. Dan
+[04:38] Morgan, a senior portfolio manager at
+[04:39] Cynis Trust, said, "Trump kind of
+[04:41] becomes your salesperson." Bernstein
+[04:43] analyst Stacy Ragson wrote in a note,
+[04:45] "Funding a buildout with no customers
+[04:47] probably won't end well for
+[04:48] shareholders, of whom the US government
+[04:49] would be the largest under the
+[04:50] situation." Now, at the end of the day,
+[04:52] this is of course not just the US
+[04:54] government taking a stake in some random
+[04:56] tech company. The big question here is
+[04:58] whether the US needs domestic chipmaking
+[05:00] as a national security imperative or
+[05:02] not. Political reporter Cigar and Jetty
+[05:04] wrote, "Taking a stake in Intel is much
+[05:06] better than the pay-forplay structure
+[05:08] for Nvidia and AMD. Intel's managerial
+[05:10] decline is a major reason we're so
+[05:12] vulnerable on chip manufacturing. If
+[05:14] left to the fake free market, we will
+[05:16] continue to get beaten by subsidized
+[05:17] TSMC, Samsung, and SIMC. The point is
+[05:21] that for some observers, where this gets
+[05:22] blurry is the national security
+[05:24] consideration of domestic chip
+[05:25] manufacturing capacity, which takes this
+[05:27] out of the realm of just generic debate
+[05:29] and into its own very specific
+[05:30] situation. Now, it's obviously way
+[05:32] outside the scope of this show to get
+[05:34] into those debates in general. For our
+[05:36] purposes, what's important to note is
+[05:38] that AI finds itself once again at the
+[05:40] epicenter of an important shift in the
+[05:41] political tides that could have big
+[05:43] ramifications in the years to come. Now,
+[05:46] speaking of that Nvidia deal, their
+[05:48] roller coaster ride in the Chinese
+[05:49] market continues as they halt production
+[05:52] of H20 chips. The information reports
+[05:54] that Nvidia has instructed suppliers to
+[05:56] stop production related to their China
+[05:58] specific chips. The chips have been, to
+[06:00] put it mildly, a political football in
+[06:02] both Washington and Beijing all year.
+[06:04] The US government had banned H20 exports
+[06:06] until this month when the president
+[06:08] struck a deal with Nvidia and AMD. The
+[06:10] arrangement was that export licenses
+[06:12] would be granted in exchange for a 15%
+[06:14] cut of sales. Shortly after that,
+[06:16] however, China opened an investigation
+[06:18] into Nvidia, accusing them of including
+[06:20] back doors in the chips. Beijing later
+[06:22] went farther, warning local firms not to
+[06:24] use Nvidia chips and to reconsider their
+[06:26] orders. That seems to have had an effect
+[06:28] with sources saying that the entire H20
+[06:30] supply chain has been shut down as a
+[06:32] result. Those sources added that Nvidia
+[06:34] and their Chinese customers are hoping
+[06:35] to get approval to sell an updated chip
+[06:37] based on the new Blackwell architecture.
+[06:40] The Trump administration has flagged
+[06:41] that they would be open to a deal
+[06:42] provided the new chips have 30 to 50%
+[06:44] less performance than US market chips.
+[06:47] Trump himself set those parameters after
+[06:48] calling the Blackwell chips quote super
+[06:50] duper advanced. Now, we don't have a
+[06:53] good sense of how Nvidia could possibly
+[06:54] assure Beijing about the safety of the
+[06:56] chips or whether the prohibition is
+[06:58] actually about protecting Huawei from
+[07:00] competition. Some outlets are even
+[07:02] suggesting that the ban was pure
+[07:03] politics with Chinese officials calling
+[07:05] US commerce secretary Howard Lutnik's
+[07:07] comments that Chinese developers were
+[07:08] addicted to Nvidia chips insulting.
+[07:11] Jimmy Goodrich's senior adviser to think
+[07:13] tank ran said China wants to have the
+[07:14] best chips but also wants to have
+[07:16] domestic chips at the same time. Those
+[07:18] two goals are in conflict with one
+[07:19] another. If the US government were to
+[07:21] approve a powerful Blackwell chip for
+[07:23] China, even at 30 to 50% performance
+[07:25] reduction, my guess is we'd miraculously
+[07:27] see China forget about security
+[07:29] concerns. In an official statement,
+[07:31] Nvidia appeared sympathetic to concerns
+[07:33] from Beijing. They said, "China won't
+[07:35] rely on American chips for government
+[07:37] operations, just like the US government
+[07:38] would not rely on chips from China.
+[07:40] However, allowing US chips for
+[07:42] beneficial commercial business use is
+[07:43] good for everyone." A spokesperson noted
+[07:46] that Nvidia has several hundred,000
+[07:47] units in a stockpile ready to be shipped
+[07:49] and that they quote constantly manage
+[07:51] our supply chain to address market
+[07:52] conditions. That's still a notable
+[07:54] turnaround from earlier this month when
+[07:55] Nvidia seemed to be gearing up to
+[07:57] produce H20s as fast as possible. During
+[07:59] a visit to Taiwan on Friday, CEO Jensen
+[08:02] Hong gave a status update, commenting,
+[08:03] "It's up to, of course, the United
+[08:05] States government. We're in dialogue
+[08:06] with them, but it's still too soon to
+[08:08] know." Speaking to Beijing's concerns,
+[08:10] he added, "We're surprised by that. They
+[08:12] requested and urged us to secure
+[08:14] licenses for the H20s for some time. And
+[08:17] this is really the other dimension of
+[08:18] the political story when it comes to
+[08:20] chips. The US is thinking not only about
+[08:22] its domestic production capabilities,
+[08:24] but also export controls, which in and
+[08:26] of itself is a complex set of
+[08:27] considerations. Do you focus on denying
+[08:29] China access to the most advanced chips?
+[08:31] Or do you try to expand access and think
+[08:34] about model access and chip access as a
+[08:35] form of soft power? A recent Reddit post
+[08:38] quoted A16Z partner Martin Casado who
+[08:40] said that when startups apply to A16Z
+[08:42] for funding, there's a quote 80% chance
+[08:45] they're using a Chinese open- source
+[08:46] model. Lastly, bringing the political
+[08:49] consideration back home. Earlier this
+[08:50] week, a group of Silicon Valley
+[08:52] investors and builders announced a new
+[08:53] AI pack in advance of next year's
+[08:55] midterm elections. The Wall Street
+[08:57] Journal writes, "Silicon Valley is
+[08:59] putting more than $100 million into a
+[09:01] network of political action committees
+[09:02] and organizations to advocate against
+[09:04] strict AI regulations. a signal that
+[09:06] tech executives will be active in next
+[09:08] year's midterm elections. The big new
+[09:10] pack being announced is called Leading
+[09:11] the Future. They wrote on Twitter, "AI
+[09:14] is already transforming the global
+[09:15] economy and America should lead in
+[09:17] advancing a policy governing AI
+[09:18] expansion that drives innovation and
+[09:20] broad economic growth for working people
+[09:22] across the country. Leading the future
+[09:24] and its affiliated organizations will
+[09:25] promote policies that unlock the
+[09:27] transformative and economic benefits of
+[09:28] AI. LTF and its affiliated organizations
+[09:31] will oppose policies that stifle
+[09:32] innovation, enable China to gain global
+[09:34] AI superiority or make it harder to
+[09:36] bring AI's benefits into the world and
+[09:38] those who support that agenda. In their
+[09:41] announcement press release, LTF got a
+[09:42] little bit more detailed about how they
+[09:44] plan to operate. They write, "LTF will
+[09:46] operate through a structured ecosystem
+[09:48] of federal and state super PACs and
+[09:49] 501c4 issue advocacy organizations,
+[09:52] giving it maximum flexibility to engage
+[09:54] in the 2026 election cycle and beyond.
+[09:56] The federal and state super PACs will
+[09:58] focus on independent expenditures to
+[09:59] support candidates aligned with the
+[10:01] pro-AI agenda and ensure America leads
+[10:03] the world in AI innovation and oppose
+[10:04] those that do not. These efforts will
+[10:06] span both primary and general elections
+[10:08] aiming to reshape the political
+[10:09] environment around innovation policy.
+[10:11] The C4 organizations will lead proactive
+[10:13] policy development, legislative
+[10:15] scorecard production, grassroots
+[10:16] engagement, and rapid response campaigns
+[10:18] to counter misinformation and
+[10:20] anti-inovation narratives. They plan to
+[10:22] begin their operations in New York,
+[10:23] California, Illinois, and Ohio, and will
+[10:25] expand into a national footprint
+[10:27] throughout next year. Leading the future
+[10:29] is led by Zack Moffat, previously
+[10:30] founder and CEO of Targeted Victory,
+[10:32] which has raised over $2 billion and
+[10:34] served over a thousand campaigns since
+[10:35] 2009, as well as Josh Blasto, who was
+[10:38] previously press secretary to US Senator
+[10:40] Chuck Schumer and chief of staff to New
+[10:41] York Governor Andrew Cuomo. Some of the
+[10:43] backers are common names at the
+[10:44] intersection of Silicon Valley in
+[10:46] Washington. Ron Conway wrote, "I'm
+[10:48] excited to be part of leading the
+[10:49] future. AI is so important. It
+[10:51] transcends Democrats and Republicans. It
+[10:53] is in America's interest to lead. The
+[10:55] only thing that stands in America's way
+[10:56] are bad policies that will cause America
+[10:58] to lose its lead to China. We have to
+[11:00] play to win. Imagine if we're not all on
+[11:01] the page when it came to the race to the
+[11:03] moon. We would have never even made it
+[11:04] to the launch pad. A newer participant
+[11:07] in this political game is OpenAI
+[11:09] president and co-founder Greg Brockman.
+[11:11] He writes, "My wife Anna and I are
+[11:13] supporting Leading the Future because we
+[11:14] believe that AI can massively improve
+[11:16] quality of life for every person and
+[11:17] every animal. We believe the goal of AI
+[11:19] policy should be to unlock this outcome.
+[11:21] That means taking a balanced view, which
+[11:23] we think of as optimistic realism
+[11:25] towards achieving AI's benefits. We're
+[11:27] excited about the future. Now, so far,
+[11:29] Leading the Future hasn't gotten
+[11:30] specific around any particular issues or
+[11:32] positions that it's going to be focused
+[11:33] on, but I would expect this to be the
+[11:35] very first of a lot of AI related
+[11:38] political activity heading into next
+[11:40] year's midterms. One of the things that
+[11:42] was really interesting about the
+[11:43] presidential election last year was how
+[11:45] little ultimately AI factored in. There
+[11:48] were grand concerns around
+[11:49] disinformation and deep fakes, none of
+[11:51] which really came to bear. Also, as much
+[11:54] as people were theoretically interested
+[11:56] in the issues of AI, they were still
+[11:58] pretty firmly in the realm of the future
+[11:59] last time. What'll be interesting to see
+[12:02] this time around during these midterms
+[12:03] is how much those issues actually come
+[12:05] home to roost in the here and now. Will
+[12:08] AI related job loss be something that
+[12:10] people actually care about in Congress
+[12:12] and Senate races in the heartland of
+[12:13] America? Will competition with China be
+[12:16] something that politicians actually talk
+[12:17] about? Too early to know, but it's very
+[12:19] clear that the AI industry is going to
+[12:21] have a seat at that table. For now
+[12:23] though, that is going to do it for
+[12:24] today's AI daily brief. Appreciate you
+[12:26] listening or watching as always and
+[12:27] until next time, peace.
