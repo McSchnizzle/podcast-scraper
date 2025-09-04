@@ -1,0 +1,491 @@
+{
+  "summary": {
+    "total_tests": 12,
+    "passed_tests": 7,
+    "overall_score": 0.5833333333333334,
+    "critical_failures": 3,
+    "status": "CRITICAL"
+  },
+  "critical_issues": [
+    {
+      "test": "guid_immutability",
+      "issue": "GUIDs use runtime timestamp, not content-based hash",
+      "recommendation": "Use content hash or episode metadata for stable GUIDs"
+    },
+    {
+      "test": "base_url_configuration",
+      "issue": "Base URLs are hardcoded in multiple places",
+      "recommendation": "Make base URL env-driven with validation"
+    },
+    {
+      "test": "security_boundaries",
+      "issue": "Critical failure",
+      "recommendation": "Needs immediate attention"
+    }
+  ],
+  "recommendations": [
+    {
+      "test": "timezone_consistency",
+      "recommendation": "Standardize all date/time operations to UTC"
+    },
+    {
+      "test": "quota_management",
+      "recommendation": "Add explicit daily/rolling caps and degradation plans"
+    },
+    {
+      "test": "concurrent_safety",
+      "recommendation": "Add file locking for concurrent pipeline execution"
+    }
+  ],
+  "detailed_results": {
+    "guid_immutability": {
+      "status": "fail",
+      "critical": true,
+      "guid_immutable": false,
+      "guid1": "https://paulrbrown.org/digest/2025-09-04/ai-news/08750de5",
+      "guid2": "https://paulrbrown.org/digest/2025-09-04/ai-news/724b8675",
+      "timestamp_sources": {
+        "digest_generation": "datetime.now().strftime() in openai_digest_integration.py:545",
+        "rss_generation": "File modification time and content-based",
+        "guid_generation": "Uses digest timestamp parameter",
+        "issue": "Runtime timestamps cause GUID instability for same content"
+      },
+      "issue": "GUIDs use runtime timestamp, not content-based hash",
+      "recommendation": "Use content hash or episode metadata for stable GUIDs",
+      "evidence": {
+        "same_content_different_guids": true,
+        "timestamp_dependency": "Runtime generated timestamps cause GUID instability"
+      }
+    },
+    "timezone_consistency": {
+      "status": "pass",
+      "critical": true,
+      "analysis": {
+        "utc_weekday": "Thursday",
+        "local_weekday": "Thursday",
+        "timezone_differs": false,
+        "current_implementation": {
+          "rss_dates": "Uses UTC with timezone.utc",
+          "weekday_logic": "Uses local time datetime.now()",
+          "file_timestamps": "Uses local time for digest generation",
+          "inconsistency": "Mixed UTC/local time usage"
+        }
+      },
+      "rss_date_format": "Thu, 04 Sep 2025 08:34:36 +0000",
+      "dst_handling": "UTC-based dates avoid DST issues",
+      "weekday_logic": "Uses local time - potential DST edge case",
+      "recommendation": "Standardize all date/time operations to UTC",
+      "evidence": {
+        "rss_uses_utc": true,
+        "pipeline_uses_local": "datetime.now() without timezone in daily_podcast_pipeline.py"
+      }
+    },
+    "base_url_configuration": {
+      "status": "fail",
+      "critical": true,
+      "analysis": {
+        "default_hardcoded": "https://paulrbrown.org",
+        "env_variable_set": false,
+        "env_value": null,
+        "hardcoded_urls_in_feed": 24,
+        "unique_domains": [
+          "paulrbrown.org"
+        ]
+      },
+      "issue": "Base URLs are hardcoded in multiple places",
+      "hardcoded_locations": [
+        "rss_generator_multi_topic.py:21",
+        "daily-digest.xml (generated)",
+        "api/rss.py:19"
+      ],
+      "recommendation": "Make base URL env-driven with validation",
+      "evidence": {
+        "hardcoded_default": true,
+        "env_not_required": true,
+        "multiple_domains_in_feed": false
+      }
+    },
+    "rss_spec_conformance": {
+      "status": "fail",
+      "critical": false,
+      "conformance_score": 0.6666666666666666,
+      "checks": {
+        "has_channel": true,
+        "has_title": true,
+        "has_description": true,
+        "has_lastBuildDate": true,
+        "has_atom_link": false,
+        "guid_permalinks": [
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false
+        ],
+        "pubdate_consistency": [
+          true,
+          true,
+          true,
+          true,
+          true,
+          true,
+          true,
+          true,
+          true,
+          true,
+          true
+        ],
+        "enclosure_validity": [
+          {
+            "url": "https://paulrbrown.org/audio/tech_product_releases_digest_20250904_040227.mp3",
+            "declared_length": "4251105",
+            "has_length": true
+          },
+          {
+            "url": "https://paulrbrown.org/audio/societal_culture_change_digest_20250904_040130.mp3",
+            "declared_length": "5003850",
+            "has_length": true
+          },
+          {
+            "url": "https://paulrbrown.org/audio/ai_news_digest_20250901_204213.mp3",
+            "declared_length": "4890165",
+            "has_length": true
+          },
+          {
+            "url": "https://paulrbrown.org/audio/ai_news_digest_20250901_203850.mp3",
+            "declared_length": "4099386",
+            "has_length": true
+          },
+          {
+            "url": "https://paulrbrown.org/audio/ai_news_digest_20250901_175357_enhanced.mp3",
+            "declared_length": "3872436",
+            "has_length": true
+          },
+          {
+            "url": "https://paulrbrown.org/audio/ai_news_digest_20250901_171631_enhanced.mp3",
+            "declared_length": "3009351",
+            "has_length": true
+          },
+          {
+            "url": "https://paulrbrown.org/audio/ai_news_digest_20250901_171626_enhanced.mp3",
+            "declared_length": "2491499",
+            "has_length": true
+          },
+          {
+            "url": "https://paulrbrown.org/audio/daily_digest_20250901_115502_enhanced.mp3",
+            "declared_length": "3486242",
+            "has_length": true
+          },
+          {
+            "url": "https://paulrbrown.org/audio/daily_digest_20250901_113824_enhanced.mp3",
+            "declared_length": "3566490",
+            "has_length": true
+          },
+          {
+            "url": "https://paulrbrown.org/audio/daily_digest_20250901_015602_enhanced.mp3",
+            "declared_length": "4222686",
+            "has_length": true
+          },
+          {
+            "url": "https://paulrbrown.org/audio/daily_digest_20250901_013235_enhanced.mp3",
+            "declared_length": "4241076",
+            "has_length": true
+          }
+        ]
+      },
+      "total_items": 11,
+      "issues": [
+        "GUID permalink issues: True",
+        "PubDate format issues: False"
+      ]
+    },
+    "guid_stability": {
+      "status": "pass",
+      "critical": true,
+      "identical_guids": true,
+      "guid_count": 13,
+      "build_dates_differ": true,
+      "content_identical": false,
+      "evidence": {
+        "guid_stability": true,
+        "expected_behavior": "GUIDs should be identical, build dates should differ"
+      }
+    },
+    "security_boundaries": {
+      "status": "fail",
+      "critical": true,
+      "file_sanitization_score": 0.875,
+      "xml_sanitization_score": 0.42857142857142855,
+      "file_tests": [
+        {
+          "original": "../../../etc/passwd",
+          "sanitized": "etc/passwd",
+          "safe": true,
+          "length_ok": true
+        },
+        {
+          "original": "..\\..\\windows\\system32\\config\\sam",
+          "sanitized": "windows\\system32\\config\\sam",
+          "safe": false,
+          "length_ok": true
+        },
+        {
+          "original": "test<script>alert('xss')</script>.mp3",
+          "sanitized": "test_script_alert(_xss_)_/script_.mp3",
+          "safe": true,
+          "length_ok": true
+        },
+        {
+          "original": "file\u0000hidden.exe",
+          "sanitized": "filehidden.exe",
+          "safe": true,
+          "length_ok": true
+        },
+        {
+          "original": "verylonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglong.mp3",
+          "sanitized": "verylonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglon.mp3",
+          "safe": true,
+          "length_ok": false
+        },
+        {
+          "original": "file with spaces and \u4e2d\u6587\u5b57\u7b26.mp3",
+          "sanitized": "file_with_spaces_and_\u4e2d\u6587\u5b57\u7b26.mp3",
+          "safe": true,
+          "length_ok": true
+        },
+        {
+          "original": "file\"with\"quotes.mp3",
+          "sanitized": "file_with_quotes.mp3",
+          "safe": true,
+          "length_ok": true
+        },
+        {
+          "original": "file&lt;with&gt;entities.mp3",
+          "sanitized": "file_and_lt;with_and_gt;entities.mp3",
+          "safe": true,
+          "length_ok": true
+        }
+      ],
+      "xml_tests": [
+        {
+          "original": "Normal content",
+          "sanitized": "Normal content",
+          "safe": false,
+          "preserves_content": true
+        },
+        {
+          "original": "<script>alert('xss')</script>",
+          "sanitized": "&lt;script&gt;alert(&#x27;xss&#x27;)&lt;/script&gt;",
+          "safe": true,
+          "preserves_content": true
+        },
+        {
+          "original": "Content with & ampersands < brackets > quotes \"",
+          "sanitized": "Content with &amp; ampersands &lt; brackets &gt; quotes &quot;",
+          "safe": true,
+          "preserves_content": true
+        },
+        {
+          "original": "Content with \u0000 null bytes \u0001 control chars",
+          "sanitized": "Content with null bytes control chars",
+          "safe": false,
+          "preserves_content": true
+        },
+        {
+          "original": "Content with \ud83c\udfb5 emoji and unicode \u00f1 characters",
+          "sanitized": "Content with \ud83c\udfb5 emoji and unicode \u00f1 characters",
+          "safe": false,
+          "preserves_content": true
+        },
+        {
+          "original": "]]>CDATA escape attempt",
+          "sanitized": "]]&gt;CDATA escape attempt",
+          "safe": true,
+          "preserves_content": true
+        },
+        {
+          "original": "&lt;already&gt;encoded&amp;content",
+          "sanitized": "&amp;lt;already&amp;gt;encoded&amp;amp;content",
+          "safe": false,
+          "preserves_content": true
+        }
+      ],
+      "evidence": {
+        "path_traversal_blocked": true,
+        "xml_injection_blocked": true
+      }
+    },
+    "quota_management": {
+      "status": "pass",
+      "critical": false,
+      "features": {
+        "openai_retry_logic": true,
+        "youtube_rate_limiting": true,
+        "graceful_degradation": true,
+        "telemetry_tracking": true
+      },
+      "recommendation": "Add explicit daily/rolling caps and degradation plans",
+      "evidence": {
+        "has_retry_backoff": true,
+        "tracks_usage": true
+      }
+    },
+    "retention_scope": {
+      "status": "warn",
+      "critical": false,
+      "config": {
+        "retention_days": 14,
+        "rss_item_limit": 100,
+        "db_cleanup": true,
+        "file_cleanup": true
+      },
+      "analysis": {
+        "rss_items_preserved_longer": true,
+        "potential_broken_links": "RSS items may reference deleted MP3 files",
+        "recommendation": "Consider keeping artifacts for RSS item lifetime or prune RSS items with artifacts"
+      },
+      "evidence": {
+        "rss_outlives_artifacts": true,
+        "max_rss_items": 100,
+        "artifact_retention_days": 14
+      }
+    },
+    "audio_metadata_integrity": {
+      "status": "pass",
+      "critical": false,
+      "tested_files": 3,
+      "valid_files": 3,
+      "tests": [
+        {
+          "file": "societal_culture_change_digest_20250904_040130.mp3",
+          "size_bytes": 5003850,
+          "size_valid": true,
+          "metadata": {
+            "duration": 312.711837,
+            "size": 5003850,
+            "format": "mp3"
+          },
+          "has_duration": true
+        },
+        {
+          "file": "societal_culture_change_digest_20250902_005315.mp3",
+          "size_bytes": 4901034,
+          "size_valid": true,
+          "metadata": {
+            "duration": 306.311813,
+            "size": 4901034,
+            "format": "mp3"
+          },
+          "has_duration": true
+        },
+        {
+          "file": "daily_digest_20250901_115502_enhanced.mp3",
+          "size_bytes": 3486242,
+          "size_valid": true,
+          "metadata": {
+            "duration": 217.887313,
+            "size": 3486242,
+            "format": "mp3"
+          },
+          "has_duration": true
+        }
+      ],
+      "evidence": {
+        "all_files_valid": true,
+        "has_metadata_extraction": true
+      }
+    },
+    "concurrent_safety": {
+      "status": "pass",
+      "critical": false,
+      "features": {
+        "uses_transactions": true,
+        "has_locking": true,
+        "atomic_operations": true
+      },
+      "recommendation": "Add file locking for concurrent pipeline execution",
+      "evidence": {
+        "database_safety": true,
+        "file_safety": true
+      }
+    },
+    "filename_security": {
+      "status": "pass",
+      "critical": false,
+      "boundary_tests": [
+        {
+          "test": "Length 255",
+          "result": true,
+          "safe_length": 255
+        },
+        {
+          "test": "Length 256",
+          "result": true,
+          "safe_length": 255
+        }
+      ],
+      "evidence": {
+        "handles_long_names": true
+      }
+    },
+    "xml_injection_protection": {
+      "status": "pass",
+      "critical": true,
+      "safety_score": 1.0,
+      "tests": [
+        {
+          "original": "Normal title",
+          "sanitized": "Normal title",
+          "xml_valid": true,
+          "length_controlled": true
+        },
+        {
+          "original": "Title with & ampersand",
+          "sanitized": "Title with &amp; ampersand",
+          "xml_valid": true,
+          "length_controlled": true
+        },
+        {
+          "original": "Title with <tags> inside",
+          "sanitized": "Title with &lt;tags&gt; inside",
+          "xml_valid": true,
+          "length_controlled": true
+        },
+        {
+          "original": "Title with \"quotes\" and 'apostrophes'",
+          "sanitized": "Title with &quot;quotes&quot; and &#x27;apostrophe...",
+          "xml_valid": true,
+          "length_controlled": true
+        },
+        {
+          "original": "Title with ]]> CDATA escape",
+          "sanitized": "Title with ]]&gt; CDATA escape",
+          "xml_valid": true,
+          "length_controlled": true
+        },
+        {
+          "original": "Title with \u0000 null \u0001 control chars",
+          "sanitized": "Title with null control chars",
+          "xml_valid": true,
+          "length_controlled": true
+        },
+        {
+          "original": "Very long long long long long long long long long ...",
+          "sanitized": "Very long long long long long long long long long ...",
+          "xml_valid": true,
+          "length_controlled": false
+        }
+      ],
+      "evidence": {
+        "xml_injection_blocked": true,
+        "length_limits_enforced": false
+      }
+    }
+  }
+}

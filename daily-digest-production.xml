@@ -1,0 +1,212 @@
+<?xml version='1.0' encoding='utf-8'?>
+<rss xmlns:ns0="http://www.itunes.com/dtds/podcast-1.0.dtd" xmlns:ns1="http://www.w3.org/2005/Atom" version="2.0" xmlns:itunes="http://www.itunes.com/dtds/podcast-1.0.dtd" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Daily Tech &amp;amp; Society Digest</title>
+    <description>AI-generated daily digest covering technology, society, and culture from leading podcasts and creators, organized by topic</description>
+    <link>https://podcast.paulrbrown.org/daily-digest</link>
+    <language>en-US</language>
+    <copyright>© 2025 Paul Brown</copyright>
+    <managingEditor>podcast@paulrbrown.org (Paul Brown)</managingEditor>
+    <webMaster>podcast@paulrbrown.org (Paul Brown)</webMaster>
+    <lastBuildDate>Thu, 04 Sep 2025 08:39:59 +0000</lastBuildDate>
+    <ns0:author>Paul Brown</ns0:author>
+    <ns0:summary>AI-generated daily digest covering technology, society, and culture from leading podcasts and creators, organized by topic</ns0:summary>
+    <ns0:owner>Paul Brown</ns0:owner>
+    <ns0:image href="https://podcast.paulrbrown.org/podcast-artwork.jpg" />
+    <ns0:category text="Technology" />
+    <ns0:explicit>no</ns0:explicit>
+    <ns1:link rel="self" type="application/rss+xml" href="https://podcast.paulrbrown.org/daily-digest.xml" />
+    <item>
+      <title>Tech Product Releases - September 04, 2025</title>
+      <description>In this episode, we explore tech product releases including key developments, insights, and analysis from leading voices in the field.</description>
+      <link>https://podcast.paulrbrown.org/daily-digest/20250904_040227</link>
+      <guid isPermaLink="false">https://podcast.paulrbrown.org/digest/2025-09-04/tech-product-releases/63171d3f3a28</guid>
+      <pubDate>Thu, 04 Sep 2025 04:02:27 +0000</pubDate>
+      <enclosure url="https://paulrbrown.org/audio/tech_product_releases_digest_20250904_040227.mp3" length="4251105" type="audio/mpeg" />
+      <ns0:title>Tech Product Releases - September 04, 2025</ns0:title>
+      <ns0:summary>In this episode, we explore tech product releases including key developments, insights, and analysis from leading voices in the field.</ns0:summary>
+      <ns0:duration>240</ns0:duration>
+      <ns0:keywords>Technology/Products</ns0:keywords>
+      </item>
+    <item>
+      <title>Societal Culture Change - September 04, 2025</title>
+      <description>In this episode, we explore societal culture change including key developments, insights, and analysis from leading voices in the field.</description>
+      <link>https://podcast.paulrbrown.org/daily-digest/20250904_040130</link>
+      <guid isPermaLink="false">https://podcast.paulrbrown.org/digest/2025-09-04/societal-culture-change/0ee2b30a7d39</guid>
+      <pubDate>Thu, 04 Sep 2025 04:01:30 +0000</pubDate>
+      <enclosure url="https://paulrbrown.org/audio/societal_culture_change_digest_20250904_040130.mp3" length="5003850" type="audio/mpeg" />
+      <ns0:title>Societal Culture Change - September 04, 2025</ns0:title>
+      <ns0:summary>In this episode, we explore societal culture change including key developments, insights, and analysis from leading voices in the field.</ns0:summary>
+      <ns0:duration>240</ns0:duration>
+      <ns0:keywords>Society/Culture</ns0:keywords>
+      </item>
+    <item>
+      <title>Tech News And Tech Culture - September 02, 2025</title>
+      <description>In this episode, we explore tech news and tech culture including key developments, insights, and analysis from leading voices in the field.</description>
+      <link>https://podcast.paulrbrown.org/daily-digest/20250902_005409</link>
+      <guid isPermaLink="false">https://podcast.paulrbrown.org/digest/2025-09-02/tech-news-and-tech-culture/7cc453ba8792</guid>
+      <pubDate>Tue, 02 Sep 2025 00:54:09 +0000</pubDate>
+      <enclosure url="https://paulrbrown.org/audio/tech_news_and_tech_culture_digest_20250902_005409.mp3" length="5059440" type="audio/mpeg" />
+      <ns0:title>Tech News And Tech Culture - September 02, 2025</ns0:title>
+      <ns0:summary>In this episode, we explore tech news and tech culture including key developments, insights, and analysis from leading voices in the field.</ns0:summary>
+      <ns0:duration>240</ns0:duration>
+      <ns0:keywords>Technology/General</ns0:keywords>
+      </item>
+    <item>
+      <title>Societal Culture Change - September 02, 2025</title>
+      <description>In this episode, we explore societal culture change including key developments, insights, and analysis from leading voices in the field.</description>
+      <link>https://podcast.paulrbrown.org/daily-digest/20250902_005315</link>
+      <guid isPermaLink="false">https://podcast.paulrbrown.org/digest/2025-09-02/societal-culture-change/f0e9f5dc0392</guid>
+      <pubDate>Tue, 02 Sep 2025 00:53:15 +0000</pubDate>
+      <enclosure url="https://paulrbrown.org/audio/societal_culture_change_digest_20250902_005315.mp3" length="4901034" type="audio/mpeg" />
+      <ns0:title>Societal Culture Change - September 02, 2025</ns0:title>
+      <ns0:summary>In this episode, we explore societal culture change including key developments, insights, and analysis from leading voices in the field.</ns0:summary>
+      <ns0:duration>240</ns0:duration>
+      <ns0:keywords>Society/Culture</ns0:keywords>
+      </item>
+    <item>
+      <title>Ai News - September 01, 2025</title>
+      <description>In this episode, we explore ai news including key developments, insights, and analysis from leading voices in the field.</description>
+      <link>https://podcast.paulrbrown.org/daily-digest/20250901_204213</link>
+      <guid isPermaLink="false">https://podcast.paulrbrown.org/digest/2025-09-01/ai-news/67a339c101dc</guid>
+      <pubDate>Mon, 01 Sep 2025 20:42:13 +0000</pubDate>
+      <enclosure url="https://paulrbrown.org/audio/ai_news_digest_20250901_204213.mp3" length="4890165" type="audio/mpeg" />
+      <ns0:title>Ai News - September 01, 2025</ns0:title>
+      <ns0:summary>In this episode, we explore ai news including key developments, insights, and analysis from leading voices in the field.</ns0:summary>
+      <ns0:duration>240</ns0:duration>
+      <ns0:keywords>Technology/General</ns0:keywords>
+      </item>
+    <item>
+      <title>Ai News - September 01, 2025</title>
+      <description>In this episode, we explore ai news including key developments, insights, and analysis from leading voices in the field.</description>
+      <link>https://podcast.paulrbrown.org/daily-digest/20250901_203850</link>
+      <guid isPermaLink="false">https://podcast.paulrbrown.org/digest/2025-09-01/ai-news/67a339c101dc</guid>
+      <pubDate>Mon, 01 Sep 2025 20:38:50 +0000</pubDate>
+      <enclosure url="https://paulrbrown.org/audio/ai_news_digest_20250901_203850.mp3" length="4099386" type="audio/mpeg" />
+      <ns0:title>Ai News - September 01, 2025</ns0:title>
+      <ns0:summary>In this episode, we explore ai news including key developments, insights, and analysis from leading voices in the field.</ns0:summary>
+      <ns0:duration>180</ns0:duration>
+      <ns0:keywords>Technology/General</ns0:keywords>
+      </item>
+    <item>
+      <title>Ai News - September 01, 2025</title>
+      <description>In this episode, we explore ai news including key developments, insights, and analysis from leading voices in the field.</description>
+      <link>https://podcast.paulrbrown.org/daily-digest/20250901_175357</link>
+      <guid isPermaLink="false">https://podcast.paulrbrown.org/digest/2025-09-01/ai-news/67a339c101dc</guid>
+      <pubDate>Mon, 01 Sep 2025 17:53:57 +0000</pubDate>
+      <enclosure url="https://paulrbrown.org/audio/ai_news_digest_20250901_175357.mp3" length="3872436" type="audio/mpeg" />
+      <ns0:title>Ai News - September 01, 2025</ns0:title>
+      <ns0:summary>In this episode, we explore ai news including key developments, insights, and analysis from leading voices in the field.</ns0:summary>
+      <ns0:duration>180</ns0:duration>
+      <ns0:keywords>Technology/General</ns0:keywords>
+      </item>
+    <item>
+      <title>Ai News - September 01, 2025</title>
+      <description>In this episode, we explore ai news including key developments, insights, and analysis from leading voices in the field.</description>
+      <link>https://podcast.paulrbrown.org/daily-digest/20250901_171631</link>
+      <guid isPermaLink="false">https://podcast.paulrbrown.org/digest/2025-09-01/ai-news/67a339c101dc</guid>
+      <pubDate>Mon, 01 Sep 2025 17:16:31 +0000</pubDate>
+      <enclosure url="https://paulrbrown.org/audio/ai_news_digest_20250901_171631.mp3" length="3009351" type="audio/mpeg" />
+      <ns0:title>Ai News - September 01, 2025</ns0:title>
+      <ns0:summary>In this episode, we explore ai news including key developments, insights, and analysis from leading voices in the field.</ns0:summary>
+      <ns0:duration>120</ns0:duration>
+      <ns0:keywords>Technology/General</ns0:keywords>
+      </item>
+    <item>
+      <title>Ai News - September 01, 2025</title>
+      <description>In this episode, we explore ai news including key developments, insights, and analysis from leading voices in the field.</description>
+      <link>https://podcast.paulrbrown.org/daily-digest/20250901_171626</link>
+      <guid isPermaLink="false">https://podcast.paulrbrown.org/digest/2025-09-01/ai-news/67a339c101dc</guid>
+      <pubDate>Mon, 01 Sep 2025 17:16:26 +0000</pubDate>
+      <enclosure url="https://paulrbrown.org/audio/ai_news_digest_20250901_171626.mp3" length="2491499" type="audio/mpeg" />
+      <ns0:title>Ai News - September 01, 2025</ns0:title>
+      <ns0:summary>In this episode, we explore ai news including key developments, insights, and analysis from leading voices in the field.</ns0:summary>
+      <ns0:duration>120</ns0:duration>
+      <ns0:keywords>Technology/General</ns0:keywords>
+      </item>
+    <item>
+      <title>Daily - September 01, 2025</title>
+      <description>In this episode, we explore daily including key developments, insights, and analysis from leading voices in the field.</description>
+      <link>https://podcast.paulrbrown.org/daily-digest/20250901_115502</link>
+      <guid isPermaLink="false">https://podcast.paulrbrown.org/digest/2025-09-01/daily/8f1179007552</guid>
+      <pubDate>Mon, 01 Sep 2025 11:55:02 +0000</pubDate>
+      <enclosure url="https://paulrbrown.org/audio/daily_digest_20250901_115502.mp3" length="3486242" type="audio/mpeg" />
+      <ns0:title>Daily - September 01, 2025</ns0:title>
+      <ns0:summary>In this episode, we explore daily including key developments, insights, and analysis from leading voices in the field.</ns0:summary>
+      <ns0:duration>180</ns0:duration>
+      <ns0:keywords>Technology/General</ns0:keywords>
+      </item>
+    <item>
+      <title>Complete Topic - September 01, 2025</title>
+      <description>In this episode, we explore complete topic including key developments, insights, and analysis from leading voices in the field.</description>
+      <link>https://podcast.paulrbrown.org/daily-digest/20250901_115502</link>
+      <guid isPermaLink="false">https://podcast.paulrbrown.org/digest/2025-09-01/complete-topic/41f61d5afc5e</guid>
+      <pubDate>Mon, 01 Sep 2025 11:55:02 +0000</pubDate>
+      <enclosure url="https://paulrbrown.org/audio/complete_topic_digest_20250901_115502.mp3" length="3499617" type="audio/mpeg" />
+      <ns0:title>Complete Topic - September 01, 2025</ns0:title>
+      <ns0:summary>In this episode, we explore complete topic including key developments, insights, and analysis from leading voices in the field.</ns0:summary>
+      <ns0:duration>180</ns0:duration>
+      <ns0:keywords>Technology/General</ns0:keywords>
+      </item>
+    <item>
+      <title>Daily - September 01, 2025</title>
+      <description>In this episode, we explore daily including key developments, insights, and analysis from leading voices in the field.</description>
+      <link>https://podcast.paulrbrown.org/daily-digest/20250901_113824</link>
+      <guid isPermaLink="false">https://podcast.paulrbrown.org/digest/2025-09-01/daily/8f1179007552</guid>
+      <pubDate>Mon, 01 Sep 2025 11:38:24 +0000</pubDate>
+      <enclosure url="https://paulrbrown.org/audio/daily_digest_20250901_113824.mp3" length="3566490" type="audio/mpeg" />
+      <ns0:title>Daily - September 01, 2025</ns0:title>
+      <ns0:summary>In this episode, we explore daily including key developments, insights, and analysis from leading voices in the field.</ns0:summary>
+      <ns0:duration>180</ns0:duration>
+      <ns0:keywords>Technology/General</ns0:keywords>
+      </item>
+    <item>
+      <title>Complete Topic - September 01, 2025</title>
+      <description>In this episode, we explore complete topic including key developments, insights, and analysis from leading voices in the field.</description>
+      <link>https://podcast.paulrbrown.org/daily-digest/20250901_015602</link>
+      <guid isPermaLink="false">https://podcast.paulrbrown.org/digest/2025-09-01/complete-topic/41f61d5afc5e</guid>
+      <pubDate>Mon, 01 Sep 2025 01:56:02 +0000</pubDate>
+      <enclosure url="https://paulrbrown.org/audio/complete_topic_digest_20250901_015602.mp3" length="4263646" type="audio/mpeg" />
+      <ns0:title>Complete Topic - September 01, 2025</ns0:title>
+      <ns0:summary>In this episode, we explore complete topic including key developments, insights, and analysis from leading voices in the field.</ns0:summary>
+      <ns0:duration>240</ns0:duration>
+      <ns0:keywords>Technology/General</ns0:keywords>
+      </item>
+    <item>
+      <title>Daily - September 01, 2025</title>
+      <description>In this episode, we explore daily including key developments, insights, and analysis from leading voices in the field.</description>
+      <link>https://podcast.paulrbrown.org/daily-digest/20250901_015602</link>
+      <guid isPermaLink="false">https://podcast.paulrbrown.org/digest/2025-09-01/daily/8f1179007552</guid>
+      <pubDate>Mon, 01 Sep 2025 01:56:02 +0000</pubDate>
+      <enclosure url="https://paulrbrown.org/audio/daily_digest_20250901_015602.mp3" length="4222686" type="audio/mpeg" />
+      <ns0:title>Daily - September 01, 2025</ns0:title>
+      <ns0:summary>In this episode, we explore daily including key developments, insights, and analysis from leading voices in the field.</ns0:summary>
+      <ns0:duration>240</ns0:duration>
+      <ns0:keywords>Technology/General</ns0:keywords>
+      </item>
+    <item>
+      <title>Daily - September 01, 2025</title>
+      <description>In this episode, we explore daily including key developments, insights, and analysis from leading voices in the field.</description>
+      <link>https://podcast.paulrbrown.org/daily-digest/20250901_013235</link>
+      <guid isPermaLink="false">https://podcast.paulrbrown.org/digest/2025-09-01/daily/8f1179007552</guid>
+      <pubDate>Mon, 01 Sep 2025 01:32:35 +0000</pubDate>
+      <enclosure url="https://paulrbrown.org/audio/daily_digest_20250901_013235.mp3" length="4241076" type="audio/mpeg" />
+      <ns0:title>Daily - September 01, 2025</ns0:title>
+      <ns0:summary>In this episode, we explore daily including key developments, insights, and analysis from leading voices in the field.</ns0:summary>
+      <ns0:duration>240</ns0:duration>
+      <ns0:keywords>Technology/General</ns0:keywords>
+      </item>
+    <item>
+      <title>Complete Topic - September 01, 2025</title>
+      <description>In this episode, we explore complete topic including key developments, insights, and analysis from leading voices in the field.</description>
+      <link>https://podcast.paulrbrown.org/daily-digest/20250901_013235</link>
+      <guid isPermaLink="false">https://podcast.paulrbrown.org/digest/2025-09-01/complete-topic/41f61d5afc5e</guid>
+      <pubDate>Mon, 01 Sep 2025 01:32:35 +0000</pubDate>
+      <enclosure url="https://paulrbrown.org/audio/complete_topic_digest_20250901_013235.mp3" length="4217253" type="audio/mpeg" />
+      <ns0:title>Complete Topic - September 01, 2025</ns0:title>
+      <ns0:summary>In this episode, we explore complete topic including key developments, insights, and analysis from leading voices in the field.</ns0:summary>
+      <ns0:duration>240</ns0:duration>
+      <ns0:keywords>Technology/General</ns0:keywords>
+      </item>
+    </channel>
+  </rss>
