@@ -113,29 +113,21 @@ class Config:
             'backoff_base_delay': 0.5,  # Starting delay for exponential backoff
             
             'topics': {
-                'AI News': {
-                    'description': 'Artificial intelligence developments, AI research, machine learning breakthroughs, AI industry news, AI policy and ethics',
-                    'prompt': 'artificial intelligence, AI news, machine learning, deep learning, AI research, AI breakthroughs, AI industry, AI policy, AI ethics, AI regulation, generative AI, LLMs, AI startups, AI funding'
+                'AI & Intelligence': {
+                    'description': 'Artificial intelligence news, AI products and services, machine learning breakthroughs, AI industry developments, AI culture and society impact, AI ethics and policy',
+                    'prompt': 'artificial intelligence, AI news, machine learning, deep learning, AI research, AI products, AI services, AI breakthroughs, AI industry, AI policy, AI ethics, AI regulation, generative AI, LLMs, AI startups, AI funding, AI culture, AI impact on society'
                 },
-                'Tech Product Releases': {
-                    'description': 'New technology product launches, hardware releases, software updates, gadget reviews, product announcements',
-                    'prompt': 'product launch, product release, new products, hardware launch, software release, gadget announcement, tech products, product reviews, device launch, tech hardware, consumer electronics'
+                'Tech & Innovation': {
+                    'description': 'Non-AI technology news, tech product releases, software updates, hardware launches, tech industry developments, digital innovation and tech culture trends',
+                    'prompt': 'technology news, tech products, software release, hardware launch, tech innovation, technology trends, tech industry news, startup news, digital transformation, emerging technology, consumer electronics, tech culture, software updates, product announcements, tech companies'
                 },
-                'Tech News and Tech Culture': {
-                    'description': 'Technology industry news, tech company developments, tech culture discussions, digital trends, tech policy',
-                    'prompt': 'tech news, technology industry, tech companies, tech culture, digital trends, tech policy, tech regulation, tech industry analysis, tech leadership, tech innovation, startup news'
+                'Social Justice & Organizing': {
+                    'description': 'Social justice movements, community organizing efforts, civil rights advocacy, grassroots activism, systemic change initiatives, community building and mobilization strategies',
+                    'prompt': 'social justice, community organizing, civil rights, activism, grassroots organizing, social equity, community building, social movements, systemic change, racial justice, economic justice, community advocacy, local organizing, civic engagement, community mobilization'
                 },
-                'Community Organizing': {
-                    'description': 'Grassroots organizing, community activism, local organizing efforts, civic engagement, community building strategies',
-                    'prompt': 'community organizing, grassroots activism, local organizing, civic engagement, community building, activist organizing, community mobilization, grassroots campaigns, community advocacy, local activism'
-                },
-                'Social Justice': {
-                    'description': 'Social justice movements, civil rights, equity and inclusion, systemic justice issues, advocacy and activism',
-                    'prompt': 'social justice, civil rights, equity, inclusion, systemic justice, social equity, human rights, justice advocacy, social activism, civil rights movement, racial justice, economic justice'
-                },
-                'Societal Culture Change': {
-                    'description': 'Cultural shifts, social movements, changing social norms, generational changes, cultural transformation',
-                    'prompt': 'cultural change, social movements, cultural shifts, social transformation, generational change, cultural evolution, social change, cultural trends, societal transformation, cultural movements'
+                'Culture & Future': {
+                    'description': 'Cultural shifts and social transformation, philosophical discussions, policy analysis, future thinking, generational changes, societal trends, consciousness and meaning exploration',
+                    'prompt': 'cultural change, social transformation, philosophy, future thinking, policy analysis, generational change, cultural evolution, social change, cultural trends, societal transformation, consciousness, meaning, ethics, philosophical discussions, cultural movements, policy implications'
                 }
             }
         }
@@ -186,6 +178,31 @@ class Config:
         
         if not self.ELEVENLABS_API_KEY:
             warnings.append("ELEVENLABS_API_KEY not set - TTS features will be disabled")
+        
+        if not self.OPENAI_API_KEY:
+            warnings.append("OPENAI_API_KEY not set - OpenAI digest generation will be disabled")
+        
+        # Validate OPENAI_SETTINGS has all required fields
+        required_openai_fields = [
+            'relevance_threshold', 'scoring_model', 'validator_model', 'digest_model'
+        ]
+        
+        missing_fields = []
+        for field in required_openai_fields:
+            if field not in self.OPENAI_SETTINGS:
+                missing_fields.append(field)
+        
+        if missing_fields:
+            errors.append(f"Missing OPENAI_SETTINGS fields: {', '.join(missing_fields)}")
+        else:
+            logger.debug("✅ OPENAI_SETTINGS validation passed")
+        
+        # Check .env file loading
+        env_file = Path('.env')
+        if env_file.exists():
+            logger.debug("✅ .env file found and loaded")
+        else:
+            warnings.append(".env file not found - using environment variables only")
         
         # Check for required tools
         if require_claude:

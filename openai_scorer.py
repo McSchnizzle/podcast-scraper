@@ -171,12 +171,10 @@ Provide scores as requested in the system prompt."""
     def _create_fallback_scores(self, episode_id: str = None) -> Dict[str, Any]:
         """Create neutral fallback scores when API fails"""
         return {
-            'AI News': 0.0,
-            'Tech Product Releases': 0.0,
-            'Tech News and Tech Culture': 0.0,
-            'Community Organizing': 0.0,
-            'Social Justice': 0.0,
-            'Societal Culture Change': 0.0,
+            'AI & Intelligence': 0.0,
+            'Tech & Innovation': 0.0,
+            'Social Justice & Organizing': 0.0,
+            'Culture & Future': 0.0,
             'moderation_flag': False,
             'moderation_reason': None,
             'confidence': 0.0,
