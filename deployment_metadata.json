@@ -1,0 +1,84 @@
+{
+  "deployment_timestamp": "2025-09-04T06:56:16.435931",
+  "release_tag": "multi-topic-2025-09-01",
+  "github_release_url": "https://github.com/McSchnizzle/podcast-scraper/releases/tag/multi-topic-2025-09-01",
+  "episodes": [
+    {
+      "topic": "ai_news",
+      "timestamp": "20250901_175357",
+      "date": "2025-09-01T17:53:57",
+      "local_path": "daily_digests/ai_news_digest_20250901_175357_enhanced.mp3",
+      "public_url": "https://github.com/McSchnizzle/podcast-scraper/releases/download/multi-topic-2025-09-01/ai_news_digest_20250901_175357_enhanced.mp3",
+      "file_size": 3872436,
+      "duration_estimate": "~3 minutes",
+      "is_enhanced": true,
+      "file_key": "ai_news_20250901_175357"
+    },
+    {
+      "topic": "ai_news",
+      "timestamp": "20250901_203850",
+      "date": "2025-09-01T20:38:50",
+      "local_path": "daily_digests/ai_news_digest_20250901_203850.mp3",
+      "public_url": "https://github.com/McSchnizzle/podcast-scraper/releases/download/multi-topic-2025-09-01/ai_news_digest_20250901_203850.mp3",
+      "file_size": 4099386,
+      "duration_estimate": "~3 minutes",
+      "is_enhanced": false,
+      "file_key": "ai_news_20250901_203850"
+    },
+    {
+      "topic": "ai_news",
+      "timestamp": "20250901_204213",
+      "date": "2025-09-01T20:42:13",
+      "local_path": "daily_digests/ai_news_digest_20250901_204213.mp3",
+      "public_url": "https://github.com/McSchnizzle/podcast-scraper/releases/download/multi-topic-2025-09-01/ai_news_digest_20250901_204213.mp3",
+      "file_size": 4890165,
+      "duration_estimate": "~4 minutes",
+      "is_enhanced": false,
+      "file_key": "ai_news_20250901_204213"
+    },
+    {
+      "topic": "societal_culture_change",
+      "timestamp": "20250902_005315",
+      "date": "2025-09-02T00:53:15",
+      "local_path": "daily_digests/societal_culture_change_digest_20250902_005315_enhanced.mp3",
+      "public_url": "https://github.com/McSchnizzle/podcast-scraper/releases/download/multi-topic-2025-09-01/societal_culture_change_digest_20250902_005315_enhanced.mp3",
+      "file_size": 4901034,
+      "duration_estimate": "~4 minutes",
+      "is_enhanced": true,
+      "file_key": "societal_culture_change_20250902_005315"
+    },
+    {
+      "topic": "tech_news_and_tech_culture",
+      "timestamp": "20250902_005409",
+      "date": "2025-09-02T00:54:09",
+      "local_path": "daily_digests/tech_news_and_tech_culture_digest_20250902_005409_enhanced.mp3",
+      "public_url": "https://github.com/McSchnizzle/podcast-scraper/releases/download/multi-topic-2025-09-01/tech_news_and_tech_culture_digest_20250902_005409_enhanced.mp3",
+      "file_size": 5059440,
+      "duration_estimate": "~4 minutes",
+      "is_enhanced": true,
+      "file_key": "tech_news_and_tech_culture_20250902_005409"
+    },
+    {
+      "topic": "societal_culture_change",
+      "timestamp": "20250904_040130",
+      "date": "2025-09-04T04:01:30",
+      "local_path": "daily_digests/societal_culture_change_digest_20250904_040130.mp3",
+      "public_url": "https://github.com/McSchnizzle/podcast-scraper/releases/download/multi-topic-2025-09-01/societal_culture_change_digest_20250904_040130.mp3",
+      "file_size": 5003850,
+      "duration_estimate": "~4 minutes",
+      "is_enhanced": false,
+      "file_key": "societal_culture_change_20250904_040130"
+    },
+    {
+      "topic": "tech_product_releases",
+      "timestamp": "20250904_040227",
+      "date": "2025-09-04T04:02:27",
+      "local_path": "daily_digests/tech_product_releases_digest_20250904_040227.mp3",
+      "public_url": "https://github.com/McSchnizzle/podcast-scraper/releases/download/multi-topic-2025-09-01/tech_product_releases_digest_20250904_040227.mp3",
+      "file_size": 4251105,
+      "duration_estimate": "~4 minutes",
+      "is_enhanced": false,
+      "file_key": "tech_product_releases_20250904_040227"
+    }
+  ]
+}

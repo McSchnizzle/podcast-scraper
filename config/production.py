@@ -59,12 +59,66 @@ class ProductionConfig:
     SELECTOR_THRESHOLD: float = 0.65
 
     def __post_init__(self):
-        # Provide defaults for OPENAI_SETTINGS / OPENAI_MODELS used by the codebase
+        # Provide complete OPENAI_SETTINGS structure expected by the codebase
         self.OPENAI_SETTINGS = {
+            # Model configuration - using actual OpenAI model names
+            'digest_model': _env('DIGEST_MODEL', 'gpt-4-turbo-preview'),
+            'scoring_model': _env('SCORING_MODEL', 'gpt-4o-mini'),  # Cost-effective for scoring
+            'validator_model': _env('VALIDATOR_MODEL', 'gpt-4o-mini'),  # Cost-effective for validation
+            
+            # Digest generation settings
+            'digest_temperature': 0.7,
+            'digest_presence_penalty': 0.1,
+            'digest_frequency_penalty': 0.2,
+            'digest_max_tokens': 4000,
+            
+            # Scoring settings
+            'scoring_temperature': 0.1,
+            'scoring_max_tokens': 500,
+            'timeout_seconds': 60,
+            'batch_size': 5,  # Number of episodes to score in one batch
+            'rate_limit_delay': 1,  # Seconds between API calls
+            'relevance_threshold': 0.65,  # CRITICAL: Minimum score to include in topic digest
+            
+            # Map-reduce settings for token optimization
+            'max_episodes_per_topic': 6,  # Top-N cap per topic
+            'max_episode_summary_tokens': 450,  # Per-episode summary token limit
+            'max_reduce_tokens': 6000,  # Total tokens for final digest prompt
+            'max_retries': 4,  # Exponential backoff retries
+            'backoff_base_delay': 0.5,  # Starting delay for exponential backoff
+            
+            # Legacy keys for backward compatibility
             "model": self.SUMMARY_MODEL,
             "temperature": float(_env("SUMMARY_TEMPERATURE", "0.2")),
             "max_tokens": int(_env("SUMMARY_MAX_TOKENS", "1600")),
             "timeout": int(_env("OPENAI_TIMEOUT_SECS", "60")),
+            
+            'topics': {
+                'AI News': {
+                    'description': 'Artificial intelligence developments, AI research, machine learning breakthroughs, AI industry news, AI policy and ethics',
+                    'prompt': 'artificial intelligence, AI news, machine learning, deep learning, AI research, AI breakthroughs, AI industry, AI policy, AI ethics, AI regulation, generative AI, LLMs, AI startups, AI funding'
+                },
+                'Tech Product Releases': {
+                    'description': 'New technology product launches, hardware releases, software updates, gadget reviews, product announcements',
+                    'prompt': 'product launch, product release, new products, hardware launch, software release, gadget announcement, tech products, product reviews, device launch, tech hardware, consumer electronics'
+                },
+                'Tech News and Tech Culture': {
+                    'description': 'Technology industry news, tech company developments, tech culture discussions, digital trends, tech policy',
+                    'prompt': 'tech news, technology industry, tech companies, tech culture, digital trends, tech policy, tech regulation, tech industry analysis, tech leadership, tech innovation, startup news'
+                },
+                'Community Organizing': {
+                    'description': 'Grassroots organizing, community activism, local organizing efforts, civic engagement, community building strategies',
+                    'prompt': 'community organizing, grassroots activism, local organizing, civic engagement, community building, activist organizing, community mobilization, grassroots campaigns, community advocacy, local activism'
+                },
+                'Social Justice': {
+                    'description': 'Social justice movements, civil rights, equity and inclusion, systemic justice issues, advocacy and activism',
+                    'prompt': 'social justice, civil rights, equity, inclusion, systemic justice, social equity, human rights, justice advocacy, social activism, civil rights movement, racial justice, economic justice'
+                },
+                'Societal Culture Change': {
+                    'description': 'Cultural shifts, social movements, changing social norms, generational changes, cultural transformation',
+                    'prompt': 'cultural change, social movements, cultural shifts, social transformation, generational change, cultural evolution, social change, cultural trends, societal transformation, cultural movements'
+                }
+            }
         }
         self.OPENAI_MODELS = {
             "summary": self.SUMMARY_MODEL,

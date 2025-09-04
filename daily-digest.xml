@@ -1,14 +1,14 @@
 <?xml version="1.0" ?>
 <rss xmlns:itunes="http://www.itunes.com/dtds/podcast-1.0.dtd" xmlns:content="http://purl.org/rss/1.0/modules/content/" version="2.0">
   <channel>
-    <title>Daily Tech &amp; Society Digest</title>
+    <title>Daily Tech &amp;amp; Society Digest</title>
     <description>AI-generated daily digest covering technology, society, and culture from leading podcasts and creators, organized by topic</description>
     <link>https://paulrbrown.org/daily-digest</link>
     <language>en-US</language>
     <copyright>© 2025 Paul Brown</copyright>
     <managingEditor>podcast@paulrbrown.org (Paul Brown)</managingEditor>
     <webMaster>podcast@paulrbrown.org (Paul Brown)</webMaster>
-    <lastBuildDate>Thu, 04 Sep 2025 07:05:25 +0000</lastBuildDate>
+    <lastBuildDate>Thu, 04 Sep 2025 09:56:17 +0000</lastBuildDate>
     <itunes:author>Paul Brown</itunes:author>
     <itunes:summary>AI-generated daily digest covering technology, society, and culture from leading podcasts and creators, organized by topic</itunes:summary>
     <itunes:owner>Paul Brown</itunes:owner>
@@ -17,135 +17,87 @@
     <itunes:explicit>no</itunes:explicit>
     <item>
       <title>Tech Product Releases - September 04, 2025</title>
-      <description>The key highlights of the day included Google AI's new model, a strategic partnership between Midjourney and Meta, and a successful fundraising round by Anthropic. This new model showcases significant advancements in image editing capabilities at a fraction of the cost, seemingly putting Google at t</description>
+      <description>Tech Product Releases digest from September 04, 2025. New product launches, updates, and technology announcements</description>
       <link>https://paulrbrown.org/daily-digest/20250904_040227</link>
-      <guid>https://paulrbrown.org/daily-digest/20250904_040227</guid>
+      <guid>https://paulrbrown.org/digest/2025-09-04/tech_product_releases/f000217c</guid>
       <pubDate>Thu, 04 Sep 2025 04:02:27 +0000</pubDate>
-      <enclosure url="https://paulrbrown.org/audio/tech_product_releases_digest_20250904_040227.mp3" length="4251105" type="audio/mpeg"/>
+      <enclosure url="https://github.com/McSchnizzle/podcast-scraper/releases/download/multi-topic-2025-09-01/tech_product_releases_digest_20250904_040227.mp3" length="4251105" type="audio/mpeg"/>
       <itunes:title>Tech Product Releases - September 04, 2025</itunes:title>
-      <itunes:summary>The key highlights of the day included Google AI's new model, a strategic partnership between Midjourney and Meta, and a successful fundraising round by Anthropic. This new model showcases significant advancements in image editing capabilities at a fraction of the cost, seemingly putting Google at t</itunes:summary>
+      <itunes:summary>Tech Product Releases digest from September 04, 2025. New product launches, updates, and technology announcements</itunes:summary>
       <itunes:duration>240</itunes:duration>
       <itunes:keywords>Technology/Products</itunes:keywords>
     </item>
     <item>
       <title>Societal Culture Change - September 04, 2025</title>
-      <description>In this episode, we explore the clash of AI and media, focusing on YouTube's backlash and Netflix's Gen AI rules. We discuss the generational divide in attitudes toward AI, the demand for creator control, and the cultural implications of AI's growing influence on digital content.</description>
+      <description>Societal Culture Change digest from September 04, 2025. Cultural shifts, social movements, and societal transformation</description>
       <link>https://paulrbrown.org/daily-digest/20250904_040130</link>
-      <guid>https://paulrbrown.org/daily-digest/20250904_040130</guid>
+      <guid>https://paulrbrown.org/digest/2025-09-04/societal_culture_change/635d7f2b</guid>
       <pubDate>Thu, 04 Sep 2025 04:01:30 +0000</pubDate>
-      <enclosure url="https://paulrbrown.org/audio/societal_culture_change_digest_20250904_040130.mp3" length="5003850" type="audio/mpeg"/>
+      <enclosure url="https://github.com/McSchnizzle/podcast-scraper/releases/download/multi-topic-2025-09-01/societal_culture_change_digest_20250904_040130.mp3" length="5003850" type="audio/mpeg"/>
       <itunes:title>Societal Culture Change - September 04, 2025</itunes:title>
-      <itunes:summary>In this episode, we explore the clash of AI and media, focusing on YouTube's backlash and Netflix's Gen AI rules. We discuss the generational divide in attitudes toward AI, the demand for creator control, and the cultural implications of AI's growing influence on digital content.</itunes:summary>
+      <itunes:summary>Societal Culture Change digest from September 04, 2025. Cultural shifts, social movements, and societal transformation</itunes:summary>
       <itunes:duration>240</itunes:duration>
       <itunes:keywords>Society/Culture</itunes:keywords>
     </item>
     <item>
-      <title>AI News &amp; Developments - September 01, 2025</title>
-      <description>In the realm of artificial intelligence, September 2025 has been a month of significant developments. In the midst of these developments, Apple's potential acquisition pursuits suggest a strategic shift in the tech giant's approach to AI.</description>
+      <title>Tech News &amp;amp; Culture - September 02, 2025</title>
+      <description>Tech News &amp;amp; Culture digest from September 02, 2025. Technology industry news, trends, and cultural developments</description>
+      <link>https://paulrbrown.org/daily-digest/20250902_005409</link>
+      <guid>https://paulrbrown.org/digest/2025-09-02/tech_news_and_tech_culture/9a8dfacb</guid>
+      <pubDate>Tue, 02 Sep 2025 00:54:09 +0000</pubDate>
+      <enclosure url="https://github.com/McSchnizzle/podcast-scraper/releases/download/multi-topic-2025-09-01/tech_news_and_tech_culture_digest_20250902_005409_enhanced.mp3" length="5059440" type="audio/mpeg"/>
+      <itunes:title>Tech News &amp;amp; Culture - September 02, 2025</itunes:title>
+      <itunes:summary>Tech News &amp;amp; Culture digest from September 02, 2025. Technology industry news, trends, and cultural developments</itunes:summary>
+      <itunes:duration>240</itunes:duration>
+      <itunes:keywords>Technology/News</itunes:keywords>
+    </item>
+    <item>
+      <title>Societal Culture Change - September 02, 2025</title>
+      <description>Societal Culture Change digest from September 02, 2025. Cultural shifts, social movements, and societal transformation</description>
+      <link>https://paulrbrown.org/daily-digest/20250902_005315</link>
+      <guid>https://paulrbrown.org/digest/2025-09-02/societal_culture_change/48e2c8e9</guid>
+      <pubDate>Tue, 02 Sep 2025 00:53:15 +0000</pubDate>
+      <enclosure url="https://github.com/McSchnizzle/podcast-scraper/releases/download/multi-topic-2025-09-01/societal_culture_change_digest_20250902_005315_enhanced.mp3" length="4901034" type="audio/mpeg"/>
+      <itunes:title>Societal Culture Change - September 02, 2025</itunes:title>
+      <itunes:summary>Societal Culture Change digest from September 02, 2025. Cultural shifts, social movements, and societal transformation</itunes:summary>
+      <itunes:duration>240</itunes:duration>
+      <itunes:keywords>Society/Culture</itunes:keywords>
+    </item>
+    <item>
+      <title>AI News &amp;amp; Developments Catch-up Digest - September 01, 2025</title>
+      <description>Monday catch-up ai news &amp;amp; developments digest from September 01, 2025. Covering weekend and recent developments you may have missed. Latest artificial intelligence news, breakthroughs, and industry developments</description>
       <link>https://paulrbrown.org/daily-digest/20250901_204213</link>
-      <guid>https://paulrbrown.org/daily-digest/20250901_204213</guid>
+      <guid>https://paulrbrown.org/digest/2025-09-01/ai_news/e1c66127</guid>
       <pubDate>Mon, 01 Sep 2025 20:42:13 +0000</pubDate>
-      <enclosure url="https://paulrbrown.org/audio/ai_news_digest_20250901_204213.mp3" length="4890165" type="audio/mpeg"/>
-      <itunes:title>AI News &amp; Developments - September 01, 2025</itunes:title>
-      <itunes:summary>In the realm of artificial intelligence, September 2025 has been a month of significant developments. In the midst of these developments, Apple's potential acquisition pursuits suggest a strategic shift in the tech giant's approach to AI.</itunes:summary>
+      <enclosure url="https://github.com/McSchnizzle/podcast-scraper/releases/download/multi-topic-2025-09-01/ai_news_digest_20250901_204213.mp3" length="4890165" type="audio/mpeg"/>
+      <itunes:title>AI News &amp;amp; Developments Catch-up Digest - September 01, 2025</itunes:title>
+      <itunes:summary>Monday catch-up ai news &amp;amp; developments digest from September 01, 2025. Covering weekend and recent developments you may have missed. Latest artificial intelligence news, breakthroughs, and industry developments</itunes:summary>
       <itunes:duration>240</itunes:duration>
       <itunes:keywords>Technology/AI</itunes:keywords>
     </item>
     <item>
-      <title>AI News &amp; Developments - September 01, 2025</title>
-      <description>As we delve into the AI news and developments of September 1, 2025, one event stands out above the rest: the release of GPT-5 by OpenAI. This new model has significantly disrupted the landscape of accessible AI, democratizing the power of high-level reasoning AI models.</description>
+      <title>AI News &amp;amp; Developments Catch-up Digest - September 01, 2025</title>
+      <description>Monday catch-up ai news &amp;amp; developments digest from September 01, 2025. Covering weekend and recent developments you may have missed. Latest artificial intelligence news, breakthroughs, and industry developments</description>
       <link>https://paulrbrown.org/daily-digest/20250901_203850</link>
-      <guid>https://paulrbrown.org/daily-digest/20250901_203850</guid>
+      <guid>https://paulrbrown.org/digest/2025-09-01/ai_news/2c8a9ef9</guid>
       <pubDate>Mon, 01 Sep 2025 20:38:50 +0000</pubDate>
-      <enclosure url="https://paulrbrown.org/audio/ai_news_digest_20250901_203850.mp3" length="4099386" type="audio/mpeg"/>
-      <itunes:title>AI News &amp; Developments - September 01, 2025</itunes:title>
-      <itunes:summary>As we delve into the AI news and developments of September 1, 2025, one event stands out above the rest: the release of GPT-5 by OpenAI. This new model has significantly disrupted the landscape of accessible AI, democratizing the power of high-level reasoning AI models.</itunes:summary>
+      <enclosure url="https://github.com/McSchnizzle/podcast-scraper/releases/download/multi-topic-2025-09-01/ai_news_digest_20250901_203850.mp3" length="4099386" type="audio/mpeg"/>
+      <itunes:title>AI News &amp;amp; Developments Catch-up Digest - September 01, 2025</itunes:title>
+      <itunes:summary>Monday catch-up ai news &amp;amp; developments digest from September 01, 2025. Covering weekend and recent developments you may have missed. Latest artificial intelligence news, breakthroughs, and industry developments</itunes:summary>
       <itunes:duration>180</itunes:duration>
       <itunes:keywords>Technology/AI</itunes:keywords>
     </item>
     <item>
-      <title>AI News &amp; Developments - September 01, 2025</title>
-      <description>One of the most recent breakthroughs that has caught the attention of many is the announcement of GPT-5, a new AI model. This model is a game-changer, significantly enhancing the capacity for reasoning, factual accuracy, and language understanding.</description>
+      <title>AI News &amp;amp; Developments Catch-up Digest - September 01, 2025</title>
+      <description>Monday catch-up ai news &amp;amp; developments digest from September 01, 2025. Covering weekend and recent developments you may have missed. Latest artificial intelligence news, breakthroughs, and industry developments</description>
       <link>https://paulrbrown.org/daily-digest/20250901_175357</link>
-      <guid>https://paulrbrown.org/daily-digest/20250901_175357</guid>
+      <guid>https://paulrbrown.org/digest/2025-09-01/ai_news/65a65ded</guid>
       <pubDate>Mon, 01 Sep 2025 17:53:57 +0000</pubDate>
-      <enclosure url="https://paulrbrown.org/audio/ai_news_digest_20250901_175357_enhanced.mp3" length="3872436" type="audio/mpeg"/>
-      <itunes:title>AI News &amp; Developments - September 01, 2025</itunes:title>
-      <itunes:summary>One of the most recent breakthroughs that has caught the attention of many is the announcement of GPT-5, a new AI model. This model is a game-changer, significantly enhancing the capacity for reasoning, factual accuracy, and language understanding.</itunes:summary>
+      <enclosure url="https://github.com/McSchnizzle/podcast-scraper/releases/download/multi-topic-2025-09-01/ai_news_digest_20250901_175357_enhanced.mp3" length="3872436" type="audio/mpeg"/>
+      <itunes:title>AI News &amp;amp; Developments Catch-up Digest - September 01, 2025</itunes:title>
+      <itunes:summary>Monday catch-up ai news &amp;amp; developments digest from September 01, 2025. Covering weekend and recent developments you may have missed. Latest artificial intelligence news, breakthroughs, and industry developments</itunes:summary>
       <itunes:duration>180</itunes:duration>
       <itunes:keywords>Technology/AI</itunes:keywords>
-    </item>
-    <item>
-      <title>AI News &amp; Developments - September 01, 2025</title>
-      <description>In this week's AI News Digest, we spotlight the launch of OpenAI's GPT-5, a groundbreaking language model enhancing natural language processing. We also discuss emerging trends in machine learning infrastructure aimed at creating more efficient and sustainable AI solutions.</description>
-      <link>https://paulrbrown.org/daily-digest/20250901_171631</link>
-      <guid>https://paulrbrown.org/daily-digest/20250901_171631</guid>
-      <pubDate>Mon, 01 Sep 2025 17:16:31 +0000</pubDate>
-      <enclosure url="https://paulrbrown.org/audio/ai_news_digest_20250901_171631_enhanced.mp3" length="3009351" type="audio/mpeg"/>
-      <itunes:title>AI News &amp; Developments - September 01, 2025</itunes:title>
-      <itunes:summary>In this week's AI News Digest, we spotlight the launch of OpenAI's GPT-5, a groundbreaking language model enhancing natural language processing. We also discuss emerging trends in machine learning infrastructure aimed at creating more efficient and sustainable AI solutions.</itunes:summary>
-      <itunes:duration>120</itunes:duration>
-      <itunes:keywords>Technology/AI</itunes:keywords>
-    </item>
-    <item>
-      <title>AI News &amp; Developments - September 01, 2025</title>
-      <description>Stay updated with the latest in AI as we explore significant advancements, new models, and industry developments from September 1, 2025. Discover key research findings, market trends, and actionable insights to navigate the evolving AI landscape effectively.</description>
-      <link>https://paulrbrown.org/daily-digest/20250901_171626</link>
-      <guid>https://paulrbrown.org/daily-digest/20250901_171626</guid>
-      <pubDate>Mon, 01 Sep 2025 17:16:26 +0000</pubDate>
-      <enclosure url="https://paulrbrown.org/audio/ai_news_digest_20250901_171626_enhanced.mp3" length="2491499" type="audio/mpeg"/>
-      <itunes:title>AI News &amp; Developments - September 01, 2025</itunes:title>
-      <itunes:summary>Stay updated with the latest in AI as we explore significant advancements, new models, and industry developments from September 1, 2025. Discover key research findings, market trends, and actionable insights to navigate the evolving AI landscape effectively.</itunes:summary>
-      <itunes:duration>120</itunes:duration>
-      <itunes:keywords>Technology/AI</itunes:keywords>
-    </item>
-    <item>
-      <title>Daily Tech Digest - September 01, 2025</title>
-      <description>In this episode of Daily Tech Digest, we explore Apple's potential $10B AI acquisitions, Microsoft's launch of proprietary AI models, and Anthropic's settlement over copyright issues. We also discuss the implications of AI on employment and workplace trust.</description>
-      <link>https://paulrbrown.org/daily-digest/20250901_115502</link>
-      <guid>https://paulrbrown.org/daily-digest/20250901_115502</guid>
-      <pubDate>Mon, 01 Sep 2025 11:55:02 +0000</pubDate>
-      <enclosure url="https://paulrbrown.org/audio/daily_digest_20250901_115502_enhanced.mp3" length="3486242" type="audio/mpeg"/>
-      <itunes:title>Daily Tech Digest - September 01, 2025</itunes:title>
-      <itunes:summary>In this episode of Daily Tech Digest, we explore Apple's potential $10B AI acquisitions, Microsoft's launch of proprietary AI models, and Anthropic's settlement over copyright issues. We also discuss the implications of AI on employment and workplace trust.</itunes:summary>
-      <itunes:duration>180</itunes:duration>
-      <itunes:keywords>Technology/General</itunes:keywords>
-    </item>
-    <item>
-      <title>Daily Tech Digest - September 01, 2025</title>
-      <description>In today’s Daily Tech Digest, explore Google’s free Universal Voice Translator and OpenAI’s new Voice API enhancing real-time conversation capabilities. Also, dive into the Pixel 10 Pro’s launch featuring the Tensor G5 chip and advancements in AI technology.</description>
-      <link>https://paulrbrown.org/daily-digest/20250901_113824</link>
-      <guid>https://paulrbrown.org/daily-digest/20250901_113824</guid>
-      <pubDate>Mon, 01 Sep 2025 11:38:24 +0000</pubDate>
-      <enclosure url="https://paulrbrown.org/audio/daily_digest_20250901_113824_enhanced.mp3" length="3566490" type="audio/mpeg"/>
-      <itunes:title>Daily Tech Digest - September 01, 2025</itunes:title>
-      <itunes:summary>In today’s Daily Tech Digest, explore Google’s free Universal Voice Translator and OpenAI’s new Voice API enhancing real-time conversation capabilities. Also, dive into the Pixel 10 Pro’s launch featuring the Tensor G5 chip and advancements in AI technology.</itunes:summary>
-      <itunes:duration>180</itunes:duration>
-      <itunes:keywords>Technology/General</itunes:keywords>
-    </item>
-    <item>
-      <title>Daily Tech Digest - September 01, 2025</title>
-      <description>In today's Daily Tech Digest, we explore Apple's potential major AI acquisitions, including partnerships with Google to enhance Siri, and Meta's collaboration with Midjourney for visual AI. We also discuss Microsoft's latest AI initiatives and the growing concerns over trust in workplace AI.</description>
-      <link>https://paulrbrown.org/daily-digest/20250901_015602</link>
-      <guid>https://paulrbrown.org/daily-digest/20250901_015602</guid>
-      <pubDate>Mon, 01 Sep 2025 01:56:02 +0000</pubDate>
-      <enclosure url="https://paulrbrown.org/audio/daily_digest_20250901_015602_enhanced.mp3" length="4222686" type="audio/mpeg"/>
-      <itunes:title>Daily Tech Digest - September 01, 2025</itunes:title>
-      <itunes:summary>In today's Daily Tech Digest, we explore Apple's potential major AI acquisitions, including partnerships with Google to enhance Siri, and Meta's collaboration with Midjourney for visual AI. We also discuss Microsoft's latest AI initiatives and the growing concerns over trust in workplace AI.</itunes:summary>
-      <itunes:duration>240</itunes:duration>
-      <itunes:keywords>Technology/General</itunes:keywords>
-    </item>
-    <item>
-      <title>Daily Tech Digest - September 01, 2025</title>
-      <description>**Apple Exploring Major AI Acquisition** - Apple is considering acquisitions including Mistral AI and Perplexity to address their AI capabilities gap. **Google-Apple AI Partnership** - Google's Gemini may power next-gen Siri, marking a significant shift in Apple's AI strategy and potentially reshapi</description>
-      <link>https://paulrbrown.org/daily-digest/20250901_013235</link>
-      <guid>https://paulrbrown.org/daily-digest/20250901_013235</guid>
-      <pubDate>Mon, 01 Sep 2025 01:32:35 +0000</pubDate>
-      <enclosure url="https://paulrbrown.org/audio/daily_digest_20250901_013235_enhanced.mp3" length="4241076" type="audio/mpeg"/>
-      <itunes:title>Daily Tech Digest - September 01, 2025</itunes:title>
-      <itunes:summary>**Apple Exploring Major AI Acquisition** - Apple is considering acquisitions including Mistral AI and Perplexity to address their AI capabilities gap. **Google-Apple AI Partnership** - Google's Gemini may power next-gen Siri, marking a significant shift in Apple's AI strategy and potentially reshapi</itunes:summary>
-      <itunes:duration>240</itunes:duration>
-      <itunes:keywords>Technology/General</itunes:keywords>
     </item>
   </channel>
 </rss>

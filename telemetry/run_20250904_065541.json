@@ -1,0 +1,39 @@
+{
+  "run_id": "run_20250904_065541",
+  "timestamp": "2025-09-04T06:55:41.269851",
+  "pipeline_type": "daily",
+  "total_processing_time": 35.0449800491333,
+  "topics_processed": [
+    {
+      "topic": "AI News",
+      "total_candidates": 1,
+      "above_threshold_count": 1,
+      "selected_count": 1,
+      "threshold_used": 0.65,
+      "map_phase_tokens": 384,
+      "reduce_phase_tokens": 2644,
+      "total_tokens": 3028,
+      "retry_count": 0,
+      "processing_time_seconds": 25.651501893997192,
+      "episode_ids_included": [
+        "9626cc37"
+      ],
+      "episode_ids_dropped": [],
+      "success": true,
+      "error_message": null
+    }
+  ],
+  "episodes_transcribed": 0,
+  "episodes_scored": 0,
+  "episodes_digested": 0,
+  "files_deployed": 0,
+  "rss_items_generated": 0,
+  "total_api_calls": 1,
+  "total_tokens_used": 3028,
+  "total_cost_estimate": 0.10604799999999999,
+  "errors": [],
+  "warnings": [
+    "No transcripts available for Tech News and Tech Culture",
+    "No transcripts available for Tech Product Releases"
+  ]
+}

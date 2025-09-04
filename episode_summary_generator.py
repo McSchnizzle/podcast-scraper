@@ -56,7 +56,27 @@ class EpisodeSummaryGenerator:
                 self.client = None
                 self.api_available = False
         
-        self.settings = config.OPENAI_SETTINGS
+        # Defensive fallback for OPENAI_SETTINGS with defaults
+        DEFAULTS = {
+            "model": "gpt-4o-mini",
+            "temperature": 0.2,
+            "max_tokens": 1600,
+            "timeout": 60,
+            "relevance_threshold": 0.65,
+            "summary_model": "gpt-4o-mini",
+            "scoring_model": "gpt-4o-mini",
+            "validator_model": "gpt-4-turbo-preview",
+        }
+        
+        settings = dict(getattr(config, "OPENAI_SETTINGS", {}))
+        for k, v in DEFAULTS.items():
+            settings.setdefault(k, v)
+        
+        self.settings = settings
+        self.relevance_threshold = float(settings["relevance_threshold"])
+        self.summary_model = settings["summary_model"]
+        self.scoring_model = settings["scoring_model"]
+        self.validator_model = settings["validator_model"]
         
         # Initialize cache database
         self._init_cache_db()
