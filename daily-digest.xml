@@ -8,13 +8,37 @@
     <copyright>© 2025 Paul Brown</copyright>
     <managingEditor>podcast@paulrbrown.org (Paul Brown)</managingEditor>
     <webMaster>podcast@paulrbrown.org (Paul Brown)</webMaster>
-    <lastBuildDate>Tue, 02 Sep 2025 00:22:55 +0000</lastBuildDate>
+    <lastBuildDate>Thu, 04 Sep 2025 07:05:25 +0000</lastBuildDate>
     <itunes:author>Paul Brown</itunes:author>
     <itunes:summary>AI-generated daily digest covering technology, society, and culture from leading podcasts and creators, organized by topic</itunes:summary>
     <itunes:owner>Paul Brown</itunes:owner>
     <itunes:image href="https://paulrbrown.org/podcast-artwork.jpg"/>
     <itunes:category text="Technology"/>
     <itunes:explicit>no</itunes:explicit>
+    <item>
+      <title>Tech Product Releases - September 04, 2025</title>
+      <description>The key highlights of the day included Google AI's new model, a strategic partnership between Midjourney and Meta, and a successful fundraising round by Anthropic. This new model showcases significant advancements in image editing capabilities at a fraction of the cost, seemingly putting Google at t</description>
+      <link>https://paulrbrown.org/daily-digest/20250904_040227</link>
+      <guid>https://paulrbrown.org/daily-digest/20250904_040227</guid>
+      <pubDate>Thu, 04 Sep 2025 04:02:27 +0000</pubDate>
+      <enclosure url="https://paulrbrown.org/audio/tech_product_releases_digest_20250904_040227.mp3" length="4251105" type="audio/mpeg"/>
+      <itunes:title>Tech Product Releases - September 04, 2025</itunes:title>
+      <itunes:summary>The key highlights of the day included Google AI's new model, a strategic partnership between Midjourney and Meta, and a successful fundraising round by Anthropic. This new model showcases significant advancements in image editing capabilities at a fraction of the cost, seemingly putting Google at t</itunes:summary>
+      <itunes:duration>240</itunes:duration>
+      <itunes:keywords>Technology/Products</itunes:keywords>
+    </item>
+    <item>
+      <title>Societal Culture Change - September 04, 2025</title>
+      <description>In this episode, we explore the clash of AI and media, focusing on YouTube's backlash and Netflix's Gen AI rules. We discuss the generational divide in attitudes toward AI, the demand for creator control, and the cultural implications of AI's growing influence on digital content.</description>
+      <link>https://paulrbrown.org/daily-digest/20250904_040130</link>
+      <guid>https://paulrbrown.org/daily-digest/20250904_040130</guid>
+      <pubDate>Thu, 04 Sep 2025 04:01:30 +0000</pubDate>
+      <enclosure url="https://paulrbrown.org/audio/societal_culture_change_digest_20250904_040130.mp3" length="5003850" type="audio/mpeg"/>
+      <itunes:title>Societal Culture Change - September 04, 2025</itunes:title>
+      <itunes:summary>In this episode, we explore the clash of AI and media, focusing on YouTube's backlash and Netflix's Gen AI rules. We discuss the generational divide in attitudes toward AI, the demand for creator control, and the cultural implications of AI's growing influence on digital content.</itunes:summary>
+      <itunes:duration>240</itunes:duration>
+      <itunes:keywords>Society/Culture</itunes:keywords>
+    </item>
     <item>
       <title>AI News &amp; Developments - September 01, 2025</title>
       <description>In the realm of artificial intelligence, September 2025 has been a month of significant developments. In the midst of these developments, Apple's potential acquisition pursuits suggest a strategic shift in the tech giant's approach to AI.</description>
@@ -101,13 +125,13 @@
     </item>
     <item>
       <title>Daily Tech Digest - September 01, 2025</title>
-      <description>**Apple Exploring Major AI Acquisition** - Apple is considering acquisitions including Mistral AI and Perplexity to address their AI capabilities gap. **Google-Apple AI Partnership** - Google's Gemini may power next-gen Siri, marking a significant shift in Apple's AI strategy and potentially reshapi</description>
+      <description>In today's Daily Tech Digest, we explore Apple's potential major AI acquisitions, including partnerships with Google to enhance Siri, and Meta's collaboration with Midjourney for visual AI. We also discuss Microsoft's latest AI initiatives and the growing concerns over trust in workplace AI.</description>
       <link>https://paulrbrown.org/daily-digest/20250901_015602</link>
       <guid>https://paulrbrown.org/daily-digest/20250901_015602</guid>
       <pubDate>Mon, 01 Sep 2025 01:56:02 +0000</pubDate>
       <enclosure url="https://paulrbrown.org/audio/daily_digest_20250901_015602_enhanced.mp3" length="4222686" type="audio/mpeg"/>
       <itunes:title>Daily Tech Digest - September 01, 2025</itunes:title>
-      <itunes:summary>**Apple Exploring Major AI Acquisition** - Apple is considering acquisitions including Mistral AI and Perplexity to address their AI capabilities gap. **Google-Apple AI Partnership** - Google's Gemini may power next-gen Siri, marking a significant shift in Apple's AI strategy and potentially reshapi</itunes:summary>
+      <itunes:summary>In today's Daily Tech Digest, we explore Apple's potential major AI acquisitions, including partnerships with Google to enhance Siri, and Meta's collaboration with Midjourney for visual AI. We also discuss Microsoft's latest AI initiatives and the growing concerns over trust in workplace AI.</itunes:summary>
       <itunes:duration>240</itunes:duration>
       <itunes:keywords>Technology/General</itunes:keywords>
     </item>

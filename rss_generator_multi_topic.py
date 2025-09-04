@@ -15,6 +15,7 @@ import hashlib
 from pathlib import Path
 from typing import List, Dict, Tuple, Optional
 from episode_summary_generator import EpisodeSummaryGenerator
+from utils.sanitization import sanitize_xml_content, safe_log_message
 
 class MultiTopicRSSGenerator:
     def __init__(self, db_path="podcast_monitor.db", base_url="https://paulrbrown.org"):
@@ -84,6 +85,65 @@ class MultiTopicRSSGenerator:
     
     def find_digest_files(self, days=7) -> List[Dict]:
         """Find all topic-specific digest files from the last N days"""
+        # First try to load from deployment metadata (GitHub releases)
+        deployment_metadata = self._load_deployment_metadata()
+        if deployment_metadata:
+            return self._process_deployment_metadata(deployment_metadata, days)
+        
+        # Fallback to file system discovery
+        print("⚠️ No deployment metadata found, falling back to file system discovery")
+        return self._find_digest_files_fallback(days)
+    
+    def _load_deployment_metadata(self) -> Optional[Dict]:
+        """Load deployment metadata from deploy script"""
+        metadata_file = Path("deployment_metadata.json")
+        if not metadata_file.exists():
+            return None
+        
+        try:
+            with open(metadata_file, 'r') as f:
+                return json.load(f)
+        except Exception as e:
+            print(f"⚠️ Could not load deployment metadata: {e}")
+            return None
+    
+    def _process_deployment_metadata(self, metadata: Dict, days: int) -> List[Dict]:
+        """Process deployment metadata into digest files format"""
+        cutoff_date = datetime.now()
+        cutoff_date = cutoff_date.replace(hour=0, minute=0, second=0, microsecond=0)
+        cutoff_timestamp = cutoff_date.timestamp() - (days * 24 * 3600)
+        
+        digest_files = []
+        
+        for episode in metadata.get('episodes', []):
+            try:
+                file_date = datetime.fromisoformat(episode['date'])
+                if file_date.timestamp() < cutoff_timestamp:
+                    continue
+                
+                # Use deployment metadata for accurate URLs and file info
+                digest_files.append({
+                    'topic': episode['topic'],
+                    'timestamp': episode['timestamp'],
+                    'date': file_date,
+                    'md_file': Path(episode['local_path']).with_suffix('.md') if Path(episode['local_path']).exists() else None,
+                    'mp3_file': Path(episode['local_path']),
+                    'public_url': episode['public_url'],  # GitHub release URL
+                    'file_size': episode['file_size'],
+                    'content': '',
+                    'description': self._generate_episode_description(episode['topic'], file_date),
+                    'title': self._generate_episode_title(episode['topic'], file_date),
+                    'is_enhanced': episode.get('is_enhanced', False)
+                })
+            except Exception as e:
+                print(f"⚠️ Error processing episode {episode.get('file_key', 'unknown')}: {e}")
+        
+        # Sort by date (newest first)  
+        digest_files.sort(key=lambda x: x['date'], reverse=True)
+        return digest_files
+    
+    def _find_digest_files_fallback(self, days=7) -> List[Dict]:
+        """Fallback file system discovery method"""
         digest_files = []
         digest_dir = Path("daily_digests")
         
@@ -250,11 +310,35 @@ class MultiTopicRSSGenerator:
         return description
     
     def _generate_episode_title(self, topic: str, date: datetime) -> str:
-        """Generate episode title from topic and date"""
+        """Generate episode title from topic and date with Weekly/Catch-up labels"""
         topic_info = self.topic_config.get(topic, {})
         display_name = topic_info.get('display_name', topic.replace('_', ' ').title())
         date_str = date.strftime('%B %d, %Y')
-        return f"{display_name} - {date_str}"
+        
+        # Add special labels based on publication day
+        weekday = date.strftime('%A')
+        if weekday == 'Friday':
+            return f"{display_name} Weekly Digest - {date_str}"
+        elif weekday == 'Monday':
+            return f"{display_name} Catch-up Digest - {date_str}"
+        else:
+            return f"{display_name} - {date_str}"
+    
+    def _generate_episode_description(self, topic: str, date: datetime) -> str:
+        """Generate episode description from topic and date with Weekly/Catch-up context"""
+        topic_info = self.topic_config.get(topic, {})
+        topic_display = topic_info.get('display_name', topic.replace('_', ' ').title())
+        date_formatted = date.strftime('%B %d, %Y')
+        base_description = topic_info.get('description', 'Covering the latest developments and insights.')
+        
+        # Add context based on publication day
+        weekday = date.strftime('%A')
+        if weekday == 'Friday':
+            return f"Weekly {topic_display.lower()} digest from {date_formatted}. Comprehensive weekly overview of the most important developments. {base_description}"
+        elif weekday == 'Monday':
+            return f"Monday catch-up {topic_display.lower()} digest from {date_formatted}. Covering weekend and recent developments you may have missed. {base_description}"
+        else:
+            return f"{topic_display} digest from {date_formatted}. {base_description}"
     
     def _get_file_size(self, file_path: Path) -> int:
         """Get file size safely"""
@@ -263,13 +347,30 @@ class MultiTopicRSSGenerator:
         except:
             return 0
     
+    def _generate_stable_guid(self, topic: str, timestamp: str, date: datetime) -> str:
+        """
+        Generate stable GUID that doesn't change across regenerations for the same digest
+        Format: {date}-{topic}-{hash(episode_ids)}
+        """
+        # Create a consistent identifier based on topic, date, and timestamp
+        date_str = date.strftime('%Y-%m-%d')
+        
+        # Create a hash from the topic and timestamp for uniqueness
+        # This ensures the same digest always gets the same GUID
+        content_hash = hashlib.md5(f"{topic}_{timestamp}".encode()).hexdigest()[:8]
+        
+        # Create stable GUID in format: domain/date/topic/hash
+        stable_guid = f"{self.base_url}/digest/{date_str}/{topic.lower().replace(' ', '-')}/{content_hash}"
+        
+        return stable_guid
+    
     def _estimate_duration(self, file_size: int) -> int:
         """Estimate audio duration in seconds from file size (rough approximation)"""
         # Rough estimate: 1MB ≈ 1 minute for speech MP3
         duration_minutes = max(1, file_size // (1024 * 1024))
         return duration_minutes * 60
     
-    def generate_rss(self, output_file="daily-digest.xml") -> bool:
+    def generate_rss(self, output_file="daily-digest.xml", max_items=100) -> bool:
         """Generate complete RSS feed with all recent topic-specific episodes"""
         try:
             digest_files = self.find_digest_files()
@@ -277,6 +378,11 @@ class MultiTopicRSSGenerator:
             if not digest_files:
                 print("⚠️  No digest files found for RSS generation")
                 return False
+            
+            # Apply item cap (newest first, so we keep the most recent)
+            if len(digest_files) > max_items:
+                digest_files = digest_files[:max_items]
+                print(f"📡 Applied RSS item cap: showing {max_items} of {len(digest_files)} available episodes")
             
             print(f"📡 Generating RSS feed with {len(digest_files)} episodes")
             
@@ -289,8 +395,8 @@ class MultiTopicRSSGenerator:
             channel = SubElement(rss, 'channel')
             
             # Podcast metadata
-            SubElement(channel, 'title').text = self.podcast_info['title']
-            SubElement(channel, 'description').text = self.podcast_info['description']
+            SubElement(channel, 'title').text = sanitize_xml_content(self.podcast_info['title'])
+            SubElement(channel, 'description').text = sanitize_xml_content(self.podcast_info['description'])
             SubElement(channel, 'link').text = self.podcast_info['website']
             SubElement(channel, 'language').text = self.podcast_info['language']
             SubElement(channel, 'copyright').text = self.podcast_info['copyright']
@@ -299,8 +405,8 @@ class MultiTopicRSSGenerator:
             SubElement(channel, 'lastBuildDate').text = datetime.now(timezone.utc).strftime('%a, %d %b %Y %H:%M:%S %z')
             
             # iTunes-specific tags
-            SubElement(channel, 'itunes:author').text = self.podcast_info['author']
-            SubElement(channel, 'itunes:summary').text = self.podcast_info['description']
+            SubElement(channel, 'itunes:author').text = sanitize_xml_content(self.podcast_info['author'])
+            SubElement(channel, 'itunes:summary').text = sanitize_xml_content(self.podcast_info['description'])
             SubElement(channel, 'itunes:owner').text = self.podcast_info['author']
             SubElement(channel, 'itunes:image', href=self.podcast_info['artwork_url'])
             SubElement(channel, 'itunes:category', text=self.podcast_info['category'])
@@ -311,21 +417,29 @@ class MultiTopicRSSGenerator:
                 item = SubElement(channel, 'item')
                 
                 # Basic item info
-                SubElement(item, 'title').text = digest_info['title']
-                SubElement(item, 'description').text = digest_info['description']
+                SubElement(item, 'title').text = sanitize_xml_content(digest_info['title'])
+                SubElement(item, 'description').text = sanitize_xml_content(digest_info['description'])
                 
-                # Generate permalink
+                # Generate permalink and stable GUID
                 permalink = f"{self.podcast_info['website']}/{digest_info['timestamp']}"
+                stable_guid = self._generate_stable_guid(digest_info['topic'], digest_info['timestamp'], digest_info['date'])
+                
                 SubElement(item, 'link').text = permalink
-                SubElement(item, 'guid').text = permalink
+                SubElement(item, 'guid').text = stable_guid
                 
                 # Publication date
                 pub_date = digest_info['date'].replace(tzinfo=timezone.utc)
                 SubElement(item, 'pubDate').text = pub_date.strftime('%a, %d %b %Y %H:%M:%S %z')
                 
-                # Audio enclosure
-                file_size = self._get_file_size(digest_info['mp3_file'])
-                audio_url = f"{self.audio_base_url}/{digest_info['mp3_file'].name}"
+                # Audio enclosure - use deployment metadata URL if available
+                if 'public_url' in digest_info and digest_info['public_url']:
+                    # Use GitHub release URL from deployment metadata
+                    audio_url = digest_info['public_url']
+                    file_size = digest_info.get('file_size', 0)
+                else:
+                    # Fallback to audio base URL construction
+                    file_size = self._get_file_size(digest_info['mp3_file'])
+                    audio_url = f"{self.audio_base_url}/{digest_info['mp3_file'].name}"
                 
                 enclosure = SubElement(item, 'enclosure')
                 enclosure.set('url', audio_url)
@@ -333,8 +447,8 @@ class MultiTopicRSSGenerator:
                 enclosure.set('type', 'audio/mpeg')
                 
                 # iTunes episode info
-                SubElement(item, 'itunes:title').text = digest_info['title']
-                SubElement(item, 'itunes:summary').text = digest_info['description']
+                SubElement(item, 'itunes:title').text = sanitize_xml_content(digest_info['title'])
+                SubElement(item, 'itunes:summary').text = sanitize_xml_content(digest_info['description'])
                 SubElement(item, 'itunes:duration').text = str(self._estimate_duration(file_size))
                 
                 # Topic-specific category

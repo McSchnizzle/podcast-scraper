@@ -1,13 +1,15 @@
 #!/usr/bin/env python3
 """
-Episode Summary Generator - AI-powered RSS episode descriptions
-Generates concise, informative summaries of digest episodes using OpenAI API
+Episode Summary Generator - Map-Reduce Implementation
+Generates per-episode summaries to reduce token usage in digest generation
+Uses GPT-5 models for efficient summarization
 """
 
 import os
 import json
 import hashlib
 import sqlite3
+import time
 from pathlib import Path
 from typing import Optional, Dict, List
 from datetime import datetime
@@ -20,8 +22,14 @@ try:
 except ImportError:
     pass
 
+from config import config
+
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
+
+def approx_tokens(text: str) -> int:
+    """Estimate token count using simple heuristic"""
+    return (len(text) + 3) // 4
 
 class EpisodeSummaryGenerator:
     def __init__(self, cache_db_path: str = "episode_summaries.db"):
@@ -33,19 +41,22 @@ class EpisodeSummaryGenerator:
         # Initialize OpenAI client
         api_key = os.getenv('OPENAI_API_KEY')
         if not api_key:
-            logger.warning("OPENAI_API_KEY environment variable not set - summaries will use fallback descriptions")
-        elif len(api_key.strip()) < 10:
-            logger.warning(f"OPENAI_API_KEY appears invalid (length: {len(api_key.strip())}) - using fallback descriptions")
+            logger.error("OPENAI_API_KEY environment variable not set")
+            self.client = None
+            self.api_available = False
         else:
             try:
                 # Initialize OpenAI client (v1.0+ format)
                 from openai import OpenAI
                 self.client = OpenAI(api_key=api_key.strip())
                 self.api_available = True
-                logger.info("✅ OpenAI client initialized successfully")
+                logger.info(f"✅ Episode Summary Generator initialized with {config.OPENAI_SETTINGS['scoring_model']}")
             except Exception as e:
-                logger.warning(f"Failed to initialize OpenAI client: {e} - using fallback descriptions")
+                logger.error(f"Failed to initialize OpenAI client: {e}")
+                self.client = None
                 self.api_available = False
+        
+        self.settings = config.OPENAI_SETTINGS
         
         # Initialize cache database
         self._init_cache_db()
@@ -259,6 +270,123 @@ class EpisodeSummaryGenerator:
         except Exception as e:
             logger.error(f"Failed to get summary stats: {e}")
             return {}
+
+    def generate_episode_summary(self, episode_data: Dict, topic: str, max_tokens: int = None) -> Optional[str]:
+        """Generate a concise summary of an episode for a specific topic (Map phase)"""
+        if not self.api_available:
+            logger.error("OpenAI API not available")
+            return None
+            
+        if max_tokens is None:
+            max_tokens = self.settings['max_episode_summary_tokens']
+        
+        topic_info = self.settings['topics'].get(topic, {})
+        topic_description = topic_info.get('description', topic)
+        
+        # Create focused summary prompt
+        system_prompt = f"""You are an expert content summarizer. Create a concise summary focused on {topic_description}.
+
+Requirements:
+- Maximum {max_tokens} tokens
+- Focus only on content related to {topic}
+- Include key insights, developments, or announcements
+- Include one compelling quote if particularly relevant
+- Write in flowing prose, no bullet points or lists
+- If episode has minimal {topic} content, state "Limited {topic} content" and provide brief summary"""
+
+        user_prompt = f"""Episode: {episode_data['title']}
+Published: {episode_data['published_date']}
+Source: {episode_data['source']}
+
+Transcript excerpt (first 3000 chars):
+{episode_data['content'][:3000]}
+
+Create a focused summary for {topic} digest."""
+
+        try:
+            response = self.client.chat.completions.create(
+                model=self.settings['scoring_model'],  # Use cost-effective model for efficiency
+                messages=[
+                    {"role": "system", "content": system_prompt},
+                    {"role": "user", "content": user_prompt}
+                ],
+                temperature=self.settings['scoring_temperature'],
+                max_tokens=max_tokens,
+                timeout=self.settings['timeout_seconds']
+            )
+            
+            summary = response.choices[0].message.content.strip()
+            
+            # Log token usage
+            actual_tokens = approx_tokens(summary)
+            logger.info(f"Generated summary for {episode_data['episode_id']} ({topic}): {actual_tokens} tokens")
+            
+            return summary
+            
+        except Exception as e:
+            logger.error(f"Failed to generate summary for {episode_data['episode_id']} ({topic}): {e}")
+            return None
+
+    def select_top_episodes_for_topic(self, transcripts: List[Dict], topic: str, 
+                                    threshold: float = None, max_episodes: int = None) -> List[Dict]:
+        """Select top episodes for a topic based on relevance scores"""
+        if threshold is None:
+            threshold = self.settings['relevance_threshold']
+        if max_episodes is None:
+            max_episodes = self.settings['max_episodes_per_topic']
+        
+        # Filter episodes by topic relevance
+        relevant_episodes = []
+        for episode in transcripts:
+            topic_scores = episode.get('topic_scores', {})
+            topic_score = topic_scores.get(topic, 0.0)
+            
+            if topic_score >= threshold:
+                episode['topic_score'] = topic_score
+                relevant_episodes.append(episode)
+        
+        # Sort by relevance score (highest first) and take top N
+        relevant_episodes.sort(key=lambda x: x['topic_score'], reverse=True)
+        selected_episodes = relevant_episodes[:max_episodes]
+        
+        logger.info(f"Topic '{topic}': {len(relevant_episodes)} candidates, "
+                   f"{len(selected_episodes)} selected (threshold: {threshold})")
+        
+        return selected_episodes
+
+    def generate_topic_summaries(self, transcripts: List[Dict], topic: str) -> List[Dict]:
+        """Generate summaries for all selected episodes for a topic (Map phase)"""
+        selected_episodes = self.select_top_episodes_for_topic(transcripts, topic)
+        
+        if not selected_episodes:
+            logger.warning(f"No episodes selected for topic '{topic}'")
+            return []
+        
+        summaries = []
+        max_summary_tokens = self.settings['max_episode_summary_tokens']
+        
+        for episode in selected_episodes:
+            logger.info(f"Generating summary for {episode['episode_id']} (score: {episode['topic_score']:.3f})")
+            
+            summary = self.generate_episode_summary(episode, topic, max_summary_tokens)
+            if summary:
+                summaries.append({
+                    'episode_id': episode['episode_id'],
+                    'title': episode['title'],
+                    'published_date': episode['published_date'],
+                    'source': episode['source'],
+                    'topic_score': episode['topic_score'],
+                    'summary': summary,
+                    'tokens': approx_tokens(summary)
+                })
+                
+                # Rate limiting
+                time.sleep(self.settings['rate_limit_delay'])
+        
+        total_tokens = sum(s['tokens'] for s in summaries)
+        logger.info(f"Generated {len(summaries)} summaries for '{topic}': {total_tokens} total tokens")
+        
+        return summaries
 
 def main():
     """Test the episode summary generator"""

@@ -140,8 +140,13 @@ Original content:
 
 Rewritten prose:"""
 
+                # Use cost-effective model for prose validation (aligned with config.py)
+                from config import Config
+                config = Config(require_claude=False)
+                model = config.OPENAI_SETTINGS['validator_model']  # Cost-effective model for validation
+                
                 response = self.client.chat.completions.create(
-                    model="gpt-4",
+                    model=model,
                     messages=[{"role": "user", "content": prompt}],
                     max_tokens=4000,
                     temperature=0.3

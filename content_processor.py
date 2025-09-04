@@ -392,9 +392,14 @@ class ContentProcessor:
             # Download audio file
             audio_file = self._download_audio(audio_url, episode_id)
             if not audio_file:
+                self._update_episode_status(ep_id, 'failed', error_reason="Audio download failed")
                 return None
             
-            # Convert to transcript using Parakeet MLX
+            # Update status to 'downloaded' after successful audio download
+            print(f"✅ Audio downloaded to: {audio_file}")
+            self._update_episode_status(ep_id, 'downloaded')
+            
+            # Convert to transcript using ASR backend
             transcript = self._audio_to_transcript(audio_file)
             
             # Note: Audio file cleanup now handled by workflow after database update
@@ -409,6 +414,32 @@ class ContentProcessor:
             # Log failure reason to database
             self._log_episode_failure(episode_id, f"RSS: {error_msg}")
             return None
+
+    def _update_episode_status(self, episode_id, status, error_reason=None):
+        """Update episode status in database with proper logging"""
+        try:
+            conn = sqlite3.connect(self.db_path)
+            cursor = conn.cursor()
+            
+            if error_reason:
+                cursor.execute('''
+                    UPDATE episodes 
+                    SET status = ?, failure_reason = ?
+                    WHERE id = ?
+                ''', (status, error_reason, episode_id))
+                print(f"📊 Episode {episode_id} status: {status} (reason: {error_reason})")
+            else:
+                cursor.execute('''
+                    UPDATE episodes 
+                    SET status = ?
+                    WHERE id = ?
+                ''', (status, episode_id))
+                print(f"📊 Episode {episode_id} status: {status}")
+            
+            conn.commit()
+            conn.close()
+        except Exception as e:
+            print(f"Error updating episode status: {e}")
     
     def _download_audio(self, audio_url, episode_id):
         """Download audio file from RSS feed or use local file if path provided"""
@@ -433,7 +464,8 @@ class ContentProcessor:
                 print(f"Audio file already exists: {audio_file}")
                 return str(audio_file)
             
-            print(f"Downloading audio from {audio_url}")
+            print(f"📥 Downloading audio from {audio_url}")
+            print(f"📂 Target path: {audio_file}")
             headers = {'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36'}
             # Follow redirects and increase timeout for large podcast files
             response = requests.get(audio_url, headers=headers, stream=True, timeout=120, allow_redirects=True)
@@ -443,8 +475,9 @@ class ContentProcessor:
                 for chunk in response.iter_content(chunk_size=8192):
                     f.write(chunk)
             
-            print(f"Downloaded: {audio_file} ({audio_file.stat().st_size} bytes)")
-            return str(audio_file)
+            abs_path = str(audio_file.absolute())
+            print(f"✅ Downloaded: {abs_path} ({audio_file.stat().st_size} bytes)")
+            return abs_path
             
         except Exception as e:
             print(f"Error downloading audio: {e}")

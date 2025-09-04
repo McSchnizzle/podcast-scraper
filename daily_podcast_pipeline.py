@@ -26,6 +26,7 @@ from feed_monitor import FeedMonitor
 from content_processor import ContentProcessor
 from openai_digest_integration import OpenAIDigestIntegration
 from retention_cleanup import RetentionCleanup
+from telemetry_manager import telemetry
 
 # Configuration
 CONFIG = {
@@ -62,6 +63,15 @@ class DailyPodcastPipeline:
         current_weekday = datetime.now().strftime('%A')
         logger.info(f"🚀 Starting Daily Tech Digest Pipeline - {current_weekday}")
         logger.info("=" * 50)
+        
+        # Initialize telemetry for this run
+        pipeline_start_time = time.time()
+        if current_weekday == 'Friday':
+            telemetry.set_pipeline_type('weekly')
+        elif current_weekday == 'Monday':
+            telemetry.set_pipeline_type('catchup')
+        else:
+            telemetry.set_pipeline_type('daily')
         
         # Self-healing: Backfill missing topic scores from previous runs
         import subprocess, sys
@@ -105,10 +115,21 @@ class DailyPodcastPipeline:
             self._cleanup_old_files()
             
             logger.info("✅ Daily workflow completed successfully")
+            
+            # Finalize telemetry
+            total_time = time.time() - pipeline_start_time
+            telemetry.finalize_run(total_time)
+            
             return True
             
         except Exception as e:
             logger.error(f"❌ Daily workflow failed: {e}")
+            telemetry.record_error(f"Pipeline failed: {e}")
+            
+            # Still finalize telemetry for failed runs
+            total_time = time.time() - pipeline_start_time
+            telemetry.finalize_run(total_time)
+            
             return False
     
     def _monitor_rss_feeds(self):

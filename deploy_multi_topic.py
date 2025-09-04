@@ -14,10 +14,17 @@ from pathlib import Path
 from typing import List, Dict, Tuple, Optional
 
 class MultiTopicDeployer:
-    def __init__(self, base_url="https://paulrbrown.org"):
-        self.base_url = base_url
+    def __init__(self, base_url=None):
+        # Use environment variable or fallback to default
+        self.base_url = base_url or os.getenv('PODCAST_BASE_URL', 'https://podcast.paulrbrown.org')
         self.digests_dir = Path("daily_digests")
         self.deployed_marker_file = "deployed_episodes.json"
+        
+        # Validate base URL is set
+        if not self.base_url:
+            raise ValueError("PODCAST_BASE_URL environment variable must be set")
+        
+        print(f"📡 Podcast base URL: {self.base_url}")
         
         # Load previously deployed episodes
         self.deployed_episodes = self._load_deployed_episodes()
@@ -41,6 +48,42 @@ class MultiTopicDeployer:
         except Exception as e:
             print(f"⚠️  Could not save deployed episodes marker: {e}")
     
+    def _save_deployment_metadata(self, digests: List[Dict], release_tag: str):
+        """Save deployment metadata for RSS generator consumption"""
+        metadata = {
+            'deployment_timestamp': datetime.now().isoformat(),
+            'release_tag': release_tag,
+            'github_release_url': f"https://github.com/McSchnizzle/podcast-scraper/releases/tag/{release_tag}",
+            'episodes': []
+        }
+        
+        for digest in digests:
+            file_size, duration = self._get_file_info(digest['mp3_file'])
+            
+            # Construct GitHub release asset URL  
+            asset_url = f"https://github.com/McSchnizzle/podcast-scraper/releases/download/{release_tag}/{digest['mp3_file'].name}"
+            
+            metadata['episodes'].append({
+                'topic': digest['topic'],
+                'timestamp': digest['timestamp'],
+                'date': digest['date'].isoformat(),
+                'local_path': str(digest['mp3_file']),
+                'public_url': asset_url,
+                'file_size': file_size,
+                'duration_estimate': duration,
+                'is_enhanced': '_enhanced' in digest['mp3_file'].name,
+                'file_key': digest['file_key']
+            })
+        
+        # Save metadata for RSS generator
+        metadata_file = "deployment_metadata.json"
+        try:
+            with open(metadata_file, 'w') as f:
+                json.dump(metadata, f, indent=2)
+            print(f"✅ Saved deployment metadata: {metadata_file}")
+        except Exception as e:
+            print(f"⚠️ Could not save deployment metadata: {e}")
+    
     def find_new_digest_files(self) -> List[Dict]:
         """Find new digest files that haven't been deployed"""
         new_digests = []
@@ -63,10 +106,11 @@ class MultiTopicDeployer:
             if file_key in self.deployed_episodes:
                 continue
             
-            # Check if we have a corresponding MP3 file
+            # Check if we have a corresponding MP3 file (prioritize enhanced versions)
             mp3_candidates = [
-                self.digests_dir / f"{topic}_digest_{timestamp_str}.mp3",
-                self.digests_dir / f"complete_topic_digest_{timestamp_str}.mp3"  # Legacy naming
+                self.digests_dir / f"{topic}_digest_{timestamp_str}_enhanced.mp3",  # Preferred with music
+                self.digests_dir / f"{topic}_digest_{timestamp_str}.mp3",           # Standard TTS  
+                self.digests_dir / f"complete_topic_digest_{timestamp_str}.mp3"     # Legacy naming
             ]
             
             mp3_file = None
@@ -159,6 +203,9 @@ AI-generated digest from leading podcasts and creators, organized by topic for f
         # Generate release information
         release_tag, release_title, description = self._generate_release_info(digests)
         
+        # Save deployment metadata for RSS generator
+        self._save_deployment_metadata(digests, release_tag)
+        
         try:
             # Create release
             cmd = [
@@ -197,7 +244,7 @@ AI-generated digest from leading podcasts and creators, organized by topic for f
             print(f"❌ Error creating GitHub release: {e}")
             return False
     
-    def deploy_new_episodes(self) -> bool:
+    def deploy_new_episodes(self, dry_run: bool = False) -> bool:
         """Main deployment method - find and deploy all new episodes"""
         print("🔍 Checking for new digest episodes to deploy...")
         
@@ -210,7 +257,12 @@ AI-generated digest from leading podcasts and creators, organized by topic for f
         print(f"📦 Found {len(new_digests)} new episodes:")
         for digest in new_digests:
             file_size, duration = self._get_file_info(digest['mp3_file'])
-            print(f"  • {digest['topic']} ({digest['timestamp']}) - {duration}")
+            enhanced_marker = " (enhanced)" if '_enhanced' in digest['mp3_file'].name else ""
+            print(f"  • {digest['topic']} ({digest['timestamp']}) - {duration}{enhanced_marker}")
+        
+        if dry_run:
+            print("🧪 DRY RUN MODE - Would deploy but not actually creating release")
+            return True
         
         # Deploy all new episodes in a single release
         return self.create_github_release(new_digests)
@@ -251,6 +303,8 @@ def main():
     parser = argparse.ArgumentParser(description='Deploy multi-topic digest episodes to GitHub releases')
     parser.add_argument('--force-redeploy', type=int, metavar='DAYS', 
                         help='Force redeploy episodes from last N days')
+    parser.add_argument('--dry-run', action='store_true',
+                        help='Show what would be deployed without actually deploying')
     
     args = parser.parse_args()
     
@@ -258,12 +312,17 @@ def main():
     
     try:
         if args.force_redeploy:
+            if args.dry_run:
+                print("🧪 DRY RUN: Force redeploy mode (no actual deployment)")
             success = deployer.force_redeploy_recent(args.force_redeploy)
         else:
-            success = deployer.deploy_new_episodes()
+            success = deployer.deploy_new_episodes(dry_run=args.dry_run)
         
         if success:
-            print("🎙️  Multi-topic episode deployment complete!")
+            if args.dry_run:
+                print("🧪 DRY RUN: Multi-topic episode deployment preview complete!")
+            else:
+                print("🎙️  Multi-topic episode deployment complete!")
             return 0
         else:
             print("❌ Deployment failed")

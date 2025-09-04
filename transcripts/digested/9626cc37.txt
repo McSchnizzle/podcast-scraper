@@ -1,0 +1,537 @@
+[00:00] Welcome back to the AI daily brief.
+[00:02] Today we are nominally talking about
+[00:04] Google's big win in their antirust case.
+[00:07] TLDDR on that is that they are not going
+[00:09] to be forced to sell Chrome. So we will
+[00:11] talk about the implications of that,
+[00:12] what it means for their positioning visa
+[00:14] vi, why Chrome might matter in the AI
+[00:16] race. But I thought it would be
+[00:18] interesting to use this as a chance to
+[00:20] do a little bit of a retrospective
+[00:21] around where Google has been. I think
+[00:23] when it comes to the major labs, no one
+[00:25] has gone through such wild swings of
+[00:28] where they sit in the AI race as has
+[00:30] Google. There is a growing chorus of
+[00:33] people who believe that Google is now
+[00:35] firmly in the lead when it comes to AI.
+[00:38] That's showing up not just in random
+[00:39] tweets, but on prediction markets. Since
+[00:42] all the way back in May, Google has been
+[00:44] slightly in the lead when it comes to
+[00:45] the polyarket prediction market for
+[00:47] which company will have the best AI
+[00:48] model by the end of 2025. But since the
+[00:51] release of GPT5, the number has
+[00:53] absolutely skyrocketed up to Google
+[00:55] having a 75% chance. Now, on the one
+[00:58] hand, this shouldn't be all that
+[01:00] surprising. Google has had a longer
+[01:02] relationship with generative AI building
+[01:04] than most of their competitors. They had
+[01:06] the talent, the money, the motivation,
+[01:08] and the drive, which is why it was so
+[01:10] shocking how far behind they found
+[01:12] themselves when Chat GBT was launched.
+[01:16] The piece that we're looking at is from
+[01:17] Forbes in February of 2023. It was
+[01:20] called AI first to last, how Google fell
+[01:22] behind in the AI boom and was one of a
+[01:25] series of pieces with similar themes
+[01:27] around that time. The piece discussed
+[01:29] Google's early lead in AI. They talked
+[01:31] about how just a few months after
+[01:33] becoming CEO back in 2016, Sundar Pichai
+[01:36] declared that Google would become an AI
+[01:38] first company. Now, interestingly, even
+[01:40] back then, they already felt like they
+[01:41] had their back to the wall at least a
+[01:43] little bit. Amazon's release of Alexa
+[01:45] had taken Google by surprise, feeling
+[01:47] like they should have been first to
+[01:48] market with that product. Forbes wrote,
+[01:50] "Seven years later, Google finds itself
+[01:51] in a similar position, again, beaten to
+[01:54] market in a field it should have
+[01:55] dominated. But this time, it's worse.
+[01:57] The usurper is OpenAI, a comparatively
+[01:59] small San Francisco startup, and not a
+[02:01] deep pocketed giant like Amazon. The
+[02:03] product is ChatGBT, a bot that can
+[02:05] generate sitcom plots, resignation
+[02:07] letters, lines of code, and other text
+[02:09] on almost any subject conceivable as if
+[02:11] written by a human. and it was built
+[02:12] using a technology breakthrough Google
+[02:14] itself had pioneered years ago. Now, of
+[02:17] course, part of what made this all the
+[02:18] more frustrating was that Microsoft, by
+[02:20] dent of their relationship with OpenAI,
+[02:22] had moved into more of a software
+[02:24] leadership role than they'd had in some
+[02:25] time. And for much of 2023, Google's
+[02:29] story in AI was all about catching up.
+[02:32] There were a bunch of product
+[02:33] announcements with names that you might
+[02:34] or might not remember, for example,
+[02:36] Bard, but nothing that could be
+[02:38] considered even close to GPT4 level. In
+[02:40] other words, close to the
+[02:41] state-of-the-art until the very end of
+[02:43] the year when Google announced Gemini.
+[02:46] Now, I was already 6 months into the
+[02:48] show at that time, and I remember that
+[02:49] the general sentiment was that it was
+[02:52] very much a pressured and rushed
+[02:54] announcement forced by how far ahead
+[02:56] OpenAI was. Although it was announced in
+[02:59] December, it was announced with a bunch
+[03:00] of pre-recorded demos, and the most
+[03:02] performant model wasn't even available
+[03:04] yet. That wouldn't come until the
+[03:05] beginning of the next year. And when it
+[03:07] did, it did little to improve Google's
+[03:10] rough position. First of all, Google got
+[03:13] itself completely caught up in the
+[03:14] culture war by releasing an image
+[03:16] generation model that tried extremely
+[03:18] hard to add diversity into historical
+[03:21] images in places that were completely
+[03:23] inappropriate. For example, putting
+[03:25] people of color into Nazi uniforms as
+[03:28] emblematic examples of early 1940s
+[03:30] German soldiers. Hold aside the
+[03:32] political dimensions of this, it was bad
+[03:34] enough that Google pulled the model
+[03:35] entirely and later apologized for
+[03:37] releasing something that was so far out
+[03:38] of sync with reality. A couple months
+[03:40] later, we had the first incarnation of
+[03:42] Google's AI overviews. While they've now
+[03:44] become totally deeur and very much a
+[03:46] part of the search experience at the
+[03:47] beginning, all that anyone could talk
+[03:49] about were things like where Google
+[03:50] suggested that people use glue as an
+[03:52] ingredient in pizza. Now whereas the
+[03:55] problems with the image generator were
+[03:57] extremely widespread, Google did try to
+[04:00] say that the examples going public with
+[04:02] the AI overviews were more isolated, but
+[04:04] still it all contributed to this
+[04:06] narrative of Google being incredibly far
+[04:08] behind. Behind the scenes though, there
+[04:11] was a lot going on at the company. Some
+[04:13] of that was personnel. One of the issues
+[04:15] with Google had been that AI was so big
+[04:18] at the company that it was spread across
+[04:19] a lot of different divisions rather than
+[04:21] consolidated and focused. Over the
+[04:23] course of 2024, there was a set of at
+[04:25] sometimes painful consolidation to bring
+[04:27] everything basically under DeepMind and
+[04:29] DeepMind leader Demis. For example, it
+[04:32] took until October of 2024 for Google to
+[04:35] fold the team that was responsible for
+[04:36] the Gemini app into DeepMind officially.
+[04:39] But where things really started to turn
+[04:41] around for Google was of course the
+[04:43] release of Notebook LM or more
+[04:45] specifically the release of audio
+[04:47] overviews in Notebook LM. Notebook LM
+[04:50] was first announced earlier in the year
+[04:51] as part of a string of announcements and
+[04:53] was frankly kind of buried when it came.
+[04:56] However, in the fall, they released a
+[04:57] new feature called audio overviews,
+[04:59] which was basically a way to
+[05:00] autogenerate a podcast based on any
+[05:02] subject matter. You could drop a set of
+[05:04] documents or source links into Notebook
+[05:06] LM, and in a couple of minutes, you
+[05:08] would get an audio conversation between
+[05:10] two hosts explaining the material in
+[05:13] ways that were engaging and really fell
+[05:15] into all the tropes of podcasting. Now,
+[05:17] this is the type of thing that could
+[05:19] easily just become a novelty, something
+[05:21] that people tried once or twice and then
+[05:23] went away from. That didn't happen. And
+[05:25] I think part of why it didn't is that
+[05:27] Google really had unlocked a different
+[05:29] medium for consuming information that
+[05:32] some number of people found really
+[05:33] useful. For example, for me on the
+[05:35] podcast, it was sometimes a more
+[05:37] engaging way to deal with complex
+[05:39] technical topics that I wanted to then
+[05:40] share with this audience. I knew law
+[05:42] firms who were using it to help
+[05:43] summarize case files. You had students
+[05:45] who were using it as a study tool and
+[05:48] the point was that for the first time
+[05:50] Google AI had a genuine bonafide hit on
+[05:53] their hands that people were really
+[05:54] thrilled about. I think it was also a
+[05:56] testament to the goodwill and good brand
+[05:58] that Google has built over the last
+[05:59] decades that there was almost a sense of
+[06:01] relief of Google getting back in the AI
+[06:03] game and doing something well as though
+[06:05] the aberration had always been when they
+[06:06] were behind. As the year closed out, it
+[06:09] was clear that heading into 2025, AI
+[06:12] competition was going to be the big
+[06:13] mission. In a December town hall, CEO
+[06:16] Sedarp Pachai told the company, "I think
+[06:18] 2025 will be critical. I think it's
+[06:20] really important we internalize the
+[06:21] urgency of this moment and need to move
+[06:23] faster as a company. The stakes are
+[06:25] high. These are disruptive moments. In
+[06:27] 2025, we need to be relentlessly focused
+[06:29] on unlocking the benefits of this
+[06:30] technology and solve real user problems.
+[06:33] And indeed, 2025 has been an absolute
+[06:36] flurry of products. One interesting
+[06:39] inflection point came at the IO
+[06:40] conference in May. Google made an odd
+[06:43] decision heading into the conference,
+[06:44] releasing AI mode for search the prior
+[06:47] week. When he took the stage for his
+[06:48] keynote, Pichai said, "Normally, you
+[06:50] wouldn't have heard much from us in the
+[06:52] weeks leading up to IO because we'd be
+[06:53] saving our best models for the stage,
+[06:55] but in our Gemini era, we're just as
+[06:57] likely to ship our most intelligent
+[06:58] model on a Tuesday in March or announce
+[07:00] a really cool breakthrough a week
+[07:02] before. We want to get our best models
+[07:04] into your hands and our products ASAP,
+[07:05] so we're shipping faster than ever." And
+[07:08] ship, they did. Google coverage listed
+[07:10] 100 different things announced at IO and
+[07:12] a very meaningful portion of them were
+[07:14] AI related and there was definitely a
+[07:16] sense that Google was starting to get
+[07:17] its groove back. Now there are two big
+[07:20] areas where Google has been very on the
+[07:22] ball this year. One of them is
+[07:24] multimodal which we'll talk about in
+[07:25] just a moment and where I think more
+[07:27] than anything else the sense of Google
+[07:28] maybe now being in the leader or pole
+[07:30] position with AI comes from. But it's
+[07:33] also important to note that they
+[07:34] recognized quite early in the year that
+[07:37] Agentic coding was going to be a massive
+[07:39] massive theme. Back in February, they
+[07:42] released a version of Gemini 2.0 that
+[07:44] was fine-tuned for coding. Again, CEO
+[07:46] Sundar Pichai tweeted, "New Gemini 2.0
+[07:48] updates for developers. Starting today,
+[07:50] you can use Gemini Code Assist for free
+[07:52] in your favorite IDE. It's Gemini 2.0
+[07:55] fine-tuned for coding, including 180K
+[07:57] code completions per month, 90x what
+[08:00] others currently offer. Plus, Gemini 2.0
+[08:02] 0 flashlight is now GA and cost
+[08:04] effective for projects that use long
+[08:05] context windows. And so what I think is
+[08:08] notable here is that one they understood
+[08:10] that models that were specific to coding
+[08:11] were going to be important and two they
+[08:14] knew that they wanted to compete on cost
+[08:16] because the increase in performance of
+[08:17] these models was going to ultimately
+[08:19] lead to a big increase in the tokens
+[08:21] that would ultimately be consumed. A
+[08:23] couple months later in May they released
+[08:25] an updated Gemini 2.5 Pro once again
+[08:28] focused on coding. Google Deep Mind CEO
+[08:31] Demis tweeted, "Very excited to share
+[08:33] the best coding model we've ever built.
+[08:35] Today, we're launching Gemini 2.5 Pro
+[08:37] Preview IO Edition with massively
+[08:39] improved coding capabilities. It's
+[08:41] especially good at building interactive
+[08:42] web apps." A couple months later in
+[08:44] June, and Taylor Mullen tweeted, "This
+[08:47] is truly a proud moment for me. For the
+[08:49] past few months, we've pushed non-stop
+[08:50] to build Gemini CLI. It's been a
+[08:52] journey, and I couldn't be happier to
+[08:53] finally share it with all of you." Okay,
+[08:56] so the point here is clearly that Google
+[08:57] was focused on this coding use case. And
+[08:59] if you need evidence of whether it
+[09:00] worked, look no further than an
+[09:02] announcement from July where Google
+[09:04] shared that they had jumped from
+[09:05] processing 480 trillion tokens in May to
+[09:09] 980 trillion by July. 104% growth in
+[09:13] just a couple of months. I think a huge
+[09:15] part of that was the emergence of this
+[09:17] coding use case. Still, it's impossible
+[09:20] to talk about Google AI right now
+[09:21] without recognizing that where they have
+[09:23] really started to break out into a
+[09:25] distinct lead is around multimodal
+[09:28] specifically when it comes to video
+[09:29] image generation and world models. For a
+[09:32] while, all the buzz in video was around
+[09:34] OpenAI Sora. Over time, however, Sora
+[09:36] stayed very much in a behindthe-scenes
+[09:38] for paid partners only kind of mode. And
+[09:41] when Google released V3, it had one very
+[09:44] specific transformative difference that
+[09:46] made, as it turns out, all the
+[09:48] difference in the world. That was the
+[09:50] ability to generate sound and video at
+[09:52] the same time. For the first time with
+[09:54] AI video generation, people didn't have
+[09:57] to create the video clips and the audio
+[09:59] clips separately and lay them together
+[10:00] with some program. Instead, they could
+[10:02] generate in a single shot the full clip,
+[10:05] including video and audio. AI generated
+[10:08] video absolutely exploded from there. I
+[10:12] did a show back in July about 10 AI
+[10:14] video trends taking over the internet.
+[10:15] And if you've spent any time on Tik Tok
+[10:17] or Instagram reels or any social media
+[10:19] in the last 3 months, you have
+[10:21] absolutely been inundated with V3
+[10:24] generated videos. Of course, it's not
+[10:26] just video. More recently, we've got
+[10:28] Genie 3, which is Google's experimental
+[10:31] world model where you can generate
+[10:32] entire interactive environments with
+[10:34] just a prompt. This is still a little
+[10:36] bit more firmly in the realm of the
+[10:37] future and the experimental rather than
+[10:39] something you're seeing people deploy
+[10:40] for a lot of different use cases right
+[10:42] now, but it still contributed to this
+[10:44] sense that when it comes to multimedia
+[10:46] and multimodality, Google is just on a
+[10:48] different plane. And then of course more
+[10:50] recently, you'll know if you've been
+[10:52] listening to the show that everyone's
+[10:53] been talking about Nano Banana or as
+[10:55] it's technically called Gemini 2.5 flash
+[10:57] image or something along those lines.
+[11:00] Now, what made Nano Banana different is
+[11:02] its ability to do editing of a
+[11:04] particular image in a way that is
+[11:05] extremely high fidelity to the prompt.
+[11:07] It captured more attention than any
+[11:09] image generation model we've seen since
+[11:10] the studio Giblly trend of earlier in
+[11:12] the year from OpenAI. And while the
+[11:13] Giblly trend was a cultural moment, the
+[11:15] image editing capabilities of Nano
+[11:17] Banana are actually opening up a new
+[11:19] variety of use cases that people are
+[11:20] finding really economically useful. When
+[11:23] Andre and Horowitz came out with its
+[11:24] latest edition of its top 100 Genai
+[11:26] consumer apps, the first trend that they
+[11:29] noticed was Google making big moves.
+[11:32] Google had four different entries to the
+[11:34] list. Gemini was number two behind only
+[11:36] chat GBT, but Google AI Studio, Notebook
+[11:39] LM, and Google Labs all showed up in the
+[11:41] top 50 as well. AI Studio was number 10
+[11:44] and Notebook LM was 13. So, three Google
+[11:47] properties in the top 15 Gen AI apps for
+[11:49] consumers. All of which brings us to the
+[11:51] latest news that one of Google's biggest
+[11:53] overhangs has been resolved. A judge has
+[11:55] ruled that Google will not be forced to
+[11:57] divest of Chrome in order to cure their
+[11:59] monopoly on search. What's more, they
+[12:02] will still be allowed to pay to be the
+[12:04] default search engine on other
+[12:05] platforms, which is of course the
+[12:07] relationship that they've had with
+[12:08] Apple. The only prohibition is that they
+[12:10] can't arrange exclusive deals for
+[12:11] distribution. The judge also ruled that
+[12:14] Google has to share their search data
+[12:15] freely with competitors to make their
+[12:16] moat less complete. Now, this had been a
+[12:19] big topic of conversation recently. We
+[12:21] are in the beginning innings of the AI
+[12:22] browser wars. Perplexity has been making
+[12:24] moves with their Comet browser. OpenAI
+[12:26] is reportedly going to release an AI
+[12:28] browser. And both of those companies had
+[12:30] expressed interest in buying Chrome if
+[12:32] Google was forced to divest. Perplexity
+[12:34] had even announced an official $34.5
+[12:37] billion offer despite the fact that that
+[12:39] was more than the company is currently
+[12:40] valued at. And Sam Alman said that if
+[12:42] Google was forced to divest, it was
+[12:44] something that they would have to look
+[12:45] into and that they would of course be
+[12:46] interested. Now, alongside the decision
+[12:48] that Google would not have to sell off
+[12:50] Chrome, there were a few other
+[12:51] interesting notes on the AI competition
+[12:53] that came out of the decision. First,
+[12:55] the court explicitly recognized that
+[12:57] Apple would be a big loser if Google
+[12:59] were no longer able to pay to be the
+[13:00] default search engine. Not exactly a
+[13:02] comment on AI, but certainly a
+[13:03] demonstration of how utterly
+[13:04] directionless they are, given that
+[13:06] they're relying on a $20 billion a year
+[13:08] deal with a competitor as a major source
+[13:09] of revenue. The bigger point that the
+[13:11] judge recognized was that AI is rapidly
+[13:13] changing the landscape of search, so
+[13:15] intervention isn't obviously necessary.
+[13:17] The judge stated that AI startups quote
+[13:19] are already in a better position both
+[13:21] financially and technologically to
+[13:23] compete with Google than any traditional
+[13:24] search company has been in decades
+[13:26] except perhaps Microsoft. The judge
+[13:28] added, "There are strong reasons not to
+[13:30] jolt the system and to allow market
+[13:32] forces to do the work." Google, for
+[13:34] their part, said that the decision quote
+[13:36] recognizes how much the industry has
+[13:37] changed through the advent of AI and
+[13:39] validates their position that quote
+[13:41] competition is intense and people can
+[13:43] easily choose the services they want.
+[13:45] Now, Google is still reviewing the
+[13:46] decision and could appeal the slim
+[13:47] penalties they received, namely the
+[13:49] forced data sharing under the guise of
+[13:51] protecting user privacy. For their part,
+[13:53] the markets rejoiced upon hearing the
+[13:54] news, sending Google stock soaring by
+[13:56] almost 9%. Analysts were quick to note
+[13:58] that the ruling allows Google to science
+[14:00] similar distribution deals on AI as they
+[14:02] established in the search era. And with
+[14:04] Apple seemingly vacating the field, it
+[14:06] seems entirely likely that Google will
+[14:07] pay up big to use the iPhone as a major
+[14:10] distribution channel for Gemini. DOJ
+[14:12] antitrust head Abigail Slater seems
+[14:13] satisfied with the results, posting,
+[14:15] "The court recognized the key inflection
+[14:17] point we are in with the development of
+[14:18] AI. The court gave a leg up to the
+[14:20] United States in the global AI race,
+[14:22] preventing Google from slowing down AI
+[14:24] innovation with the same
+[14:25] anti-competitive playbook it used to
+[14:26] freeze search competition. Still, you
+[14:29] got to think this seems like a huge
+[14:30] advantage for Google as they seek to get
+[14:31] out into the lead position when it comes
+[14:33] to AI. This was nothing like the
+[14:35] antitrust action suffered by Microsoft
+[14:36] at the '90s. Google will still be
+[14:38] allowed to pursue acquisitions, sign
+[14:40] distribution deals, and generally use
+[14:42] their size as an advantage. And all in
+[14:44] all, it seems like there is a lot more
+[14:45] coming. Couple hours before I recorded
+[14:47] this, I noticed a new piece on the
+[14:48] information about Google ramping up
+[14:50] their AI chip competition with Nvidia.
+[14:52] We'll probably get into this more later
+[14:53] this week, but information sources
+[14:55] suggest that Google has recently been
+[14:57] approaching small cloud providers that
+[14:58] primarily rent out Nvidia chips about
+[15:00] also hosting Google's AI chips in their
+[15:02] data centers, and at least one agreement
+[15:04] has been reached. There is also a slew
+[15:06] of rumors about Gemini 3 being right on
+[15:08] the horizon. Kath Corvec, the director
+[15:10] of product at Google Labs, seemed to be
+[15:12] dropping some sort of hint on Tuesday
+[15:14] posting, "It's a big week with a squid
+[15:16] emoji, although it turned out that was
+[15:17] about their Jules coding agent." Then of
+[15:19] course, there was this widely seen tweet
+[15:20] from Semi analysis, who wrote, "Because
+[15:22] Google is so bad at tweeting, we'll do
+[15:24] it for them. Gemini 3 is shaping up to
+[15:26] be an incredibly performant model,
+[15:28] especially on coding and multimodal
+[15:29] capabilities." So, as we wrap up, is
+[15:32] Google officially in the AI lead right
+[15:34] now? I think that there are somewhere
+[15:36] between two and four potential
+[15:38] counterpositions. The first is that
+[15:40] while yes, Google has four properties in
+[15:42] the top 50 of consumer AI apps, Gemini
+[15:44] at number two behind Chat GBT has only
+[15:47] 12% of Chat GBT's visits on the web. The
+[15:50] gap is narrower on mobile, but still
+[15:52] very significant. The reality is that
+[15:54] for an entire generation, Chat GBT
+[15:56] simply is AI. And for as much as Google
+[15:59] might be beating OpenAI in those other
+[16:00] models, a huge percentage of current
+[16:02] usership is focused on those core LLM
+[16:05] chat bots. I think a second and maybe
+[16:07] third potential argument is less about
+[16:09] where things are today and whereabout
+[16:11] things will be, which is that it's
+[16:12] pretty dangerous to ever fully count
+[16:14] either Elon or Mark Zuckerberg out. XAI
+[16:17] has put on extreme moves when it comes
+[16:18] to catching up in this race and is on an
+[16:20] incredibly impressive trajectory. When
+[16:22] it comes to Zuckerberg and Meta, we
+[16:24] haven't seen the outputs of the talent
+[16:25] wars yet, but certainly they've been
+[16:27] aggressive enough about acquiring talent
+[16:28] and appear to be aggressive enough about
+[16:30] acquiring compute that it's not
+[16:31] inconceivable that things could look
+[16:33] very different about a year from now.
+[16:34] Speaking of trajectory, Anthropic has
+[16:36] put out by far the fastest growing
+[16:38] products in this space this year, really
+[16:40] cementing their lead in that key
+[16:41] category of coding, even if Google has
+[16:43] also been doing well in that area. And
+[16:45] then there's the whole mess of Chinese
+[16:46] companies, which has continued to put
+[16:48] out very impressive models very often in
+[16:50] an open- source way. And so that's the
+[16:52] reason for the question mark in this
+[16:53] title. I'm certainly not ready to
+[16:55] declare yet that there is one company
+[16:56] that is distinctly in the lead. There
+[16:58] are lots of different advantages that
+[16:59] different companies have and different
+[17:00] ways to squint at it. But for Google,
+[17:03] the fact that they have come from
+[17:04] confusing laughingstock 18 months ago to
+[17:07] growing consensus at their place at top
+[17:09] the heap has got to feel good. I also
+[17:11] think that regardless of anything else,
+[17:13] even if they just won multimodal, there
+[17:16] are so many stones to turn over when it
+[17:18] comes to the amazing things that we're
+[17:20] going to get to create with future image
+[17:21] models, video models, and world models
+[17:23] that the future of Google AI is looking
+[17:25] very bright. That's how we're going to
+[17:27] do it for today's AI daily brief. Thanks
+[17:29] as always for listening or watching.

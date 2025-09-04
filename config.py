@@ -84,15 +84,34 @@ class Config:
             'max_text_length': 50000
         }
         
-        # OpenAI topic scoring settings
+        # OpenAI settings with actual model names
         self.OPENAI_SETTINGS = {
-            'model': 'gpt-4o-mini',
-            'temperature': 0.1,
-            'max_tokens': 500,
+            # Model configuration - using actual OpenAI model names
+            'digest_model': os.getenv('DIGEST_MODEL', 'gpt-4-turbo-preview'),
+            'scoring_model': os.getenv('SCORING_MODEL', 'gpt-4o-mini'),  # Cost-effective for scoring
+            'validator_model': os.getenv('VALIDATOR_MODEL', 'gpt-4o-mini'),  # Cost-effective for validation
+            
+            # Digest generation settings
+            'digest_temperature': 0.7,
+            'digest_presence_penalty': 0.1,
+            'digest_frequency_penalty': 0.2,
+            'digest_max_tokens': 4000,
+            
+            # Scoring settings
+            'scoring_temperature': 0.1,
+            'scoring_max_tokens': 500,
             'timeout_seconds': 60,
             'batch_size': 5,  # Number of episodes to score in one batch
             'rate_limit_delay': 1,  # Seconds between API calls
-            'relevance_threshold': 0.6,  # Minimum score to include in topic digest
+            'relevance_threshold': 0.65,  # Minimum score to include in topic digest (raised from 0.6)
+            
+            # Map-reduce settings for token optimization
+            'max_episodes_per_topic': 6,  # Top-N cap per topic
+            'max_episode_summary_tokens': 450,  # Per-episode summary token limit
+            'max_reduce_tokens': 6000,  # Total tokens for final digest prompt
+            'max_retries': 4,  # Exponential backoff retries
+            'backoff_base_delay': 0.5,  # Starting delay for exponential backoff
+            
             'topics': {
                 'AI News': {
                     'description': 'Artificial intelligence developments, AI research, machine learning breakthroughs, AI industry news, AI policy and ethics',
@@ -123,7 +142,7 @@ class Config:
         
         # Pipeline settings
         self.PIPELINE_SETTINGS = {
-            'retention_days': 7,
+            'retention_days': 14,  # Updated to 14-day retention
             'max_rss_episodes': 7,
             'cleanup_audio_cache': True,
             'cleanup_intermediate_files': True

@@ -1,0 +1,19 @@
+{
+  "title": "Tech Product Releases - September 04, 2025",
+  "description": "Daily digest covering tech product releases",
+  "topic": "tech_product_releases",
+  "timestamp": "20250904_040227",
+  "date": "2025-09-04T04:02:27",
+  "voice_config": {
+    "voice_id": "AZnzlk1XvdvUeBnXmlld",
+    "display_name": "Tech Product Releases",
+    "stability": 0.7,
+    "similarity_boost": 0.8,
+    "style": 0.25
+  },
+  "generated_at": "2025-09-04T04:05:12.236229",
+  "audio_file": "tech_product_releases_digest_20250904_040227.mp3",
+  "markdown_file": "tech_product_releases_digest_20250904_040227.md",
+  "tts_script_file": "tech_product_releases_digest_tts_20250904_040227.txt",
+  "music_enhanced": true
+}

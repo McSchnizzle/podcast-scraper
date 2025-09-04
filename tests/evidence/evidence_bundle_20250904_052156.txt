@@ -1,0 +1,92 @@
+🧪 PODCAST SCRAPER SYSTEM VERIFICATION REPORT
+============================================================
+
+Generated: 2025-09-04T05:21:56.590239
+Evidence Bundle: evidence_bundle_20250904_052156.json
+
+📋 VERIFICATION QUESTIONS ANSWERED
+----------------------------------------
+
+✅ Rss Path Flow
+   Analysis: RSS episode 9626cc37 shows complete flow: digested status with transcript at transcripts/9626cc37.txt
+
+✅ Immediate Scoring
+   Analysis: Scoring happens immediately after transcription in content_processor.py process_episode() method
+
+✅ Short Media Handling
+   Analysis: YouTube videos shorter than 3 minutes are automatically skipped with logged reason
+
+✅ Selector Math
+   Analysis: Selector filters episodes ≥0.65 relevance, caps at 6 episodes, estimates tokens for budget management
+
+✅ Over Budget Handling
+   Analysis: System detects over-budget, drops lowest-scored episodes, and retries
+
+✅ Model Configuration
+   Analysis: Models configured: digest=gpt-4-turbo-preview, scoring=gpt-4o-mini, validator=gpt-4o-mini
+
+✅ Throttling Implementation
+   Analysis: 4 retries with exponential backoff starting at 0.5s, includes jitter for rate limiting
+
+✅ Enhanced Prioritization
+   Analysis: Deployment prioritizes enhanced MP3 files with music over standard TTS
+
+✅ Idempotency Tracking
+   Analysis: Tracking 6 previously deployed episodes for idempotency
+
+✅ Rss Item Generation
+   Analysis: Each digest file creates exactly one RSS item
+
+✅ Enclosure Handling
+   Analysis: Enclosures use actual file sizes and proper MIME types
+
+✅ Stable Guids
+   Analysis: GUIDs are deterministic based on content, stable across regenerations
+
+✅ Weekly Monday Logic
+   Analysis: Weekday detection automatically triggers appropriate digest types
+
+✅ Prose Validation
+   Analysis: Comprehensive prose validation with automatic rewriting and failure handling
+
+✅ Database Bootstrap
+   Analysis: Database has 20 columns including all required fields
+
+✅ Retention System
+   Analysis: Automated 14-day retention with database VACUUM operations
+
+🧪 TEST RESULTS
+----------------------------------------
+
+SETUP_READY          End To End
+   Note: Full end-to-end test requires live API keys and seeded data
+
+LOGIC_VERIFIED       Over Budget
+   Note: Live test requires temporarily lowering token budget
+
+IMPLEMENTATION_VERIFIED 429 Handling
+   Note: Live 429 test requires API rate limiting or mocking
+
+TRACKING_ACTIVE      Idempotent Deployment
+   Note: Full test requires running deployment twice
+
+RSS_FOUND            Rss Integrity
+   Note: Full integrity test requires HEAD requests to all enclosure URLs
+
+LOGIC_VERIFIED       Weekly Monday Windows
+   Note: Full test requires running with --force-weekly and --force-monday-catchup flags
+
+FAILSAFE_IMPLEMENTED Prose Failsafe
+   Note: Full test requires mocking OpenAI to return bulleted content
+
+SCRIPTS_READY        Bootstrap Retention
+   Note: Full test requires removing DBs and running bootstrap, then retention
+
+WORKFLOW_EXISTS      Ci Validation
+   Note: Full test requires adding feed validation step and testing with broken feed
+
+📊 SYSTEM STATUS
+----------------------------------------
+rss_episodes: {'archived': 2, 'digested': 1, 'downloaded': 1, 'failed': 1}
+youtube_episodes: {'digested': 10}
+recent_digests: 11

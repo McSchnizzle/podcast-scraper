@@ -117,6 +117,9 @@ jobs:
         echo "ELEVENLABS_API_KEY=$ELEVENLABS_API_KEY" >> $GITHUB_ENV
         echo "GITHUB_TOKEN=$GITHUB_TOKEN" >> $GITHUB_ENV
         
+        # Set podcast base URL for deployment
+        echo "PODCAST_BASE_URL=https://podcast.paulrbrown.org" >> $GITHUB_ENV
+        
     - name: Run Multi-Topic Podcast Pipeline (GitHub Actions mode)
       run: |
         if [ "${{ github.event.inputs.debug }}" == "true" ]; then
@@ -129,10 +132,10 @@ jobs:
           python3 daily_podcast_pipeline.py --rss-only --test
         elif [ "$FRIDAY_WEEKLY" == "true" ]; then
           echo "🗓️  Friday mode - generating daily + weekly digests"
-          python3 daily_podcast_pipeline.py --rss-only --weekly
+          python3 daily_podcast_pipeline.py --rss-only
         elif [ "$MONDAY_CATCHUP" == "true" ]; then
           echo "📅 Monday catch-up mode - processing since Friday"
-          python3 daily_podcast_pipeline.py --rss-only --catchup
+          python3 daily_podcast_pipeline.py --rss-only
         else
           echo "🚀 Regular weekday processing mode"
           python3 daily_podcast_pipeline.py --rss-only
@@ -160,11 +163,12 @@ jobs:
         echo "=== Topic-Specific Digest Files ==="
         find daily_digests/ -name "*_digest_*.md" -exec echo "📄 Found digest: {}" \; 2>/dev/null || echo "❌ No topic digest files found"
         
+        echo "=== Topic-Specific Audio Files (Enhanced and Standard) ==="
+        find daily_digests/ -name "*_digest_*_enhanced.mp3" -exec echo "🎵 Found enhanced audio: {}" \; 2>/dev/null || echo "ℹ️  No enhanced audio files found"
+        find daily_digests/ -name "*_digest_*.mp3" ! -name "*_enhanced.mp3" -exec echo "🎵 Found standard audio: {}" \; 2>/dev/null || echo "❌ No standard audio files found"
+        
         echo "=== All TTS Text Files ==="
         find daily_digests/ -name "*_digest_tts_*.txt" -exec echo "📝 Found TTS text: {}" \; 2>/dev/null || echo "⚠️ No TTS text files found"
-        
-        echo "=== Topic-Specific Audio Files ==="
-        find daily_digests/ -name "*_digest_*.mp3" -exec echo "🎵 Found audio: {}" \; 2>/dev/null || echo "❌ No audio files found"
         
         echo "=== All JSON Metadata Files ==="
         find daily_digests/ -name "*_digest_*.json" -exec echo "📊 Found metadata: {}" \; 2>/dev/null || echo "⚠️ No metadata files found"
@@ -266,16 +270,23 @@ jobs:
           echo "✅ Committed digest updates to both databases"
         fi
         
-    - name: Create release with digest
-      if: success() && hashFiles('daily_digests/*.md') != '' && github.event.inputs.mode != 'test-run'
-      uses: softprops/action-gh-release@v1
-      with:
-        tag_name: digest-${{ github.run_number }}
-        name: Daily Tech Digest ${{ github.run_number }}
-        files: |
-          daily_digests/*.md
-          daily_digests/*.mp3
-        body: |
-          Automated daily tech digest generated on $(date -u +%Y-%m-%d)
-          
-          Contains podcast summaries and audio from the latest tech episodes.
+    - name: Deploy multi-topic episodes (using new deployment system)
+      if: success() && hashFiles('daily_digests/*_digest_*.md') != '' && github.event.inputs.mode != 'test-run'
+      run: |
+        echo "🚀 Using new multi-topic deployment system..."
+        python3 deploy_multi_topic.py
+        
+    - name: Update RSS feed (using multi-topic generator)
+      if: success() && github.event.inputs.mode != 'test-run'
+      run: |
+        echo "📡 Generating RSS feed with multi-topic support..."
+        python3 rss_generator_multi_topic.py
+        
+        # Commit RSS feed changes
+        if [ -f "daily-digest.xml" ]; then
+          git add daily-digest.xml
+          if ! git diff --staged --quiet -- daily-digest.xml; then
+            git commit -m "Update RSS feed with multi-topic digest episodes - $(date -u +%Y-%m-%d)" daily-digest.xml || echo "Failed to commit RSS feed"
+            git push || echo "Failed to push RSS feed"
+          fi
+        fi

@@ -1,13 +1,14 @@
 #!/usr/bin/env python3
 """
 OpenAI Digest Integration - Multi-Topic Digest Generator
-Complete replacement for Claude integration using OpenAI GPT-4 for consistency
+Uses configurable models for digest generation with cost-effective models for scoring/validation
 """
 
 import os
 import json
 import logging
 import re
+import time
 from pathlib import Path
 from datetime import datetime
 from typing import Dict, List, Optional, Tuple
@@ -21,17 +22,26 @@ try:
 except ImportError:
     pass
 from prose_validator import ProseValidator
+from config import config
+from episode_summary_generator import EpisodeSummaryGenerator
+from telemetry_manager import telemetry
+from utils.sanitization import safe_digest_filename, scrub_secrets_from_text
 
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
+
+def approx_tokens(text: str) -> int:
+    """Estimate token count using simple heuristic"""
+    return (len(text) + 3) // 4
 
 class OpenAIDigestIntegration:
     def __init__(self, db_path: str = "podcast_monitor.db", transcripts_dir: str = "transcripts"):
         self.db_path = db_path
         self.transcripts_dir = Path(transcripts_dir)
         
-        # Initialize prose validator
+        # Initialize prose validator and episode summary generator
         self.prose_validator = ProseValidator()
+        self.summary_generator = EpisodeSummaryGenerator()
         
         # Initialize OpenAI client
         api_key = os.getenv('OPENAI_API_KEY')
@@ -462,43 +472,63 @@ Format the output as clean Markdown suitable for publication. Focus on accuracy,
         return sorted(list(topics_with_episodes))
 
     def generate_topic_digest(self, topic: str) -> Tuple[bool, Optional[str], Optional[str]]:
-        """Generate digest for a specific topic using OpenAI GPT-5"""
+        """Generate digest for a specific topic using map-reduce approach with OpenAI models"""
         
-        logger.info(f"🧠 Starting {topic} digest generation with OpenAI GPT-5")
+        logger.info(f"🧠 Starting {topic} digest generation with OpenAI (map-reduce)")
+        start_time = time.time()
+        retry_count = 0
         
         if not self.api_available:
             logger.error("OpenAI API not available - cannot generate digest")
+            telemetry.record_error(f"OpenAI API not available for {topic}")
             return False, None, None
         
-        # Get transcripts for this topic
-        transcripts = self.get_transcripts_for_analysis(topic=topic)
-        if not transcripts:
-            logger.warning(f"No transcripts available for topic: {topic}")
+        # Get all transcripts and use map-reduce approach
+        all_transcripts = self.get_transcripts_for_analysis(include_youtube=True)
+        if not all_transcripts:
+            logger.warning(f"No transcripts available for any topics")
+            telemetry.record_warning(f"No transcripts available for {topic}")
             return False, None, None
         
-        logger.info(f"📊 Analyzing {len(transcripts)} transcripts for {topic}")
+        logger.info(f"📊 Starting map-reduce for {topic} with {len(all_transcripts)} total transcripts")
+        
+        # Filter by topic relevance for telemetry
+        threshold = config.OPENAI_SETTINGS['relevance_threshold']
+        topic_relevant = [t for t in all_transcripts 
+                         if t.get('topic_scores', {}).get(topic, 0.0) >= threshold]
         
         try:
-            # Prepare topic-specific prompt
-            prompt = self.prepare_digest_prompt(transcripts, topic=topic)
+            # MAP PHASE: Generate episode summaries using cost-effective model
+            episode_summaries = self.summary_generator.generate_topic_summaries(all_transcripts, topic)
             
-            # Call OpenAI GPT-4 API
-            response = self.client.chat.completions.create(
-                model="gpt-4-1106-preview",  # Use GPT-4.1 model with 1M context window
-                messages=[{
-                    "role": "system",
-                    "content": "You are an expert analyst creating focused, insightful digests from podcast transcripts. You excel at identifying key themes, connecting information across sources, and providing actionable insights."
-                }, {
-                    "role": "user",
-                    "content": prompt
-                }],
-                max_tokens=4000,
-                temperature=0.7
-            )
+            if not episode_summaries:
+                logger.warning(f"No relevant episodes found for topic: {topic}")
+                return False, None, f"No episodes meet relevance threshold for {topic}"
             
-            digest_content = response.choices[0].message.content
+            # Check token budget for REDUCE phase
+            total_summary_tokens = sum(s['tokens'] for s in episode_summaries)
+            max_reduce_tokens = config.OPENAI_SETTINGS['max_reduce_tokens']
             
-            # Validate and ensure prose quality before saving
+            logger.info(f"Map phase complete: {len(episode_summaries)} summaries, {total_summary_tokens} tokens")
+            
+            # Progressive token reduction if needed
+            if total_summary_tokens > max_reduce_tokens * 0.8:  # Leave room for system prompt
+                logger.warning(f"Token budget tight ({total_summary_tokens} > {int(max_reduce_tokens * 0.8)}), reducing episodes")
+                # Drop lowest-scored episodes until we fit
+                episode_summaries.sort(key=lambda x: x['topic_score'], reverse=True)
+                while total_summary_tokens > max_reduce_tokens * 0.8 and len(episode_summaries) > 2:
+                    removed = episode_summaries.pop()
+                    total_summary_tokens -= removed['tokens']
+                    logger.info(f"Dropped episode {removed['episode_id']} (score: {removed['topic_score']:.3f})")
+            
+            # REDUCE PHASE: Generate final digest using primary model
+            digest_content = self._generate_final_digest(episode_summaries, topic)
+            
+            if not digest_content:
+                logger.error(f"Failed to generate final digest for {topic}")
+                return False, None, "Digest generation failed in reduce phase"
+            
+            # Validate and ensure prose quality
             logger.info(f"🔍 Validating prose quality for {topic} digest")
             success, final_content, issues = self.prose_validator.ensure_prose_quality(digest_content)
             
@@ -513,8 +543,7 @@ Format the output as clean Markdown suitable for publication. Focus on accuracy,
             
             # Save topic-specific digest
             timestamp = datetime.now().strftime('%Y%m%d_%H%M%S')
-            topic_safe = topic.lower().replace(' ', '_').replace('&', 'and')
-            digest_filename = f"{topic_safe}_digest_{timestamp}.md"
+            digest_filename = safe_digest_filename(topic, timestamp)
             digest_path = Path('daily_digests') / digest_filename
             digest_path.parent.mkdir(exist_ok=True)
             
@@ -524,16 +553,207 @@ Format the output as clean Markdown suitable for publication. Focus on accuracy,
             logger.info(f"✅ {topic} digest saved to {digest_path}")
             
             # Update databases - mark episodes as digested and stamp with topic/date
-            self._mark_episodes_as_digested(transcripts, topic, timestamp)
+            episode_ids = [s['episode_id'] for s in episode_summaries]
+            self._mark_episodes_as_digested_by_ids(episode_ids, topic, timestamp)
             
             # Move transcripts to digested folder
-            self._move_transcripts_to_digested(transcripts)
+            transcript_paths = [Path(s.get('transcript_path', '')) for s in episode_summaries if s.get('transcript_path')]
+            self._move_transcripts_to_digested_by_paths(transcript_paths)
+            
+            # Save map summaries for telemetry retention
+            for summary in episode_summaries:
+                telemetry.save_map_summary(
+                    episode_id=summary['episode_id'],
+                    topic=topic,
+                    summary_content=summary['summary'],
+                    token_count=summary['tokens']
+                )
+            
+            # Record telemetry for successful processing
+            processing_time = time.time() - start_time
+            
+            # Track dropped episode IDs (if any were removed during budget trimming)
+            all_selected_ids = {s['episode_id'] for s in episode_summaries}
+            all_relevant_ids = {t['episode_id'] for t in topic_relevant}
+            dropped_ids = list(all_relevant_ids - all_selected_ids)
+            
+            telemetry.record_topic_processing(
+                topic=topic,
+                total_candidates=len(all_transcripts),
+                above_threshold_count=len(topic_relevant),
+                selected_count=len(episode_summaries),
+                threshold_used=threshold,
+                map_phase_tokens=sum(s['tokens'] for s in episode_summaries),
+                reduce_phase_tokens=len(final_content.split()) * 4,  # Estimate output tokens
+                retry_count=retry_count,
+                processing_time=processing_time,
+                episode_ids_included=episode_ids,
+                episode_ids_dropped=dropped_ids,
+                success=True
+            )
             
             return True, str(digest_path), None
             
         except Exception as e:
-            logger.error(f"Error generating {topic} digest with OpenAI GPT-5: {e}")
+            logger.error(f"Error generating {topic} digest with OpenAI: {e}")
+            
+            # Record telemetry for failed processing
+            processing_time = time.time() - start_time
+            telemetry.record_topic_processing(
+                topic=topic,
+                total_candidates=len(all_transcripts),
+                above_threshold_count=len(topic_relevant),
+                selected_count=0,
+                threshold_used=threshold,
+                map_phase_tokens=0,
+                reduce_phase_tokens=0,
+                retry_count=retry_count,
+                processing_time=processing_time,
+                episode_ids_included=[],
+                episode_ids_dropped=[],
+                success=False,
+                error_message=str(e)
+            )
+            
             return False, None, str(e)
+
+    def _generate_final_digest(self, episode_summaries: List[Dict], topic: str) -> Optional[str]:
+        """Generate final digest using primary model (Reduce phase)"""
+        if not episode_summaries:
+            return None
+        
+        topic_info = config.OPENAI_SETTINGS['topics'].get(topic, {})
+        topic_description = topic_info.get('description', topic)
+        
+        # Build system prompt with prose-only requirement
+        system_prompt = f"""You are an expert podcast writer. Produce a single, flowing spoken script.
+
+Absolutely no bullet points, no numbered lists, no markdown, no headings.
+Keep it conversational and coherent. Include short, attributed quotes only if instructed.
+Honor the topic's structure and voice.
+
+Topic Focus: {topic_description}
+
+Create a comprehensive digest that synthesizes insights across episodes. 
+Connect themes, highlight key developments, and provide actionable insights.
+Write for an intelligent audience interested in {topic}.
+Aim for 2000-3000 words in flowing, conversational prose."""
+
+        # Build user prompt with episode summaries
+        summaries_text = []
+        for i, summary in enumerate(episode_summaries, 1):
+            summaries_text.append(
+                f"Episode {i}: {summary['title']} ({summary['source']}, score: {summary['topic_score']:.3f})\n"
+                f"{summary['summary']}\n"
+            )
+        
+        user_prompt = f"""Generate a comprehensive {topic} digest from these episode summaries:
+
+{chr(10).join(summaries_text)}
+
+Create a flowing, conversational digest that synthesizes these insights."""
+
+        # Estimate tokens for logging
+        total_tokens = approx_tokens(system_prompt + user_prompt)
+        logger.info(f"Reduce phase prompt: {total_tokens} tokens")
+        
+        try:
+            # Use exponential backoff for retries
+            for attempt in range(config.OPENAI_SETTINGS['max_retries']):
+                try:
+                    response = self.client.chat.completions.create(
+                        model=config.OPENAI_SETTINGS['digest_model'],  # Use primary model for digest
+                        messages=[
+                            {"role": "system", "content": system_prompt},
+                            {"role": "user", "content": user_prompt}
+                        ],
+                        temperature=config.OPENAI_SETTINGS['digest_temperature'],
+                        presence_penalty=config.OPENAI_SETTINGS['digest_presence_penalty'],
+                        frequency_penalty=config.OPENAI_SETTINGS['digest_frequency_penalty'],
+                        max_tokens=config.OPENAI_SETTINGS['digest_max_tokens'],
+                        timeout=config.OPENAI_SETTINGS['timeout_seconds']
+                    )
+                    
+                    digest_content = response.choices[0].message.content.strip()
+                    logger.info(f"✅ Generated final digest for {topic}: {approx_tokens(digest_content)} tokens")
+                    return digest_content
+                    
+                except Exception as e:
+                    if "429" in str(e) and attempt < config.OPENAI_SETTINGS['max_retries'] - 1:
+                        delay = config.OPENAI_SETTINGS['backoff_base_delay'] * (2 ** attempt)
+                        logger.warning(f"Rate limit hit for {topic} (attempt {attempt + 1}), retrying in {delay}s")
+                        time.sleep(delay)
+                        continue
+                    else:
+                        raise e
+                        
+        except Exception as e:
+            logger.error(f"Failed to generate final digest for {topic}: {e}")
+            
+            # Write error artifact
+            error_filename = f"{topic.lower().replace(' ', '_')}_digest_ERROR.md"
+            error_path = Path('daily_digests') / error_filename
+            with open(error_path, 'w') as f:
+                f.write(f"# ERROR generating {topic} digest\n\n")
+                f.write(f"Error: {e}\n\n")
+                f.write(f"Token estimate: {total_tokens}\n")
+                f.write(f"Episodes included: {len(episode_summaries)}\n\n")
+                for summary in episode_summaries:
+                    f.write(f"- {summary['episode_id']}: {summary['title']}\n")
+            
+            logger.error(f"Error artifact saved to {error_path}")
+            return None
+
+    def _mark_episodes_as_digested_by_ids(self, episode_ids: List[str], topic: str, timestamp: str):
+        """Mark episodes as digested in both databases"""
+        # Mark in RSS database
+        try:
+            conn = sqlite3.connect(self.db_path)
+            cursor = conn.cursor()
+            for episode_id in episode_ids:
+                if not episode_id.startswith('yt_'):  # RSS episode
+                    cursor.execute('''
+                        UPDATE episodes 
+                        SET status = 'digested', digest_topic = ?, digest_date = ?
+                        WHERE episode_id = ?
+                    ''', (topic, timestamp, episode_id))
+            conn.commit()
+            conn.close()
+        except Exception as e:
+            logger.error(f"Error marking RSS episodes as digested: {e}")
+        
+        # Mark in YouTube database
+        try:
+            youtube_db_path = "youtube_transcripts.db"
+            if Path(youtube_db_path).exists():
+                conn = sqlite3.connect(youtube_db_path)
+                cursor = conn.cursor()
+                for episode_id in episode_ids:
+                    if episode_id.startswith('yt_'):  # YouTube episode
+                        actual_id = episode_id[3:]  # Remove 'yt_' prefix
+                        cursor.execute('''
+                            UPDATE episodes 
+                            SET status = 'digested', digest_topic = ?, digest_date = ?
+                            WHERE episode_id = ?
+                        ''', (topic, timestamp, actual_id))
+                conn.commit()
+                conn.close()
+        except Exception as e:
+            logger.error(f"Error marking YouTube episodes as digested: {e}")
+
+    def _move_transcripts_to_digested_by_paths(self, transcript_paths: List[Path]):
+        """Move transcript files to digested directory"""
+        digested_dir = Path("transcripts/digested")
+        digested_dir.mkdir(parents=True, exist_ok=True)
+        
+        for transcript_path in transcript_paths:
+            if transcript_path.exists():
+                try:
+                    target_path = digested_dir / transcript_path.name
+                    transcript_path.rename(target_path)
+                    logger.debug(f"Moved {transcript_path} to {target_path}")
+                except Exception as e:
+                    logger.error(f"Error moving transcript {transcript_path}: {e}")
 
     def generate_all_topic_digests(self) -> Dict[str, Tuple[bool, Optional[str], Optional[str]]]:
         """Generate digests for all available topics"""
