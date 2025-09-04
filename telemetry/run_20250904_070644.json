@@ -1,0 +1,77 @@
+{
+  "run_id": "run_20250904_070644",
+  "timestamp": "2025-09-04T07:06:44.383780",
+  "pipeline_type": "daily",
+  "total_processing_time": 147.4421980381012,
+  "topics_processed": [
+    {
+      "topic": "AI News",
+      "total_candidates": 4,
+      "above_threshold_count": 3,
+      "selected_count": 3,
+      "threshold_used": 0.65,
+      "map_phase_tokens": 1290,
+      "reduce_phase_tokens": 2872,
+      "total_tokens": 4162,
+      "retry_count": 0,
+      "processing_time_seconds": 44.02397704124451,
+      "episode_ids_included": [
+        "1356d2cc",
+        "4cd9eaba",
+        "96e71ad6"
+      ],
+      "episode_ids_dropped": [],
+      "success": true,
+      "error_message": null
+    },
+    {
+      "topic": "Tech News and Tech Culture",
+      "total_candidates": 4,
+      "above_threshold_count": 3,
+      "selected_count": 3,
+      "threshold_used": 0.65,
+      "map_phase_tokens": 1280,
+      "reduce_phase_tokens": 2628,
+      "total_tokens": 3908,
+      "retry_count": 0,
+      "processing_time_seconds": 44.119593143463135,
+      "episode_ids_included": [
+        "1356d2cc",
+        "96e71ad6",
+        "4cd9eaba"
+      ],
+      "episode_ids_dropped": [],
+      "success": true,
+      "error_message": null
+    },
+    {
+      "topic": "Tech Product Releases",
+      "total_candidates": 4,
+      "above_threshold_count": 2,
+      "selected_count": 2,
+      "threshold_used": 0.65,
+      "map_phase_tokens": 558,
+      "reduce_phase_tokens": 3232,
+      "total_tokens": 3790,
+      "retry_count": 0,
+      "processing_time_seconds": 50.07326006889343,
+      "episode_ids_included": [
+        "96e71ad6",
+        "1356d2cc"
+      ],
+      "episode_ids_dropped": [],
+      "success": true,
+      "error_message": null
+    }
+  ],
+  "episodes_transcribed": 0,
+  "episodes_scored": 0,
+  "episodes_digested": 0,
+  "files_deployed": 0,
+  "rss_items_generated": 0,
+  "total_api_calls": 3,
+  "total_tokens_used": 11860,
+  "total_cost_estimate": 0.351626,
+  "errors": [],
+  "warnings": []
+}

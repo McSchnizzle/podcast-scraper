@@ -1,0 +1,21 @@
+{
+  "run_id": "run_20250904_070354",
+  "timestamp": "2025-09-04T07:03:54.210771",
+  "pipeline_type": "daily",
+  "total_processing_time": 11.528809070587158,
+  "topics_processed": [],
+  "episodes_transcribed": 0,
+  "episodes_scored": 0,
+  "episodes_digested": 0,
+  "files_deployed": 0,
+  "rss_items_generated": 0,
+  "total_api_calls": 0,
+  "total_tokens_used": 0,
+  "total_cost_estimate": 0.0,
+  "errors": [
+    "OpenAI API not available for AI News",
+    "OpenAI API not available for Tech News and Tech Culture",
+    "OpenAI API not available for Tech Product Releases"
+  ],
+  "warnings": []
+}
