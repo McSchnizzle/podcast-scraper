@@ -1,0 +1,19 @@
+{
+  "title": "Societal Culture Change - September 02, 2025",
+  "description": "Daily digest covering societal culture change",
+  "topic": "societal_culture_change",
+  "timestamp": "20250902_005315",
+  "date": "2025-09-02T00:53:15",
+  "voice_config": {
+    "voice_id": "pNInz6obpgDQGcFmaJgB",
+    "display_name": "Societal Culture Change",
+    "stability": 0.75,
+    "similarity_boost": 0.8,
+    "style": 0.3
+  },
+  "generated_at": "2025-09-02T00:55:37.594498",
+  "audio_file": "societal_culture_change_digest_20250902_005315.mp3",
+  "markdown_file": "societal_culture_change_digest_20250902_005315.md",
+  "tts_script_file": "societal_culture_change_digest_tts_20250902_005315.txt",
+  "music_enhanced": true
+}
