@@ -1,5 +1,5 @@
 {
-  "deployment_timestamp": "2025-09-04T07:09:11.782186",
+  "deployment_timestamp": "2025-09-04T10:31:11.962862",
   "release_tag": "multi-topic-2025-09-01",
   "github_release_url": "https://github.com/McSchnizzle/podcast-scraper/releases/tag/multi-topic-2025-09-01",
   "episodes": [
@@ -79,6 +79,61 @@
       "duration_estimate": "~4 minutes",
       "is_enhanced": false,
       "file_key": "tech_product_releases_20250904_040227"
+    },
+    {
+      "topic": "ai-news",
+      "timestamp": "20250904_065616",
+      "date": "2025-09-04T06:56:16",
+      "local_path": "daily_digests/ai-news_digest_20250904_065616.mp3",
+      "public_url": "https://github.com/McSchnizzle/podcast-scraper/releases/download/multi-topic-2025-09-01/ai-news_digest_20250904_065616.mp3",
+      "file_size": 5108340,
+      "duration_estimate": "~4 minutes",
+      "is_enhanced": false,
+      "file_key": "ai-news_20250904_065616"
+    },
+    {
+      "topic": "ai-news",
+      "timestamp": "20250904_070737",
+      "date": "2025-09-04T07:07:37",
+      "local_path": "daily_digests/ai-news_digest_20250904_070737.mp3",
+      "public_url": "https://github.com/McSchnizzle/podcast-scraper/releases/download/multi-topic-2025-09-01/ai-news_digest_20250904_070737.mp3",
+      "file_size": 2065528,
+      "duration_estimate": "~1 minutes",
+      "is_enhanced": false,
+      "file_key": "ai-news_20250904_070737"
+    },
+    {
+      "topic": "tech-news-and-tech-culture",
+      "timestamp": "20250904_070821",
+      "date": "2025-09-04T07:08:21",
+      "local_path": "daily_digests/tech-news-and-tech-culture_digest_20250904_070821.mp3",
+      "public_url": "https://github.com/McSchnizzle/podcast-scraper/releases/download/multi-topic-2025-09-01/tech-news-and-tech-culture_digest_20250904_070821.mp3",
+      "file_size": 5245430,
+      "duration_estimate": "~5 minutes",
+      "is_enhanced": false,
+      "file_key": "tech-news-and-tech-culture_20250904_070821"
+    },
+    {
+      "topic": "tech-product-releases",
+      "timestamp": "20250904_070911",
+      "date": "2025-09-04T07:09:11",
+      "local_path": "daily_digests/tech-product-releases_digest_20250904_070911.mp3",
+      "public_url": "https://github.com/McSchnizzle/podcast-scraper/releases/download/multi-topic-2025-09-01/tech-product-releases_digest_20250904_070911.mp3",
+      "file_size": 1929644,
+      "duration_estimate": "~1 minutes",
+      "is_enhanced": false,
+      "file_key": "tech-product-releases_20250904_070911"
+    },
+    {
+      "topic": "ai-news",
+      "timestamp": "20250904_102917",
+      "date": "2025-09-04T10:29:17",
+      "local_path": "daily_digests/ai-news_digest_20250904_102917.mp3",
+      "public_url": "https://github.com/McSchnizzle/podcast-scraper/releases/download/multi-topic-2025-09-01/ai-news_digest_20250904_102917.mp3",
+      "file_size": 3839454,
+      "duration_estimate": "~3 minutes",
+      "is_enhanced": false,
+      "file_key": "ai-news_20250904_102917"
     }
   ]
 }

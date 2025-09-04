@@ -1,0 +1,770 @@
+[00:00] Hello friends, welcome back to the AI
+[00:01] Daily Brief. Now, I have a fun one for
+[00:03] you today. The news cycle is slowly
+[00:06] starting back up. It is back to school
+[00:08] time here in the US, which also means
+[00:10] back to work time for all intents and
+[00:12] purposes. This is really the time of
+[00:13] year that everyone shakes off the summer
+[00:15] sunshine and gets back down to business.
+[00:17] And I love it. It has, since I was very
+[00:20] young and this was the school year
+[00:21] beginning, felt more like New Year's to
+[00:23] me than New Year's. And so rather than
+[00:24] just do a retrospective on what happened
+[00:27] this summer, which if you were listening
+[00:28] to the show, you'll already have heard,
+[00:30] I want to translate that into some
+[00:32] predictions. So what I'm going to do is
+[00:33] I'm going to look at where we are and
+[00:35] how I think it plays out over the course
+[00:37] of the next couple of months. And I
+[00:39] think where we have to start is with
+[00:41] continued simmering skepticism around
+[00:44] AI. We right now have an unholy alliance
+[00:47] of market shorters, AI skeptics, and
+[00:49] media headline editors who are all
+[00:51] keeping this MIT study headline alive.
+[00:54] This, of course, is the study where MIT
+[00:56] found that 95% of all AI pilots were
+[00:59] going nowhere and creating no value,
+[01:01] which was translated by headline writers
+[01:03] into 95% of AI efforts are completely
+[01:06] worthless. Never mind the fact that this
+[01:07] was based on around 50 interviews and a
+[01:09] reading of public financial statements
+[01:11] to see whether companies were declaring
+[01:12] that AI had increased their revenue or
+[01:14] not. A very dubious methodology at best.
+[01:17] Now, interestingly, however, you're also
+[01:19] starting to see a lot of companies who
+[01:21] want to sell you something lean into the
+[01:23] MIT story as well. Basically, the
+[01:25] extension of the narrative is that yes,
+[01:27] of course, many pilots are meaningless,
+[01:29] but it's not because AI doesn't work.
+[01:31] It's because it wasn't implemented well.
+[01:33] The implication of course being that if
+[01:34] you work with them they can help you
+[01:35] implement it well. Which honestly I'm
+[01:38] totally fine with this narrative. Secure
+[01:40] the bag my AI entrepreneur friends. But
+[01:42] the point is that surrounding all of
+[01:43] this we are heading into this fall with
+[01:45] a little bit of AI skepticism. Usually
+[01:48] at this time the summer AI antagonistic
+[01:50] narrative has sort of worn off. But of
+[01:52] course it wasn't just the MIT study. It
+[01:53] was also Sam Alman sort of a little bit
+[01:56] saying we're in a bubble. Although even
+[01:58] that was widely over reported I think.
+[02:00] But as I said before, I think that part
+[02:02] of the reason that this hit the way that
+[02:04] it did when it did is that it came in
+[02:05] the context of the broader market cycle.
+[02:08] Summer is a historically low liquidity
+[02:10] kind of time when there's not all that
+[02:12] much market activity and narratives that
+[02:14] otherwise wouldn't move the needle have
+[02:16] a more outsiz impact. Take on top of
+[02:18] that anxiety around the rate cutting
+[02:21] cycle as well as tariff policy. Although
+[02:24] really for most of August it was about
+[02:25] the rate cutting cycle and Wall Street's
+[02:27] general concern that AI is the only
+[02:30] thing propping up this market. The TLDDR
+[02:32] for me is that I think that the response
+[02:34] had a lot more to do with where
+[02:36] specifically the market is than anything
+[02:39] that you have to be concerned about if
+[02:40] you're thinking about how to use AI for
+[02:42] your own benefits or for your company's
+[02:44] benefits. So predictions. First of all,
+[02:46] I think that this story has some more
+[02:49] legs from where it is right now, but
+[02:50] ultimately will feel much less
+[02:52] significant in the future than it was
+[02:54] presented when it came. Same as previous
+[02:56] AI skeptic narratives in years past. I
+[02:59] think this is especially true if markets
+[03:01] get the rate cut that they want in
+[03:02] September. At the same time, I also
+[03:05] predict that there is going to be a
+[03:06] positive outcome of this, which is a
+[03:08] return to focus on some things that have
+[03:11] gotten lost, which is the real challenge
+[03:13] of actually implementing AI in the
+[03:15] enterprise. Remember, another part of
+[03:18] the reason that the MIT study hit when
+[03:20] it did was that it came right after the
+[03:22] announcement of GPT5, which was for a
+[03:24] time viewed with a lot of skepticism.
+[03:27] Now, at this point, the narrative, I
+[03:28] think, has shifted fairly dramatically
+[03:30] and people are enjoying GBT5, figuring
+[03:32] out how to get more out of it, etc.,
+[03:34] etc. But all of this has combined to
+[03:36] create a conversation where companies
+[03:38] are thinking about not just how well
+[03:40] performant a model is and assuming that
+[03:43] a more powerful model means that their
+[03:44] experiments are going to work, but
+[03:46] instead, this is creating context to go
+[03:48] even deeper on the real challenges of
+[03:51] implementation, the real challenges and
+[03:53] opportunity of the last mile. you're
+[03:55] starting to see these other types of
+[03:56] pieces pop up like this one in the
+[03:58] Harvard Business Review that's all about
+[04:00] how companies can escape the AI
+[04:02] experimentation trap. That's their term
+[04:04] and I think it's a good one. And hold
+[04:06] aside their advice, which is basically
+[04:07] to focus on the use cases that have real
+[04:09] business opportunity and double down on
+[04:11] them rather than spreading yourself too
+[04:12] thin. The point isn't so much whether
+[04:15] that advice is right or not. Although I
+[04:16] do think it's fairly sound and instead
+[04:18] the fact that this is the conversation
+[04:20] that's coming out of this. Organizations
+[04:22] by and large are not looking at that MIT
+[04:24] study and justifying a lack of behavior.
+[04:27] Instead, they're saying, "How can we do
+[04:29] this better?" And I think that's a
+[04:30] really positive outcome. I think in fact
+[04:33] that it is going to create the context
+[04:35] for a much broader conversation about
+[04:38] infrastructure and why that should be
+[04:40] where companies place a lot of their
+[04:42] emphasis. Which brings us to our next
+[04:44] prediction. I recently said that I
+[04:46] thought that 2026 was going to be the
+[04:48] year where the big theme in enterprise
+[04:50] AI was context orchestration or context
+[04:52] engineering. And the idea of context
+[04:54] orchestration or engineering is
+[04:55] basically that AI and agents can only
+[04:57] get you so far in an enterprise if they
+[04:59] don't have good access to the context in
+[05:02] which they are operating. In other
+[05:04] words, if your agents don't have the
+[05:06] relevant background, the relevant data,
+[05:07] the relevant information that can help
+[05:09] them contextualize their work to your
+[05:11] organization, there are just going to be
+[05:13] really severe walls that you run up
+[05:14] against very quickly. It's very natural
+[05:16] at the beginning of a technology cycle
+[05:19] to focus on big flashy pilots and
+[05:21] exciting proof of concepts to basically
+[05:24] move the ball down the field by doing
+[05:25] things that are fun to show off rather
+[05:27] than a lot of the laborious hidden
+[05:29] behind-the-scenes work that ultimately
+[05:30] is going to produce good results. Now,
+[05:32] frankly, AI has always been a little bit
+[05:35] of an exception to this rule in the
+[05:36] sense that pretty quickly organizations
+[05:38] started to try to get their data houses
+[05:40] in order and understood that there was
+[05:41] likely to be a direct relationship
+[05:43] between how good at giving AI access to
+[05:45] information and context they were and
+[05:47] how well it was going to perform for
+[05:48] them. But I think that this moment with
+[05:50] GPT5 and the MIT study are going to give
+[05:53] enterprises even more narrative cloud
+[05:55] cover to really have the new hotness be
+[05:58] the messy difficult infrastructure work
+[06:00] that is so necessary for getting to the
+[06:02] next level of performance when it comes
+[06:03] to AI and agents. Now a lot of this has
+[06:05] already started this year. One of the
+[06:07] major themes I think when we look back
+[06:09] on 2025 will have been MCP model context
+[06:11] protocol in these new standards around
+[06:13] agent access to information that so many
+[06:16] enterprises are adopting quite quickly.
+[06:18] You're also seeing conversations spring
+[06:20] up around other standards like A to A.
+[06:22] Ravine the CEO of Credle recently wrote
+[06:24] on his LinkedIn I'm not a fortune teller
+[06:26] but my educated guess on what will
+[06:27] dominate AI headlines in 2026 is agentto
+[06:30] agent or Ato workflows. Over the past
+[06:33] few months, my conversations with AI
+[06:35] experts, customers, and other builders
+[06:36] all point in the same direction. Single
+[06:39] agents aren't enough. We've seen AI
+[06:41] evolve in waves. 2023 was the year of AI
+[06:44] chat. 2024 was all about LLM rappers.
+[06:47] 2025 has been dominated by AI agents.
+[06:49] And I believe 2026 will be the year Atoa
+[06:51] workflows take center stage. He argues
+[06:54] that the two reasons why are first
+[06:56] massive tool and data sprawl that
+[06:57] happens inside companies that make a
+[06:59] single agent managing all tasks across
+[07:01] those systems really unrealistic and the
+[07:04] fact that communications infrastructure
+[07:05] like ADA helps us build more specialized
+[07:08] agents that can then work together. You
+[07:10] already started to get a taste this year
+[07:12] of MCP showing how infrastructure
+[07:15] buildout can be sexy. I think we're
+[07:17] going to see that do nothing but
+[07:18] increase. And I think that some of the
+[07:19] skepticism that we got in the summer is
+[07:21] actually going to create some momentum
+[07:23] to move even faster in that area. Then
+[07:26] again, I also think that we're starting
+[07:28] to see a bunch of counter signals to
+[07:30] that skepticism from the summer. And one
+[07:32] of my predictions for the fall is that
+[07:34] you're going to see a bunch of people
+[07:35] race in the other direction over the
+[07:36] next few weeks. An example of this came
+[07:38] on Monday when Evercore bucked the trend
+[07:41] of calling things an AI bubble and
+[07:42] instead released a note predicting a 20%
+[07:44] rally for US stocks by 2026 driven in
+[07:47] large part by excitement around AI.
+[07:50] Evercore's report basically said that if
+[07:51] you zoom past all of the hand ringing
+[07:53] and nervousness, earnings continue to
+[07:55] defy expectations despite tariff and
+[07:57] policy uncertainties. Now they're not
+[07:59] saying it's a sure thing that we're
+[08:00] going to see another big rally, but
+[08:02] remember in the last quarter we saw
+[08:04] coreweave triple their revenue.
+[08:06] Microsoft's Azure jumped 39% and Nvidia
+[08:09] was up 56%. Which, yes, was less than
+[08:11] the 200% the year before, but is still a
+[08:13] remarkable result for the biggest
+[08:14] company in the world. I think that this
+[08:16] sort of market positivity is going to
+[08:19] surge, especially after we get whatever
+[08:21] we're going to get when it comes to
+[08:22] rates at the end of this month. And when
+[08:25] it does, people are going to look back
+[08:26] on some of the stories that they decided
+[08:28] to conveniently not focus on in the
+[08:29] summer. like Sam Alman saying that they
+[08:31] were expecting to spend trillions on
+[08:33] infrastructure quite quickly despite the
+[08:34] fact that they knew that economists were
+[08:35] going to say they were nuts and that is
+[08:37] going to help fuel this narrative even
+[08:38] further. Another counter signal comes
+[08:41] around fundraising. This isn't so much a
+[08:43] prediction just an observation. Although
+[08:44] to the extent that I think there is a
+[08:45] prediction here I think it's going to do
+[08:46] nothing but increase. But the TLDDR is
+[08:48] that at least when it comes to private
+[08:50] markets appetite for AI investment
+[08:52] remains unabated. Biggest example of
+[08:54] this is that Enthropic has now closed
+[08:56] this round that has been increasing in
+[08:58] both total size and total valuation over
+[09:00] the last couple of months coming in at a
+[09:02] hot $183 billion valuation. The company
+[09:05] ended up raising $13 billion which was
+[09:08] like three or four times as much as it
+[09:09] seemed like they were going to at the
+[09:10] beginning and at a significantly juiced
+[09:12] valuation from where they started. Now
+[09:14] of course the reason that Anthropic was
+[09:15] able to command such a big increase in
+[09:17] their valuation is that the company has
+[09:19] just been absolutely crushing it. They
+[09:21] 5xed their revenue from 1 billion
+[09:22] annualized in January to 5 billion
+[09:25] annualized in August, thanks in large
+[09:27] part to the rise of the agentic coding
+[09:28] use case. Speaking of which, more
+[09:31] evidence of the counter signal in
+[09:32] fundraising. Vibe coding platform
+[09:34] lovable, fresh off of a raise at a $ 1.8
+[09:36] billion valuation. The year-old startup
+[09:39] is now apparently receiving offers at
+[09:40] double that at a $4 billion valuation.
+[09:43] Point is, I don't think these are
+[09:44] outliers. I think these are reflective
+[09:46] of the fact that we are just going to
+[09:48] see nothing but more private investor
+[09:49] enthusiasm for hot AI deals. And boy, at
+[09:52] this point, we are definitely in the
+[09:54] okay, but that's so obvious portion of
+[09:55] these predictions that Vibe or perhaps
+[09:58] as it will now be known, agentic coding,
+[10:00] is going to continue to dominate as
+[10:02] maybe the key theme of 2025. Vibe coding
+[10:05] wasn't even a term when we started this
+[10:06] year. Tools for AI coding had only just
+[10:08] started to really get good enough, but
+[10:10] obviously over the last 6 months, it has
+[10:12] become a dominant force. We saw this
+[10:14] expressed in Andre Horowitz's recent top
+[10:16] 100 Genai consumer apps where lovable
+[10:18] jumped from just off the list 6 months
+[10:20] ago to number 23 and was one of the big
+[10:23] themes that A16Z called out in part
+[10:25] because we were seeing an increase not
+[10:26] only in traffic to the core websites of
+[10:28] these companies but also to the domains
+[10:30] where they hosted users creations
+[10:32] suggesting that people are actually
+[10:33] building real stuff that they're then
+[10:34] publishing for other people. I do
+[10:36] predict that the language of vibe coding
+[10:38] is going to go a little bit by the
+[10:40] wayside. I'm already noticing people
+[10:42] starting to call it simply agentic
+[10:44] coding more often and I think that's a
+[10:46] more accurate reflection of the full
+[10:47] range of how it's being used. Now we
+[10:49] might still use vibe coding to refer to
+[10:51] people who are not traditional software
+[10:53] engineers using these tools or maybe
+[10:54] we'll come up with some other term for
+[10:56] that but I think that agentic coding
+[10:57] will continue to be a force. It will
+[10:58] continue to be used in higher and higher
+[11:00] value and more complete production uses.
+[11:02] I think that inside companies it'll
+[11:04] start to jump out of the prototype phase
+[11:06] and we'll have specific buckets of work
+[11:08] that become normalized to be completed
+[11:09] with agentic coding. I think that we're
+[11:11] going to see more startups who start to
+[11:12] fill in the gaps of agentic coding such
+[11:14] as the just released code review agent
+[11:17] from Lindy that can look at your vibe
+[11:18] coding app and see where it needs to be
+[11:20] improved. And again, prediction for the
+[11:22] fall is that by the time we're doing
+[11:23] endofear lists, agentic coding will be
+[11:25] seen as perhaps the most important force
+[11:28] in AI of 2025.
+[11:30] Let's talk about what we can expect from
+[11:32] models. One prediction that I have is
+[11:35] that as we get out of the summer
+[11:36] doldrums and we get farther away from
+[11:38] the release of GPT5 and further past the
+[11:41] MIT study, etc., I think that we will
+[11:43] realize that while yes, we may be seeing
+[11:45] the saturation of chatbot style use
+[11:48] cases and progress is moving more
+[11:50] incrementally when it comes to the
+[11:51] difference between GPT 4.5 and 5 and
+[11:54] eventually Gemini 2.5 to 3 and Grock 4
+[11:56] to 5 etc. that while we were all focused
+[11:59] on that and looking over in that
+[12:01] direction, multimmodal capabilities were
+[12:03] just absolutely exploding all around us.
+[12:06] There are a bunch of big examples of
+[12:07] this from the summer. A huge number of
+[12:09] which by the way come from Google. Most
+[12:12] recently, of course, we got Nanobanana.
+[12:14] I have talked extensively about
+[12:15] Nanobanana, which is, by the way,
+[12:17] technically Gemini 2.5 flash image is
+[12:19] its real name. But where Nano Banana
+[12:21] excels is not in how much better it is
+[12:23] at native generation. it's how much
+[12:25] better it is at making changes to
+[12:27] existing photos. I'm working on an
+[12:29] episode for sometime this week or next
+[12:31] week where I talk about this new idea
+[12:33] for a benchmark I have called the unlock
+[12:35] score that was inspired directly by
+[12:37] seeing how many new use cases this
+[12:40] simple change opens up. Basically, while
+[12:42] some people have complained that Nano
+[12:44] Banana doesn't represent some major
+[12:46] increase in raw generative capacity, the
+[12:48] fact that it can allow for more
+[12:50] precision photo changes creates a huge
+[12:52] number of commercially viable use cases
+[12:54] that used to either be a only possible
+[12:57] through an extended set of workflows
+[12:58] that were all cobbled together or b not
+[13:00] possible at all. It is of course not
+[13:03] just images that have gotten a major
+[13:05] upgrade. We haven't really gotten an
+[13:07] update in a while, but what we are
+[13:09] seeing now is V3 actually making its way
+[13:11] into production for a lot of different
+[13:13] use cases, particularly around social
+[13:16] media and advertising. V3 is the first
+[13:18] model that has made it fully into
+[13:20] production for ads that are airing on
+[13:22] national TV in major places. And that is
+[13:25] a trend that I think is going to do
+[13:26] nothing but increase, especially as it
+[13:28] gets plugged in with models like Nano
+[13:30] Banana that make the process of going
+[13:32] from image to video more viable and just
+[13:34] better. Indeed, a lot of what you're
+[13:36] seeing right now on the internet is
+[13:38] people combining the capabilities of
+[13:39] these models as well as apps like
+[13:41] Higsfield to make AI videos that can
+[13:43] more natively translate crazy imaginings
+[13:45] into something really powerful and
+[13:47] clear. There's this other X factor as
+[13:49] well of world models. At the beginning
+[13:51] of August, we got a preview of Genie 3,
+[13:53] which made some major advancements when
+[13:55] it comes to the ability to create 3D
+[13:57] interactive worlds with just a text
+[13:59] prompt. Specifically, we got much more
+[14:01] extended memory. That again opens up a
+[14:03] whole variety of new use cases. Most
+[14:06] people are barely touching images and
+[14:07] video to say nothing of these world
+[14:08] models, but this could be a whole new
+[14:10] frontier for creation and is happening
+[14:12] at a more rapid clip than I think most
+[14:14] people would have predicted. So my
+[14:16] prediction for this area of
+[14:17] multimodality is that again as we shake
+[14:20] off the slough of debates from the
+[14:22] summer about MIT and GPT5. I think
+[14:25] people are realized that they have this
+[14:26] totally expanded creative canvas that
+[14:29] they have barely scratched the surface
+[14:30] on. And I think we're going to see a lot
+[14:32] of that come to actual production as
+[14:34] people dig in and try these rapidly
+[14:36] improved step function improved type of
+[14:38] multimodal models out. Now let's talk
+[14:40] about cost. The state of the cost of AI
+[14:43] is really fascinating to me. On the one
+[14:46] hand, we're seeing the cost of inference
+[14:48] go down and down and down in a way that
+[14:50] basically no one would have thought
+[14:51] possible. I mean, it just massively
+[14:53] exceeds anything that we would have
+[14:54] expected or any comparison to Moore's
+[14:56] law. At the same time, so far most
+[15:00] people for most use cases have opted to
+[15:02] just focus on the highest end models and
+[15:05] so total cost continues to rise. The
+[15:08] Wall Street Journal wrote about this
+[15:09] over the weekend with a piece called
+[15:11] Cutting Edge AI was supposed to get
+[15:13] cheaper. It's more expensive than ever.
+[15:15] And obviously, what's going on here is
+[15:17] not about AI not getting cheaper. It's
+[15:19] actually about the fact that as it gets
+[15:20] more powerful and cheaper on a unit
+[15:23] basis, we use more of those units. Aaron
+[15:26] Levy from Box wrote about this
+[15:28] specifically in the context of the
+[15:29] journal piece and said, "This is
+[15:31] precisely Javvon's paradox in action in
+[15:33] the purest form. Because the cost of AI
+[15:35] tokens have gone down, we can now afford
+[15:37] to use far more of them for increasingly
+[15:39] complex tasks. The key point thus is not
+[15:41] that AI is getting more expensive.
+[15:43] Instead, it's that because it's getting
+[15:44] cheaper and more capable, we're using
+[15:46] more of it to solve problems better. For
+[15:48] almost every like forlike task, we're
+[15:50] just using way more tokens to complete
+[15:52] the task to deliver far better output.
+[15:54] Whether it's writing code, answering a
+[15:56] healthcare question, or analyzing a
+[15:58] contract, we're using far more AI today
+[16:00] to perform that work because we need the
+[16:01] additional points of performance.
+[16:03] Getting a 99% correct answer when
+[16:05] working with a legal contract is very
+[16:07] different from a 90% correct answer and
+[16:09] it's easily worth the 10x to 100x
+[16:11] increase in tokens. Now, at some point,
+[16:13] we will start to reach plateaus for
+[16:14] certain types of tasks and then the cost
+[16:16] per task will go down. For instance, we
+[16:18] probably don't need 100x more tokens
+[16:20] than we use today for answering a simple
+[16:22] medical question or summarizing a
+[16:23] document. So then eventually on a like
+[16:25] forlike basis, these workloads will
+[16:27] become cheaper as we're able to capture
+[16:28] the efficiency gains from the models.
+[16:30] But the general cycle will go on
+[16:32] essentially forever because we will just
+[16:34] keep raising the bar of what we do with
+[16:35] AI. As tokens continue to get cheaper
+[16:37] due to algorithmic breakthroughs,
+[16:39] competition, and GPU prices, general
+[16:41] compute efficiencies, and openweight
+[16:42] alternatives, we will find the next set
+[16:44] of ways to consume the tokens. We'll
+[16:46] deploy far more agents in parallel to
+[16:48] speed up tasks. We'll use multi-agent
+[16:49] systems to compare answers and get to
+[16:51] consensus. We'll solve more complex
+[16:53] knowledge work problems, and we'll have
+[16:54] far longer running agents in the
+[16:56] background. AI will both simultaneously
+[16:58] always be getting cheaper and more
+[17:00] expensive. It is very rare that someone
+[17:02] says exactly what I would have said, but
+[17:05] this is exactly one of those times.
+[17:07] Going back to this idea that agentic
+[17:08] coding is the key use and the breakout
+[17:11] use of AI in 2025, we've moved from
+[17:13] sitting there telling a coding tool what
+[17:15] to do to now running multiple coding
+[17:18] agents in the background in a way that
+[17:20] just simply consumes more tokens. We
+[17:23] also continue to ride the frontier where
+[17:25] each increase in AI capability opens up
+[17:27] new uses that weren't possible before.
+[17:30] And to the extent that anyone's most
+[17:31] important work is in that set of new use
+[17:33] cases, they're kind of priced into using
+[17:35] the most expensive versions of the
+[17:36] models. However, at some point, there
+[17:39] will be entire categories of tasks that
+[17:41] can comfortably use models that aren't
+[17:43] the state-of-the-art and can take
+[17:45] advantage of ridiculously reduced prices
+[17:47] in inference. So my prediction exactly
+[17:51] as Aaron said for a little while at
+[17:53] least even though AI costs are coming
+[17:55] down dramatically the things that get
+[17:57] enabled both by new capabilities and by
+[18:00] the cost coming down are going to
+[18:02] ironically increase the total amount
+[18:04] that we spend on AI because we're simply
+[18:06] going to be using more of it. Last state
+[18:09] of the models conversation, new data
+[18:11] sources. We continue to have lurking
+[18:13] around us a conversation that's been
+[18:14] going on since about this time last
+[18:16] year, which is whether we've reached a
+[18:18] plateau in pre-training as a scaling
+[18:20] methodology. Certainly, for some people,
+[18:22] the more incremental performance between
+[18:24] something like GPT 4.5 and GPT5 suggests
+[18:27] that yes, we have. And while I think
+[18:29] I've clearly shown that there are other
+[18:30] areas where models are improving at
+[18:32] every bit as exponential a clip as
+[18:34] anything we've seen before, there is
+[18:35] still this conversation around plateaus
+[18:37] and specifically LLMs and what it means
+[18:39] in terms of what we can predict for the
+[18:41] future. Part of the challenge is the
+[18:43] incremental cost of compute, but part of
+[18:45] the challenge is also access to data. At
+[18:47] this point, every model has been trained
+[18:49] on the entire corpus of publicly
+[18:50] available human information. That's just
+[18:52] basically what you can assume. And so to
+[18:54] train on more novel data, companies are
+[18:57] going to have to go find more novel
+[18:59] data. I predict that rather than just
+[19:01] resting on their laurels, AI companies
+[19:03] are increasingly going to be looking for
+[19:05] those novel sources of data. One example
+[19:08] of this is it's going to be very
+[19:10] default, even more default than it is
+[19:11] now, for AI to be training on your
+[19:13] interaction with it. Anthropic was a
+[19:15] long-term holdout around this, but even
+[19:17] they have finally changed their terms of
+[19:18] service to force an opt out when it
+[19:20] comes to general consumer usage being
+[19:22] included in the training data. You're
+[19:24] also starting to see companies go out
+[19:26] and look for novel sources of data. The
+[19:28] information today posted this piece,
+[19:30] OpenAI and XAI show interest in Cursor's
+[19:32] coding data. Startups that sell AI
+[19:34] powered coding assistants have created
+[19:35] some of the fastest growing businesses
+[19:37] in Silicon Valley, making them ripe
+[19:38] acquisition targets for OpenAI and other
+[19:40] large AI developers. So far, Curser's
+[19:43] owner, Any Sphere, isn't selling.
+[19:45] Instead, potential acquirers such as
+[19:46] OpenAI, XAI, and Enthropic have
+[19:49] discussed a possible deal with the
+[19:50] coding startup to license or purchase
+[19:52] what could be a gold mine of data. Reams
+[19:54] of information on how millions of
+[19:55] software engineers use Cursor to edit or
+[19:57] write their code. My prediction is that
+[19:59] we're going to see a renewed interest in
+[20:01] any novel source of data that hasn't
+[20:03] been captured yet. Could you see the big
+[20:05] labs even go try to cut deals with, for
+[20:08] example, the enterprise content
+[20:09] management providers? wouldn't surprise
+[20:12] me at all. Now, moving past the state of
+[20:14] the models, what are the models that
+[20:16] we're waiting for that we might get this
+[20:17] fall? Well, one thing of note is that
+[20:20] Sam Alman is already talking about GPT6.
+[20:23] He has said explicitly in recent
+[20:25] interviews that it will come much more
+[20:27] quickly than the time between GPT 4 and
+[20:29] 5, although that did lead him to have to
+[20:31] walk it back and say that it wasn't
+[20:33] coming like tomorrow or anything like
+[20:34] that. He's even started talking about
+[20:36] where some of the technical emphasis
+[20:38] might be. He's talking a lot, for
+[20:40] example, about memory as a key feature.
+[20:43] This goes back to that context
+[20:44] engineering or context orchestration
+[20:46] idea, although put in a consumer
+[20:47] dimension. Elon Musk has suggested that
+[20:50] they intend to launch Gro 5 by the end
+[20:52] of the year. And of course, there has
+[20:54] been a ton of conversation around Gemini
+[20:56] 3, although most of that frankly has not
+[20:58] been encouraged by Google and it's just
+[21:00] been the internet doing its rumor mill
+[21:02] thing. So again when it comes to
+[21:04] predictions sadly my prediction and my
+[21:06] base case is that we will not get any of
+[21:09] these major models this year. I think we
+[21:11] will see other models launched. I think
+[21:13] we'll see multimodal updates and maybe
+[21:15] some advancements in open models
+[21:17] particularly from Chinese companies. And
+[21:19] my ranked order of most likely to least
+[21:21] likely in terms of a new model release
+[21:23] in calendar year 2025 would be Gro 5
+[21:26] then Gemini 3 then GPT6.
+[21:29] The biggest reason that I think that
+[21:30] they won't come out is that I think that
+[21:32] they're going to have watched what
+[21:33] happened with GPT5 and decide that
+[21:36] unless they've made some major crazy
+[21:38] advancement, it's not going to be worth
+[21:40] fighting the disappointed initial
+[21:41] expectations until the model is really
+[21:43] and distinctly better in a way that is
+[21:45] incontrovertible.
+[21:47] At the same time, I think that we're
+[21:49] going to see a bit of a shift in where
+[21:50] the lab's emphasis is. Specifically, I
+[21:53] think we're going to see especially the
+[21:54] bigger labs have more focus on
+[21:57] individual applications and use cases
+[21:59] that take advantage of their models.
+[22:01] Now, certainly with OpenAI, they are
+[22:03] signaling this very clearly. They have
+[22:05] brought in an entire new CEO of
+[22:07] applications named Fiji Simo. She was
+[22:09] previously the CEO of Instacart and is
+[22:11] going to be focused on the practical
+[22:13] useful applications of ChachiBT and
+[22:16] OpenAI's models more broadly. News also
+[22:19] just broke of an OpenAI acquisition of a
+[22:20] product testing startup. Plus, you have
+[22:22] people like OpenAI CPO Kevin Wheel
+[22:24] sharing that he's starting what they're
+[22:25] calling OpenAI for science with the goal
+[22:27] to build the quote nextgrade scientific
+[22:29] instrument, an AI powered platform that
+[22:31] accelerates scientific discovery. Over
+[22:33] in Anthropic over the summer, we got
+[22:35] Claude for financial services, a more
+[22:37] custom skin version for that particular
+[22:39] set of applications. And I predict that
+[22:41] we're going to see more, not less of
+[22:42] that. In fact, one of the big questions
+[22:44] for the next 6 to 18 months is going to
+[22:47] be in what domains the foundation model
+[22:49] companies want to compete with their own
+[22:51] version of, for example, Claude for
+[22:53] financial services and what that means
+[22:55] for startups that are building specific
+[22:56] applications in those verticals using
+[22:58] those models. What room will there be
+[23:00] for third party apps instead of the
+[23:02] foundation model companies? I'm not as
+[23:04] pessimistic as some. I think that there
+[23:05] is a lot of contextual knowledge that
+[23:07] someone who is deep in those industries
+[23:08] can bring. There may be UX
+[23:10] specifications or even custom data sets
+[23:12] that the anthropics and open AIs of the
+[23:14] world don't have access to. So I don't
+[23:16] think that a priority anthropic or open
+[23:18] AI deciding to move into a space like
+[23:20] financial services or healthcare means
+[23:22] that third party AI vertical apps in
+[23:23] those spaces are going to be out
+[23:25] competed. But it obviously does change
+[23:27] the competitive dynamics.
+[23:29] Speaking of competitive dynamics, one
+[23:31] theme that people are talking about for
+[23:33] the fall is the question of
+[23:34] consolidation. It's actually been kind
+[23:36] of more than a year since we had a major
+[23:38] wave of changes to the AI landscape.
+[23:41] Yes, we had the wind surf acquisition
+[23:42] and the scale sort of acquisition and
+[23:44] those are big. But for example,
+[23:46] inflection being absorbed by Microsoft
+[23:49] that was over a year ago. Character AI
+[23:52] moving back over into Google or at least
+[23:54] the leadership team moving back over
+[23:55] into Google. We haven't really had that
+[23:57] type of big surprising shift in the
+[24:00] landscape this year. The odds on
+[24:02] favorite to where that could happen is
+[24:04] of course surrounding Apple. Recent
+[24:05] reporting has suggested that some inside
+[24:08] Apple have been aggressively pushing
+[24:10] acquisitions as a way to get back in the
+[24:12] race with Mistl and Perplexity being the
+[24:14] main targets that were discussed. But
+[24:15] those deals have had the kaosh put on
+[24:17] them by no less than Tim Cook himself. I
+[24:19] think outside of Apple, another big open
+[24:21] question is Meta. It's very clear that
+[24:23] Zuckerberg is going to do whatever it
+[24:24] takes to out compete in this area and
+[24:26] he's got deep pockets for spending as
+[24:28] witnessed not only by his hiring spree
+[24:30] but by his semi-acquisition of scale AI
+[24:33] just to get Alexander Wang. And so it's
+[24:35] not at all inconceivable to me that they
+[24:37] could go out and try to buy someone big
+[24:38] as well. My prediction, because it's way
+[24:41] more fun to have something on record
+[24:42] that you were either right or wrong
+[24:43] about than just vagaries, is that one,
+[24:46] we will see at least one big unexpected
+[24:49] M&A deal this fall, but that two, it
+[24:52] will not involve Apple. I just think
+[24:54] Apple's not going to get out of their
+[24:55] own way and be willing to embrace this
+[24:57] very different approach, but I hope I'm
+[24:59] wrong about that. And if it doesn't
+[25:01] happen in 2025, well, Goldman Sachs is
+[25:03] already predicting in general across all
+[25:05] different categories record-breaking M&A
+[25:07] in 2026. So maybe that will be the year
+[25:09] for AI as well. Anyways guys, that's it.
+[25:12] My autumn AI predictions. Let me know
+[25:14] what you think is going to happen.
+[25:15] Anything where you think I'm way off
+[25:16] base, anything you think I missed, let
+[25:18] me know in the comments. And appreciate
+[25:19] you guys listening or watching. As
+[25:21] always, until next time.

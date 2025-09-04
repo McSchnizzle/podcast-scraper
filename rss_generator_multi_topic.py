@@ -15,7 +15,7 @@ import hashlib
 from pathlib import Path
 from typing import List, Dict, Tuple, Optional
 from episode_summary_generator import EpisodeSummaryGenerator
-from utils.sanitization import sanitize_xml_content, safe_log_message
+from utils.sanitization import sanitize_xml_content, safe_log_message, create_topic_pattern, create_topic_mp3_patterns
 
 class MultiTopicRSSGenerator:
     def __init__(self, db_path="podcast_monitor.db", base_url="https://paulrbrown.org"):
@@ -158,7 +158,7 @@ class MultiTopicRSSGenerator:
         processed_timestamps = set()
         
         # First pass: Process MD files with corresponding MP3s
-        topic_pattern = re.compile(r'^([a-zA-Z_]+)_digest_(\d{8}_\d{6})\.md$')
+        topic_pattern = create_topic_pattern()
         
         for md_file in digest_dir.glob("*_digest_*.md"):
             match = topic_pattern.match(md_file.name)
@@ -216,10 +216,8 @@ class MultiTopicRSSGenerator:
             processed_timestamps.add(timestamp_str)
         
         # Second pass: Process MP3-only files (without MD files)
-        mp3_patterns = [
-            re.compile(r'^([a-zA-Z_]+)_digest_(\d{8}_\d{6})(_enhanced)?\.mp3$'),
-            re.compile(r'^complete_topic_digest_(\d{8}_\d{6})(_enhanced)?\.mp3$')
-        ]
+        topic_mp3_pattern, legacy_mp3_pattern = create_topic_mp3_patterns()
+        mp3_patterns = [topic_mp3_pattern, legacy_mp3_pattern]
         
         for mp3_file in digest_dir.glob("*.mp3"):
             # Prioritize enhanced versions (skip non-enhanced if enhanced exists)
@@ -370,6 +368,36 @@ class MultiTopicRSSGenerator:
         duration_minutes = max(1, file_size // (1024 * 1024))
         return duration_minutes * 60
     
+    def _validate_mp3_file(self, digest_info: Dict) -> bool:
+        """Validate that MP3 file exists and has correct length"""
+        try:
+            # If using public URL (GitHub releases), assume it's valid
+            if digest_info.get('public_url'):
+                return True
+            
+            # Check local file exists
+            mp3_file = digest_info.get('mp3_file')
+            if not mp3_file or not Path(mp3_file).exists():
+                print(f"⚠️ SKIP missing MP3: {mp3_file}")
+                return False
+            
+            # Check file size is reasonable (> 100KB)
+            file_size = Path(mp3_file).stat().st_size
+            if file_size < 100 * 1024:  # 100KB minimum
+                print(f"⚠️ SKIP small MP3: {mp3_file} ({file_size} bytes)")
+                return False
+            
+            # Check if expected file_size matches (if available)
+            expected_size = digest_info.get('file_size')
+            if expected_size and abs(file_size - expected_size) > 1024:  # Allow 1KB difference
+                print(f"⚠️ SKIP size mismatch: {mp3_file} (expected {expected_size}, got {file_size})")
+                return False
+            
+            return True
+        except Exception as e:
+            print(f"⚠️ Error validating MP3 {digest_info.get('mp3_file', 'unknown')}: {e}")
+            return False
+    
     def generate_rss(self, output_file="daily-digest.xml", max_items=100) -> bool:
         """Generate complete RSS feed with all recent topic-specific episodes"""
         try:
@@ -378,6 +406,16 @@ class MultiTopicRSSGenerator:
             if not digest_files:
                 print("⚠️  No digest files found for RSS generation")
                 return False
+            
+            # Guardrail: Check if we have MP3s for today
+            today = datetime.now(timezone.utc).date()
+            today_mp3s = [d for d in digest_files if d['date'].date() == today and self._validate_mp3_file(d)]
+            
+            if not today_mp3s:
+                print(f"RSS not updated: no new MP3s for {today}")
+                return False
+            
+            print(f"✅ Found {len(today_mp3s)} valid MP3s for today: {today}")
             
             # Apply item cap (newest first, so we keep the most recent)
             if len(digest_files) > max_items:
@@ -412,8 +450,13 @@ class MultiTopicRSSGenerator:
             SubElement(channel, 'itunes:category', text=self.podcast_info['category'])
             SubElement(channel, 'itunes:explicit').text = 'no'
             
-            # Add items for each digest file
+            # Add items for each digest file (with validation)
+            items_added = 0
             for digest_info in digest_files:
+                # Skip items with invalid MP3s
+                if not self._validate_mp3_file(digest_info):
+                    continue
+                
                 item = SubElement(channel, 'item')
                 
                 # Basic item info
@@ -446,6 +489,8 @@ class MultiTopicRSSGenerator:
                 enclosure.set('length', str(file_size))
                 enclosure.set('type', 'audio/mpeg')
                 
+                items_added += 1
+                
                 # iTunes episode info
                 SubElement(item, 'itunes:title').text = sanitize_xml_content(digest_info['title'])
                 SubElement(item, 'itunes:summary').text = sanitize_xml_content(digest_info['description'])
@@ -468,7 +513,7 @@ class MultiTopicRSSGenerator:
             with open(output_file, 'w', encoding='utf-8') as f:
                 f.write(pretty_xml)
             
-            print(f"✅ RSS feed generated: {output_file}")
+            print(f"✅ RSS feed generated: {output_file} with {items_added} valid items")
             
             # Show summary generation statistics
             try:
@@ -491,6 +536,13 @@ class MultiTopicRSSGenerator:
 
 def main():
     """Generate RSS feed for multi-topic digests"""
+    # Set up quiet logging for external libraries
+    try:
+        from logging_setup import set_all_quiet
+        set_all_quiet()
+    except ImportError:
+        pass
+    
     generator = MultiTopicRSSGenerator()
     
     success = generator.generate_rss()

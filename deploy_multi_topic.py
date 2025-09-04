@@ -12,6 +12,14 @@ import re
 from datetime import datetime
 from pathlib import Path
 from typing import List, Dict, Tuple, Optional
+from utils.sanitization import create_topic_pattern, create_topic_mp3_filename
+
+# Load environment variables from .env file
+try:
+    from dotenv import load_dotenv
+    load_dotenv()
+except ImportError:
+    pass  # dotenv is optional
 
 class MultiTopicDeployer:
     def __init__(self, base_url=None):
@@ -26,8 +34,34 @@ class MultiTopicDeployer:
         
         print(f"📡 Podcast base URL: {self.base_url}")
         
+        # Validate GitHub environment upfront  
+        self._validate_github_environment()
+        
         # Load previously deployed episodes
         self.deployed_episodes = self._load_deployed_episodes()
+    
+    def _validate_github_environment(self):
+        """Validate GitHub token and repository settings upfront"""
+        # Check for GitHub token
+        token = os.getenv("GITHUB_TOKEN") or os.getenv("GH_TOKEN")
+        if not token:
+            raise SystemExit("❌ GITHUB_TOKEN/GH_TOKEN is not set")
+        
+        print(f"✅ GitHub token found (length: {len(token)})")
+        
+        # Check repository setting
+        repo = os.getenv("GITHUB_REPOSITORY", "McSchnizzle/podcast-scraper")
+        print(f"📦 Target repository: {repo}")
+        
+        # Test gh CLI is available
+        try:
+            result = subprocess.run(['gh', '--version'], capture_output=True, text=True, timeout=10)
+            if result.returncode == 0:
+                print(f"✅ GitHub CLI available: {result.stdout.strip()}")
+            else:
+                raise SystemExit("❌ GitHub CLI (gh) not available or not working")
+        except (subprocess.TimeoutExpired, FileNotFoundError):
+            raise SystemExit("❌ GitHub CLI (gh) not found in PATH")
     
     def _load_deployed_episodes(self) -> Dict[str, str]:
         """Load record of previously deployed episodes"""
@@ -92,7 +126,8 @@ class MultiTopicDeployer:
             return []
         
         # Pattern for topic-specific digests: {topic}_digest_{timestamp}.md
-        topic_pattern = re.compile(r'^([a-zA-Z_]+)_digest_(\d{8}_\d{6})\.md$')
+        # Support both hyphens and underscores in topic names for back-compatibility
+        topic_pattern = create_topic_pattern()
         
         for md_file in self.digests_dir.glob("*_digest_*.md"):
             match = topic_pattern.match(md_file.name)
@@ -108,9 +143,9 @@ class MultiTopicDeployer:
             
             # Check if we have a corresponding MP3 file (prioritize enhanced versions)
             mp3_candidates = [
-                self.digests_dir / f"{topic}_digest_{timestamp_str}_enhanced.mp3",  # Preferred with music
-                self.digests_dir / f"{topic}_digest_{timestamp_str}.mp3",           # Standard TTS  
-                self.digests_dir / f"complete_topic_digest_{timestamp_str}.mp3"     # Legacy naming
+                self.digests_dir / create_topic_mp3_filename(topic, timestamp_str, enhanced=True),  # Preferred with music
+                self.digests_dir / create_topic_mp3_filename(topic, timestamp_str),                 # Standard TTS  
+                self.digests_dir / f"complete_topic_digest_{timestamp_str}.mp3"                     # Legacy naming
             ]
             
             mp3_file = None
@@ -203,6 +238,20 @@ AI-generated digest from leading podcasts and creators, organized by topic for f
         # Generate release information
         release_tag, release_title, description = self._generate_release_info(digests)
         
+        # Check idempotency - if release already exists, don't recreate
+        if self._release_exists(release_tag):
+            print(f"✅ Release {release_tag} already exists - marking episodes as deployed")
+            for digest in digests:
+                self.deployed_episodes[digest['file_key']] = release_tag
+            self._save_deployed_episodes()
+            return True
+        
+        # Validate all MP3 files exist before attempting deployment
+        for digest in digests:
+            if not digest['mp3_file'].exists():
+                print(f"❌ MP3 file missing: {digest['mp3_file']}")
+                return False
+        
         # Save deployment metadata for RSS generator
         self._save_deployment_metadata(digests, release_tag)
         
@@ -220,11 +269,12 @@ AI-generated digest from leading podcasts and creators, organized by topic for f
                 cmd.append(str(digest['mp3_file']))
                 print(f"  📎 Adding: {digest['mp3_file'].name}")
             
-            print(f"📡 Creating release: {release_tag}")
+            print(f"📡 Creating release with command: {' '.join(cmd[:6])} [+ {len(digests)} files]")
             result = subprocess.run(cmd, capture_output=True, text=True, timeout=300)
             
             if result.returncode == 0:
                 print(f"✅ Release created successfully: {release_tag}")
+                print(f"📄 STDOUT: {result.stdout.strip()}")
                 
                 # Mark episodes as deployed
                 for digest in digests:
@@ -234,14 +284,30 @@ AI-generated digest from leading podcasts and creators, organized by topic for f
                 self._save_deployed_episodes()
                 return True
             else:
-                print(f"❌ Failed to create release: {result.stderr}")
+                print(f"❌ GitHub deployment failed")
+                print(f"📄 CMD: {' '.join(cmd)}")
+                print(f"📄 Return code: {result.returncode}")
+                print(f"📄 STDOUT: {result.stdout}")
+                print(f"📄 STDERR: {result.stderr}")
                 return False
                 
         except subprocess.TimeoutExpired:
-            print("❌ GitHub release creation timed out")
+            print("❌ GitHub release creation timed out after 5 minutes")
+            print(f"📄 CMD: {' '.join(cmd)}")
             return False
         except Exception as e:
             print(f"❌ Error creating GitHub release: {e}")
+            print(f"📄 CMD: {' '.join(cmd)}")
+            return False
+    
+    def _release_exists(self, release_tag: str) -> bool:
+        """Check if a GitHub release already exists"""
+        try:
+            result = subprocess.run([
+                'gh', 'release', 'view', release_tag
+            ], capture_output=True, text=True, timeout=30)
+            return result.returncode == 0
+        except Exception:
             return False
     
     def deploy_new_episodes(self, dry_run: bool = False) -> bool:

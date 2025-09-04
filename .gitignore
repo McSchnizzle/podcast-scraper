@@ -233,3 +233,15 @@ __marimo__/
 tmp*
 *.tmp
 .vercel
+
+# Database backup files
+*.db.backup.*
+
+# Telemetry files
+telemetry/*.json
+
+# Backup directory
+/backups/
+
+# Temporary digest files
+daily_digests/*.txt

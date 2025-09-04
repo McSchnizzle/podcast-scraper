@@ -8,13 +8,68 @@
     <copyright>© 2025 Paul Brown</copyright>
     <managingEditor>podcast@paulrbrown.org (Paul Brown)</managingEditor>
     <webMaster>podcast@paulrbrown.org (Paul Brown)</webMaster>
-    <lastBuildDate>Thu, 04 Sep 2025 10:09:12 +0000</lastBuildDate>
+    <lastBuildDate>Thu, 04 Sep 2025 20:12:42 +0000</lastBuildDate>
     <itunes:author>Paul Brown</itunes:author>
     <itunes:summary>AI-generated daily digest covering technology, society, and culture from leading podcasts and creators, organized by topic</itunes:summary>
     <itunes:owner>Paul Brown</itunes:owner>
     <itunes:image href="https://paulrbrown.org/podcast-artwork.jpg"/>
     <itunes:category text="Technology"/>
     <itunes:explicit>no</itunes:explicit>
+    <item>
+      <title>Ai-News - September 04, 2025</title>
+      <description>Ai-News digest from September 04, 2025. Covering the latest developments and insights.</description>
+      <link>https://paulrbrown.org/daily-digest/20250904_102917</link>
+      <guid>https://paulrbrown.org/digest/2025-09-04/ai-news/fa8c2b6e</guid>
+      <pubDate>Thu, 04 Sep 2025 10:29:17 +0000</pubDate>
+      <enclosure url="https://github.com/McSchnizzle/podcast-scraper/releases/download/multi-topic-2025-09-01/ai-news_digest_20250904_102917.mp3" length="3839454" type="audio/mpeg"/>
+      <itunes:title>Ai-News - September 04, 2025</itunes:title>
+      <itunes:summary>Ai-News digest from September 04, 2025. Covering the latest developments and insights.</itunes:summary>
+      <itunes:duration>180</itunes:duration>
+    </item>
+    <item>
+      <title>Tech-Product-Releases - September 04, 2025</title>
+      <description>Tech-Product-Releases digest from September 04, 2025. Covering the latest developments and insights.</description>
+      <link>https://paulrbrown.org/daily-digest/20250904_070911</link>
+      <guid>https://paulrbrown.org/digest/2025-09-04/tech-product-releases/c27fb4ff</guid>
+      <pubDate>Thu, 04 Sep 2025 07:09:11 +0000</pubDate>
+      <enclosure url="https://github.com/McSchnizzle/podcast-scraper/releases/download/multi-topic-2025-09-01/tech-product-releases_digest_20250904_070911.mp3" length="1929644" type="audio/mpeg"/>
+      <itunes:title>Tech-Product-Releases - September 04, 2025</itunes:title>
+      <itunes:summary>Tech-Product-Releases digest from September 04, 2025. Covering the latest developments and insights.</itunes:summary>
+      <itunes:duration>60</itunes:duration>
+    </item>
+    <item>
+      <title>Tech-News-And-Tech-Culture - September 04, 2025</title>
+      <description>Tech-News-And-Tech-Culture digest from September 04, 2025. Covering the latest developments and insights.</description>
+      <link>https://paulrbrown.org/daily-digest/20250904_070821</link>
+      <guid>https://paulrbrown.org/digest/2025-09-04/tech-news-and-tech-culture/d7991b18</guid>
+      <pubDate>Thu, 04 Sep 2025 07:08:21 +0000</pubDate>
+      <enclosure url="https://github.com/McSchnizzle/podcast-scraper/releases/download/multi-topic-2025-09-01/tech-news-and-tech-culture_digest_20250904_070821.mp3" length="5245430" type="audio/mpeg"/>
+      <itunes:title>Tech-News-And-Tech-Culture - September 04, 2025</itunes:title>
+      <itunes:summary>Tech-News-And-Tech-Culture digest from September 04, 2025. Covering the latest developments and insights.</itunes:summary>
+      <itunes:duration>300</itunes:duration>
+    </item>
+    <item>
+      <title>Ai-News - September 04, 2025</title>
+      <description>Ai-News digest from September 04, 2025. Covering the latest developments and insights.</description>
+      <link>https://paulrbrown.org/daily-digest/20250904_070737</link>
+      <guid>https://paulrbrown.org/digest/2025-09-04/ai-news/faefdd20</guid>
+      <pubDate>Thu, 04 Sep 2025 07:07:37 +0000</pubDate>
+      <enclosure url="https://github.com/McSchnizzle/podcast-scraper/releases/download/multi-topic-2025-09-01/ai-news_digest_20250904_070737.mp3" length="2065528" type="audio/mpeg"/>
+      <itunes:title>Ai-News - September 04, 2025</itunes:title>
+      <itunes:summary>Ai-News digest from September 04, 2025. Covering the latest developments and insights.</itunes:summary>
+      <itunes:duration>60</itunes:duration>
+    </item>
+    <item>
+      <title>Ai-News - September 04, 2025</title>
+      <description>Ai-News digest from September 04, 2025. Covering the latest developments and insights.</description>
+      <link>https://paulrbrown.org/daily-digest/20250904_065616</link>
+      <guid>https://paulrbrown.org/digest/2025-09-04/ai-news/32d191c3</guid>
+      <pubDate>Thu, 04 Sep 2025 06:56:16 +0000</pubDate>
+      <enclosure url="https://github.com/McSchnizzle/podcast-scraper/releases/download/multi-topic-2025-09-01/ai-news_digest_20250904_065616.mp3" length="5108340" type="audio/mpeg"/>
+      <itunes:title>Ai-News - September 04, 2025</itunes:title>
+      <itunes:summary>Ai-News digest from September 04, 2025. Covering the latest developments and insights.</itunes:summary>
+      <itunes:duration>240</itunes:duration>
+    </item>
     <item>
       <title>Tech Product Releases - September 04, 2025</title>
       <description>Tech Product Releases digest from September 04, 2025. New product launches, updates, and technology announcements</description>

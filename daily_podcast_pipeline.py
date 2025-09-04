@@ -42,11 +42,11 @@ CONFIG = {
     'DAILY_DIGESTS_DIR': 'daily_digests'
 }
 
-logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
-logger = logging.getLogger(__name__)
+# Logging will be configured in main() based on --verbose flag
+logger = None
 
 class DailyPodcastPipeline:
-    def __init__(self):
+    def __init__(self, hours_back=None):
         self.db_path = CONFIG['DB_PATH']
         self.feed_monitor = FeedMonitor(self.db_path)
         self.content_processor = ContentProcessor(
@@ -57,6 +57,7 @@ class DailyPodcastPipeline:
             db_path=self.db_path,
             transcripts_dir=CONFIG['TRANSCRIPTS_DIR']
         )
+        self.hours_back = hours_back
         
     def run_daily_workflow(self):
         """Execute complete daily workflow with weekday logic"""
@@ -75,7 +76,7 @@ class DailyPodcastPipeline:
         
         # Self-healing: Backfill missing topic scores from previous runs
         import subprocess, sys
-        subprocess.run([sys.executable, "backfill_missing_scores.py"], check=False)
+        subprocess.run([sys.executable, "scripts/backfill_missing_scores.py"], check=False)
         
         try:
             # Step 1: Monitor RSS feeds for new episodes
@@ -99,17 +100,32 @@ class DailyPodcastPipeline:
                 digest_success = self._generate_daily_digest()
             
             if digest_success:
-                # Step 5: Create TTS audio
-                self._create_tts_audio()
+                # Transactional Publishing: Strict order with hard gates
+                logger.info("🔒 Starting transactional publishing process...")
                 
-                # Step 6: Deploy to GitHub releases
-                self._deploy_to_github()
+                # Step 5: Create TTS audio for today only
+                today = datetime.utcnow().date().isoformat()
+                mp3_files_created = self._create_tts_audio_today_only(today)
                 
-                # Step 7: Update RSS feed
-                self._update_rss_feed()
+                if not mp3_files_created:
+                    logger.info(f"RSS not updated: no new MP3s for {today}")
+                    return False  # Exit without marking episodes as digested
                 
-                # Step 8: Mark processed episodes as 'digested'
+                # Step 6: Deploy to GitHub releases (MUST succeed)
+                deploy_success = self._deploy_to_github()
+                if not deploy_success:
+                    logger.error("❌ Transactional publishing failed: deployment failed")
+                    return False  # Exit without marking episodes as digested
+                
+                # Step 7: Update RSS feed (MUST succeed)
+                rss_success = self._update_rss_feed()
+                if not rss_success:
+                    logger.error("❌ Transactional publishing failed: RSS update failed")
+                    return False  # Exit without marking episodes as digested
+                
+                # Step 8: ONLY NOW mark processed episodes as 'digested'
                 self._mark_episodes_digested()
+                logger.info("✅ Transactional publishing completed successfully")
             
             # Step 9: Cleanup old files and transcripts
             self._cleanup_old_files()
@@ -136,7 +152,7 @@ class DailyPodcastPipeline:
         """Check RSS feeds for new episodes"""
         logger.info("📡 Checking RSS feeds for new episodes...")
         
-        new_episodes = self.feed_monitor.check_new_episodes(hours_back=24)
+        new_episodes = self.feed_monitor.check_new_episodes(hours_back=self.hours_back)
         
         if new_episodes:
             logger.info(f"Found {len(new_episodes)} new episodes")
@@ -585,6 +601,73 @@ class DailyPodcastPipeline:
         finally:
             logger.info("========================================")
     
+    def _create_tts_audio_today_only(self, today: str) -> bool:
+        """Create TTS audio for today's digests only - Transactional version"""
+        logger.info(f"🎙️ Creating TTS audio for today only: {today}")
+        
+        # Check environment variables
+        elevenlabs_key = os.getenv('ELEVENLABS_API_KEY')
+        if elevenlabs_key:
+            logger.info(f"✅ ELEVENLABS_API_KEY found (length: {len(elevenlabs_key)})")
+        else:
+            logger.error("❌ ELEVENLABS_API_KEY is missing or empty!")
+        
+        # Check for existing digest files
+        digest_files = list(Path('daily_digests').glob('*_digest_*.md'))
+        logger.info(f"📄 Found {len(digest_files)} total digest files: {[f.name for f in digest_files]}")
+        
+        try:
+            logger.info(f"🚀 Running TTS generation with --since {today}")
+            
+            # Run TTS generation with date filter
+            result = subprocess.run([
+                'python3', 'multi_topic_tts_generator.py', '--since', today
+            ], capture_output=True, text=True, timeout=600)
+            
+            logger.info(f"🔍 TTS subprocess return code: {result.returncode}")
+            
+            if result.stdout:
+                for line in result.stdout.split('\n'):
+                    if line.strip():
+                        logger.info(f"   {line}")
+            
+            if result.stderr:
+                for line in result.stderr.split('\n'):
+                    if line.strip():
+                        logger.warning(f"   {line}")
+            
+            if result.returncode != 0:
+                logger.error(f"❌ TTS generation failed with return code {result.returncode}")
+                return False
+            
+            # Check if any MP3 files were generated today
+            today_mp3s = []
+            for mp3_file in Path('daily_digests').glob('*_digest_*.mp3'):
+                # Extract timestamp from filename
+                import re
+                match = re.search(r'_digest_(\d{8})_', mp3_file.name)
+                if match:
+                    file_date = match.group(1)
+                    expected_date = today.replace('-', '')
+                    if file_date == expected_date:
+                        today_mp3s.append(mp3_file)
+            
+            if today_mp3s:
+                logger.info(f"✅ Generated {len(today_mp3s)} MP3 files for today:")
+                for mp3 in sorted(today_mp3s):
+                    logger.info(f"   🎵 {mp3.name}")
+                return True
+            else:
+                logger.info(f"ℹ️  No MP3 files generated for today ({today})")
+                return False
+                
+        except subprocess.TimeoutExpired:
+            logger.error("❌ TTS generation timed out after 10 minutes")
+            return False
+        except Exception as e:
+            logger.error(f"❌ TTS generation error: {e}")
+            return False
+    
     def _deploy_to_github(self):
         """Deploy latest episode to GitHub releases"""
         logger.info("🚀 Deploying to GitHub...")
@@ -716,9 +799,20 @@ def main():
     parser.add_argument('--rss-only', action='store_true', help='Process RSS feeds only (GitHub Actions mode)')
     parser.add_argument('--cleanup', action='store_true', help='Run cleanup only')
     parser.add_argument('--test', action='store_true', help='Test individual components')
+    parser.add_argument('--hours-back', type=int, help='Override feed lookback hours (default: uses FEED_LOOKBACK_HOURS env var)')
+    parser.add_argument('--verbose', action='store_true', help='Enable verbose (DEBUG level) logging')
     args = parser.parse_args()
     
-    pipeline = DailyPodcastPipeline()
+    # Set up centralized logging
+    from logging_setup import setup_logging
+    global logger
+    logger = setup_logging(verbose=args.verbose, logger_name=__name__)
+    
+    # Validate configuration and environment
+    from config import config
+    logger.info("🔧 Validating configuration and environment...")
+    
+    pipeline = DailyPodcastPipeline(hours_back=args.hours_back)
     
     if args.status:
         status = pipeline.get_status_summary()

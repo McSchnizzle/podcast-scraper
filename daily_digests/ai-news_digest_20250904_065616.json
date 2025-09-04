@@ -1,0 +1,20 @@
+{
+  "title": "Ai-News - September 04, 2025",
+  "description": "Daily digest covering ai-news",
+  "topic": "ai-news",
+  "timestamp": "20250904_065616",
+  "date": "2025-09-04T06:56:16",
+  "voice_config": {
+    "voice_id": "21m00Tcm4TlvDq8ikWAM",
+    "voice_settings": {
+      "stability": 0.75,
+      "similarity_boost": 0.75,
+      "style": 0.2
+    }
+  },
+  "generated_at": "2025-09-04T09:49:58.063937",
+  "audio_file": "ai-news_digest_20250904_065616.mp3",
+  "markdown_file": "ai-news_digest_20250904_065616.md",
+  "tts_script_file": "ai-news_digest_tts_20250904_065616.txt",
+  "music_enhanced": true
+}

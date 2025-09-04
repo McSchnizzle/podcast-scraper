@@ -1,0 +1,20 @@
+{
+  "title": "Tech-News-And-Tech-Culture - September 04, 2025",
+  "description": "Daily digest covering tech-news-and-tech-culture",
+  "topic": "tech-news-and-tech-culture",
+  "timestamp": "20250904_070821",
+  "date": "2025-09-04T07:08:21",
+  "voice_config": {
+    "voice_id": "21m00Tcm4TlvDq8ikWAM",
+    "voice_settings": {
+      "stability": 0.75,
+      "similarity_boost": 0.75,
+      "style": 0.2
+    }
+  },
+  "generated_at": "2025-09-04T10:25:12.526140",
+  "audio_file": "tech-news-and-tech-culture_digest_20250904_070821.mp3",
+  "markdown_file": "tech-news-and-tech-culture_digest_20250904_070821.md",
+  "tts_script_file": "tech-news-and-tech-culture_digest_tts_20250904_070821.txt",
+  "music_enhanced": true
+}

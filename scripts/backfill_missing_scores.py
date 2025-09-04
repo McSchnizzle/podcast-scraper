@@ -7,7 +7,11 @@ Self-healing script to calculate missing topic relevance scores for episodes
 import os
 import logging
 import sqlite3
+import sys
 from pathlib import Path
+
+# Add parent directory to path to import modules
+sys.path.insert(0, str(Path(__file__).parent.parent))
 
 # Import the topic scorer
 from openai_scorer import OpenAITopicScorer

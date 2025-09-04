@@ -21,7 +21,7 @@ import os
 
 # Import production configuration
 from config.production import production_config, get_stable_guid, format_rss_date, get_utc_now
-from utils.sanitization import sanitize_xml_content, sanitize_filename
+from utils.sanitization import sanitize_xml_content, sanitize_filename, create_topic_file_pattern
 
 logger = logging.getLogger(__name__)
 
@@ -105,7 +105,8 @@ class ProductionRSSGenerator:
         for file_path in daily_digests_dir.iterdir():
             if file_path.is_file():
                 # Extract topic and timestamp from filename
-                match = re.match(r'(\w+(?:_\w+)*)_digest_(\d{8}_\d{6})\.(md|mp3|json)', file_path.name)
+                topic_file_pattern = create_topic_file_pattern()
+                match = topic_file_pattern.match(file_path.name)
                 if match:
                     topic, timestamp_str, file_type = match.groups()
                     

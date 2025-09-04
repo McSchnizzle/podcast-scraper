@@ -13,6 +13,7 @@ import time
 from pathlib import Path
 from datetime import datetime
 from typing import Dict, List, Optional, Tuple
+from utils.sanitization import create_topic_pattern, create_topic_mp3_filename
 
 # Import music integration
 try:
@@ -142,30 +143,44 @@ class MultiTopicTTSGenerator:
             }
         }
     
-    def find_unprocessed_digests(self) -> List[Dict]:
+    def find_unprocessed_digests(self, since_date=None) -> List[Dict]:
         """Find topic digest MD files that don't have corresponding MP3s"""
         unprocessed = []
+        all_md_files = []
+        matched_files = []
         
         # Pattern for topic-specific digests: {topic}_digest_{timestamp}.md
-        topic_pattern = re.compile(r'^([a-zA-Z_]+)_digest_(\d{8}_\d{6})\.md$')
+        # Support both hyphens and underscores in topic names for back-compatibility
+        topic_pattern = create_topic_pattern()
         
+        # Collect all MD files for logging
         for md_file in self.output_dir.glob("*_digest_*.md"):
+            all_md_files.append(md_file.name)
+            
             match = topic_pattern.match(md_file.name)
             if not match:
                 continue
             
+            matched_files.append(md_file.name)
             topic, timestamp_str = match.groups()
-            
-            # Check if MP3 already exists
-            mp3_file = self.output_dir / f"{topic}_digest_{timestamp_str}.mp3"
-            if mp3_file.exists():
-                continue
             
             # Parse timestamp
             try:
                 file_date = datetime.strptime(timestamp_str, "%Y%m%d_%H%M%S")
             except ValueError:
                 logger.warning(f"Invalid timestamp format in {md_file.name}")
+                continue
+            
+            # Filter by since_date if provided
+            if since_date and file_date.date() < since_date:
+                logger.debug(f"Skipping {md_file.name}: {file_date.date()} < {since_date}")
+                continue
+            
+            # Check if MP3 already exists
+            mp3_filename = create_topic_mp3_filename(topic, timestamp_str)
+            mp3_file = self.output_dir / mp3_filename
+            if mp3_file.exists():
+                logger.debug(f"Skipping {md_file.name}: MP3 already exists")
                 continue
             
             unprocessed.append({
@@ -175,6 +190,13 @@ class MultiTopicTTSGenerator:
                 'md_file': md_file,
                 'mp3_file': mp3_file
             })
+        
+        # Enhanced logging for visibility
+        logger.info(f"📄 Found {len(all_md_files)} total digest files: {sorted(all_md_files)}")
+        logger.info(f"✅ Regex matched {len(matched_files)} files: {sorted(matched_files)}")
+        if since_date:
+            logger.info(f"🗓️  After date filtering (>= {since_date}): {len(unprocessed)} files")
+        logger.info(f"🎯 Final unprocessed count: {len(unprocessed)} files")
         
         # Sort by date (oldest first)
         unprocessed.sort(key=lambda x: x['date'])
@@ -337,12 +359,15 @@ class MultiTopicTTSGenerator:
             logger.error(f"❌ Error processing {topic} digest: {e}")
             return False
     
-    def process_all_unprocessed(self) -> Tuple[int, int]:
+    def process_all_unprocessed(self, since_date=None) -> Tuple[int, int]:
         """Process all unprocessed digest files"""
-        unprocessed = self.find_unprocessed_digests()
+        unprocessed = self.find_unprocessed_digests(since_date=since_date)
         
         if not unprocessed:
-            logger.info("✅ No unprocessed digest files found")
+            if since_date:
+                logger.info(f"✅ No unprocessed digest files found for {since_date} or later")
+            else:
+                logger.info("✅ No unprocessed digest files found")
             return 0, 0
         
         logger.info(f"🎯 Found {len(unprocessed)} unprocessed digest files")
@@ -367,9 +392,32 @@ class MultiTopicTTSGenerator:
 
 def main():
     """Process all unprocessed topic digest files"""
+    import argparse
+    parser = argparse.ArgumentParser(description='Multi-Topic TTS Generator')
+    parser.add_argument('--since', type=str, help='Only process digests from this date (YYYY-MM-DD) or later')
+    args = parser.parse_args()
+    
+    # Set up logging (import here to avoid circular imports)
+    try:
+        from logging_setup import set_httpx_quiet
+        set_httpx_quiet()  # Quiet httpx logs by default
+    except ImportError:
+        pass
+    
     generator = MultiTopicTTSGenerator()
     
-    success_count, failed_count = generator.process_all_unprocessed()
+    # Parse since date if provided
+    since_date = None
+    if args.since:
+        try:
+            from datetime import datetime
+            since_date = datetime.strptime(args.since, '%Y-%m-%d').date()
+            logger.info(f"🗓️  Processing digests from {since_date} or later")
+        except ValueError:
+            logger.error(f"❌ Invalid date format: {args.since}. Use YYYY-MM-DD")
+            return 1
+    
+    success_count, failed_count = generator.process_all_unprocessed(since_date=since_date)
     
     if success_count > 0:
         print(f"🎙️  Successfully generated {success_count} TTS audio files")
@@ -379,7 +427,10 @@ def main():
         return 1
     
     if success_count == 0 and failed_count == 0:
-        print("✅ No unprocessed digest files found")
+        if since_date:
+            print(f"✅ No unprocessed digest files found for {since_date} or later")
+        else:
+            print("✅ No unprocessed digest files found")
     
     return 0
 

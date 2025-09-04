@@ -360,6 +360,73 @@ def safe_audio_filename(topic: str, timestamp: str, enhanced: bool = False) -> s
     suffix = "_enhanced" if enhanced else ""
     return f"{safe_topic}_digest_{safe_timestamp}{suffix}.mp3"
 
+# Centralized filename format functions
+def create_topic_digest_filename(topic: str, timestamp: str) -> str:
+    """
+    Create standardized topic digest filename
+    
+    Args:
+        topic: Topic name (will be slugified)
+        timestamp: Timestamp string in YYYYMMDD_HHMMSS format
+        
+    Returns:
+        Standardized filename: {topic}_digest_{timestamp}.md
+    """
+    safe_topic = create_safe_slug(topic)
+    return f"{safe_topic}_digest_{timestamp}.md"
+
+def create_topic_mp3_filename(topic: str, timestamp: str, enhanced: bool = False) -> str:
+    """
+    Create standardized topic MP3 filename
+    
+    Args:
+        topic: Topic name (will be slugified)
+        timestamp: Timestamp string in YYYYMMDD_HHMMSS format
+        enhanced: Whether this is an enhanced version
+        
+    Returns:
+        Standardized filename: {topic}_digest_{timestamp}[_enhanced].mp3
+    """
+    safe_topic = create_safe_slug(topic)
+    suffix = "_enhanced" if enhanced else ""
+    return f"{safe_topic}_digest_{timestamp}{suffix}.mp3"
+
+def create_topic_pattern() -> re.Pattern:
+    """
+    Create compiled regex pattern for topic digest files
+    
+    Returns:
+        Compiled regex pattern that matches: {topic}_digest_{timestamp}.md
+        Supports both hyphens and underscores in topic names for backward compatibility
+        Groups: (topic, timestamp)
+    """
+    return re.compile(r'^([A-Za-z0-9_-]+)_digest_(\d{8}_\d{6})\.md$')
+
+def create_topic_mp3_patterns() -> tuple[re.Pattern, re.Pattern]:
+    """
+    Create compiled regex patterns for topic MP3 files
+    
+    Returns:
+        Tuple of (topic_pattern, legacy_pattern) for matching MP3 files
+        topic_pattern: matches {topic}_digest_{timestamp}[_enhanced].mp3
+        legacy_pattern: matches complete_topic_digest_{timestamp}[_enhanced].mp3
+        Both support groups: (topic/timestamp, enhanced_suffix)
+    """
+    topic_pattern = re.compile(r'^([A-Za-z0-9_-]+)_digest_(\d{8}_\d{6})(_enhanced)?\.mp3$')
+    legacy_pattern = re.compile(r'^complete_topic_digest_(\d{8}_\d{6})(_enhanced)?\.mp3$')
+    return topic_pattern, legacy_pattern
+
+def create_topic_file_pattern() -> re.Pattern:
+    """
+    Create compiled regex pattern for topic digest files (any extension)
+    
+    Returns:
+        Compiled regex pattern that matches: {topic}_digest_{timestamp}.{ext}
+        Supports both hyphens and underscores in topic names for backward compatibility
+        Groups: (topic, timestamp, extension)
+    """
+    return re.compile(r'^([A-Za-z0-9_-]+)_digest_(\d{8}_\d{6})\.(md|mp3|json)$')
+
 def safe_log_message(message: str) -> str:
     """Prepare message for safe logging"""
     return scrub_secrets_from_text(str(message))
@@ -376,5 +443,10 @@ __all__ = [
     'validate_file_path',
     'safe_digest_filename',
     'safe_audio_filename',
-    'safe_log_message'
+    'safe_log_message',
+    'create_topic_digest_filename',
+    'create_topic_mp3_filename',
+    'create_topic_pattern',
+    'create_topic_mp3_patterns',
+    'create_topic_file_pattern'
 ]

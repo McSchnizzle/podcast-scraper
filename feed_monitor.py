@@ -173,15 +173,21 @@ class FeedMonitor:
         print("Please provide the channel ID manually or use the full channel URL")
         return None
     
-    def check_new_episodes(self, hours_back=24, feed_types=None):
+    def check_new_episodes(self, hours_back=None, feed_types=None):
         """Check feeds for new episodes in the last N hours
         
         Args:
-            hours_back: How many hours to look back for new episodes
+            hours_back: How many hours to look back for new episodes.
+                       If None, uses FEED_LOOKBACK_HOURS env var (default 48)
             feed_types: List of feed types to check ('rss', 'youtube'). 
                        If None, checks all types. In GitHub Actions, should be ['rss']
         """
+        # Use environment variable if hours_back not specified
+        if hours_back is None:
+            hours_back = int(os.getenv("FEED_LOOKBACK_HOURS", "48"))
+        
         cutoff_time = datetime.now() - timedelta(hours=hours_back)
+        print(f"🕐 Looking for episodes newer than {cutoff_time.isoformat()} ({hours_back}h lookback)")
         new_episodes = []
         
         # Check if running in GitHub Actions
@@ -214,6 +220,9 @@ class FeedMonitor:
                 response = requests.get(url, headers=headers, timeout=30)
                 feed = feedparser.parse(response.content)
                 
+                # Track newest entry for feed freshness
+                pub_dates = []
+                
                 for entry in feed.entries:
                     # Parse publication date
                     pub_date = None
@@ -229,16 +238,30 @@ class FeedMonitor:
                         except:
                             print(f"Could not parse date: {entry.published}")
                     
-                    # Skip if no date or too old
-                    if not pub_date or pub_date < cutoff_time:
+                    # Extract episode information for logging
+                    episode_title = entry.get('title', '(untitled)')
+                    
+                    # Skip with explicit logging
+                    if not pub_date:
+                        print(f"  SKIP no-date: {title} :: {episode_title}")
                         continue
                     
-                    # Extract episode information
+                    pub_dates.append(pub_date)  # Track for newest calculation
+                    
+                    if pub_date < cutoff_time:
+                        print(f"  SKIP old-entry: {title} :: {episode_title} ({pub_date.isoformat()} < {cutoff_time.isoformat()})")
+                        continue
+                    
+                    # Create episode ID
                     raw_episode_id = entry.get('id') or entry.get('guid') or entry.get('link')
-                    # Create consistent 8-character hash for episode_id to match audio filenames
                     import hashlib
                     episode_id = hashlib.md5(raw_episode_id.encode()).hexdigest()[:8]
-                    episode_title = entry.get('title', 'Untitled')
+                    
+                    # Check if already processed
+                    cursor.execute('SELECT id FROM episodes WHERE episode_id = ?', (episode_id,))
+                    if cursor.fetchone():
+                        print(f"  SKIP duplicate episode_id: {episode_id} :: {episode_title}")
+                        continue
                     
                     # Get audio URL
                     audio_url = None
@@ -254,16 +277,13 @@ class FeedMonitor:
                         if video_id:
                             audio_url = f"https://www.youtube.com/watch?v={video_id}"
                     
-                    # Check if already processed
-                    cursor.execute('SELECT id FROM episodes WHERE episode_id = ?', (episode_id,))
-                    if cursor.fetchone():
-                        continue
-                    
                     # Add new episode with pre-download status
                     cursor.execute('''
                         INSERT INTO episodes (feed_id, episode_id, title, published_date, audio_url, status)
                         VALUES (?, ?, ?, ?, ?, 'pre-download')
                     ''', (feed_id, episode_id, episode_title, pub_date, audio_url))
+                    
+                    print(f"  ✅ Added new episode: {episode_title} ({pub_date.isoformat()})")
                     
                     new_episodes.append({
                         'feed_title': title,
@@ -273,6 +293,13 @@ class FeedMonitor:
                         'audio_url': audio_url,
                         'type': feed_type
                     })
+                
+                # Show feed freshness
+                if pub_dates:
+                    newest_seen = max(pub_dates)
+                    print(f"  📅 Newest in {title}: {newest_seen.isoformat()} (cutoff {cutoff_time.isoformat()})")
+                else:
+                    print(f"  ⚠️ No dated entries found in {title}")
                 
                 # Update last checked time
                 cursor.execute('UPDATE feeds SET last_checked = datetime("now") WHERE id = ?', (feed_id,))
