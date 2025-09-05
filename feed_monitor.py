@@ -9,14 +9,20 @@ import feedparser
 import sqlite3
 import json
 import requests
+import logging
 from datetime import datetime, timedelta, UTC
-from utils.datetime_utils import now_utc
+from utils.datetime_utils import now_utc, cutoff_utc, parse_entry_to_utc, to_utc
 from urllib.parse import urlparse
 from youtube_transcript_api import YouTubeTranscriptApi
 import re
 
 # Import configuration
 from config import config
+
+# Set up logging
+from utils.logging_setup import configure_logging
+configure_logging()
+logger = logging.getLogger(__name__)
 
 class FeedMonitor:
     def __init__(self, db_path="podcast_monitor.db"):
@@ -192,7 +198,7 @@ class FeedMonitor:
             hours_back = int(os.getenv("FEED_LOOKBACK_HOURS", "48"))
         
         # Use UTC for cutoff time to match database storage
-        cutoff_time = datetime.now(UTC) - timedelta(hours=hours_back)
+        cutoff_time = cutoff_utc(hours_back)
         print(f"🕐 Looking for episodes newer than {cutoff_time.isoformat()}Z UTC ({hours_back}h lookback)")
         new_episodes = []
         
@@ -236,7 +242,8 @@ class FeedMonitor:
                 max_items = self.feed_settings['max_episodes_per_feed']
                 entries_to_process = feed.entries[:max_items] if max_items > 0 else feed.entries
                 
-                print(f"  📄 Processing {len(entries_to_process)}/{len(feed.entries)} entries (limit: {max_items})")
+                # INFO: Header line per feed
+                print(f"▶ {title} (entries={len(entries_to_process)}/{len(feed.entries)}, limit={max_items}, cutoff={cutoff_time.strftime('%Y-%m-%d %H:%M:%S')}Z)")
                 
                 # Track processing stats
                 pub_dates = []
@@ -254,7 +261,7 @@ class FeedMonitor:
                     
                     # Skip with debug logging
                     if not pub_date:
-                        print(f"  DEBUG SKIP no-date: {title} :: {episode_title}")
+                        logger.debug(f"SKIP no-date: {title} :: {episode_title}")
                         no_date_count += 1
                         continue
                     
@@ -262,7 +269,7 @@ class FeedMonitor:
                     
                     if pub_date < cutoff_time:
                         old_skipped += 1
-                        print(f"  DEBUG SKIP old-entry: {title} :: {episode_title} ({pub_date.isoformat()} < {cutoff_time.isoformat()})")
+                        logger.debug(f"SKIP old-entry: {title} :: {episode_title} ({pub_date.isoformat()} < {cutoff_time.isoformat()})")
                         
                         # Break on old if enabled and feed appears to be reverse-chronological
                         if self.feed_settings['break_on_old'] and old_skipped == 1:
@@ -292,7 +299,7 @@ class FeedMonitor:
                     # Robust duplicate detection with composite checks
                     if self._is_duplicate_episode(cursor, episode_id, audio_url, episode_title, pub_date):
                         dup_count += 1
-                        print(f"  DEBUG SKIP duplicate episode: {episode_id} :: {episode_title}")
+                        logger.debug(f"SKIP duplicate episode: {episode_id} :: {episode_title}")
                         continue
                     
                     # Add new episode with pre-download status
@@ -302,7 +309,7 @@ class FeedMonitor:
                     ''', (feed_id, episode_id, episode_title, pub_date.isoformat(), audio_url))
                     
                     new_count += 1
-                    print(f"  ✅ Added new episode: {episode_title} ({pub_date.isoformat()})")
+                    logger.debug(f"Added new episode: {episode_title} ({pub_date.isoformat()})")
                     
                     new_episodes.append({
                         'feed_title': title,
@@ -313,8 +320,8 @@ class FeedMonitor:
                         'type': feed_type
                     })
                 
-                # Show feed summary and freshness
-                print(f"  📊 {title}: new={new_count} dup={dup_count} older={old_skipped} no_date={no_date_count} max_items={max_items} cutoff={cutoff_time.date()}")
+                # INFO: Totals line per feed
+                print(f"   totals: new={new_count} dup={dup_count} older={old_skipped} no_date={no_date_count}")
                 
                 # Show feed freshness
                 if pub_dates:
@@ -322,11 +329,12 @@ class FeedMonitor:
                     print(f"  📅 Newest in {title}: {newest_seen.isoformat()}Z UTC")
                     
                     # Check for stale feeds
-                    stale_threshold = datetime.now(UTC) - timedelta(days=self.feed_settings['stale_feed_days'])
+                    stale_threshold = now_utc() - timedelta(days=self.feed_settings['stale_feed_days'])
                     if newest_seen < stale_threshold:
-                        print(f"  ⚠️  STALE FEED WARNING: {title} - newest episode is {(datetime.now(UTC) - newest_seen).days} days old (threshold: {self.feed_settings['stale_feed_days']} days)")
+                        print(f"  ⚠️  STALE FEED WARNING: {title} - newest episode is {(now_utc() - newest_seen).days} days old (threshold: {self.feed_settings['stale_feed_days']} days)")
                 else:
-                    print(f"  ⚠️ No dated entries found in {title}")
+                    # INFO: Single line for feeds with no dates (avoiding spam)
+                    print(f"⚠️ {title}: no dated entries (skipped gracefully)")
                 
                 # Update last checked time
                 cursor.execute('UPDATE feeds SET last_checked = datetime("now") WHERE id = ?', (feed_id,))
@@ -394,40 +402,17 @@ class FeedMonitor:
             entry: Feed entry object
             
         Returns:
-            datetime object in UTC or None if parsing fails
+            datetime object in UTC (timezone-aware) or None if parsing fails
         """
-        import pytz
-        from dateutil import parser as date_parser
-        
         try:
-            pub_date = None
+            # Use the centralized parser from datetime_utils
+            pub_date, source_key = parse_entry_to_utc(entry)
             
-            # Try feedparser's parsed date first (already in UTC)
-            if hasattr(entry, 'published_parsed') and entry.published_parsed:
-                pub_date = datetime(*entry.published_parsed[:6], tzinfo=pytz.utc)
-            elif hasattr(entry, 'updated_parsed') and entry.updated_parsed:
-                pub_date = datetime(*entry.updated_parsed[:6], tzinfo=pytz.utc)
-            elif hasattr(entry, 'published'):
-                # Parse string date and convert to UTC
-                parsed_date = date_parser.parse(entry.published)
-                if parsed_date.tzinfo is None:
-                    # Naive datetime - assume UTC
-                    pub_date = pytz.utc.localize(parsed_date)
-                else:
-                    # Convert to UTC
-                    pub_date = parsed_date.astimezone(pytz.utc)
-            elif hasattr(entry, 'updated'):
-                # Parse string date and convert to UTC
-                parsed_date = date_parser.parse(entry.updated)
-                if parsed_date.tzinfo is None:
-                    # Naive datetime - assume UTC
-                    pub_date = pytz.utc.localize(parsed_date)
-                else:
-                    # Convert to UTC
-                    pub_date = parsed_date.astimezone(pytz.utc)
-            
-            # Return as naive UTC datetime for database storage
-            return pub_date.replace(tzinfo=None) if pub_date else None
+            if pub_date is None:
+                return None
+                
+            # Ensure timezone-aware UTC datetime for consistent comparisons
+            return to_utc(pub_date)
             
         except Exception as e:
             print(f"Could not parse date from entry: {e}")

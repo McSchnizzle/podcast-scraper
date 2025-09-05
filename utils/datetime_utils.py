@@ -6,7 +6,8 @@ Provides timezone-aware datetime functions to prevent naive/aware comparison iss
 
 import time
 from datetime import datetime, timezone, timedelta
-from typing import Optional
+from typing import Optional, Tuple
+from email.utils import parsedate_to_datetime
 
 
 def now_utc() -> datetime:
@@ -62,9 +63,10 @@ def ensure_aware_utc(dt: datetime) -> datetime:
     return to_utc(dt)
 
 
-def parse_rss_datetime(time_struct) -> Optional[datetime]:
+def parse_struct_time_to_utc(time_struct) -> Optional[datetime]:
     """
     Parse RSS feed time struct to UTC datetime.
+    Feedparser *_parsed structs are effectively UTC.
     
     Args:
         time_struct: RSS time struct from feedparser (published_parsed/updated_parsed)
@@ -81,6 +83,55 @@ def parse_rss_datetime(time_struct) -> Optional[datetime]:
         return naive_dt.replace(tzinfo=timezone.utc)
     except (ValueError, TypeError, AttributeError):
         return None
+
+
+def parse_entry_to_utc(entry) -> Tuple[Optional[datetime], str]:
+    """
+    Parse RSS entry to UTC datetime with fallback chain.
+    
+    Args:
+        entry: RSS entry object from feedparser
+    
+    Returns:
+        tuple: (datetime or None, source_key) indicating which field was used
+    """
+    # First try struct time fields (most reliable)
+    for key in ("published_parsed", "updated_parsed"):
+        time_struct = getattr(entry, key, None) or (entry.get(key) if hasattr(entry, "get") else None)
+        dt = parse_struct_time_to_utc(time_struct)
+        if dt:
+            return to_utc(dt), key
+    
+    # Fallback to string fields with multiple parsing attempts
+    for key in ("published", "updated", "date"):
+        date_str = getattr(entry, key, None) or (entry.get(key) if hasattr(entry, "get") else None)
+        if not date_str:
+            continue
+        
+        # Try RFC2822 parsing (most common in RSS)
+        try:
+            dt = parsedate_to_datetime(date_str)
+            return to_utc(dt), key
+        except Exception:
+            pass
+        
+        # Try ISO8601 parsing (handle Z suffix)
+        try:
+            clean_str = date_str.replace("Z", "+00:00")
+            dt = datetime.fromisoformat(clean_str)
+            return to_utc(dt), key
+        except Exception:
+            pass
+    
+    return None, "none"
+
+
+# Backward compatibility alias
+def parse_rss_datetime(time_struct) -> Optional[datetime]:
+    """
+    Legacy function name - use parse_struct_time_to_utc() for new code.
+    """
+    return parse_struct_time_to_utc(time_struct)
 
 
 def set_system_timezone_utc():

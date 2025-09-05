@@ -409,7 +409,7 @@ class MultiTopicRSSGenerator:
                 return False
             
             # Guardrail: Check if we have MP3s for today
-            today = datetime.now(timezone.utc).date()
+            today = now_utc().date()
             today_mp3s = [d for d in digest_files if d['date'].date() == today and self._validate_mp3_file(d)]
             
             if not today_mp3s:
@@ -441,7 +441,7 @@ class MultiTopicRSSGenerator:
             SubElement(channel, 'copyright').text = self.podcast_info['copyright']
             SubElement(channel, 'managingEditor').text = f"{self.podcast_info['email']} ({self.podcast_info['author']})"
             SubElement(channel, 'webMaster').text = f"{self.podcast_info['email']} ({self.podcast_info['author']})"
-            SubElement(channel, 'lastBuildDate').text = datetime.now(timezone.utc).strftime('%a, %d %b %Y %H:%M:%S %z')
+            SubElement(channel, 'lastBuildDate').text = now_utc().strftime('%a, %d %b %Y %H:%M:%S %z')
             
             # iTunes-specific tags
             SubElement(channel, 'itunes:author').text = sanitize_xml_content(self.podcast_info['author'])

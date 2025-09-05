@@ -38,6 +38,7 @@ CONFIG = {
     'CLEANUP_AUDIO_CACHE': True,
     'CLEANUP_INTERMEDIATE_FILES': True,
     'GITHUB_TOKEN': os.getenv('GITHUB_TOKEN'),
+    'DIGEST_DISPLAY_TZ': os.getenv('DIGEST_DISPLAY_TZ', 'UTC'),  # Display timezone for human-facing labels
     'ELEVENLABS_API_KEY': os.getenv('ELEVENLABS_API_KEY'),
     'DB_PATH': 'podcast_monitor.db',
     'AUDIO_CACHE_DIR': 'audio_cache',
@@ -61,18 +62,43 @@ class DailyPodcastPipeline:
             transcripts_dir=CONFIG['TRANSCRIPTS_DIR']
         )
         self.hours_back = hours_back
+    
+    def _get_display_weekday(self):
+        """Get weekday in display timezone for human-facing labels"""
+        display_tz = CONFIG['DIGEST_DISPLAY_TZ']
+        
+        if display_tz == 'UTC':
+            return now_utc().strftime('%A')
+        
+        # For non-UTC display timezones, we still use UTC for all comparisons
+        # but can show local time for user display
+        try:
+            from zoneinfo import ZoneInfo
+            utc_now = now_utc()
+            local_time = utc_now.astimezone(ZoneInfo(display_tz))
+            return local_time.strftime('%A')
+        except ImportError:
+            # Fallback to UTC if zoneinfo not available
+            logger.debug(f"zoneinfo not available, using UTC instead of {display_tz}")
+            return now_utc().strftime('%A')
+        except Exception as e:
+            # Fallback to UTC if timezone is invalid
+            logger.warning(f"Invalid DIGEST_DISPLAY_TZ '{display_tz}', using UTC: {e}")
+            return now_utc().strftime('%A')
         
     def run_daily_workflow(self):
         """Execute complete daily workflow with weekday logic"""
-        current_weekday = now_utc().strftime('%A')
-        logger.info(f"🚀 Starting Daily Tech Digest Pipeline - {current_weekday}")
+        # Use UTC for all logic/comparisons, display timezone for user-facing labels
+        utc_weekday = now_utc().strftime('%A')
+        display_weekday = self._get_display_weekday()
+        logger.info(f"🚀 Starting Daily Tech Digest Pipeline - {display_weekday}")
         logger.info("=" * 50)
         
         # Initialize telemetry for this run
         pipeline_start_time = time.time()
-        if current_weekday == 'Friday':
+        if utc_weekday == 'Friday':
             telemetry.set_pipeline_type('weekly')
-        elif current_weekday == 'Monday':
+        elif utc_weekday == 'Monday':
             telemetry.set_pipeline_type('catchup')
         else:
             telemetry.set_pipeline_type('daily')
@@ -105,14 +131,14 @@ class DailyPodcastPipeline:
             logger.info(f"Post-transcription scoring complete: RSS={scored_rss}, YT={scored_yt}")
             
             # Step 5: Generate digest based on weekday logic
-            if current_weekday == 'Friday':
-                logger.info("📅 Friday detected - generating daily + weekly digests")
+            if utc_weekday == 'Friday':
+                logger.info(f"📅 {display_weekday} detected - generating daily + weekly digests")
                 digest_success = self._generate_weekly_digest()
-            elif current_weekday == 'Monday':
-                logger.info("📅 Monday detected - generating catch-up digest")
+            elif utc_weekday == 'Monday':
+                logger.info(f"📅 {display_weekday} detected - generating catch-up digest")
                 digest_success = self._generate_catchup_digest()
             else:
-                logger.info(f"📅 {current_weekday} - generating standard daily digest")
+                logger.info(f"📅 {display_weekday} - generating standard daily digest")
                 digest_success = self._generate_daily_digest()
             
             if digest_success:
