@@ -9,14 +9,18 @@ import feedparser
 import sqlite3
 import json
 import requests
-from datetime import datetime, timedelta
+from datetime import datetime, timedelta, UTC
 from urllib.parse import urlparse
 from youtube_transcript_api import YouTubeTranscriptApi
 import re
 
+# Import configuration
+from config import config
+
 class FeedMonitor:
     def __init__(self, db_path="podcast_monitor.db"):
         self.db_path = db_path
+        self.feed_settings = config.FEED_SETTINGS
         self.init_database()
     
     def init_database(self):
@@ -186,8 +190,9 @@ class FeedMonitor:
         if hours_back is None:
             hours_back = int(os.getenv("FEED_LOOKBACK_HOURS", "48"))
         
-        cutoff_time = datetime.now() - timedelta(hours=hours_back)
-        print(f"🕐 Looking for episodes newer than {cutoff_time.isoformat()} ({hours_back}h lookback)")
+        # Use UTC for cutoff time to match database storage
+        cutoff_time = datetime.now(UTC) - timedelta(hours=hours_back)
+        print(f"🕐 Looking for episodes newer than {cutoff_time.isoformat()}Z UTC ({hours_back}h lookback)")
         new_episodes = []
         
         # Check if running in GitHub Actions
@@ -215,41 +220,53 @@ class FeedMonitor:
             print(f"Checking {title}...")
             
             try:
-                # Use proper headers for better compatibility
-                headers = {'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36'}
-                response = requests.get(url, headers=headers, timeout=30)
+                # Use network utilities with retries
+                from utils.network import get_with_backoff
+                
+                response = get_with_backoff(
+                    url,
+                    tries=self.feed_settings['max_retries'],
+                    base_delay=self.feed_settings['backoff_base_delay'],
+                    timeout=self.feed_settings['request_timeout']
+                )
                 feed = feedparser.parse(response.content)
                 
-                # Track newest entry for feed freshness
-                pub_dates = []
+                # Apply feed item limits to reduce processing
+                max_items = self.feed_settings['max_episodes_per_feed']
+                entries_to_process = feed.entries[:max_items] if max_items > 0 else feed.entries
                 
-                for entry in feed.entries:
-                    # Parse publication date
-                    pub_date = None
-                    if hasattr(entry, 'published_parsed') and entry.published_parsed:
-                        pub_date = datetime(*entry.published_parsed[:6])
-                    elif hasattr(entry, 'updated_parsed') and entry.updated_parsed:
-                        pub_date = datetime(*entry.updated_parsed[:6])
-                    elif hasattr(entry, 'published'):
-                        # Try to parse ISO format date string
-                        try:
-                            from dateutil import parser
-                            pub_date = parser.parse(entry.published).replace(tzinfo=None)
-                        except:
-                            print(f"Could not parse date: {entry.published}")
+                print(f"  📄 Processing {len(entries_to_process)}/{len(feed.entries)} entries (limit: {max_items})")
+                
+                # Track processing stats
+                pub_dates = []
+                old_skipped = 0
+                dup_count = 0 
+                new_count = 0
+                no_date_count = 0
+                
+                for i, entry in enumerate(entries_to_process, 1):
+                    # Parse publication date and normalize to UTC
+                    pub_date = self._parse_date_to_utc(entry)
                     
                     # Extract episode information for logging
                     episode_title = entry.get('title', '(untitled)')
                     
-                    # Skip with explicit logging
+                    # Skip with debug logging
                     if not pub_date:
-                        print(f"  SKIP no-date: {title} :: {episode_title}")
+                        print(f"  DEBUG SKIP no-date: {title} :: {episode_title}")
+                        no_date_count += 1
                         continue
                     
                     pub_dates.append(pub_date)  # Track for newest calculation
                     
                     if pub_date < cutoff_time:
-                        print(f"  SKIP old-entry: {title} :: {episode_title} ({pub_date.isoformat()} < {cutoff_time.isoformat()})")
+                        old_skipped += 1
+                        print(f"  DEBUG SKIP old-entry: {title} :: {episode_title} ({pub_date.isoformat()} < {cutoff_time.isoformat()})")
+                        
+                        # Break on old if enabled and feed appears to be reverse-chronological
+                        if self.feed_settings['break_on_old'] and old_skipped == 1:
+                            print(f"  🚀 Early break: {title} appears reverse-chronological, stopping scan")
+                            break
                         continue
                     
                     # Create episode ID
@@ -257,13 +274,7 @@ class FeedMonitor:
                     import hashlib
                     episode_id = hashlib.md5(raw_episode_id.encode()).hexdigest()[:8]
                     
-                    # Check if already processed
-                    cursor.execute('SELECT id FROM episodes WHERE episode_id = ?', (episode_id,))
-                    if cursor.fetchone():
-                        print(f"  SKIP duplicate episode_id: {episode_id} :: {episode_title}")
-                        continue
-                    
-                    # Get audio URL
+                    # Get audio URL first for duplicate detection
                     audio_url = None
                     if hasattr(entry, 'enclosures') and entry.enclosures:
                         for enclosure in entry.enclosures:
@@ -277,12 +288,19 @@ class FeedMonitor:
                         if video_id:
                             audio_url = f"https://www.youtube.com/watch?v={video_id}"
                     
+                    # Robust duplicate detection with composite checks
+                    if self._is_duplicate_episode(cursor, episode_id, audio_url, episode_title, pub_date):
+                        dup_count += 1
+                        print(f"  DEBUG SKIP duplicate episode: {episode_id} :: {episode_title}")
+                        continue
+                    
                     # Add new episode with pre-download status
                     cursor.execute('''
                         INSERT INTO episodes (feed_id, episode_id, title, published_date, audio_url, status)
                         VALUES (?, ?, ?, ?, ?, 'pre-download')
-                    ''', (feed_id, episode_id, episode_title, pub_date, audio_url))
+                    ''', (feed_id, episode_id, episode_title, pub_date.isoformat(), audio_url))
                     
+                    new_count += 1
                     print(f"  ✅ Added new episode: {episode_title} ({pub_date.isoformat()})")
                     
                     new_episodes.append({
@@ -294,10 +312,18 @@ class FeedMonitor:
                         'type': feed_type
                     })
                 
+                # Show feed summary and freshness
+                print(f"  📊 {title}: new={new_count} dup={dup_count} older={old_skipped} no_date={no_date_count} max_items={max_items} cutoff={cutoff_time.date()}")
+                
                 # Show feed freshness
                 if pub_dates:
                     newest_seen = max(pub_dates)
-                    print(f"  📅 Newest in {title}: {newest_seen.isoformat()} (cutoff {cutoff_time.isoformat()})")
+                    print(f"  📅 Newest in {title}: {newest_seen.isoformat()}Z UTC")
+                    
+                    # Check for stale feeds
+                    stale_threshold = datetime.now(UTC) - timedelta(days=self.feed_settings['stale_feed_days'])
+                    if newest_seen < stale_threshold:
+                        print(f"  ⚠️  STALE FEED WARNING: {title} - newest episode is {(datetime.now(UTC) - newest_seen).days} days old (threshold: {self.feed_settings['stale_feed_days']} days)")
                 else:
                     print(f"  ⚠️ No dated entries found in {title}")
                 
@@ -311,6 +337,100 @@ class FeedMonitor:
         conn.close()
         
         return new_episodes
+    
+    def _is_duplicate_episode(self, cursor, episode_id: str, audio_url: str, title: str, pub_date: datetime) -> bool:
+        """
+        Robust duplicate detection with composite checks
+        
+        Args:
+            cursor: Database cursor
+            episode_id: Generated episode ID (hash)
+            audio_url: Episode audio/video URL
+            title: Episode title
+            pub_date: Published date
+            
+        Returns:
+            True if this episode is a duplicate
+        """
+        # Check 1: Episode ID (GUID/ID hash)
+        if episode_id:
+            cursor.execute("SELECT 1 FROM episodes WHERE episode_id = ?", (episode_id,))
+            if cursor.fetchone():
+                return True
+        
+        # Check 2: Audio URL (exact match)
+        if audio_url:
+            cursor.execute("SELECT 1 FROM episodes WHERE audio_url = ?", (audio_url,))
+            if cursor.fetchone():
+                return True
+        
+        # Check 3: Title + date combo (fallback for unstable GUIDs)
+        if title and pub_date:
+            # Check for exact title and date match
+            cursor.execute(
+                "SELECT 1 FROM episodes WHERE title = ? AND published_date = ?", 
+                (title, pub_date.isoformat())
+            )
+            if cursor.fetchone():
+                return True
+            
+            # Check for title match within same day (timezone variations)
+            pub_date_str = pub_date.strftime('%Y-%m-%d')
+            cursor.execute(
+                "SELECT 1 FROM episodes WHERE title = ? AND date(published_date) = ?", 
+                (title, pub_date_str)
+            )
+            if cursor.fetchone():
+                return True
+        
+        return False
+    
+    def _parse_date_to_utc(self, entry) -> datetime:
+        """
+        Parse entry date and normalize to UTC
+        
+        Args:
+            entry: Feed entry object
+            
+        Returns:
+            datetime object in UTC or None if parsing fails
+        """
+        import pytz
+        from dateutil import parser as date_parser
+        
+        try:
+            pub_date = None
+            
+            # Try feedparser's parsed date first (already in UTC)
+            if hasattr(entry, 'published_parsed') and entry.published_parsed:
+                pub_date = datetime(*entry.published_parsed[:6], tzinfo=pytz.utc)
+            elif hasattr(entry, 'updated_parsed') and entry.updated_parsed:
+                pub_date = datetime(*entry.updated_parsed[:6], tzinfo=pytz.utc)
+            elif hasattr(entry, 'published'):
+                # Parse string date and convert to UTC
+                parsed_date = date_parser.parse(entry.published)
+                if parsed_date.tzinfo is None:
+                    # Naive datetime - assume UTC
+                    pub_date = pytz.utc.localize(parsed_date)
+                else:
+                    # Convert to UTC
+                    pub_date = parsed_date.astimezone(pytz.utc)
+            elif hasattr(entry, 'updated'):
+                # Parse string date and convert to UTC
+                parsed_date = date_parser.parse(entry.updated)
+                if parsed_date.tzinfo is None:
+                    # Naive datetime - assume UTC
+                    pub_date = pytz.utc.localize(parsed_date)
+                else:
+                    # Convert to UTC
+                    pub_date = parsed_date.astimezone(pytz.utc)
+            
+            # Return as naive UTC datetime for database storage
+            return pub_date.replace(tzinfo=None) if pub_date else None
+            
+        except Exception as e:
+            print(f"Could not parse date from entry: {e}")
+            return None
     
     def _extract_video_id_from_entry(self, entry):
         """Extract YouTube video ID from RSS entry"""

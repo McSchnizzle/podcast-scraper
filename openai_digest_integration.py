@@ -670,7 +670,7 @@ Create a flowing, conversational digest that synthesizes these insights."""
                         temperature=config.OPENAI_SETTINGS['digest_temperature'],
                         presence_penalty=config.OPENAI_SETTINGS['digest_presence_penalty'],
                         frequency_penalty=config.OPENAI_SETTINGS['digest_frequency_penalty'],
-                        max_tokens=config.OPENAI_SETTINGS['digest_max_tokens'],
+                        max_completion_tokens=config.OPENAI_SETTINGS['digest_max_tokens'],
                         timeout=config.OPENAI_SETTINGS['timeout_seconds']
                     )
                     
@@ -912,7 +912,7 @@ Create a flowing, conversational digest that synthesizes these insights."""
                     "role": "user",
                     "content": "Hello, please respond with 'API connection successful'"
                 }],
-                max_tokens=50
+                max_completion_tokens=50
             )
             
             response_text = response.choices[0].message.content

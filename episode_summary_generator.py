@@ -58,14 +58,14 @@ class EpisodeSummaryGenerator:
         
         # Defensive fallback for OPENAI_SETTINGS with defaults
         DEFAULTS = {
-            "model": "gpt-4o-mini",
+            "model": "gpt-5-mini",
             "temperature": 0.2,
             "max_tokens": 1600,
             "timeout": 60,
             "relevance_threshold": 0.65,
-            "summary_model": "gpt-4o-mini",
-            "scoring_model": "gpt-4o-mini",
-            "validator_model": "gpt-4-turbo-preview",
+            "summary_model": "gpt-5-mini",
+            "scoring_model": "gpt-5-mini",
+            "validator_model": "gpt-5-mini",
         }
         
         settings = dict(getattr(config, "OPENAI_SETTINGS", {}))
@@ -182,7 +182,7 @@ class EpisodeSummaryGenerator:
             logger.info(f"🤖 Generating AI summary for {topic} episode ({len(clean_content)} chars)")
             
             response = self.client.chat.completions.create(
-                model="gpt-4o-mini",  # Cost-effective model for summaries
+                model="gpt-5-mini",  # Cost-effective model for summaries
                 messages=[
                     {
                         "role": "system", 
@@ -193,7 +193,7 @@ class EpisodeSummaryGenerator:
                         "content": f"Write a 2-3 sentence RSS description (max 250 characters) for this {topic.replace('_', ' ').title()} digest:\n\n{clean_content}"
                     }
                 ],
-                max_tokens=100,
+                max_completion_tokens=100,
                 temperature=0.7
             )
             
@@ -331,7 +331,7 @@ Create a focused summary for {topic} digest."""
                     {"role": "user", "content": user_prompt}
                 ],
                 temperature=self.settings['scoring_temperature'],
-                max_tokens=max_tokens,
+                max_completion_tokens=max_tokens,
                 timeout=self.settings['timeout_seconds']
             )
             

@@ -43,9 +43,9 @@ class ProductionConfig:
     OPENAI_MODELS: Dict[str, str] = None  # filled in __post_init__
 
     # ---- Model choices (align with your verified config) ----
-    SUMMARY_MODEL: str = _env("SUMMARY_MODEL", "gpt-4o-mini")
-    SCORER_MODEL: str = _env("SCORER_MODEL", "gpt-4o-mini")
-    PROSE_VALIDATOR_MODEL: str = _env("PROSE_VALIDATOR_MODEL", "gpt-4-turbo-preview")
+    SUMMARY_MODEL: str = _env("SUMMARY_MODEL", "gpt-5-mini")
+    SCORER_MODEL: str = _env("SCORER_MODEL", "gpt-5-mini")
+    PROSE_VALIDATOR_MODEL: str = _env("PROSE_VALIDATOR_MODEL", "gpt-5-mini")
 
     # ---- Quotas / limits (guardrails, can be tuned via env) ----
     DAILY_TOKEN_LIMIT: int = int(_env("DAILY_TOKEN_LIMIT", "200000"))   # example
@@ -74,9 +74,9 @@ class ProductionConfig:
         # Provide complete OPENAI_SETTINGS structure expected by the codebase
         self.OPENAI_SETTINGS = {
             # Model configuration - using actual OpenAI model names
-            'digest_model': _env('DIGEST_MODEL', 'gpt-4-turbo-preview'),
-            'scoring_model': _env('SCORING_MODEL', 'gpt-4o-mini'),  # Cost-effective for scoring
-            'validator_model': _env('VALIDATOR_MODEL', 'gpt-4o-mini'),  # Cost-effective for validation
+            'digest_model': _env('DIGEST_MODEL', 'gpt-5'),
+            'scoring_model': _env('SCORING_MODEL', 'gpt-5-mini'),  # Cost-effective for scoring
+            'validator_model': _env('VALIDATOR_MODEL', 'gpt-5-mini'),  # Cost-effective for validation
             
             # Digest generation settings
             'digest_temperature': 0.7,

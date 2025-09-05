@@ -148,7 +148,7 @@ Rewritten prose:"""
                 response = self.client.chat.completions.create(
                     model=model,
                     messages=[{"role": "user", "content": prompt}],
-                    max_tokens=4000,
+                    max_completion_tokens=4000,
                     temperature=0.3
                 )
                 

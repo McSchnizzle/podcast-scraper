@@ -46,9 +46,14 @@ class Config:
         # Feed monitoring settings
         self.FEED_SETTINGS = {
             'check_interval_hours': 24,
-            'max_episodes_per_feed': 10,
+            'max_episodes_per_feed': int(os.getenv('FEED_MAX_ITEMS_PER_FEED', '50')),
+            'break_on_old': os.getenv('FEED_BREAK_ON_OLD', '1') == '1',
+            'stale_feed_days': int(os.getenv('FEED_STALE_DAYS', '21')),
             'youtube_min_duration': 180,  # 3 minutes
-            'user_agent': 'PodcastDigest/1.0 (+https://github.com/McSchnizzle/podcast-scraper)'
+            'user_agent': 'PodcastDigest/2.0 (+https://github.com/McSchnizzle/podcast-scraper)',
+            'request_timeout': int(os.getenv('REQUEST_TIMEOUT', '30')),
+            'max_retries': int(os.getenv('MAX_RETRIES', '4')),
+            'backoff_base_delay': float(os.getenv('BACKOFF_BASE_DELAY', '0.5'))
         }
         
         # Content processing settings
@@ -87,9 +92,9 @@ class Config:
         # OpenAI settings with actual model names
         self.OPENAI_SETTINGS = {
             # Model configuration - using actual OpenAI model names
-            'digest_model': os.getenv('DIGEST_MODEL', 'gpt-4-turbo-preview'),
-            'scoring_model': os.getenv('SCORING_MODEL', 'gpt-4o-mini'),  # Cost-effective for scoring
-            'validator_model': os.getenv('VALIDATOR_MODEL', 'gpt-4o-mini'),  # Cost-effective for validation
+            'digest_model': os.getenv('DIGEST_MODEL', 'gpt-5'),
+            'scoring_model': os.getenv('SCORING_MODEL', 'gpt-5-mini'),  # Cost-effective for scoring
+            'validator_model': os.getenv('VALIDATOR_MODEL', 'gpt-5-mini'),  # Cost-effective for validation
             
             # Digest generation settings
             'digest_temperature': 0.7,

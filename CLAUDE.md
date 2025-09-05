@@ -14,7 +14,8 @@ This is a Multi-Topic Podcast Digest System that automatically monitors podcast 
 - **Prose Validation**: Automatic rewriting to ensure TTS-suitable content (no bullet points/markdown)
 
 **Key Technologies**:
-- **OpenAI Integration**: GPT-4 for digest generation, GPT-4o-mini for topic scoring
+- **OpenAI Integration**: GPT-5 for digest generation, GPT-5-mini for topic scoring
+- **CRITICAL**: GPT-5 models are required - DO NOT revert to GPT-4 under any circumstances
 - **Prose Validator**: Comprehensive validation and automatic rewriting for TTS optimization
 - **Multi-Topic TTS**: Topic-specific voice configurations using ElevenLabs
 - **Parakeet MLX**: Apple Silicon-optimized ASR with 10-minute chunking and cross-platform fallbacks
@@ -327,6 +328,13 @@ Parakeet MLX performance varies by file. Use `RobustTranscriber.estimate_transcr
 - Episodes must have `status='transcribed'` in BOTH databases to be included in digest
 - Digest instructions in `claude_digest_instructions.md` control output format
 - TTS generation requires ElevenLabs API key for MP3 creation
+
+### GPT-5 Implementation
+- **CRITICAL**: See `gpt5-implementation-learnings.md` for complete GPT-5 API migration guide
+- GPT-5 models require Responses API, not Chat Completions API
+- Use `max_output_tokens` instead of `max_tokens` for Responses API
+- Full transcript processing without truncation (400K token context)
+- Structured JSON output via `text.format.json_schema`
 
 ### Environment Dependencies
 - macOS: Use `./fix_malloc_warnings.sh` for Python malloc warnings
