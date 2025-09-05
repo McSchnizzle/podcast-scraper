@@ -245,3 +245,6 @@ telemetry/*.json
 
 # Temporary digest files
 daily_digests/*.txt
+
+# Repository zip files for sharing
+*.zip
