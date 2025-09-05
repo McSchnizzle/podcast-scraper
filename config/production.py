@@ -59,6 +59,18 @@ class ProductionConfig:
     SELECTOR_THRESHOLD: float = 0.65
 
     def __post_init__(self):
+        # Feed monitoring settings
+        self.FEED_SETTINGS = {
+            'check_interval_hours': 24,
+            'max_episodes_per_feed': int(_env('FEED_MAX_ITEMS_PER_FEED', '50')),
+            'break_on_old': _env('FEED_BREAK_ON_OLD', '1') == '1',
+            'stale_feed_days': int(_env('FEED_STALE_DAYS', '21')),
+            'youtube_min_duration': 180,  # 3 minutes
+            'user_agent': 'PodcastDigest/2.0 (+https://github.com/McSchnizzle/podcast-scraper)',
+            'request_timeout': int(_env('REQUEST_TIMEOUT', '30')),
+            'max_retries': int(_env('MAX_RETRIES', '4')),
+            'backoff_base_delay': float(_env('BACKOFF_BASE_DELAY', '0.5'))
+        }
         # Provide complete OPENAI_SETTINGS structure expected by the codebase
         self.OPENAI_SETTINGS = {
             # Model configuration - using actual OpenAI model names
@@ -166,6 +178,330 @@ class ProductionConfig:
         ident = f"{topic}|{date.strftime('%Y-%m-%d')}|{sorted_ids}"
         content_hash = hashlib.md5(ident.encode("utf-8")).hexdigest()[:12]
         return f"{self.PODCAST_BASE_URL}/digest/{date.strftime('%Y-%m-%d')}/{safe_topic}/{content_hash}"
+
+    # ---------- Feed Management ----------
+    def get_feed_config(self) -> list:
+        """Get complete feed configuration with all monitored feeds
+        
+        Note: topic_category is informational only. Content selection is 100% score-based
+        using AI relevance scoring against the 6 defined topics.
+        """
+        return [
+            # Technology RSS Feeds
+            {
+                'title': 'The Vergecast',
+                'url': 'https://feeds.megaphone.fm/vergecast',
+                'type': 'rss',
+                'topic_category': 'technology'
+            },
+            
+            # AI-focused YouTube Channels
+            {
+                'title': 'Wes Roth',
+                'url': 'https://www.youtube.com/feeds/videos.xml?channel_id=UCqcbQf6yw5KzRoDDcZ_wBSw',
+                'type': 'youtube',
+                'topic_category': 'technology'
+            },
+            {
+                'title': 'Matt Wolfe',
+                'url': 'https://www.youtube.com/feeds/videos.xml?channel_id=UChpleBmo18P08aKCIgti38g',
+                'type': 'youtube',
+                'topic_category': 'technology'
+            },
+            {
+                'title': 'How I AI',
+                'url': 'https://www.youtube.com/feeds/videos.xml?channel_id=UCRYY7IEbkHLH_ScJCu9eWDQ',
+                'type': 'youtube',
+                'topic_category': 'technology'
+            },
+            {
+                'title': 'The AI Advantage',
+                'url': 'https://www.youtube.com/feeds/videos.xml?channel_id=UCHhYXsLBEVVnbvsq57n1MTQ',
+                'type': 'youtube',
+                'topic_category': 'technology'
+            },
+            {
+                'title': 'AI Daily Brief',
+                'url': 'https://www.youtube.com/feeds/videos.xml?channel_id=UCKelCK4ZaO6HeEI1KQjqzWA',
+                'type': 'youtube',
+                'topic_category': 'technology'
+            },
+            {
+                'title': 'All About AI',
+                'url': 'https://www.youtube.com/feeds/videos.xml?channel_id=UCR9j1jqqB5Rse69wjUnbYwA',
+                'type': 'youtube',
+                'topic_category': 'technology'
+            },
+            {
+                'title': 'Indy Dev Dan',
+                'url': 'https://www.youtube.com/feeds/videos.xml?channel_id=UC_x36zCEGilGpB1m-V4gmjg',
+                'type': 'youtube',
+                'topic_category': 'technology'
+            },
+            {
+                'title': 'Robin',
+                'url': 'https://www.youtube.com/feeds/videos.xml?channel_id=UCy71Sv5TVBbn5BYETRQV22Q',
+                'type': 'youtube',
+                'topic_category': 'technology'
+            },
+            
+            # Business & Entrepreneurship
+            {
+                'title': 'Leading the Shift: AI innovation talks with Microsoft Azure',
+                'url': 'https://media.rss.com/leading-the-shift/feed.xml',
+                'type': 'rss',
+                'topic_category': 'business'
+            },
+            {
+                'title': 'The Diary Of A CEO with Steven Bartlett',
+                'url': 'https://feeds.megaphone.fm/thediaryofaceo',
+                'type': 'rss',
+                'topic_category': 'business'
+            },
+            
+            # Philosophy & Society
+            {
+                'title': 'Slo Mo: A Podcast with Mo Gawdat',
+                'url': 'https://feeds.buzzsprout.com/843595.rss',
+                'type': 'rss',
+                'topic_category': 'philosophy'
+            },
+            {
+                'title': 'Team Human',
+                'url': 'https://feeds.acast.com/public/shows/58ad887a1608b1752663b04a',
+                'type': 'rss',
+                'topic_category': 'philosophy'
+            },
+            {
+                'title': 'The Great Simplification with Nate Hagens',
+                'url': 'https://thegreatsimplification.libsyn.com/rss',
+                'type': 'rss',
+                'topic_category': 'philosophy'
+            },
+            
+            # Political & Social Commentary - CORRECTED RSS FEEDS
+            {
+                'title': 'Movement Memos',
+                'url': 'https://feeds.megaphone.fm/movementmemos',
+                'type': 'rss',
+                'topic_category': 'politics'
+            },
+            {
+                'title': 'Real Sankara Hours',
+                'url': 'https://feed.podbean.com/realsankarahours/feed.xml',
+                'type': 'rss',
+                'topic_category': 'politics'
+            },
+            {
+                'title': 'Millennials Are Killing Capitalism',
+                'url': 'https://millennialsarekillingcapitalism.libsyn.com/rss',
+                'type': 'rss',
+                'topic_category': 'politics'
+            },
+            {
+                'title': 'THIS IS REVOLUTION',
+                'url': 'https://feed.podbean.com/bitterlake/feed.xml',
+                'type': 'rss',
+                'topic_category': 'politics'
+            },
+            {
+                'title': 'The Red Nation Podcast',
+                'url': 'https://therednation.libsyn.com/rss',
+                'type': 'rss',
+                'topic_category': 'politics'
+            },
+            
+            # Black Culture & History - CORRECTED RSS FEEDS
+            {
+                'title': 'The Black Myths Podcast',
+                'url': 'https://blackmyths.libsyn.com/rss',
+                'type': 'rss',
+                'topic_category': 'culture'
+            },
+            {
+                'title': 'The Malcolm Effect',
+                'url': 'https://feed.podbean.com/kultural/feed.xml',
+                'type': 'rss',
+                'topic_category': 'culture'
+            },
+            {
+                'title': 'Black Autonomy Podcast',
+                'url': 'https://blackautonomy.libsyn.com/rss',
+                'type': 'rss',
+                'topic_category': 'culture'
+            },
+            {
+                'title': 'The Dugout | a black anarchist podcast',
+                'url': 'https://anchor.fm/dugoutpodcast/rss',
+                'type': 'rss',
+                'topic_category': 'culture'
+            }
+        ]
+    
+    def sync_feeds_to_database(self, db_path: str = "podcast_monitor.db", force_update: bool = False):
+        """Sync feed configuration to database (database is source of truth)"""
+        import sqlite3
+        import logging
+        
+        logger = logging.getLogger(__name__)
+        
+        conn = sqlite3.connect(db_path)
+        cursor = conn.cursor()
+        
+        # Get current feeds from database
+        cursor.execute("SELECT COUNT(*) FROM feeds")
+        db_feed_count = cursor.fetchone()[0]
+        
+        # Only sync from config if database is empty or force_update is True
+        if db_feed_count == 0 or force_update:
+            logger.info(f"Syncing {len(self.get_feed_config())} feeds to database...")
+            
+            for feed in self.get_feed_config():
+                cursor.execute('''
+                    INSERT OR REPLACE INTO feeds (url, title, type, topic_category, active, last_checked)
+                    VALUES (?, ?, ?, ?, 1, datetime('now'))
+                ''', (feed['url'], feed['title'], feed['type'], feed['topic_category']))
+            
+            conn.commit()
+            logger.info(f"✅ Synced {len(self.get_feed_config())} feeds to database")
+        else:
+            logger.info(f"Database has {db_feed_count} feeds - using database as source of truth")
+        
+        conn.close()
+    
+    def get_active_feeds_from_db(self, db_path: str = "podcast_monitor.db") -> list:
+        """Get active feeds from database (single source of truth)"""
+        import sqlite3
+        import logging
+        
+        logger = logging.getLogger(__name__)
+        
+        try:
+            conn = sqlite3.connect(db_path)
+            cursor = conn.cursor()
+            
+            cursor.execute('''
+                SELECT id, url, title, type, topic_category
+                FROM feeds
+                WHERE active = 1
+                ORDER BY id
+            ''')
+            
+            feeds = []
+            for row in cursor.fetchall():
+                feeds.append({
+                    'id': row[0],
+                    'url': row[1],
+                    'title': row[2],
+                    'type': row[3],
+                    'topic_category': row[4]
+                })
+            
+            conn.close()
+            return feeds
+        except Exception as e:
+            logger.error(f"Error getting feeds from database: {e}")
+            return []
+    
+    def add_feed_to_db(self, url: str, title: str, feed_type: str, topic_category: str, 
+                       db_path: str = "podcast_monitor.db") -> bool:
+        """Add new feed to database"""
+        import sqlite3
+        import logging
+        
+        logger = logging.getLogger(__name__)
+        
+        try:
+            conn = sqlite3.connect(db_path)
+            cursor = conn.cursor()
+            
+            cursor.execute('''
+                INSERT OR REPLACE INTO feeds (url, title, type, topic_category, active, last_checked)
+                VALUES (?, ?, ?, ?, 1, datetime('now'))
+            ''', (url, title, feed_type, topic_category))
+            
+            conn.commit()
+            conn.close()
+            logger.info(f"✅ Added feed: {title} ({feed_type})")
+            return True
+        except Exception as e:
+            logger.error(f"Error adding feed: {e}")
+            return False
+    
+    def validate_feed_url(self, url: str) -> tuple[bool, str]:
+        """Validate that a feed URL is accessible and returns a 200 status"""
+        import requests
+        
+        try:
+            headers = {
+                'User-Agent': 'PodcastDigest/2.0 (+https://github.com/McSchnizzle/podcast-scraper)'
+            }
+            
+            response = requests.get(url, headers=headers, timeout=15)
+            if response.status_code == 200:
+                return True, "OK"
+            else:
+                return False, f"HTTP {response.status_code}"
+                
+        except requests.exceptions.Timeout:
+            return False, "Request timeout"
+        except requests.exceptions.ConnectionError:
+            return False, "Connection error"
+        except Exception as e:
+            return False, f"Error: {str(e)}"
+    
+    def add_feed_with_validation(self, url: str, title: str, feed_type: str, topic_category: str, 
+                                db_path: str = "podcast_monitor.db") -> tuple[bool, str]:
+        """Add new feed to database with validation"""
+        import logging
+        
+        logger = logging.getLogger(__name__)
+        
+        # First validate the feed URL
+        is_valid, error_msg = self.validate_feed_url(url)
+        if not is_valid:
+            logger.error(f"❌ Feed validation failed for {title}: {error_msg}")
+            return False, error_msg
+        
+        # If validation passes, add to database
+        success = self.add_feed_to_db(url, title, feed_type, topic_category, db_path)
+        if success:
+            logger.info(f"✅ Feed validated and added: {title}")
+            return True, "Successfully added"
+        else:
+            return False, "Database error"
+    
+    def remove_feed_from_db(self, feed_id: int, db_path: str = "podcast_monitor.db") -> bool:
+        """Remove feed from database"""
+        import sqlite3
+        import logging
+        
+        logger = logging.getLogger(__name__)
+        
+        try:
+            conn = sqlite3.connect(db_path)
+            cursor = conn.cursor()
+            
+            # Get feed info before deletion for logging
+            cursor.execute("SELECT title FROM feeds WHERE id = ?", (feed_id,))
+            result = cursor.fetchone()
+            feed_title = result[0] if result else f"Feed ID {feed_id}"
+            
+            cursor.execute("DELETE FROM feeds WHERE id = ?", (feed_id,))
+            
+            if cursor.rowcount > 0:
+                conn.commit()
+                logger.info(f"✅ Removed feed: {feed_title}")
+                result = True
+            else:
+                logger.warning(f"Feed ID {feed_id} not found")
+                result = False
+                
+            conn.close()
+            return result
+        except Exception as e:
+            logger.error(f"Error removing feed: {e}")
+            return False
 
     # ---------- Quotas ----------
     def validate_quota_usage(self, tokens_used: int, requests_made: int) -> Dict[str, Any]:
