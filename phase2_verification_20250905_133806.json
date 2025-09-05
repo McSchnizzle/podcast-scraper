@@ -1,0 +1,94 @@
+{
+  "timestamp": "2025-09-05T13:38:06.285191",
+  "overall_status": "passed",
+  "categories": {
+    "File Structure": {
+      "passed": true,
+      "status": "All required files present",
+      "failures": [],
+      "details": {
+        "checked_files": 7,
+        "missing_files": 0
+      }
+    },
+    "Code Migration": {
+      "passed": true,
+      "status": "Code properly migrated to GPT-5",
+      "failures": [],
+      "details": {
+        "files_checked": 3,
+        "gpt5_indicators": [
+          "episode_summary_generator.py uses centralized helpers",
+          "openai_digest_integration.py uses centralized helpers",
+          "prose_validator.py uses centralized helpers"
+        ]
+      }
+    },
+    "Configuration": {
+      "passed": true,
+      "status": "Configuration properly updated",
+      "failures": [],
+      "details": {
+        "config_module": "config"
+      }
+    },
+    "Database Schema": {
+      "passed": true,
+      "status": "Database schema properly migrated",
+      "failures": [],
+      "details": {
+        "verified_tables": [
+          "RSS Episodes:episode_summaries",
+          "RSS Episodes:digest_operations",
+          "RSS Episodes:validation_operations",
+          "RSS Episodes:run_headers",
+          "RSS Episodes:api_call_logs",
+          "YouTube Episodes:episode_summaries",
+          "YouTube Episodes:digest_operations",
+          "YouTube Episodes:validation_operations",
+          "YouTube Episodes:run_headers",
+          "YouTube Episodes:api_call_logs"
+        ],
+        "expected_tables": 10
+      }
+    },
+    "API Integration": {
+      "passed": true,
+      "status": "API integration working correctly",
+      "failures": [],
+      "details": {
+        "tested_components": [
+          "openai_helpers",
+          "idempotency",
+          "safety",
+          "schemas"
+        ]
+      }
+    },
+    "Test Coverage": {
+      "passed": true,
+      "status": "Comprehensive test coverage",
+      "failures": [],
+      "details": {
+        "required_test_classes": 8,
+        "test_file_size": 23962
+      }
+    },
+    "Documentation": {
+      "passed": true,
+      "status": "Documentation up to date",
+      "failures": [],
+      "details": {
+        "checked_docs": 2
+      }
+    }
+  },
+  "summary": {
+    "total_categories": 7,
+    "passed_categories": 7,
+    "failed_categories": 0,
+    "total_failures": 0,
+    "overall_success_rate": "100.0%"
+  },
+  "failed_checks": []
+}

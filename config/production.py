@@ -138,6 +138,41 @@ class ProductionConfig:
             "scorer": self.SCORER_MODEL,
             "prose_validator": self.PROSE_VALIDATOR_MODEL,
         }
+        
+        # ---- Phase 2 GPT-5 Integration Configuration ----
+        
+        # GPT-5 Models for each component
+        self.GPT5_MODELS = {
+            'summary': _env('GPT5_SUMMARY_MODEL', 'gpt-5-mini'),
+            'scorer': _env('GPT5_SCORER_MODEL', 'gpt-5-mini'),
+            'digest': _env('GPT5_DIGEST_MODEL', 'gpt-5'),
+            'validator': _env('GPT5_VALIDATOR_MODEL', 'gpt-5-mini')
+        }
+        
+        # Token limits for each component
+        self.OPENAI_TOKENS = {
+            'summary': int(_env('OPENAI_SUMMARY_TOKENS', '1500')),
+            'scorer': int(_env('OPENAI_SCORER_TOKENS', '500')),
+            'digest': int(_env('OPENAI_DIGEST_TOKENS', '4000')),
+            'validator': int(_env('OPENAI_VALIDATOR_TOKENS', '2000'))
+        }
+        
+        # Reasoning effort levels
+        self.REASONING_EFFORT = {
+            'summary': _env('REASONING_SUMMARY', 'minimal'),
+            'scorer': _env('REASONING_SCORER', 'minimal'),
+            'digest': _env('REASONING_DIGEST', 'medium'),
+            'validator': _env('REASONING_VALIDATOR', 'minimal')
+        }
+        
+        # Feature flags for staged rollout
+        self.FEATURE_FLAGS = {
+            'use_gpt5_summaries': _env('USE_GPT5_SUMMARIES', '1') == '1',
+            'use_gpt5_digest': _env('USE_GPT5_DIGEST', '1') == '1',
+            'use_gpt5_validator': _env('USE_GPT5_VALIDATOR', '1') == '1',
+            'enable_idempotency': _env('ENABLE_IDEMPOTENCY', '1') == '1',
+            'enable_observability': _env('ENABLE_OBSERVABILITY', '1') == '1'
+        }
 
     # ---------- Time / Labels ----------
     @staticmethod

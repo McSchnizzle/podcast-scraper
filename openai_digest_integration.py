@@ -27,6 +27,7 @@ from config import config
 from episode_summary_generator import EpisodeSummaryGenerator
 from telemetry_manager import telemetry
 from utils.sanitization import safe_digest_filename, scrub_secrets_from_text
+from utils.openai_helpers import call_openai_with_backoff, get_json_schema, generate_idempotency_key
 
 from utils.logging_setup import configure_logging
 configure_logging()
@@ -45,27 +46,46 @@ class OpenAIDigestIntegration:
         self.prose_validator = ProseValidator()
         self.summary_generator = EpisodeSummaryGenerator()
         
-        # Initialize OpenAI client
-        api_key = os.getenv('OPENAI_API_KEY')
-        if not api_key:
-            logger.error("OPENAI_API_KEY environment variable not set")
+        # GPT-5 configuration
+        self.model = config.GPT5_MODELS['digest']
+        self.max_output_tokens = config.OPENAI_TOKENS['digest']
+        self.reasoning_effort = config.REASONING_EFFORT['digest']
+        self.feature_enabled = config.FEATURE_FLAGS['use_gpt5_digest']
+        
+        # Check for mock mode
+        self.mock_mode = os.getenv('MOCK_OPENAI') == '1' or os.getenv('CI_SMOKE') == '1'
+        
+        if self.mock_mode:
+            logger.info("🧪 MOCK MODE: Using mock OpenAI responses for digest")
             self.client = None
-            self.api_available = False
-        elif len(api_key.strip()) < 10:
-            logger.error(f"OPENAI_API_KEY appears invalid (length: {len(api_key.strip())})")
-            self.client = None
-            self.api_available = False
+            self.api_available = True
         else:
-            try:
-                # Initialize OpenAI client (v1.0+ format)
-                from openai import OpenAI
-                self.client = OpenAI(api_key=api_key.strip())
-                self.api_available = True
-                logger.info(f"✅ OpenAI API client initialized (key length: {len(api_key.strip())})")
-            except Exception as e:
-                logger.error(f"Failed to initialize OpenAI client: {e}")
+            # Initialize OpenAI client
+            api_key = os.getenv('OPENAI_API_KEY')
+            if not api_key:
+                logger.error("OPENAI_API_KEY environment variable not set")
                 self.client = None
                 self.api_available = False
+            elif len(api_key.strip()) < 10:
+                logger.error(f"OPENAI_API_KEY appears invalid (length: {len(api_key.strip())})")
+                self.client = None
+                self.api_available = False
+            else:
+                try:
+                    from openai import OpenAI
+                    self.client = OpenAI(api_key=api_key.strip())
+                    self.api_available = True
+                    logger.info(f"✅ OpenAI Digest Integration initialized with {self.model}")
+                except Exception as e:
+                    logger.error(f"Failed to initialize OpenAI client: {e}")
+                    self.client = None
+                    self.api_available = False
+        
+        # Log configuration on startup
+        logger.info(
+            f"component=digest model={self.model} max_output_tokens={self.max_output_tokens} "
+            f"reasoning={self.reasoning_effort} feature_enabled={self.feature_enabled}"
+        )
 
     def get_transcripts_for_analysis(self, include_youtube: bool = True, topic: str = None, threshold: float = 0.6) -> List[Dict]:
         """Get transcripts ready for API analysis from both databases, filtered by topic relevance scores"""
@@ -660,34 +680,57 @@ Create a flowing, conversational digest that synthesizes these insights."""
         logger.info(f"Reduce phase prompt: {total_tokens} tokens")
         
         try:
-            # Use exponential backoff for retries
-            for attempt in range(config.OPENAI_SETTINGS['max_retries']):
-                try:
-                    response = self.client.chat.completions.create(
-                        model=config.OPENAI_SETTINGS['digest_model'],  # Use primary model for digest
-                        messages=[
-                            {"role": "system", "content": system_prompt},
-                            {"role": "user", "content": user_prompt}
-                        ],
-                        temperature=config.OPENAI_SETTINGS['digest_temperature'],
-                        presence_penalty=config.OPENAI_SETTINGS['digest_presence_penalty'],
-                        frequency_penalty=config.OPENAI_SETTINGS['digest_frequency_penalty'],
-                        max_completion_tokens=config.OPENAI_SETTINGS['digest_max_tokens'],
-                        timeout=config.OPENAI_SETTINGS['timeout_seconds']
-                    )
+            # Check if feature is enabled
+            if not self.feature_enabled:
+                logger.warning("GPT-5 digest generation disabled by feature flag")
+                return False, None, "Feature disabled"
+            
+            # Mock mode handling
+            if self.mock_mode:
+                logger.info("🧪 MOCK: Generating mock digest")
+                mock_digest = self._generate_mock_digest(topic, summaries)
+                return True, mock_digest, None
+            
+            # Generate run ID for idempotency and observability
+            run_id = generate_idempotency_key(topic, str(now_utc()), self.model)
+            
+            # Call GPT-5 via Responses API with structured output
+            logger.info(f"🤖 Generating digest: {topic} ({len(summaries)} summaries, ~{approx_tokens(user_prompt)} tokens)")
+            
+            result = call_openai_with_backoff(
+                client=self.client,
+                component="digest",
+                run_id=run_id,
+                idempotency_key=run_id,
+                model=self.model,
+                input=[
+                    {"role": "system", "content": system_prompt},
+                    {"role": "user", "content": user_prompt}
+                ],
+                reasoning={"effort": self.reasoning_effort},
+                max_output_tokens=self.max_output_tokens,
+                text={"format": get_json_schema("digest")}
+            )
                     
-                    digest_content = response.choices[0].message.content.strip()
-                    logger.info(f"✅ Generated final digest for {topic}: {approx_tokens(digest_content)} tokens")
-                    return digest_content
-                    
-                except Exception as e:
-                    if "429" in str(e) and attempt < config.OPENAI_SETTINGS['max_retries'] - 1:
-                        delay = config.OPENAI_SETTINGS['backoff_base_delay'] * (2 ** attempt)
-                        logger.warning(f"Rate limit hit for {topic} (attempt {attempt + 1}), retrying in {delay}s")
-                        time.sleep(delay)
-                        continue
-                    else:
-                        raise e
+            # Parse structured response
+            digest_data = result.to_json()
+            
+            # Check if digest meets quality standards
+            status = digest_data.get('status', 'OK')
+            if status == 'PARTIAL':
+                logger.warning(f"⚠️ Digest marked as PARTIAL quality for {topic}")
+            
+            # Extract digest content (assuming it's in the items field)
+            items = digest_data.get('items', [])
+            if not items:
+                logger.error(f"❌ No digest items generated for {topic}")
+                return False, None, "No digest items generated"
+            
+            # Format the digest content from structured data
+            digest_content = self._format_digest_from_structured_data(topic, digest_data)
+            
+            logger.info(f"✅ Generated final digest for {topic}: {len(items)} items, {approx_tokens(digest_content)} tokens")
+            return digest_content
                         
         except Exception as e:
             logger.error(f"Failed to generate final digest for {topic}: {e}")
@@ -699,9 +742,9 @@ Create a flowing, conversational digest that synthesizes these insights."""
                 f.write(f"# ERROR generating {topic} digest\n\n")
                 f.write(f"Error: {e}\n\n")
                 f.write(f"Token estimate: {total_tokens}\n")
-                f.write(f"Episodes included: {len(episode_summaries)}\n\n")
-                for summary in episode_summaries:
-                    f.write(f"- {summary['episode_id']}: {summary['title']}\n")
+                f.write(f"Episodes included: {len(summaries)}\n\n")
+                for summary in summaries:
+                    f.write(f"- {summary.get('episode_id', 'unknown')}: {summary.get('title', 'No title')}\n")
             
             logger.error(f"Error artifact saved to {error_path}")
             return None
@@ -903,26 +946,89 @@ Create a flowing, conversational digest that synthesizes these insights."""
                 logger.error(f"Error moving transcript {transcript['transcript_path']}: {e}")
 
     def test_api_connection(self) -> bool:
-        """Test OpenAI API connection"""
+        """Test OpenAI API connection using GPT-5"""
         if not self.api_available:
             return False
+            
+        if self.mock_mode:
+            logger.info("🧪 MOCK: OpenAI connection test successful")
+            return True
         
         try:
-            response = self.client.chat.completions.create(
-                model="gpt-4-1106-preview",
-                messages=[{
+            result = call_openai_with_backoff(
+                client=self.client,
+                component="connection_test",
+                model=self.model,
+                input=[{
                     "role": "user",
                     "content": "Hello, please respond with 'API connection successful'"
                 }],
-                max_completion_tokens=50
+                reasoning={"effort": "minimal"},
+                max_output_tokens=50
             )
             
-            response_text = response.choices[0].message.content
-            return "successful" in response_text.lower()
+            response_text = result.text
+            success = "successful" in response_text.lower()
+            if success:
+                logger.info(f"✅ API connection test successful with {self.model}")
+            return success
             
         except Exception as e:
             logger.error(f"API connection test failed: {e}")
             return False
+    
+    def _generate_mock_digest(self, topic: str, summaries: List[Dict]) -> str:
+        """Generate mock digest for CI smoke tests"""
+        timestamp = now_utc().strftime("%B %d, %Y")
+        mock_content = f"""# {topic} Digest - {timestamp}
+
+## Mock Digest Content
+
+This is a mock digest generated for testing purposes.
+
+### Summary
+- Topic: {topic}
+- Summaries processed: {len(summaries)}
+- Generated at: {timestamp}
+
+### Mock Content Items
+"""
+        
+        for i, summary in enumerate(summaries[:3], 1):  # Show first 3 summaries
+            mock_content += f"""
+#### Mock Item {i}
+**Episode:** {summary.get('episode_id', 'Unknown')}
+**Title:** {summary.get('title', 'Mock Title')}
+**Summary:** Mock summary content for testing purposes.
+"""
+        
+        return mock_content
+    
+    def _format_digest_from_structured_data(self, topic: str, digest_data: Dict) -> str:
+        """Format structured digest data into readable markdown"""
+        timestamp = now_utc().strftime("%B %d, %Y")
+        items = digest_data.get('items', [])
+        
+        # Start with header
+        content = f"# {topic} Digest - {timestamp}\n\n"
+        
+        # Add status if partial
+        status = digest_data.get('status', 'OK')
+        if status == 'PARTIAL':
+            content += "⚠️ **Note: This digest contains partial results due to processing limitations.**\n\n"
+        
+        # Add summary
+        content += f"## Summary\n\n"
+        content += f"Today's {topic.lower()} digest contains {len(items)} key developments and insights.\n\n"
+        
+        # Add items
+        for i, item in enumerate(items, 1):
+            title = item.get('title', f'Development #{i}')
+            blurb = item.get('blurb', 'No description available.')
+            
+            content += f"### {title}\n\n{blurb}\n\n"
+        
+        return content
 
 
 def main():

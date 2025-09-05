@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-Prose Validation and Rewriting System
+Prose Validation and Rewriting System - GPT-5 Implementation
 Ensures digest content is proper prose suitable for TTS, not bullet lists or markdown
 """
 
@@ -8,27 +8,50 @@ import re
 import logging
 import openai
 import os
-from typing import Tuple, List, Optional
+from typing import Tuple, List, Optional, Dict
+from utils.openai_helpers import call_openai_with_backoff, get_json_schema, generate_idempotency_key
+from utils.datetime_utils import now_utc
 
 logger = logging.getLogger(__name__)
 
 class ProseValidator:
     def __init__(self):
-        """Initialize with OpenAI client for rewriting capabilities"""
+        """Initialize with GPT-5 client for rewriting capabilities"""
         self.client = None
         self.api_available = False
         
-        api_key = os.getenv('OPENAI_API_KEY')
-        if api_key and len(api_key.strip()) >= 10:
-            try:
-                from openai import OpenAI
-                self.client = OpenAI(api_key=api_key.strip())
-                self.api_available = True
-                logger.info("✅ Prose validator OpenAI client initialized")
-            except Exception as e:
-                logger.error(f"Failed to initialize OpenAI client for prose validation: {e}")
+        # Load configuration
+        from config import config
+        self.model = config.GPT5_MODELS['validator']
+        self.max_output_tokens = config.OPENAI_TOKENS['validator']
+        self.reasoning_effort = config.REASONING_EFFORT['validator']
+        self.feature_enabled = config.FEATURE_FLAGS['use_gpt5_validator']
+        
+        # Check for mock mode
+        self.mock_mode = os.getenv('MOCK_OPENAI') == '1' or os.getenv('CI_SMOKE') == '1'
+        
+        if self.mock_mode:
+            logger.info("🧪 MOCK MODE: Using mock prose validation")
+            self.client = None
+            self.api_available = True
         else:
-            logger.warning("OpenAI API not available for prose rewriting")
+            api_key = os.getenv('OPENAI_API_KEY')
+            if api_key and len(api_key.strip()) >= 10:
+                try:
+                    from openai import OpenAI
+                    self.client = OpenAI(api_key=api_key.strip())
+                    self.api_available = True
+                    logger.info(f"✅ Prose validator initialized with {self.model}")
+                except Exception as e:
+                    logger.error(f"Failed to initialize OpenAI client for prose validation: {e}")
+            else:
+                logger.warning("OpenAI API not available for prose rewriting")
+        
+        # Log configuration
+        logger.info(
+            f"component=validator model={self.model} max_output_tokens={self.max_output_tokens} "
+            f"reasoning={self.reasoning_effort} feature_enabled={self.feature_enabled}"
+        )
 
     def validate_prose(self, text: str) -> Tuple[bool, List[str]]:
         """
@@ -115,62 +138,131 @@ class ProseValidator:
 
     def rewrite_to_prose(self, text: str, max_attempts: int = 2) -> Optional[str]:
         """
-        Use OpenAI to rewrite non-prose text into smooth narrative suitable for TTS
+        Use GPT-5 to rewrite non-prose text into smooth narrative suitable for TTS
         """
+        if not self.feature_enabled:
+            logger.warning("GPT-5 prose validation disabled by feature flag")
+            return text  # Return original text if disabled
+            
         if not self.api_available:
             logger.error("OpenAI API not available for prose rewriting")
             return None
         
+        # Mock mode - return lightly processed text
+        if self.mock_mode:
+            logger.info("🧪 MOCK: Performing mock prose validation")
+            return self._mock_prose_rewrite(text)
+        
         for attempt in range(max_attempts):
             try:
-                prompt = f"""
-Rewrite the following content as smooth, flowing prose suitable for text-to-speech narration. 
+                system_prompt = """You are an expert prose writer specializing in creating TTS-friendly content. Your task is to transform any text into smooth, flowing prose suitable for text-to-speech narration."""
+                
+                user_prompt = f"""
+Rewrite the following content as smooth, flowing prose suitable for text-to-speech narration.
 
 Requirements:
 - Convert bullet points and lists into natural sentences
-- Remove markdown formatting
+- Remove all markdown formatting (headers, bold, italics, etc.)
 - Create coherent paragraphs with varied sentence structure
-- Maintain all factual information
-- Use transitions between topics
+- Maintain all factual information and key points
+- Use natural transitions between topics
 - Write in a conversational but professional tone
 - Ensure it flows naturally when read aloud
+- Identify any content that cannot be converted to TTS-friendly prose
 
 Original content:
 {text}
 
-Rewritten prose:"""
+Provide your response in the specified JSON format."""
 
-                # Use cost-effective model for prose validation (aligned with config.py)
-                from config import Config
-                config = Config(require_claude=False)
-                model = config.OPENAI_SETTINGS['validator_model']  # Cost-effective model for validation
+                # Generate run ID for idempotency
+                run_id = generate_idempotency_key(text[:100], str(attempt), self.model)
                 
-                response = self.client.chat.completions.create(
-                    model=model,
-                    messages=[{"role": "user", "content": prompt}],
-                    max_completion_tokens=4000,
-                    temperature=0.3
+                # Call GPT-5 with structured output
+                logger.info(f"🤖 Rewriting to prose (attempt {attempt + 1}): {len(text)} chars")
+                
+                result = call_openai_with_backoff(
+                    client=self.client,
+                    component="validator",
+                    run_id=run_id,
+                    idempotency_key=run_id,
+                    model=self.model,
+                    input=[
+                        {"role": "system", "content": system_prompt},
+                        {"role": "user", "content": user_prompt}
+                    ],
+                    reasoning={"effort": self.reasoning_effort},
+                    max_output_tokens=self.max_output_tokens,
+                    text={"format": get_json_schema("validator")}
                 )
                 
-                rewritten = response.choices[0].message.content.strip()
+                # Parse structured response
+                validation_data = result.to_json()
                 
-                # Validate the rewritten text
-                is_valid, issues = self.validate_prose(rewritten)
-                if is_valid:
-                    logger.info(f"✅ Successfully rewrote text to prose (attempt {attempt + 1})")
-                    return rewritten
+                is_valid = validation_data.get('is_valid', False)
+                error_codes = validation_data.get('error_codes', [])
+                corrected_text = validation_data.get('corrected_text', text)
+                reasoning = validation_data.get('reasoning', 'No reasoning provided')
+                
+                if is_valid and corrected_text:
+                    # Double-check with our own validation
+                    local_valid, local_issues = self.validate_prose(corrected_text)
+                    if local_valid:
+                        logger.info(f"✅ Successfully rewrote text to prose (attempt {attempt + 1})")
+                        return corrected_text
+                    else:
+                        logger.warning(f"GPT-5 marked as valid but local validation failed: {', '.join(local_issues)}")
+                        
+                # Log issues for debugging
+                if error_codes:
+                    logger.warning(f"Rewrite attempt {attempt + 1} has issues: {', '.join(error_codes)} - {reasoning}")
                 else:
-                    logger.warning(f"Rewrite attempt {attempt + 1} still has issues: {', '.join(issues)}")
-                    if attempt == max_attempts - 1:
-                        logger.error("Failed to create valid prose after maximum attempts")
-                        return None
+                    logger.warning(f"Rewrite attempt {attempt + 1} failed validation - {reasoning}")
+                    
+                if attempt == max_attempts - 1:
+                    logger.error("Failed to create valid prose after maximum attempts")
+                    return corrected_text if corrected_text else text  # Return best attempt
                         
             except Exception as e:
                 logger.error(f"Error rewriting to prose (attempt {attempt + 1}): {e}")
                 if attempt == max_attempts - 1:
-                    return None
+                    return text  # Return original text if all attempts failed
         
-        return None
+        return text  # Fallback to original text
+
+    def _mock_prose_rewrite(self, text: str) -> str:
+        """
+        Mock prose rewriting for testing environments
+        Performs basic text cleaning to simulate rewriting
+        """
+        lines = [line.strip() for line in text.strip().split('\n') if line.strip()]
+        
+        # Convert bullet points to sentences
+        processed_lines = []
+        for line in lines:
+            # Remove bullet point markers
+            line = re.sub(r'^[-*•]\s+', '', line)
+            line = re.sub(r'^\d+\.\s+', '', line)
+            line = re.sub(r'^[a-zA-Z]\.\s+', '', line)
+            
+            # Remove markdown headers
+            line = re.sub(r'^#+\s+', '', line)
+            
+            # Remove markdown formatting
+            line = re.sub(r'\*\*(.*?)\*\*', r'\1', line)  # Bold
+            line = re.sub(r'\*(.*?)\*', r'\1', line)      # Italic
+            line = re.sub(r'`(.*?)`', r'\1', line)        # Code
+            line = re.sub(r'\[(.*?)\]\(.*?\)', r'\1', line)  # Links
+            
+            if line:
+                processed_lines.append(line)
+        
+        # Join into paragraphs
+        result = '. '.join(processed_lines)
+        if result and not result.endswith('.'):
+            result += '.'
+            
+        return result
 
     def ensure_prose_quality(self, text: str) -> Tuple[bool, str, List[str]]:
         """

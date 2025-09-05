@@ -89,33 +89,72 @@ class Config:
             'max_text_length': 50000
         }
         
-        # OpenAI settings with actual model names
+        # OpenAI GPT-5 Configuration (Phase 2 Enhanced)
+        # Standardized model pinning with per-component override capability
+        self.GPT5_MODELS = {
+            'summary': os.getenv('GPT5_SUMMARY_MODEL', 'gpt-5-mini'),
+            'scorer': os.getenv('GPT5_SCORER_MODEL', 'gpt-5-mini'),
+            'digest': os.getenv('GPT5_DIGEST_MODEL', 'gpt-5'),
+            'validator': os.getenv('GPT5_VALIDATOR_MODEL', 'gpt-5-mini')
+        }
+        
+        # Standardized token configuration (max_output_tokens for Responses API)
+        self.OPENAI_TOKENS = {
+            'summary': int(os.getenv('SUMMARY_MAX_OUTPUT_TOKENS', '500')),
+            'scorer': int(os.getenv('SCORER_MAX_OUTPUT_TOKENS', '700')),
+            'digest': int(os.getenv('DIGEST_MAX_OUTPUT_TOKENS', '4000')),
+            'validator': int(os.getenv('VALIDATOR_MAX_OUTPUT_TOKENS', '4000'))
+        }
+        
+        # Reasoning effort configuration (per-component for GPT-5)
+        self.REASONING_EFFORT = {
+            'summary': os.getenv('SUMMARY_REASONING_EFFORT', 'minimal'),
+            'scorer': os.getenv('SCORER_REASONING_EFFORT', 'minimal'),
+            'digest': os.getenv('DIGEST_REASONING_EFFORT', 'minimal'),
+            'validator': os.getenv('VALIDATOR_REASONING_EFFORT', 'medium')  # Higher fidelity for validation
+        }
+        
+        # Quality thresholds and guardrails
+        self.QUALITY_THRESHOLDS = {
+            'relevance_threshold': float(os.getenv('RELEVANCE_THRESHOLD', '0.65')),
+            'min_chunks_ok': int(os.getenv('MIN_CHUNKS_OK', '2')),
+            'min_coverage_pct': float(os.getenv('MIN_COVERAGE_PCT', '0.6'))
+        }
+        
+        # Execution settings
+        self.EXECUTION_SETTINGS = {
+            'max_parallel_requests': int(os.getenv('MAX_PARALLEL_REQUESTS', '4')),
+            'timeout_seconds': int(os.getenv('OPENAI_TIMEOUT_SECONDS', '60')),
+            'max_retries': 4,
+            'backoff_base_delay': 0.75
+        }
+        
+        # Feature flags for staged rollout
+        self.FEATURE_FLAGS = {
+            'use_gpt5_summaries': os.getenv('USE_GPT5_SUMMARIES', '1') == '1',
+            'use_gpt5_digest': os.getenv('USE_GPT5_DIGEST', '1') == '1',
+            'use_gpt5_validator': os.getenv('USE_GPT5_VALIDATOR', '1') == '1'
+        }
+        
+        # Legacy compatibility (deprecated - will be removed)
         self.OPENAI_SETTINGS = {
-            # Model configuration - using actual OpenAI model names
-            'digest_model': os.getenv('DIGEST_MODEL', 'gpt-5'),
-            'scoring_model': os.getenv('SCORING_MODEL', 'gpt-5-mini'),  # Cost-effective for scoring
-            'validator_model': os.getenv('VALIDATOR_MODEL', 'gpt-5-mini'),  # Cost-effective for validation
+            # Legacy model names (deprecated - use GPT5_MODELS)
+            'digest_model': self.GPT5_MODELS['digest'],
+            'scoring_model': self.GPT5_MODELS['scorer'], 
+            'validator_model': self.GPT5_MODELS['validator'],
             
-            # Digest generation settings
-            'digest_temperature': 0.7,
-            'digest_presence_penalty': 0.1,
-            'digest_frequency_penalty': 0.2,
-            'digest_max_tokens': 4000,
+            # Legacy settings
+            'timeout_seconds': self.EXECUTION_SETTINGS['timeout_seconds'],
+            'batch_size': 5,
+            'rate_limit_delay': 1,
+            'relevance_threshold': self.QUALITY_THRESHOLDS['relevance_threshold'],
             
-            # Scoring settings
-            'scoring_temperature': 0.1,
-            'scoring_max_tokens': 500,
-            'timeout_seconds': 60,
-            'batch_size': 5,  # Number of episodes to score in one batch
-            'rate_limit_delay': 1,  # Seconds between API calls
-            'relevance_threshold': 0.65,  # Minimum score to include in topic digest (raised from 0.6)
-            
-            # Map-reduce settings for token optimization
-            'max_episodes_per_topic': 6,  # Top-N cap per topic
-            'max_episode_summary_tokens': 450,  # Per-episode summary token limit
-            'max_reduce_tokens': 6000,  # Total tokens for final digest prompt
-            'max_retries': 4,  # Exponential backoff retries
-            'backoff_base_delay': 0.5,  # Starting delay for exponential backoff
+            # Map-reduce settings
+            'max_episodes_per_topic': 6,
+            'max_episode_summary_tokens': 450,
+            'max_reduce_tokens': 6000,
+            'max_retries': self.EXECUTION_SETTINGS['max_retries'],
+            'backoff_base_delay': self.EXECUTION_SETTINGS['backoff_base_delay'],
             
             'topics': {
                 'AI & Intelligence': {
