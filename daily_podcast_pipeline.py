@@ -27,6 +27,7 @@ from content_processor import ContentProcessor
 from openai_digest_integration import OpenAIDigestIntegration
 from retention_cleanup import RetentionCleanup
 from telemetry_manager import telemetry
+from utils.episode_failures import FailureManager, ensure_failures_table_exists
 
 # Configuration
 CONFIG = {
@@ -61,7 +62,7 @@ class DailyPodcastPipeline:
         
     def run_daily_workflow(self):
         """Execute complete daily workflow with weekday logic"""
-        current_weekday = datetime.now().strftime('%A')
+        current_weekday = datetime.utcnow().strftime('%A')
         logger.info(f"🚀 Starting Daily Tech Digest Pipeline - {current_weekday}")
         logger.info("=" * 50)
         
@@ -75,10 +76,17 @@ class DailyPodcastPipeline:
             telemetry.set_pipeline_type('daily')
         
         # Self-healing: Backfill missing topic scores from previous runs
-        import subprocess, sys
-        subprocess.run([sys.executable, "scripts/backfill_missing_scores.py"], check=False)
+        from openai_scorer import run_backfill_scoring
+        run_backfill_scoring()  # Keep an early pass for any leftovers
+        
+        # Ensure failure tracking tables exist
+        ensure_failures_table_exists(CONFIG['DB_PATH'])
+        ensure_failures_table_exists("youtube_transcripts.db")
         
         try:
+            # Step 0: Process retry queue for failed episodes
+            self._process_retry_queue()
+            
             # Step 1: Monitor RSS feeds for new episodes
             self._monitor_rss_feeds()
             
@@ -88,7 +96,13 @@ class DailyPodcastPipeline:
             # Step 3: Process pending episodes
             self._process_pending_episodes()
             
-            # Step 4: Generate digest based on weekday logic
+            # Step 4: CRITICAL - Re-score after new transcripts are created
+            from openai_scorer import score_pending_in_db
+            scored_rss = score_pending_in_db("podcast_monitor.db", source="rss", max_to_score=200)
+            scored_yt = score_pending_in_db("youtube_transcripts.db", source="youtube", max_to_score=200)
+            logger.info(f"Post-transcription scoring complete: RSS={scored_rss}, YT={scored_yt}")
+            
+            # Step 5: Generate digest based on weekday logic
             if current_weekday == 'Friday':
                 logger.info("📅 Friday detected - generating daily + weekly digests")
                 digest_success = self._generate_weekly_digest()
@@ -103,7 +117,7 @@ class DailyPodcastPipeline:
                 # Transactional Publishing: Strict order with hard gates
                 logger.info("🔒 Starting transactional publishing process...")
                 
-                # Step 5: Create TTS audio for today only
+                # Step 6: Create TTS audio for today only
                 today = datetime.utcnow().date().isoformat()
                 mp3_files_created = self._create_tts_audio_today_only(today)
                 
@@ -111,23 +125,23 @@ class DailyPodcastPipeline:
                     logger.info(f"RSS not updated: no new MP3s for {today}")
                     return False  # Exit without marking episodes as digested
                 
-                # Step 6: Deploy to GitHub releases (MUST succeed)
+                # Step 7: Deploy to GitHub releases (MUST succeed)
                 deploy_success = self._deploy_to_github()
                 if not deploy_success:
                     logger.error("❌ Transactional publishing failed: deployment failed")
                     return False  # Exit without marking episodes as digested
                 
-                # Step 7: Update RSS feed (MUST succeed)
+                # Step 8: Update RSS feed (MUST succeed)
                 rss_success = self._update_rss_feed()
                 if not rss_success:
                     logger.error("❌ Transactional publishing failed: RSS update failed")
                     return False  # Exit without marking episodes as digested
                 
-                # Step 8: ONLY NOW mark processed episodes as 'digested'
+                # Step 9: ONLY NOW mark processed episodes as 'digested'
                 self._mark_episodes_digested()
                 logger.info("✅ Transactional publishing completed successfully")
             
-            # Step 9: Cleanup old files and transcripts
+            # Step 10: Cleanup old files and transcripts
             self._cleanup_old_files()
             
             logger.info("✅ Daily workflow completed successfully")
@@ -147,6 +161,36 @@ class DailyPodcastPipeline:
             telemetry.finalize_run(total_time)
             
             return False
+    
+    def _process_retry_queue(self):
+        """Process failed episodes eligible for retry"""
+        logger.info("🔄 Processing retry queue for failed episodes...")
+        
+        retry_results = {'total_processed': 0, 'total_succeeded': 0, 'total_failed': 0}
+        
+        # Process retries for both RSS and YouTube databases
+        for db_name, db_path in [("RSS", CONFIG['DB_PATH']), ("YouTube", "youtube_transcripts.db")]:
+            try:
+                processor = ContentProcessor(db_path=db_path, audio_dir=CONFIG['AUDIO_CACHE_DIR'])
+                results = processor.process_retry_queue(max_retries_per_run=3)
+                
+                if results['processed'] > 0:
+                    logger.info(f"📊 {db_name} retries: {results['succeeded']} succeeded, {results['failed']} failed")
+                    retry_results['total_processed'] += results['processed']
+                    retry_results['total_succeeded'] += results['succeeded']
+                    retry_results['total_failed'] += results['failed']
+                else:
+                    logger.info(f"📊 {db_name}: No episodes eligible for retry")
+                
+                # Record telemetry
+                telemetry.record_metric(f'{db_name.lower()}_retries_processed', results['processed'])
+                telemetry.record_metric(f'{db_name.lower()}_retries_succeeded', results['succeeded'])
+                
+            except Exception as e:
+                logger.error(f"❌ Error processing {db_name} retry queue: {e}")
+        
+        if retry_results['total_processed'] > 0:
+            logger.info(f"🔄 Total retry results: {retry_results['total_succeeded']}/{retry_results['total_processed']} succeeded")
     
     def _monitor_rss_feeds(self):
         """Check RSS feeds for new episodes"""
@@ -420,7 +464,7 @@ class DailyPodcastPipeline:
             return False
         
         # Get episodes from the past 7 days that were already digested
-        seven_days_ago = datetime.now() - timedelta(days=7)
+        seven_days_ago = datetime.utcnow() - timedelta(days=7)
         
         conn = sqlite3.connect(self.db_path)
         cursor = conn.cursor()
@@ -463,7 +507,7 @@ class DailyPodcastPipeline:
         logger.info("📅 Generating MONDAY catch-up digest...")
         
         # Calculate window: Previous Friday 6 AM to now
-        now = datetime.now()
+        now = datetime.utcnow()
         
         # Find last Friday
         days_since_friday = (now.weekday() + 3) % 7  # Monday=0, Friday=4
@@ -763,31 +807,53 @@ class DailyPodcastPipeline:
     
     
     def get_status_summary(self):
-        """Get current system status summary"""
-        conn = sqlite3.connect(self.db_path)
-        cursor = conn.cursor()
+        """Get current system status summary including failure statistics"""
+        status_summary = {}
         
-        # Get episode counts by status
-        cursor.execute("""
-            SELECT status, COUNT(*) as count
-            FROM episodes
-            GROUP BY status
-            ORDER BY count DESC
-        """)
-        
-        status_counts = dict(cursor.fetchall())
+        # Process both RSS and YouTube databases
+        for db_name, db_path in [("RSS", self.db_path), ("YouTube", "youtube_transcripts.db")]:
+            try:
+                conn = sqlite3.connect(db_path)
+                cursor = conn.cursor()
+                
+                # Get episode counts by status
+                cursor.execute("""
+                    SELECT status, COUNT(*) as count
+                    FROM episodes
+                    GROUP BY status
+                    ORDER BY count DESC
+                """)
+                
+                status_counts = dict(cursor.fetchall())
+                
+                # Get failure statistics using FailureManager
+                failure_manager = FailureManager(db_path)
+                failure_stats = failure_manager.get_failure_statistics(days_back=7)
+                
+                # Get retry candidates
+                retry_candidates = failure_manager.get_retry_candidates()
+                
+                conn.close()
+                
+                status_summary[db_name] = {
+                    'status_counts': status_counts,
+                    'total_episodes': sum(status_counts.values()),
+                    'failure_stats': failure_stats,
+                    'retry_candidates': len(retry_candidates)
+                }
+                
+            except Exception as e:
+                status_summary[db_name] = {'error': str(e)}
         
         # Check audio_cache files
         audio_cache = Path(CONFIG['AUDIO_CACHE_DIR'])
         audio_cache_count = len(list(audio_cache.glob("*.mp3"))) if audio_cache.exists() else 0
         
-        conn.close()
-        
-        return {
-            'database_status': status_counts,
-            'audio_cache_files': audio_cache_count,
-            'total_episodes': sum(status_counts.values())
+        status_summary['system'] = {
+            'audio_cache_files': audio_cache_count
         }
+        
+        return status_summary
 
 def main():
     """Main entry point"""
@@ -817,10 +883,33 @@ def main():
     if args.status:
         status = pipeline.get_status_summary()
         print("\n📊 System Status:")
-        print("================")
-        print(f"Database episodes: {status['database_status']}")
-        print(f"Audio cache files: {status['audio_cache_files']}")
-        print(f"Total episodes: {status['total_episodes']}")
+        print("=" * 60)
+        
+        # Show status for each database
+        for db_name in ['RSS', 'YouTube']:
+            if db_name in status:
+                db_status = status[db_name]
+                if 'error' in db_status:
+                    print(f"\n❌ {db_name} Database: {db_status['error']}")
+                    continue
+                    
+                print(f"\n📊 {db_name} Database:")
+                print(f"  Episodes by status: {db_status['status_counts']}")
+                print(f"  Total episodes: {db_status['total_episodes']}")
+                print(f"  Episodes eligible for retry: {db_status['retry_candidates']}")
+                
+                # Show failure statistics if available
+                failure_stats = db_status.get('failure_stats', {})
+                if failure_stats.get('total_failed_episodes', 0) > 0:
+                    print(f"  Failed episodes (last 7 days): {failure_stats['total_failed_episodes']}")
+                    if failure_stats.get('retry_distribution'):
+                        print(f"  Retry attempts distribution: {failure_stats['retry_distribution']}")
+        
+        # Show system information
+        if 'system' in status:
+            print(f"\n🗂️ System:")
+            print(f"  Audio cache files: {status['system']['audio_cache_files']}")
+        
         return
     
     if args.cleanup:

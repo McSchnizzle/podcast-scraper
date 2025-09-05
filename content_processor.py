@@ -16,6 +16,7 @@ from youtube_transcript_api import YouTubeTranscriptApi
 import re
 import hashlib
 from openai_scorer import OpenAITopicScorer
+from utils.episode_failures import FailureManager
 
 # ASR backend detection and imports
 import platform
@@ -79,6 +80,9 @@ class ContentProcessor:
         
         # Initialize OpenAI scorer for topic relevance
         self.openai_scorer = OpenAITopicScorer(db_path)
+        
+        # Initialize failure manager for comprehensive error tracking
+        self.failure_manager = FailureManager(db_path)
         
         # Initialize ASR models based on environment
         self.asr_model = None
@@ -378,8 +382,14 @@ class ContentProcessor:
             
             print(f"Error extracting YouTube transcript: {error_msg}")
             
-            # Log failure reason to database
-            self._log_episode_failure(video_url, f"YouTube: {error_msg}")
+            # Log failure reason to database with appropriate category
+            if "transcript" in error_msg.lower() or "api" in error_msg.lower():
+                category = 'transcription'
+            elif "network" in error_msg.lower() or "connection" in error_msg.lower():
+                category = 'download'
+            else:
+                category = 'general'
+            self._log_episode_failure(video_url, f"YouTube: {error_msg}", category)
             return None
     
     def _process_rss_episode(self, audio_url, episode_id):
@@ -392,7 +402,7 @@ class ContentProcessor:
             # Download audio file
             audio_file = self._download_audio(audio_url, episode_id)
             if not audio_file:
-                self._update_episode_status(ep_id, 'failed', error_reason="Audio download failed")
+                self._log_episode_failure(episode_id, "Audio download failed", 'download')
                 return None
             
             # Update status to 'downloaded' after successful audio download
@@ -411,8 +421,14 @@ class ContentProcessor:
             error_msg = str(e)
             print(f"Error processing RSS audio: {error_msg}")
             
-            # Log failure reason to database
-            self._log_episode_failure(episode_id, f"RSS: {error_msg}")
+            # Log failure reason to database with appropriate category
+            if "download" in error_msg.lower() or "fetch" in error_msg.lower():
+                category = 'download'
+            elif "transcrib" in error_msg.lower():
+                category = 'transcription'
+            else:
+                category = 'general'
+            self._log_episode_failure(episode_id, f"RSS: {error_msg}", category)
             return None
 
     def _update_episode_status(self, episode_id, status, error_reason=None):
@@ -847,36 +863,59 @@ class ContentProcessor:
         except Exception as e:
             print(f"⚠️ Error cleaning up chunks: {e}")
     
-    def _log_episode_failure(self, episode_id, failure_reason):
-        """Log episode failure or skip to database with reason and timestamp"""
+    def _log_episode_failure(self, episode_id, failure_reason, failure_category='general', traceback_info=None):
+        """Log episode failure using the comprehensive failure management system"""
         try:
-            conn = sqlite3.connect(self.db_path)
-            cursor = conn.cursor()
-            
             # Determine if this is a skip or failure
             is_skip = failure_reason.startswith('Skipped:')
-            status = 'skipped' if is_skip else 'failed'
-            new_status = 'failed'
             
-            # Update episode with failure/skip information
-            cursor.execute("""
-                UPDATE episodes 
-                SET status = ?,
-                    status = ?,
-                    failure_reason = ?,
-                    failure_timestamp = datetime('now'),
-                    retry_count = CASE WHEN ? THEN retry_count ELSE retry_count + 1 END
-                WHERE episode_id = ? OR audio_url = ?
-            """, (new_status, status, failure_reason, is_skip, episode_id, episode_id))
-            
-            conn.commit()
-            conn.close()
-            
-            action = "skip" if is_skip else "failure"
-            print(f"📝 Logged {action}: {failure_reason}")
-            
+            if is_skip:
+                # For skips, update status directly without using retry system
+                conn = sqlite3.connect(self.db_path)
+                cursor = conn.cursor()
+                cursor.execute("""
+                    UPDATE episodes 
+                    SET status = 'skipped',
+                        failure_reason = ?,
+                        failure_timestamp = datetime('now')
+                    WHERE episode_id = ? OR audio_url = ?
+                """, (failure_reason, episode_id, episode_id))
+                conn.commit()
+                conn.close()
+                print(f"⏭️ Skipped: {failure_reason}")
+            else:
+                # Use comprehensive failure management for actual failures
+                success = self.failure_manager.log_episode_failure(
+                    episode_id, failure_reason, failure_category, traceback_info
+                )
+                if not success:
+                    print(f"⚠️ Could not log failure to database for {episode_id}")
+                    
         except Exception as log_error:
-            print(f"⚠️ Could not log {action} to database: {log_error}")
+            print(f"⚠️ Error in failure logging: {log_error}")
+    
+    def process_retry_queue(self, max_retries_per_run=5):
+        """Process episodes eligible for retry"""
+        try:
+            from utils.episode_failures import RetryProcessor
+            retry_processor = RetryProcessor(self.db_path)
+            
+            print("🔄 Processing episode retry queue...")
+            results = retry_processor.process_retry_queue(max_retries_per_run)
+            
+            if results['processed'] > 0:
+                print(f"📊 Retry Results: {results['succeeded']} succeeded, {results['failed']} failed out of {results['processed']} processed")
+                
+                # Log detailed results
+                for result in results['retry_results']:
+                    status = "✅" if result['success'] else "❌"
+                    print(f"  {status} {result['episode_id']}: {result['title']} (attempt #{result['retry_attempt']})")
+            
+            return results
+            
+        except Exception as e:
+            print(f"❌ Error processing retry queue: {e}")
+            return {'processed': 0, 'succeeded': 0, 'failed': 0}
     
     def _add_basic_speaker_detection(self, transcript_text, audio_file):
         """Add basic speaker detection based on audio characteristics and transcript analysis"""
