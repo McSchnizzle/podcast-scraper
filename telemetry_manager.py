@@ -11,10 +11,20 @@ import time
 from datetime import datetime, timedelta
 from pathlib import Path
 from utils.datetime_utils import now_utc
-from typing import Dict, List, Optional, Any
+from typing import Dict, List, Optional, Any, Final
 from dataclasses import dataclass, asdict
 
 logger = logging.getLogger(__name__)
+
+# Metric type detection via suffix convention
+SUFFIX_TO_KIND: Final[Dict[str, str]] = {
+    '.count': 'counter',
+    '.ms': 'histogram',
+    '.seconds': 'histogram',
+    '.gauge': 'gauge',
+    '_total': 'counter',
+    '_duration': 'histogram'
+}
 
 @dataclass
 class TopicMetrics:
@@ -183,6 +193,87 @@ class TelemetryManager:
         """Record a warning in the current run"""
         self.current_run.warnings.append(warning_message)
         logger.warning(f"📊 Warning recorded: {warning_message}")
+    
+    def record_metric(self, name: str, value: float = 1.0, **labels) -> None:
+        """
+        Record a generic metric with automatic type detection.
+        
+        Args:
+            name: Metric name (use suffixes: .count, .ms, .gauge for type hints)
+            value: Metric value (default 1.0 for counters)
+            **labels: Additional labels for the metric
+        
+        Examples:
+            record_metric('pipeline.retries.count', 3)
+            record_metric('openai.tokens.count', 500, component='scorer')
+            record_metric('processing.duration.ms', 1500, stage='transcription')
+        """
+        # Detect metric type from suffix
+        metric_kind = 'counter'  # default
+        for suffix, kind in SUFFIX_TO_KIND.items():
+            if name.endswith(suffix):
+                metric_kind = kind
+                break
+        
+        # Add run_id to labels
+        labels['run_id'] = self.current_run_id
+        
+        # Emit structured metric log
+        self._emit_metric(metric_kind, name, value, labels)
+        
+        # Update internal counters for backward compatibility
+        self._update_run_metrics(name, value)
+
+    def _emit_metric(self, kind: str, name: str, value: float, labels: Dict[str, str]) -> None:
+        """Emit structured metric as JSON log entry"""
+        metric_record = {
+            'evt': 'metric',
+            'kind': kind,
+            'name': name,
+            'value': value,
+            'labels': labels,
+            'run_id': self.current_run_id,
+            'ts': now_utc().isoformat()
+        }
+        
+        # Log at DEBUG level to avoid noise, but structured for parsing
+        logger.debug(f"METRIC {json.dumps(metric_record)}")
+        
+    def _update_run_metrics(self, name: str, value: float) -> None:
+        """Update internal run metrics for compatibility"""
+        # Map metric names to run fields
+        if 'retries' in name.lower():
+            if 'processed' in name:
+                self.current_run.total_api_calls += int(value)
+            elif 'succeeded' in name:
+                # Track success rate implicitly
+                pass
+        elif 'tokens' in name.lower():
+            self.current_run.total_tokens_used += int(value)
+        elif 'episodes' in name.lower():
+            if 'transcribed' in name:
+                self.current_run.episodes_transcribed += int(value)
+            elif 'scored' in name:
+                self.current_run.episodes_scored += int(value)
+            elif 'digested' in name:
+                self.current_run.episodes_digested += int(value)
+        elif 'error' in name.lower():
+            self.current_run.errors.append(f"Metric error: {name}={value}")
+
+    def record_counter(self, name: str, value: float = 1.0, labels: Optional[Dict[str, str]] = None) -> None:
+        """Record a counter metric (monotonically increasing)"""
+        self.record_metric(f"{name}.count" if not name.endswith('.count') else name, 
+                          value, **(labels or {}))
+
+    def record_gauge(self, name: str, value: float, labels: Optional[Dict[str, str]] = None) -> None:
+        """Record a gauge metric (can go up or down)"""
+        self.record_metric(f"{name}.gauge" if not name.endswith('.gauge') else name,
+                          value, **(labels or {}))
+
+    def record_histogram(self, name: str, value: float, labels: Optional[Dict[str, str]] = None) -> None:
+        """Record a histogram metric (for distributions like latency)"""
+        self.record_metric(f"{name}.ms" if not name.endswith(('.ms', '.seconds')) else name,
+                          value, **(labels or {}))
     
     def save_map_summary(self, episode_id: str, topic: str, summary_content: str, token_count: int):
         """Save episode map summary for 14-day retention"""

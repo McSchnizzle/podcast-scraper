@@ -411,8 +411,6 @@ class RetryProcessor:
             current_status = candidate['status']
             
             # Import processors here to avoid circular imports
-            import sys
-            sys.path.append('..')
             from content_processor import ContentProcessor
             
             # Initialize processor
@@ -520,12 +518,10 @@ class RetryProcessor:
             episode_id = candidate['episode_id']
             
             # Import scorer here to avoid circular imports
-            import sys
-            sys.path.append('..')
-            from openai_scorer import OpenAIScorer
+            from openai_scorer import OpenAITopicScorer
             
             # Initialize scorer
-            scorer = OpenAIScorer()
+            scorer = OpenAITopicScorer()
             
             # Retry scoring for this episode
             success = scorer.score_pending_in_db(self.db_path, max_episodes=1, target_episode_id=episode_id)

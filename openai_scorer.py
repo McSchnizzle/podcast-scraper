@@ -593,5 +593,16 @@ def main():
         print("Example: python openai_scorer.py --score-all")
 
 
+# Conditional backward compatibility
+import os
+if os.getenv('ALLOW_LEGACY_OPENAI_SCORER_ALIAS', '').lower() == 'true':
+    OpenAIScorer = OpenAITopicScorer
+    OpenAIRelevanceScorer = OpenAITopicScorer
+    __all__ = ["OpenAITopicScorer", "OpenAIScorer", "OpenAIRelevanceScorer", 
+               "score_pending_in_db", "run_backfill_scoring"]
+else:
+    __all__ = ["OpenAITopicScorer", "score_pending_in_db", "run_backfill_scoring"]
+
+
 if __name__ == '__main__':
     main()
