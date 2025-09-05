@@ -21,7 +21,7 @@ import hashlib
 import tempfile
 from urllib.parse import urlparse
 from datetime import datetime, timezone
-
+from utils.datetime_utils import now_utc
 logger = logging.getLogger(__name__)
 
 class SecurityValidator:

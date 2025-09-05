@@ -10,11 +10,13 @@ import subprocess
 import logging
 from pathlib import Path
 from datetime import datetime
+from utils.datetime_utils import now_utc
+from utils.logging_setup import configure_logging
 from typing import Dict, List, Optional, Tuple
 import sqlite3
 import tempfile
 
-logging.basicConfig(level=logging.INFO)
+configure_logging()
 logger = logging.getLogger(__name__)
 
 class ClaudeHeadlessIntegration:
@@ -246,7 +248,7 @@ Preview: {preview}...
             return False, None, None
         
         # Save Claude-generated digest
-        timestamp = datetime.now().strftime('%Y%m%d_%H%M%S')
+        timestamp = now_utc().strftime('%Y%m%d_%H%M%S')
         digest_path = f"claude_daily_digest_{timestamp}.md"
         
         try:

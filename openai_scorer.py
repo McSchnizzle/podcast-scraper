@@ -13,6 +13,7 @@ from datetime import datetime
 from pathlib import Path
 from typing import Dict, List, Optional, Tuple, Any
 import openai
+from utils.datetime_utils import now_utc
 
 # Load environment variables from .env file
 try:
@@ -22,7 +23,8 @@ except ImportError:
     pass
 from openai import OpenAI
 
-logging.basicConfig(level=logging.INFO)
+from utils.logging_setup import configure_logging
+configure_logging()
 logger = logging.getLogger(__name__)
 
 class OpenAITopicScorer:
@@ -93,21 +95,29 @@ Return your analysis as a JSON object with this exact structure:
     def __init__(self, db_path: str = None):
         self.db_path = db_path
         
-        # Initialize OpenAI client
-        api_key = os.getenv('OPENAI_API_KEY')
-        if not api_key:
-            logger.error("OPENAI_API_KEY environment variable not set")
+        # Check for mock mode
+        self.mock_mode = os.getenv('MOCK_OPENAI') == '1' or os.getenv('CI_SMOKE') == '1'
+        
+        if self.mock_mode:
+            logger.info("🧪 MOCK MODE: Using mock OpenAI responses")
             self.client = None
-            self.api_available = False
+            self.api_available = True  # Mock mode is always "available"
         else:
-            try:
-                self.client = OpenAI(api_key=api_key)
-                self.api_available = True
-                logger.info("✅ OpenAI client initialized successfully")
-            except Exception as e:
-                logger.error(f"Failed to initialize OpenAI client: {e}")
+            # Initialize OpenAI client
+            api_key = os.getenv('OPENAI_API_KEY')
+            if not api_key:
+                logger.error("OPENAI_API_KEY environment variable not set")
                 self.client = None
                 self.api_available = False
+            else:
+                try:
+                    self.client = OpenAI(api_key=api_key)
+                    self.api_available = True
+                    logger.info("✅ OpenAI client initialized successfully")
+                except Exception as e:
+                    logger.error(f"Failed to initialize OpenAI client: {e}")
+                    self.client = None
+                    self.api_available = False
     
     def score_transcript(self, transcript_text: str, episode_id: str = None) -> Dict[str, Any]:
         """
@@ -116,6 +126,11 @@ Return your analysis as a JSON object with this exact structure:
         if not self.api_available:
             logger.error("OpenAI API not available")
             return self._create_fallback_scores()
+        
+        # Mock mode - return fixed scores
+        if self.mock_mode:
+            logger.info(f"🧪 MOCK: Returning mock scores for episode {episode_id}")
+            return self._create_mock_scores(transcript_text, episode_id)
         
         try:
             # Process full transcript - no truncation
@@ -181,7 +196,7 @@ Provide scores as requested in the system prompt."""
             scores = json.loads(scores_json)
             
             # Add metadata
-            scores['timestamp'] = datetime.now().isoformat()
+            scores['timestamp'] = now_utc().isoformat()
             scores['model'] = "gpt-5-mini"
             scores['version'] = "1.0"
             scores['episode_id'] = episode_id
@@ -200,19 +215,54 @@ Provide scores as requested in the system prompt."""
     def _create_fallback_scores(self, episode_id: str = None) -> Dict[str, Any]:
         """Create neutral fallback scores when API fails"""
         return {
-            'AI & Intelligence': 0.0,
-            'Tech & Innovation': 0.0,
-            'Social Justice & Organizing': 0.0,
-            'Culture & Future': 0.0,
+            'AI News': 0.0,
+            'Tech Product Releases': 0.0,
+            'Tech News and Tech Culture': 0.0,
+            'Community Organizing': 0.0,
+            'Social Justice': 0.0,
+            'Societal Culture Change': 0.0,
             'moderation_flag': False,
             'moderation_reason': None,
             'confidence': 0.0,
             'reasoning': 'API unavailable - fallback scores assigned',
-            'timestamp': datetime.now().isoformat(),
+            'timestamp': now_utc().isoformat(),
             'model': 'fallback',
             'version': '1.0',
             'episode_id': episode_id,
             'error': True
+        }
+    
+    def _create_mock_scores(self, transcript_text: str, episode_id: str = None) -> Dict[str, Any]:
+        """Create realistic mock scores for CI smoke tests"""
+        # Create deterministic but realistic scores based on text content
+        text_lower = transcript_text.lower()
+        
+        # Simple keyword-based scoring for mock mode
+        scores = {}
+        for topic, config in self.TOPICS.items():
+            # Count keyword matches
+            keywords = config['prompt'].lower().split(', ')
+            matches = sum(1 for keyword in keywords if keyword in text_lower)
+            
+            # Convert to score (0.0-1.0) with some randomness for realism
+            base_score = min(matches / 5.0, 0.9)  # Cap at 0.9
+            # Add small deterministic variation based on episode_id hash
+            if episode_id:
+                variation = (hash(episode_id + topic) % 20) / 100  # 0-0.19
+            else:
+                variation = 0.1
+            
+            scores[topic] = min(base_score + variation, 1.0)
+        
+        return {
+            **scores,
+            'confidence': 0.8,  # High confidence for mock
+            'reasoning': f'Mock scoring based on {len(text_lower)} chars of transcript text',
+            'timestamp': now_utc().isoformat(),
+            'model': 'mock-gpt-5-mini',
+            'version': '1.0',
+            'episode_id': episode_id,
+            'error': False
         }
     
     def score_episodes_in_database(self, db_path: str, status_filter: str = 'transcribed') -> int:

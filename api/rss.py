@@ -8,6 +8,7 @@ Fixed dependencies for proper module loading - debug version
 import os
 import json
 from datetime import datetime, timezone
+from utils.datetime_utils import now_utc
 from xml.etree.ElementTree import Element, SubElement, tostring
 from xml.dom import minidom
 import hashlib
@@ -27,7 +28,7 @@ class PodcastRSSAPI:
             "category": "Technology",
             "artwork_url": f"{self.base_url}/podcast-artwork.jpg",
             "website": f"{self.base_url}/daily-digest",
-            "copyright": f"© {datetime.now().year} Paul Brown"
+            "copyright": f"© {now_utc().year} Paul Brown"
         }
     
     def get_episode_metadata(self):

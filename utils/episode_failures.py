@@ -9,6 +9,7 @@ import time
 import logging
 from datetime import datetime, timedelta
 from typing import List, Dict, Optional, Tuple
+from utils.datetime_utils import now_utc
 from pathlib import Path
 
 # Configuration - removed dependency on config module to avoid conflicts
@@ -157,7 +158,7 @@ class FailureManager:
             cursor = conn.cursor()
             
             retry_candidates = []
-            current_time = datetime.utcnow()
+            current_time = now_utc()
             
             # Get episodes that failed but haven't exceeded max retries
             cursor.execute("""
@@ -275,7 +276,7 @@ class FailureManager:
             conn = sqlite3.connect(self.db_path, timeout=DB_TIMEOUT)
             cursor = conn.cursor()
             
-            cutoff_date = datetime.utcnow() - timedelta(days=days_back)
+            cutoff_date = now_utc() - timedelta(days=days_back)
             
             # Get failure counts by category
             cursor.execute("""
@@ -332,7 +333,7 @@ class FailureManager:
             conn = sqlite3.connect(self.db_path, timeout=DB_TIMEOUT)
             cursor = conn.cursor()
             
-            cutoff_date = datetime.utcnow() - timedelta(days=days_old)
+            cutoff_date = now_utc() - timedelta(days=days_old)
             
             cursor.execute("""
                 DELETE FROM episode_failures 

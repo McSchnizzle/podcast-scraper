@@ -10,6 +10,7 @@ import sqlite3
 import re
 from datetime import datetime, timezone
 from xml.etree.ElementTree import Element, SubElement, tostring
+from utils.datetime_utils import now_utc
 from xml.dom import minidom
 import hashlib
 from pathlib import Path
@@ -80,7 +81,7 @@ class MultiTopicRSSGenerator:
             "subcategory": "News",
             "artwork_url": f"{base_url}/podcast-artwork.jpg",
             "website": f"{base_url}/daily-digest",
-            "copyright": f"© {datetime.now().year} Paul Brown"
+            "copyright": f"© {now_utc().year} Paul Brown"
         }
     
     def find_digest_files(self, days=7) -> List[Dict]:
@@ -109,7 +110,7 @@ class MultiTopicRSSGenerator:
     
     def _process_deployment_metadata(self, metadata: Dict, days: int) -> List[Dict]:
         """Process deployment metadata into digest files format"""
-        cutoff_date = datetime.now()
+        cutoff_date = now_utc()
         cutoff_date = cutoff_date.replace(hour=0, minute=0, second=0, microsecond=0)
         cutoff_timestamp = cutoff_date.timestamp() - (days * 24 * 3600)
         
@@ -150,7 +151,7 @@ class MultiTopicRSSGenerator:
         if not digest_dir.exists():
             return []
         
-        cutoff_date = datetime.now()
+        cutoff_date = now_utc()
         cutoff_date = cutoff_date.replace(hour=0, minute=0, second=0, microsecond=0)
         cutoff_timestamp = cutoff_date.timestamp() - (days * 24 * 3600)
         
@@ -538,7 +539,7 @@ def main():
     """Generate RSS feed for multi-topic digests"""
     # Set up quiet logging for external libraries
     try:
-        from logging_setup import set_all_quiet
+        from utils.logging_setup import set_all_quiet
         set_all_quiet()
     except ImportError:
         pass

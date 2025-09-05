@@ -2,13 +2,15 @@
 """
 Configuration Validation Script
 Ensures all config environments have consistent OPENAI_SETTINGS structure
+Supports severity levels (critical vs optional) and warn-only mode for CI smoke tests
 """
 
 import os
 import sys
 import json
+import argparse
 from pathlib import Path
-from typing import Dict, List, Set, Any
+from typing import Dict, List, Set, Any, Optional
 
 def load_config_class(config_name: str):
     """Load a specific config class"""
@@ -146,17 +148,220 @@ def validate_config_consistency():
     
     return all_passed
 
+
+def redact_secret(value: str) -> str:
+    """
+    Redact secrets for logging - show only length or last 4 chars.
+    
+    Args:
+        value: Secret value to redact
+    
+    Returns:
+        str: Redacted representation
+    """
+    if not value:
+        return "EMPTY"
+    if len(value) <= 4:
+        return f"***({len(value)} chars)"
+    return f"***{value[-4:]} ({len(value)} chars)"
+
+
+def validate_critical_config(warn_only: bool = False) -> bool:
+    """
+    Validate critical configuration that must be present for system operation.
+    
+    Args:
+        warn_only: If True, warnings instead of errors for missing criticals
+    
+    Returns:
+        bool: True if all critical checks pass or warn_only=True
+    """
+    print("🔍 Critical Configuration Validation")
+    print("-" * 40)
+    
+    critical_issues = 0
+    
+    # Critical environment variables
+    critical_env_vars = [
+        "OPENAI_API_KEY",
+        "ANTHROPIC_API_KEY",
+    ]
+    
+    for env_var in critical_env_vars:
+        value = os.getenv(env_var)
+        if not value:
+            msg = f"❌ CRITICAL: {env_var} is missing or empty"
+            if warn_only:
+                print(f"⚠️  WARN: {env_var} is missing (smoke mode)")
+            else:
+                print(msg)
+                critical_issues += 1
+        else:
+            print(f"✅ {env_var}: {redact_secret(value)}")
+    
+    # Critical directories (must be writable)
+    critical_dirs = [
+        "daily_digests",
+        "transcripts",
+        "audio_cache"
+    ]
+    
+    for dir_path in critical_dirs:
+        path_obj = Path(dir_path)
+        try:
+            path_obj.mkdir(exist_ok=True)
+            if not os.access(path_obj, os.W_OK):
+                msg = f"❌ CRITICAL: {dir_path}/ is not writable"
+                if warn_only:
+                    print(f"⚠️  WARN: {dir_path}/ may not be writable (smoke mode)")
+                else:
+                    print(msg)
+                    critical_issues += 1
+            else:
+                print(f"✅ {dir_path}/: writable")
+        except Exception as e:
+            msg = f"❌ CRITICAL: Cannot create {dir_path}/: {e}"
+            if warn_only:
+                print(f"⚠️  WARN: Cannot verify {dir_path}/ (smoke mode)")
+            else:
+                print(msg)
+                critical_issues += 1
+    
+    # Database files (must be accessible if they exist)
+    db_files = ["podcast_monitor.db", "youtube_transcripts.db"]
+    for db_file in db_files:
+        if Path(db_file).exists():
+            try:
+                import sqlite3
+                conn = sqlite3.connect(db_file)
+                conn.execute("SELECT 1")
+                conn.close()
+                print(f"✅ {db_file}: accessible")
+            except Exception as e:
+                msg = f"❌ CRITICAL: Cannot access {db_file}: {e}"
+                if warn_only:
+                    print(f"⚠️  WARN: Cannot verify {db_file} (smoke mode)")
+                else:
+                    print(msg)
+                    critical_issues += 1
+        else:
+            print(f"ℹ️  {db_file}: not present (will be created)")
+    
+    success = critical_issues == 0
+    if warn_only:
+        print("ℹ️  Critical validation completed in WARN-ONLY mode")
+        return True  # Always pass in warn-only mode
+    
+    return success
+
+
+def validate_optional_config() -> bool:
+    """
+    Validate optional configuration - warns but doesn't fail validation.
+    
+    Returns:
+        bool: Always True (warnings only)
+    """
+    print("\n🔧 Optional Configuration Validation")
+    print("-" * 40)
+    
+    # Optional environment variables
+    optional_env_vars = [
+        ("ELEVENLABS_API_KEY", "TTS audio generation"),
+        ("GITHUB_TOKEN", "GitHub releases deployment"),
+        ("FEED_LOOKBACK_HOURS", "RSS feed lookback window"),
+        ("PODCAST_BASE_URL", "Podcast RSS feed base URL"),
+        ("AUDIO_BASE_URL", "Audio file base URL")
+    ]
+    
+    for env_var, description in optional_env_vars:
+        value = os.getenv(env_var)
+        if not value:
+            print(f"⚠️  OPTIONAL: {env_var} missing - {description} disabled")
+        else:
+            if "KEY" in env_var or "TOKEN" in env_var:
+                print(f"✅ {env_var}: {redact_secret(value)} - {description} enabled")
+            else:
+                print(f"✅ {env_var}: {value} - {description} configured")
+    
+    # Optional config validation
+    try:
+        from config import Config
+        config = Config()
+        
+        # Check for voice/music configuration
+        if hasattr(config, 'VOICE_CONFIG'):
+            print("✅ Voice configuration: present")
+        else:
+            print("⚠️  OPTIONAL: Voice configuration missing")
+            
+        if hasattr(config, 'MUSIC_CONFIG'):
+            print("✅ Music configuration: present") 
+        else:
+            print("⚠️  OPTIONAL: Music configuration missing")
+            
+    except Exception as e:
+        print(f"⚠️  OPTIONAL: Could not load main config: {e}")
+    
+    return True  # Optional checks never fail validation
+
+
+def validate_all_config(warn_only: bool = False) -> bool:
+    """
+    Run all configuration validations.
+    
+    Args:
+        warn_only: If True, critical issues become warnings
+    
+    Returns:
+        bool: True if validation passes
+    """
+    print("🔍 Complete Configuration Validation")
+    print("=" * 50)
+    
+    # Run critical validation
+    critical_ok = validate_critical_config(warn_only=warn_only)
+    
+    # Run optional validation (always passes)
+    validate_optional_config()
+    
+    # Run existing OPENAI_SETTINGS validation
+    openai_ok = validate_config_consistency()
+    
+    overall_success = critical_ok and openai_ok
+    
+    print(f"\n🎯 Overall Validation Result: {'✅ PASSED' if overall_success else '❌ FAILED'}")
+    if warn_only and not overall_success:
+        print("ℹ️  Some issues found but running in WARN-ONLY mode")
+        return True
+    
+    return overall_success
+
+
 def main():
-    """Main validation function"""
-    success = validate_config_consistency()
+    """Main validation function with command line argument support"""
+    parser = argparse.ArgumentParser(description="Configuration validation for podcast scraper")
+    parser.add_argument("--all", action="store_true", 
+                       help="Run all validations (critical + optional + OpenAI settings)")
+    parser.add_argument("--warn-only", action="store_true",
+                       help="Convert critical errors to warnings (for CI smoke tests)")
+    
+    args = parser.parse_args()
+    
+    if args.all:
+        success = validate_all_config(warn_only=args.warn_only)
+    else:
+        # Legacy behavior - just OpenAI settings validation
+        success = validate_config_consistency()
     
     if not success:
-        print("\n⚠️  Configuration validation failed!")
-        print("💡 Recommendation: Update production config to match main config structure")
-        sys.exit(1)
-    else:
-        print("\n✅ All configuration validations passed!")
-        sys.exit(0)
+        if not args.warn_only:
+            print("\n⚠️  Configuration validation failed!")
+            print("💡 Recommendation: Fix critical configuration issues")
+            sys.exit(1)
+    
+    print("\n✅ Configuration validation completed!")
+    sys.exit(0)
 
 if __name__ == "__main__":
     main()

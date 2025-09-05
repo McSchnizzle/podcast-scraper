@@ -19,6 +19,8 @@ import hashlib
 import tempfile
 import xml.etree.ElementTree as ET
 from datetime import datetime, timezone, timedelta
+from utils.datetime_utils import now_utc
+from utils.logging_setup import configure_logging
 from pathlib import Path
 from typing import Dict, List, Optional, Tuple
 import logging
@@ -34,7 +36,7 @@ from rss_generator_production import ProductionRSSGenerator
 from utils.sanitization import sanitize_filename, sanitize_xml_content
 from telemetry_manager import TelemetryManager
 
-logging.basicConfig(level=logging.INFO)
+configure_logging()
 logger = logging.getLogger(__name__)
 
 class ProductionHardeningTests:
@@ -89,7 +91,7 @@ class ProductionHardeningTests:
         If it's run-time (not the recorded/published time), re-runs on the same day 
         could produce different GUIDs.
         
-        Answer: The timestamp comes from digest generation time (datetime.now()), 
+        Answer: The timestamp comes from digest generation time (now_utc()), 
         not episode publication time. This means same logical episode content 
         could get different GUIDs on re-runs.
         """
@@ -138,7 +140,7 @@ class ProductionHardeningTests:
         
         # Test weekday detection across time zones
         utc_now = datetime.now(timezone.utc)
-        local_now = datetime.now()
+        local_now = now_utc()
         
         # Test DST boundary (spring forward example)
         dst_boundary = datetime(2025, 3, 9, 7, 0, 0)  # 2AM -> 3AM DST transition
@@ -165,7 +167,7 @@ class ProductionHardeningTests:
             'recommendation': 'Standardize all date/time operations to UTC',
             'evidence': {
                 'rss_uses_utc': '+0000' in rss_date_format,
-                'pipeline_uses_local': 'datetime.now() without timezone in daily_podcast_pipeline.py'
+                'pipeline_uses_local': 'now_utc() without timezone in daily_podcast_pipeline.py'
             }
         }
     
@@ -690,7 +692,7 @@ class ProductionHardeningTests:
         """Analyze where timestamps come from in the system"""
         
         timestamp_sources = {
-            'digest_generation': 'datetime.now().strftime() in openai_digest_integration.py:545',
+            'digest_generation': 'now_utc().strftime() in openai_digest_integration.py:545',
             'rss_generation': 'File modification time and content-based',
             'guid_generation': 'Uses digest timestamp parameter',
             'issue': 'Runtime timestamps cause GUID instability for same content'
@@ -703,7 +705,7 @@ class ProductionHardeningTests:
         
         return {
             'rss_dates': 'Uses UTC with timezone.utc',
-            'weekday_logic': 'Uses local time datetime.now()',
+            'weekday_logic': 'Uses local time now_utc()',
             'file_timestamps': 'Uses local time for digest generation',
             'inconsistency': 'Mixed UTC/local time usage'
         }
@@ -894,7 +896,7 @@ def main():
     report = tester.run_all_tests()
     
     # Save detailed report
-    timestamp = datetime.now().strftime('%Y%m%d_%H%M%S')
+    timestamp = now_utc().strftime('%Y%m%d_%H%M%S')
     report_file = Path(__file__).parent / "evidence" / f"production_hardening_{timestamp}.json"
     report_file.parent.mkdir(exist_ok=True)
     

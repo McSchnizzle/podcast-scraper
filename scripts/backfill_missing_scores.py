@@ -9,6 +9,7 @@ import logging
 import sqlite3
 import sys
 from pathlib import Path
+from utils.logging_setup import configure_logging
 
 # Add parent directory to path to import modules
 sys.path.insert(0, str(Path(__file__).parent.parent))
@@ -16,7 +17,7 @@ sys.path.insert(0, str(Path(__file__).parent.parent))
 # Import the topic scorer
 from openai_scorer import OpenAITopicScorer
 
-logging.basicConfig(level=logging.INFO)
+configure_logging()
 logger = logging.getLogger(__name__)
 
 def main():

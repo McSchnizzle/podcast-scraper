@@ -10,6 +10,7 @@ import logging
 import time
 from datetime import datetime, timedelta
 from pathlib import Path
+from utils.datetime_utils import now_utc
 from typing import Dict, List, Optional, Any
 from dataclasses import dataclass, asdict
 
@@ -69,7 +70,7 @@ class TelemetryManager:
         # Initialize current run metrics
         self.current_run = RunMetrics(
             run_id=self.current_run_id,
-            timestamp=datetime.now().isoformat(),
+            timestamp=now_utc().isoformat(),
             pipeline_type="daily",  # Will be updated
             total_processing_time=0.0,
             topics_processed=[],
@@ -89,7 +90,7 @@ class TelemetryManager:
     
     def _generate_run_id(self) -> str:
         """Generate unique run identifier"""
-        return f"run_{datetime.now().strftime('%Y%m%d_%H%M%S')}"
+        return f"run_{now_utc().strftime('%Y%m%d_%H%M%S')}"
     
     def set_pipeline_type(self, pipeline_type: str):
         """Set the type of pipeline run (daily/weekly/catchup)"""
@@ -188,14 +189,14 @@ class TelemetryManager:
         summary_data = {
             'episode_id': episode_id,
             'topic': topic,
-            'timestamp': datetime.now().isoformat(),
+            'timestamp': now_utc().isoformat(),
             'summary': summary_content,
             'token_count': token_count,
             'run_id': self.current_run_id
         }
         
         # Save with timestamp for retention management
-        timestamp = datetime.now().strftime('%Y%m%d_%H%M%S')
+        timestamp = now_utc().strftime('%Y%m%d_%H%M%S')
         summary_file = self.map_summaries_dir / f"{episode_id}_{topic}_{timestamp}.json"
         
         try:
@@ -261,7 +262,7 @@ class TelemetryManager:
     
     def _cleanup_old_telemetry(self):
         """Clean up old telemetry files and map summaries"""
-        cutoff_date = datetime.now() - timedelta(days=self.retention_days)
+        cutoff_date = now_utc() - timedelta(days=self.retention_days)
         
         # Clean up main telemetry files
         removed_count = 0
@@ -298,7 +299,7 @@ class TelemetryManager:
     
     def get_recent_runs(self, days: int = 7) -> List[Dict]:
         """Get telemetry data for recent runs"""
-        cutoff_date = datetime.now() - timedelta(days=days)
+        cutoff_date = now_utc() - timedelta(days=days)
         recent_runs = []
         
         for telemetry_file in self.telemetry_dir.glob("run_*.json"):

@@ -10,6 +10,7 @@ import sqlite3
 import json
 import requests
 from datetime import datetime, timedelta, UTC
+from utils.datetime_utils import now_utc
 from urllib.parse import urlparse
 from youtube_transcript_api import YouTubeTranscriptApi
 import re

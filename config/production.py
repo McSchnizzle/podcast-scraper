@@ -15,6 +15,7 @@ import re
 import hashlib
 from dataclasses import dataclass
 from datetime import datetime, timezone, timedelta
+from utils.datetime_utils import now_utc
 from typing import Dict, Optional, Any, List
 
 

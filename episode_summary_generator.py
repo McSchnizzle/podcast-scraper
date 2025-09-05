@@ -14,6 +14,7 @@ from pathlib import Path
 from typing import Optional, Dict, List
 from datetime import datetime
 import logging
+from utils.datetime_utils import now_utc
 
 # Load environment variables from .env file
 try:
@@ -24,7 +25,8 @@ except ImportError:
 
 from config import config
 
-logging.basicConfig(level=logging.INFO)
+from utils.logging_setup import configure_logging
+configure_logging()
 logger = logging.getLogger(__name__)
 
 def approx_tokens(text: str) -> int:
@@ -38,23 +40,31 @@ class EpisodeSummaryGenerator:
         self.client = None
         self.api_available = False
         
-        # Initialize OpenAI client
-        api_key = os.getenv('OPENAI_API_KEY')
-        if not api_key:
-            logger.error("OPENAI_API_KEY environment variable not set")
+        # Check for mock mode
+        self.mock_mode = os.getenv('MOCK_OPENAI') == '1' or os.getenv('CI_SMOKE') == '1'
+        
+        if self.mock_mode:
+            logger.info("🧪 MOCK MODE: Using mock OpenAI responses for summaries")
             self.client = None
-            self.api_available = False
+            self.api_available = True  # Mock mode is always "available"
         else:
-            try:
-                # Initialize OpenAI client (v1.0+ format)
-                from openai import OpenAI
-                self.client = OpenAI(api_key=api_key.strip())
-                self.api_available = True
-                logger.info(f"✅ Episode Summary Generator initialized with {config.OPENAI_SETTINGS['scoring_model']}")
-            except Exception as e:
-                logger.error(f"Failed to initialize OpenAI client: {e}")
+            # Initialize OpenAI client
+            api_key = os.getenv('OPENAI_API_KEY')
+            if not api_key:
+                logger.error("OPENAI_API_KEY environment variable not set")
                 self.client = None
                 self.api_available = False
+            else:
+                try:
+                    # Initialize OpenAI client (v1.0+ format)
+                    from openai import OpenAI
+                    self.client = OpenAI(api_key=api_key.strip())
+                    self.api_available = True
+                    logger.info(f"✅ Episode Summary Generator initialized with {config.OPENAI_SETTINGS['scoring_model']}")
+                except Exception as e:
+                    logger.error(f"Failed to initialize OpenAI client: {e}")
+                    self.client = None
+                    self.api_available = False
         
         # Defensive fallback for OPENAI_SETTINGS with defaults
         DEFAULTS = {
@@ -174,6 +184,11 @@ class EpisodeSummaryGenerator:
             logger.info("🔄 OpenAI API not available, using enhanced fallback description")
             return self._generate_fallback_summary(content, topic, fallback_desc)
         
+        # Mock mode - return deterministic summary
+        if self.mock_mode:
+            logger.info(f"🧪 MOCK: Generating mock summary for {topic}")
+            return self._generate_mock_summary(content, topic, fallback_desc)
+        
         try:
             # Clean content for API consumption
             clean_content = self._clean_content_for_summary(content)
@@ -251,12 +266,60 @@ class EpisodeSummaryGenerator:
             
             # Final fallback
             topic_display = topic.replace('_', ' ').title()
-            date_str = datetime.now().strftime('%B %d, %Y')
+            date_str = now_utc().strftime('%B %d, %Y')
             return f"{topic_display} digest covering the latest developments and insights from {date_str}."
             
         except Exception as e:
             logger.warning(f"Fallback summary generation failed: {e}")
             return fallback_desc or f"Daily digest episode covering {topic.replace('_', ' ')}"
+    
+    def _generate_mock_summary(self, content: str, topic: str, fallback_desc: str = None) -> str:
+        """Generate realistic mock summary for CI smoke tests"""
+        topic_display = topic.replace('_', ' ').title()
+        
+        # Create topic-specific templates
+        templates = {
+            'ai_news': [
+                f"Latest {topic_display} updates covering AI developments and breakthroughs.",
+                f"This {topic_display} episode explores recent AI research and industry innovations.",
+                f"AI technology advances and their implications are discussed in this {topic_display} digest."
+            ],
+            'tech_product_releases': [
+                f"New technology products and launches are highlighted in this {topic_display} episode.",
+                f"Latest product releases and tech hardware updates covered in {topic_display}.",
+                f"This {topic_display} digest reviews recent gadget launches and software updates."
+            ],
+            'tech_news_and_tech_culture': [
+                f"Technology industry developments and cultural trends in this {topic_display} episode.",
+                f"Tech company news and digital culture insights from {topic_display}.",
+                f"This {topic_display} digest covers tech industry analysis and cultural implications."
+            ],
+            'community_organizing': [
+                f"Community activism and organizing strategies discussed in {topic_display}.",
+                f"Grassroots organizing efforts and civic engagement covered in this {topic_display} episode.",
+                f"Local organizing initiatives and community building insights from {topic_display}."
+            ],
+            'social_justice': [
+                f"Social justice movements and advocacy work highlighted in {topic_display}.",
+                f"Civil rights developments and social equality issues in this {topic_display} episode.",
+                f"This {topic_display} digest covers social justice initiatives and policy changes."
+            ],
+            'societal_culture_change': [
+                f"Cultural shifts and societal transformation explored in {topic_display}.",
+                f"Social change movements and cultural evolution discussed in this {topic_display} episode.",
+                f"This {topic_display} digest examines societal trends and cultural developments."
+            ]
+        }
+        
+        # Select template based on topic
+        topic_key = topic.lower().replace(' ', '_')
+        if topic_key in templates:
+            # Use content hash to consistently select same template
+            template_index = hash(content[:100]) % len(templates[topic_key])
+            return templates[topic_key][template_index]
+        
+        # Generic fallback
+        return f"This {topic_display} episode covers recent developments with insights and analysis."
     
     def get_summary_stats(self) -> Dict:
         """Get statistics about cached summaries"""

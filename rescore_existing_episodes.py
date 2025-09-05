@@ -8,11 +8,12 @@ import logging
 import sqlite3
 import sys
 from pathlib import Path
+from utils.logging_setup import configure_logging
 
 # Import the topic scorer
 from openai_scorer import OpenAITopicScorer
 
-logging.basicConfig(level=logging.INFO)
+configure_logging()
 logger = logging.getLogger(__name__)
 
 def rescore_database_episodes(db_path: str, scorer: OpenAITopicScorer) -> int:

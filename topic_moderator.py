@@ -9,12 +9,14 @@ import json
 import sqlite3
 import logging
 from datetime import datetime, timedelta
+from utils.datetime_utils import now_utc
+from utils.logging_setup import configure_logging
 from pathlib import Path
 from typing import Dict, List, Optional, Tuple, Any
 from openai_scorer import OpenAITopicScorer
 import argparse
 
-logging.basicConfig(level=logging.INFO)
+configure_logging()
 logger = logging.getLogger(__name__)
 
 class TopicModerator:
@@ -35,7 +37,7 @@ class TopicModerator:
         """
         Get episodes that are ready for digest (transcribed but not digested)
         """
-        cutoff_date = datetime.now() - timedelta(days=days_back)
+        cutoff_date = now_utc() - timedelta(days=days_back)
         all_episodes = {'RSS': [], 'YouTube': []}
         
         for db_type, db_path in self.databases.items():

@@ -11,6 +11,7 @@ import json
 import re
 from datetime import datetime
 from pathlib import Path
+from utils.datetime_utils import now_utc
 from typing import List, Dict, Tuple, Optional
 from utils.sanitization import create_topic_pattern, create_topic_mp3_filename
 
@@ -85,7 +86,7 @@ class MultiTopicDeployer:
     def _save_deployment_metadata(self, digests: List[Dict], release_tag: str):
         """Save deployment metadata for RSS generator consumption"""
         metadata = {
-            'deployment_timestamp': datetime.now().isoformat(),
+            'deployment_timestamp': now_utc().isoformat(),
             'release_tag': release_tag,
             'github_release_url': f"https://github.com/McSchnizzle/podcast-scraper/releases/tag/{release_tag}",
             'episodes': []
@@ -192,7 +193,7 @@ class MultiTopicDeployer:
     def _generate_release_info(self, digests: List[Dict]) -> Tuple[str, str, str]:
         """Generate release tag, title, and description from digest list"""
         if not digests:
-            today = datetime.now()
+            today = now_utc()
             return (
                 f"daily-{today.strftime('%Y-%m-%d')}",
                 f"Daily Digest - {today.strftime('%B %d, %Y')}",
@@ -337,7 +338,7 @@ AI-generated digest from leading podcasts and creators, organized by topic for f
         """Force redeployment of recent episodes (for testing)"""
         print(f"🔄 Force redeploying episodes from last {days} day(s)...")
         
-        cutoff_date = datetime.now().timestamp() - (days * 24 * 3600)
+        cutoff_date = now_utc().timestamp() - (days * 24 * 3600)
         
         # Clear deployed status for recent episodes
         keys_to_remove = []

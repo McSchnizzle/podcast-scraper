@@ -9,11 +9,13 @@ import sqlite3
 import sys
 from pathlib import Path
 from datetime import datetime
+from utils.datetime_utils import now_utc
+from utils.logging_setup import configure_logging
 import logging
 from config import Config
 
 # Setup logging
-logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
+configure_logging()
 logger = logging.getLogger(__name__)
 
 class DatabaseBootstrap:
@@ -87,7 +89,7 @@ class DatabaseBootstrap:
             cursor.execute('''
                 INSERT OR REPLACE INTO database_metadata (key, value) 
                 VALUES ('schema_version', '1.0'), ('database_type', 'rss'), ('bootstrapped_at', ?)
-            ''', (datetime.now().isoformat(),))
+            ''', (now_utc().isoformat(),))
             
             conn.commit()
             
@@ -171,7 +173,7 @@ class DatabaseBootstrap:
             cursor.execute('''
                 INSERT OR REPLACE INTO database_metadata (key, value) 
                 VALUES ('schema_version', '1.0'), ('database_type', 'youtube'), ('bootstrapped_at', ?)
-            ''', (datetime.now().isoformat(),))
+            ''', (now_utc().isoformat(),))
             
             conn.commit()
             

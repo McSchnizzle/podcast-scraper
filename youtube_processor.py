@@ -11,11 +11,13 @@ import argparse
 import logging
 from pathlib import Path
 from datetime import datetime, timedelta
+from utils.datetime_utils import now_utc
+from utils.logging_setup import configure_logging
 from typing import List, Dict
 from config import Config
 from content_processor import ContentProcessor
 
-logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
+configure_logging()
 logger = logging.getLogger(__name__)
 
 class YouTubeProcessor:
@@ -222,7 +224,7 @@ class YouTubeProcessor:
         conn = sqlite3.connect(self.youtube_db_path)
         cursor = conn.cursor()
         
-        cutoff_date = datetime.now() - timedelta(days=days_old)
+        cutoff_date = now_utc() - timedelta(days=days_old)
         
         cursor.execute('''
             DELETE FROM episodes 

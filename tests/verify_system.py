@@ -13,6 +13,8 @@ import subprocess
 import shutil
 from pathlib import Path
 from datetime import datetime, timedelta
+from utils.datetime_utils import now_utc
+from utils.logging_setup import configure_logging
 import logging
 
 # Add parent directory to path
@@ -25,7 +27,7 @@ from rss_generator_multi_topic import MultiTopicRSSGenerator
 from deploy_multi_topic import MultiTopicDeployer
 from telemetry_manager import telemetry
 
-logging.basicConfig(level=logging.INFO)
+configure_logging()
 logger = logging.getLogger(__name__)
 
 class SystemVerificationSuite:
@@ -677,7 +679,7 @@ class SystemVerificationSuite:
         
         # Create comprehensive evidence report
         evidence_report = {
-            'verification_timestamp': datetime.now().isoformat(),
+            'verification_timestamp': now_utc().isoformat(),
             'system_overview': {
                 'project_root': str(Path.cwd()),
                 'verification_suite': 'SystemVerificationSuite',
@@ -691,7 +693,7 @@ class SystemVerificationSuite:
         }
         
         # Save evidence bundle
-        bundle_file = self.evidence_dir / f"evidence_bundle_{datetime.now().strftime('%Y%m%d_%H%M%S')}.json"
+        bundle_file = self.evidence_dir / f"evidence_bundle_{now_utc().strftime('%Y%m%d_%H%M%S')}.json"
         with open(bundle_file, 'w') as f:
             json.dump(evidence_report, f, indent=2)
         
@@ -743,7 +745,7 @@ class SystemVerificationSuite:
             digest_dir = Path("daily_digests")
             if digest_dir.exists():
                 recent_digests = len([f for f in digest_dir.glob("*.md") 
-                                    if (datetime.now() - datetime.fromtimestamp(f.stat().st_mtime)).days < 7])
+                                    if (now_utc() - datetime.fromtimestamp(f.stat().st_mtime)).days < 7])
                 status['recent_digests'] = recent_digests
             
             return status

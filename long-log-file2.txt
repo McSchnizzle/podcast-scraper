@@ -1,0 +1,401 @@
+paulbrown@Pauls-MacBook-Air-2 podcast-scraper % python3 daily_podcast_pipeline.py --run
+✅ Parakeet MLX available - using Apple Silicon optimized ASR
+🍎 Using Parakeet MLX (Apple Silicon optimized)
+INFO:telemetry_manager:📊 Telemetry initialized - Run ID: run_20250905_054805
+INFO:__main__:🔧 Validating configuration and environment...
+INFO:openai_scorer:✅ OpenAI client initialized successfully
+Initializing Parakeet MLX models for Apple Silicon...
+Loading ASR model: mlx-community/parakeet-tdt-0.6b-v2
+✅ Parakeet MLX ASR model loaded successfully
+🍎 Using Apple Silicon Metal Performance Shaders acceleration
+INFO:prose_validator:✅ Prose validator OpenAI client initialized
+INFO:episode_summary_generator:✅ Episode Summary Generator initialized with gpt-5-mini
+INFO:episode_summary_generator:📚 Summary cache database initialized: episode_summaries.db
+INFO:openai_digest_integration:✅ OpenAI API client initialized (key length: 164)
+/Users/paulbrown/Desktop/podcast-scraper/daily_podcast_pipeline.py:65: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+  current_weekday = datetime.utcnow().strftime('%A')
+INFO:__main__:🚀 Starting Daily Tech Digest Pipeline - Friday
+INFO:__main__:==================================================
+INFO:telemetry_manager:📊 Pipeline type: weekly
+INFO:openai_scorer:✅ OpenAI client initialized successfully
+INFO:openai_scorer:Backfill scoring complete: RSS=0, YouTube=0
+INFO:utils.episode_failures.FailureManager:✅ Created episode_failures table with indexes
+INFO:utils.episode_failures.FailureManager:✅ Created episode_failures table with indexes
+INFO:__main__:🔄 Processing retry queue for failed episodes...
+INFO:openai_scorer:✅ OpenAI client initialized successfully
+Initializing Parakeet MLX models for Apple Silicon...
+Loading ASR model: mlx-community/parakeet-tdt-0.6b-v2
+✅ Parakeet MLX ASR model loaded successfully
+🍎 Using Apple Silicon Metal Performance Shaders acceleration
+🔄 Processing episode retry queue...
+INFO:utils.episode_failures.FailureManager:🔄 Found 1 episodes eligible for retry
+INFO:utils.episode_failures.RetryProcessor:🔄 Retrying 5836c7ba: Why are online puzzle games having a moment?
+INFO:openai_scorer:✅ OpenAI client initialized successfully
+Initializing Parakeet MLX models for Apple Silicon...
+Loading ASR model: mlx-community/parakeet-tdt-0.6b-v2
+✅ Parakeet MLX ASR model loaded successfully
+🍎 Using Apple Silicon Metal Performance Shaders acceleration
+INFO:utils.episode_failures.FailureManager:📝 Episode 5836c7ba permanently failed: [scoring] Scoring retry failed: cannot import name 'OpenAIScorer' from 'openai_scorer' (/Users/paulbrown/Desktop/podcast-scraper/openai_scorer.py)
+📊 Retry Results: 0 succeeded, 1 failed out of 1 processed
+  ❌ 5836c7ba: Why are online puzzle games having a moment? (attempt #4)
+INFO:__main__:📊 RSS retries: 0 succeeded, 1 failed
+ERROR:__main__:❌ Error processing RSS retry queue: 'TelemetryManager' object has no attribute 'record_metric'
+INFO:openai_scorer:✅ OpenAI client initialized successfully
+Initializing Parakeet MLX models for Apple Silicon...
+Loading ASR model: mlx-community/parakeet-tdt-0.6b-v2
+✅ Parakeet MLX ASR model loaded successfully
+🍎 Using Apple Silicon Metal Performance Shaders acceleration
+🔄 Processing episode retry queue...
+INFO:utils.episode_failures.FailureManager:🔄 Found 0 episodes eligible for retry
+INFO:utils.episode_failures.RetryProcessor:🔄 No episodes eligible for retry
+INFO:__main__:📊 YouTube: No episodes eligible for retry
+ERROR:__main__:❌ Error processing YouTube retry queue: 'TelemetryManager' object has no attribute 'record_metric'
+INFO:__main__:🔄 Total retry results: 0/1 succeeded
+INFO:__main__:📡 Checking RSS feeds for new episodes...
+🕐 Looking for episodes newer than 2025-09-02T08:48:07.209754+00:00Z UTC (72h lookback)
+Checking The Vergecast...
+  📄 Processing 50/910 entries (limit: 50)
+Error checking feed The Vergecast: can't compare offset-naive and offset-aware datetimes
+Checking Wes Roth...
+  📄 Processing 15/15 entries (limit: 50)
+Error checking feed Wes Roth: can't compare offset-naive and offset-aware datetimes
+Checking Matt Wolfe...
+  📄 Processing 15/15 entries (limit: 50)
+Error checking feed Matt Wolfe: can't compare offset-naive and offset-aware datetimes
+Checking How I AI...
+  📄 Processing 15/15 entries (limit: 50)
+Error checking feed How I AI: can't compare offset-naive and offset-aware datetimes
+Checking The AI Advantage...
+  📄 Processing 15/15 entries (limit: 50)
+Error checking feed The AI Advantage: can't compare offset-naive and offset-aware datetimes
+Checking AI Daily Brief...
+  📄 Processing 15/15 entries (limit: 50)
+Error checking feed AI Daily Brief: can't compare offset-naive and offset-aware datetimes
+Checking All About AI...
+  📄 Processing 15/15 entries (limit: 50)
+Error checking feed All About AI: can't compare offset-naive and offset-aware datetimes
+Checking Indy Dev Dan...
+  📄 Processing 15/15 entries (limit: 50)
+Error checking feed Indy Dev Dan: can't compare offset-naive and offset-aware datetimes
+Checking Robin...
+  📄 Processing 15/15 entries (limit: 50)
+Error checking feed Robin: can't compare offset-naive and offset-aware datetimes
+Checking Leading the Shift: AI innovation talks with Microsoft Azure...
+  📄 Processing 14/14 entries (limit: 50)
+Error checking feed Leading the Shift: AI innovation talks with Microsoft Azure: can't compare offset-naive and offset-aware datetimes
+Checking The Diary Of A CEO with Steven Bartlett...
+  📄 Processing 50/724 entries (limit: 50)
+Error checking feed The Diary Of A CEO with Steven Bartlett: can't compare offset-naive and offset-aware datetimes
+Checking Slo Mo: A Podcast with Mo Gawdat...
+  📄 Processing 50/319 entries (limit: 50)
+Error checking feed Slo Mo: A Podcast with Mo Gawdat: can't compare offset-naive and offset-aware datetimes
+Checking Team Human...
+  📄 Processing 50/380 entries (limit: 50)
+Error checking feed Team Human: can't compare offset-naive and offset-aware datetimes
+Checking The Great Simplification with Nate Hagens...
+  📄 Processing 50/319 entries (limit: 50)
+Error checking feed The Great Simplification with Nate Hagens: can't compare offset-naive and offset-aware datetimes
+Checking Movement Memos...
+  📄 Processing 50/152 entries (limit: 50)
+Error checking feed Movement Memos: can't compare offset-naive and offset-aware datetimes
+Checking Real Sankara Hours...
+  📄 Processing 50/81 entries (limit: 50)
+Error checking feed Real Sankara Hours: can't compare offset-naive and offset-aware datetimes
+Checking Millennials Are Killing Capitalism...
+  📄 Processing 50/307 entries (limit: 50)
+Error checking feed Millennials Are Killing Capitalism: can't compare offset-naive and offset-aware datetimes
+Checking THIS IS REVOLUTION...
+  📄 Processing 50/100 entries (limit: 50)
+Error checking feed THIS IS REVOLUTION: can't compare offset-naive and offset-aware datetimes
+Checking The Red Nation Podcast...
+  📄 Processing 50/434 entries (limit: 50)
+Error checking feed The Red Nation Podcast: can't compare offset-naive and offset-aware datetimes
+Checking The Black Myths Podcast...
+  📄 Processing 50/100 entries (limit: 50)
+Error checking feed The Black Myths Podcast: can't compare offset-naive and offset-aware datetimes
+Checking The Malcolm Effect...
+  📄 Processing 50/100 entries (limit: 50)
+Error checking feed The Malcolm Effect: can't compare offset-naive and offset-aware datetimes
+Checking Black Autonomy Podcast...
+  📄 Processing 17/17 entries (limit: 50)
+Error checking feed Black Autonomy Podcast: can't compare offset-naive and offset-aware datetimes
+Checking The Dugout | a black anarchist podcast...
+  📄 Processing 0/0 entries (limit: 50)
+  📊 The Dugout | a black anarchist podcast: new=0 dup=0 older=0 no_date=0 max_items=50 cutoff=2025-09-02
+  ⚠️ No dated entries found in The Dugout | a black anarchist podcast
+INFO:__main__:No new episodes found
+INFO:__main__:🎵 Processing audio cache files...
+INFO:__main__:Found 1 MP3 files to process
+🔄 Loading Parakeet MLX model...
+✅ Parakeet MLX model loaded successfully
+INFO:__main__:📊 Estimated total processing time: 19.3 minutes
+INFO:__main__:🔄 Processing 1/1: 5836c7ba.mp3
+INFO:__main__:⏱️ Audio duration: 74.0 min, estimated processing: 19.3 min
+INFO:__main__:📦 Will process in 8 chunks
+
+🎬 Starting robust transcription workflow for: 5836c7ba.mp3
+
+📊 Step 1: Analyzing audio file...
+📋 Analysis Results:
+   • Duration: 74.0 minutes
+   • Estimated processing time: 19.3 minutes
+   • Recommended chunks: 8
+
+✂️ Step 2: File chunking...
+✂️ Splitting 74.0min audio into 10min chunks...
+📄 Creating chunk 1: 0m-10m
+✅ Chunk 1 created: 9MB
+📄 Creating chunk 2: 10m-20m
+✅ Chunk 2 created: 9MB
+📄 Creating chunk 3: 20m-30m
+✅ Chunk 3 created: 9MB
+📄 Creating chunk 4: 30m-40m
+✅ Chunk 4 created: 9MB
+📄 Creating chunk 5: 40m-50m
+✅ Chunk 5 created: 9MB
+📄 Creating chunk 6: 50m-60m
+✅ Chunk 6 created: 9MB
+📄 Creating chunk 7: 60m-70m
+✅ Chunk 7 created: 9MB
+📄 Creating chunk 8: 70m-80m
+✅ Chunk 8 created: 3MB
+✅ Created 8 chunks for processing
+📝 Progress saved to: transcripts/5836c7ba_progress.txt
+
+🎯 Step 3: Transcribing 8 chunk(s)...
+
+🎯 Transcribing chunk 1/8: chunk_001.wav
+📊 Chunk duration: 10.0min, estimated processing: 170s
+🚀 Starting Parakeet MLX transcription...
+🔄 Chunk 1/8 - Progress: 8.9% (Elapsed: 15s, Est. remaining: 155s)
+🔄 Chunk 1/8 - Progress: 17.7% (Elapsed: 30s, Est. remaining: 140s)
+🔄 Chunk 1/8 - Progress: 26.5% (Elapsed: 45s, Est. remaining: 125s)
+🔄 Chunk 1/8 - Progress: 35.3% (Elapsed: 60s, Est. remaining: 110s)
+✅ Chunk 1 complete: 70.2s actual (RTF: 0.117x, chars: 8878)
+💾 Chunk 1 appended to transcripts/5836c7ba_progress.txt
+
+🎯 Transcribing chunk 2/8: chunk_002.wav
+📊 Chunk duration: 10.0min, estimated processing: 170s
+🚀 Starting Parakeet MLX transcription...
+🔄 Chunk 2/8 - Progress: 8.8% (Elapsed: 15s, Est. remaining: 155s)
+🔄 Chunk 2/8 - Progress: 17.7% (Elapsed: 30s, Est. remaining: 140s)
+🔄 Chunk 2/8 - Progress: 26.5% (Elapsed: 45s, Est. remaining: 125s)
+🔄 Chunk 2/8 - Progress: 35.3% (Elapsed: 60s, Est. remaining: 110s)
+🔄 Chunk 2/8 - Progress: 44.1% (Elapsed: 75s, Est. remaining: 95s)
+✅ Chunk 2 complete: 90.3s actual (RTF: 0.150x, chars: 9066)
+💾 Chunk 2 appended to transcripts/5836c7ba_progress.txt
+
+🎯 Transcribing chunk 3/8: chunk_003.wav
+📊 Chunk duration: 10.0min, estimated processing: 170s
+🚀 Starting Parakeet MLX transcription...
+🔄 Chunk 3/8 - Progress: 8.8% (Elapsed: 15s, Est. remaining: 155s)
+🔄 Chunk 3/8 - Progress: 17.6% (Elapsed: 30s, Est. remaining: 140s)
+🔄 Chunk 3/8 - Progress: 26.4% (Elapsed: 45s, Est. remaining: 125s)
+🔄 Chunk 3/8 - Progress: 35.4% (Elapsed: 60s, Est. remaining: 110s)
+🔄 Chunk 3/8 - Progress: 44.3% (Elapsed: 75s, Est. remaining: 95s)
+🔄 Chunk 3/8 - Progress: 53.1% (Elapsed: 90s, Est. remaining: 80s)
+🔄 Chunk 3/8 - Progress: 61.9% (Elapsed: 106s, Est. remaining: 65s)
+🔄 Chunk 3/8 - Progress: 70.7% (Elapsed: 121s, Est. remaining: 50s)
+🔄 Chunk 3/8 - Progress: 79.5% (Elapsed: 136s, Est. remaining: 35s)
+✅ Chunk 3 complete: 145.6s actual (RTF: 0.243x, chars: 8696)
+💾 Chunk 3 appended to transcripts/5836c7ba_progress.txt
+
+🎯 Transcribing chunk 4/8: chunk_004.wav
+📊 Chunk duration: 10.0min, estimated processing: 140s
+🚀 Starting Parakeet MLX transcription...
+🔄 Chunk 4/8 - Progress: 10.7% (Elapsed: 15s, Est. remaining: 125s)
+🔄 Chunk 4/8 - Progress: 21.4% (Elapsed: 30s, Est. remaining: 110s)
+🔄 Chunk 4/8 - Progress: 32.1% (Elapsed: 45s, Est. remaining: 95s)
+🔄 Chunk 4/8 - Progress: 42.8% (Elapsed: 60s, Est. remaining: 80s)
+✅ Chunk 4 complete: 75.6s actual (RTF: 0.126x, chars: 9184)
+💾 Chunk 4 appended to transcripts/5836c7ba_progress.txt
+
+🎯 Transcribing chunk 5/8: chunk_005.wav
+📊 Chunk duration: 10.0min, estimated processing: 170s
+🚀 Starting Parakeet MLX transcription...
+🔄 Chunk 5/8 - Progress: 8.8% (Elapsed: 15s, Est. remaining: 155s)
+🔄 Chunk 5/8 - Progress: 17.7% (Elapsed: 30s, Est. remaining: 140s)
+🔄 Chunk 5/8 - Progress: 26.5% (Elapsed: 45s, Est. remaining: 125s)
+🔄 Chunk 5/8 - Progress: 35.3% (Elapsed: 60s, Est. remaining: 110s)
+🔄 Chunk 5/8 - Progress: 44.2% (Elapsed: 75s, Est. remaining: 95s)
+✅ Chunk 5 complete: 90.3s actual (RTF: 0.151x, chars: 8988)
+💾 Chunk 5 appended to transcripts/5836c7ba_progress.txt
+
+🎯 Transcribing chunk 6/8: chunk_006.wav
+Python(90523) MallocStackLogging: can't turn off malloc stack logging because it was not enabled.
+📊 Chunk duration: 10.0min, estimated processing: 170s
+🚀 Starting Parakeet MLX transcription...
+Python(90525) MallocStackLogging: can't turn off malloc stack logging because it was not enabled.
+🔄 Chunk 6/8 - Progress: 8.8% (Elapsed: 15s, Est. remaining: 155s)
+🔄 Chunk 6/8 - Progress: 17.7% (Elapsed: 30s, Est. remaining: 140s)
+🔄 Chunk 6/8 - Progress: 26.5% (Elapsed: 45s, Est. remaining: 125s)
+🔄 Chunk 6/8 - Progress: 35.3% (Elapsed: 60s, Est. remaining: 110s)
+🔄 Chunk 6/8 - Progress: 44.1% (Elapsed: 75s, Est. remaining: 95s)
+🔄 Chunk 6/8 - Progress: 52.9% (Elapsed: 90s, Est. remaining: 80s)
+🔄 Chunk 6/8 - Progress: 61.7% (Elapsed: 105s, Est. remaining: 65s)
+✅ Chunk 6 complete: 110.3s actual (RTF: 0.184x, chars: 8598)
+💾 Chunk 6 appended to transcripts/5836c7ba_progress.txt
+
+🎯 Transcribing chunk 7/8: chunk_007.wav
+Python(90628) MallocStackLogging: can't turn off malloc stack logging because it was not enabled.
+📊 Chunk duration: 10.0min, estimated processing: 170s
+🚀 Starting Parakeet MLX transcription...
+Python(90634) MallocStackLogging: can't turn off malloc stack logging because it was not enabled.
+🔄 Chunk 7/8 - Progress: 8.8% (Elapsed: 15s, Est. remaining: 155s)
+🔄 Chunk 7/8 - Progress: 17.7% (Elapsed: 30s, Est. remaining: 140s)
+🔄 Chunk 7/8 - Progress: 26.5% (Elapsed: 45s, Est. remaining: 125s)
+🔄 Chunk 7/8 - Progress: 35.4% (Elapsed: 60s, Est. remaining: 110s)
+🔄 Chunk 7/8 - Progress: 44.2% (Elapsed: 75s, Est. remaining: 95s)
+🔄 Chunk 7/8 - Progress: 53.0% (Elapsed: 90s, Est. remaining: 80s)
+✅ Chunk 7 complete: 100.3s actual (RTF: 0.167x, chars: 8789)
+💾 Chunk 7 appended to transcripts/5836c7ba_progress.txt
+
+🎯 Transcribing chunk 8/8: chunk_008.wav
+Python(90736) MallocStackLogging: can't turn off malloc stack logging because it was not enabled.
+📊 Chunk duration: 4.0min, estimated processing: 56s
+🚀 Starting Parakeet MLX transcription...
+Python(90737) MallocStackLogging: can't turn off malloc stack logging because it was not enabled.
+🔄 Chunk 8/8 - Progress: 27.0% (Elapsed: 15s, Est. remaining: 41s)
+✅ Chunk 8 complete: 20.0s actual (RTF: 0.084x, chars: 3179)
+💾 Chunk 8 appended to transcripts/5836c7ba_progress.txt
+
+🔗 Step 4: Combining 8 transcription(s)...
+
+🧹 Step 5: Cleaning up transcript...
+
+💾 Step 6: Saving final cleaned transcript to: transcripts/5836c7ba.txt
+
+🗑️ Step 7: Cleaning up chunk files...
+✅ Deleted chunk directory: audio_cache/5836c7ba_chunks
+🧹 Removed progress file: transcripts/5836c7ba_progress.txt
+
+✅ Transcription workflow complete!
+   • Total time: 12.1 minutes
+   • Transcript length: 65,385 characters
+   • Overall RTF: 0.163x
+   • Final transcript: transcripts/5836c7ba.txt
+INFO:__main__:✅ Transcribed: 5836c7ba.mp3 (took 12.1 min)
+INFO:__main__:📈 Progress: 1/1 files, ~0.0 min remaining
+INFO:__main__:🏁 Audio cache processing complete: 1 files in 12.1 minutes
+INFO:__main__:⚙️ Processing episodes awaiting transcription (pending/pre-download)...
+Episode 129 not found or already transcribed
+Episode 130 not found or already transcribed
+Episode 131 not found or already transcribed
+Episode 132 not found or already transcribed
+Episode 133 not found or already transcribed
+Episode 134 not found or already transcribed
+Episode 135 not found or already transcribed
+Episode 136 not found or already transcribed
+Episode 137 not found or already transcribed
+Episode 138 not found or already transcribed
+Episode 139 not found or already transcribed
+Episode 140 not found or already transcribed
+Episode 141 not found or already transcribed
+Episode 142 not found or already transcribed
+INFO:__main__:No pending episodes to process
+INFO:openai_scorer:✅ OpenAI client initialized successfully
+INFO:openai_scorer:✅ OpenAI client initialized successfully
+INFO:__main__:Post-transcription scoring complete: RSS=0, YT=0
+INFO:__main__:📅 Friday detected - generating daily + weekly digests
+INFO:__main__:📅 Generating FRIDAY digest with weekly overview...
+INFO:__main__:📝 Generating daily digest from RSS + YouTube transcripts...
+INFO:__main__:📊 RSS Episode status breakdown:
+INFO:__main__:   archived: 2 episodes
+INFO:__main__:   digested: 1 episodes
+INFO:__main__:   failed: 3 episodes
+INFO:__main__:   pre-download: 14 episodes
+INFO:__main__:   transcribed: 2 episodes
+INFO:__main__:📊 YouTube Episode status breakdown:
+INFO:__main__:   digested: 10 episodes
+INFO:__main__:📋 Total transcripts for digest: 2 RSS + 0 YouTube = 2
+INFO:openai_digest_integration:🧠 Starting multi-topic digest generation
+INFO:openai_digest_integration:🚀 Starting multi-topic digest generation for 3 topics
+INFO:openai_digest_integration:Topics: AI News, Tech News and Tech Culture, Tech Product Releases
+INFO:openai_digest_integration:
+📝 Processing topic: AI News
+INFO:openai_digest_integration:🧠 Starting AI News digest generation with OpenAI (map-reduce)
+INFO:openai_digest_integration:Found 2 RSS transcripts
+INFO:openai_digest_integration:Found 0 YouTube transcripts
+INFO:openai_digest_integration:Total transcripts for analysis: 2
+INFO:openai_digest_integration:📊 Starting map-reduce for AI News with 2 total transcripts
+INFO:episode_summary_generator:Topic 'AI News': 1 candidates, 1 selected (threshold: 0.65)
+INFO:episode_summary_generator:Generating summary for 9626cc37 (score: 0.980)
+Python(90752) MallocStackLogging: can't turn off malloc stack logging because it was not enabled.
+Python(90753) MallocStackLogging: can't turn off malloc stack logging because it was not enabled.
+ERROR:episode_summary_generator:Failed to generate summary for 9626cc37 (AI News): Error code: 400 - {'error': {'message': "Unsupported value: 'temperature' does not support 0.1 with this model. Only the default (1) value is supported.", 'type': 'invalid_request_error', 'param': 'temperature', 'code': 'unsupported_value'}}
+INFO:episode_summary_generator:Generated 0 summaries for 'AI News': 0 total tokens
+WARNING:openai_digest_integration:No relevant episodes found for topic: AI News
+ERROR:openai_digest_integration:❌ AI News digest failed: No episodes meet relevance threshold for AI News
+INFO:openai_digest_integration:
+📝 Processing topic: Tech News and Tech Culture
+INFO:openai_digest_integration:🧠 Starting Tech News and Tech Culture digest generation with OpenAI (map-reduce)
+INFO:openai_digest_integration:Found 2 RSS transcripts
+INFO:openai_digest_integration:Found 0 YouTube transcripts
+INFO:openai_digest_integration:Total transcripts for analysis: 2
+INFO:openai_digest_integration:📊 Starting map-reduce for Tech News and Tech Culture with 2 total transcripts
+INFO:episode_summary_generator:Topic 'Tech News and Tech Culture': 2 candidates, 2 selected (threshold: 0.65)
+INFO:episode_summary_generator:Generating summary for 9626cc37 (score: 0.940)
+ERROR:episode_summary_generator:Failed to generate summary for 9626cc37 (Tech News and Tech Culture): Error code: 400 - {'error': {'message': "Unsupported value: 'temperature' does not support 0.1 with this model. Only the default (1) value is supported.", 'type': 'invalid_request_error', 'param': 'temperature', 'code': 'unsupported_value'}}
+INFO:episode_summary_generator:Generating summary for 5836c7ba (score: 0.700)
+ERROR:episode_summary_generator:Failed to generate summary for 5836c7ba (Tech News and Tech Culture): Error code: 400 - {'error': {'message': "Unsupported value: 'temperature' does not support 0.1 with this model. Only the default (1) value is supported.", 'type': 'invalid_request_error', 'param': 'temperature', 'code': 'unsupported_value'}}
+INFO:episode_summary_generator:Generated 0 summaries for 'Tech News and Tech Culture': 0 total tokens
+WARNING:openai_digest_integration:No relevant episodes found for topic: Tech News and Tech Culture
+ERROR:openai_digest_integration:❌ Tech News and Tech Culture digest failed: No episodes meet relevance threshold for Tech News and Tech Culture
+INFO:openai_digest_integration:
+📝 Processing topic: Tech Product Releases
+INFO:openai_digest_integration:🧠 Starting Tech Product Releases digest generation with OpenAI (map-reduce)
+INFO:openai_digest_integration:Found 2 RSS transcripts
+INFO:openai_digest_integration:Found 0 YouTube transcripts
+INFO:openai_digest_integration:Total transcripts for analysis: 2
+INFO:openai_digest_integration:📊 Starting map-reduce for Tech Product Releases with 2 total transcripts
+INFO:episode_summary_generator:Topic 'Tech Product Releases': 2 candidates, 2 selected (threshold: 0.65)
+INFO:episode_summary_generator:Generating summary for 5836c7ba (score: 0.800)
+ERROR:episode_summary_generator:Failed to generate summary for 5836c7ba (Tech Product Releases): Error code: 400 - {'error': {'message': "Unsupported value: 'temperature' does not support 0.1 with this model. Only the default (1) value is supported.", 'type': 'invalid_request_error', 'param': 'temperature', 'code': 'unsupported_value'}}
+INFO:episode_summary_generator:Generating summary for 9626cc37 (score: 0.720)
+ERROR:episode_summary_generator:Failed to generate summary for 9626cc37 (Tech Product Releases): Error code: 400 - {'error': {'message': "Unsupported value: 'temperature' does not support 0.1 with this model. Only the default (1) value is supported.", 'type': 'invalid_request_error', 'param': 'temperature', 'code': 'unsupported_value'}}
+INFO:episode_summary_generator:Generated 0 summaries for 'Tech Product Releases': 0 total tokens
+WARNING:openai_digest_integration:No relevant episodes found for topic: Tech Product Releases
+ERROR:openai_digest_integration:❌ Tech Product Releases digest failed: No episodes meet relevance threshold for Tech Product Releases
+INFO:openai_digest_integration:
+🏁 Multi-topic digest generation complete: 0/3 topics successful
+ERROR:__main__:❌ Failed to generate daily digest
+ERROR:__main__:❌ Failed to generate daily digest component
+INFO:__main__:🧹 Running 14-day retention cleanup...
+INFO:retention_cleanup:🗑️  Initializing retention cleanup (keep last 14 days)
+INFO:retention_cleanup:🗓️  Cutoff date: 2025-08-22 06:00:32
+INFO:retention_cleanup:🚀 Starting 14-day retention cleanup process
+INFO:retention_cleanup:🔍 Checking transcripts for old files...
+INFO:retention_cleanup:🔍 Checking transcripts/digested for old files...
+INFO:retention_cleanup:✅ Removed 0 transcript files (0 bytes freed)
+INFO:retention_cleanup:🔍 Checking daily_digests for old digest files...
+INFO:retention_cleanup:✅ Removed 0 digest files (0 bytes freed)
+INFO:retention_cleanup:🗄️  Cleaning heavy fields in podcast_monitor.db
+INFO:retention_cleanup:  ✅ No old episodes with heavy fields found
+INFO:retention_cleanup:🗄️  Cleaning heavy fields in youtube_transcripts.db
+INFO:retention_cleanup:  ✅ No old episodes with heavy fields found
+INFO:retention_cleanup:🧹 Running VACUUM on podcast_monitor.db
+INFO:retention_cleanup:  ✅ VACUUM completed: 0 bytes freed
+INFO:retention_cleanup:🧹 Running VACUUM on youtube_transcripts.db
+INFO:retention_cleanup:  ✅ VACUUM completed: 0 bytes freed
+INFO:retention_cleanup:📊 Retention cleanup summary:
+INFO:retention_cleanup:  📁 Files removed: 0
+INFO:retention_cleanup:  💾 Bytes freed: 0
+INFO:retention_cleanup:  🗄️  Episodes cleaned: 0
+INFO:retention_cleanup:  🧹 Database vacuum: ✅ Success
+INFO:__main__:✅ No cleanup needed - all files within retention period
+INFO:__main__:✅ Daily workflow completed successfully
+INFO:telemetry_manager:📊 Run telemetry saved: telemetry/run_20250905_054805.json
+INFO:telemetry_manager:📊 RUN SUMMARY
+INFO:telemetry_manager:==================================================
+INFO:telemetry_manager:Run ID: run_20250905_054805
+INFO:telemetry_manager:Type: weekly
+INFO:telemetry_manager:Total time: 745.9s
+INFO:telemetry_manager:Episodes: 0 transcribed, 0 scored, 0 digested
+INFO:telemetry_manager:Topics processed: 0
+INFO:telemetry_manager:API calls: 0
+INFO:telemetry_manager:Total tokens: 0
+INFO:telemetry_manager:Estimated cost: $0.0000
+INFO:telemetry_manager:Files deployed: 0
+INFO:telemetry_manager:RSS items: 0
+INFO:telemetry_manager:==================================================
+paulbrown@Pauls-MacBook-Air-2 podcast-scraper % 

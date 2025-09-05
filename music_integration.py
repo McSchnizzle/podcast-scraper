@@ -12,6 +12,7 @@ import logging
 from pathlib import Path
 from typing import Dict, Optional, Tuple
 import tempfile
+from utils.logging_setup import configure_logging
 
 # Load environment variables from .env file
 try:
@@ -20,7 +21,7 @@ try:
 except ImportError:
     pass
 
-logging.basicConfig(level=logging.INFO)
+configure_logging()
 logger = logging.getLogger(__name__)
 
 class MusicIntegrator:

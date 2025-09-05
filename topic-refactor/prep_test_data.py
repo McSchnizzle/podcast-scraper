@@ -4,9 +4,9 @@ import os
 import shutil
 import sqlite3
 from datetime import datetime
-
+from utils.datetime_utils import now_utc
 def backup_db(path):
-    ts = datetime.now().strftime("%Y%m%d-%H%M%S")
+    ts = now_utc().strftime("%Y%m%d-%H%M%S")
     dst = f"{path}.backup.{ts}.db"
     shutil.copy2(path, dst)
     print(f"[backup] {path} -> {dst}")

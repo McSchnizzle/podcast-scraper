@@ -9,6 +9,7 @@ import sqlite3
 import subprocess
 import shutil
 import time
+import sys
 from pathlib import Path
 from datetime import datetime, timedelta
 import logging
@@ -28,6 +29,7 @@ from openai_digest_integration import OpenAIDigestIntegration
 from retention_cleanup import RetentionCleanup
 from telemetry_manager import telemetry
 from utils.episode_failures import FailureManager, ensure_failures_table_exists
+from utils.datetime_utils import now_utc
 
 # Configuration
 CONFIG = {
@@ -62,7 +64,7 @@ class DailyPodcastPipeline:
         
     def run_daily_workflow(self):
         """Execute complete daily workflow with weekday logic"""
-        current_weekday = datetime.utcnow().strftime('%A')
+        current_weekday = now_utc().strftime('%A')
         logger.info(f"🚀 Starting Daily Tech Digest Pipeline - {current_weekday}")
         logger.info("=" * 50)
         
@@ -118,7 +120,7 @@ class DailyPodcastPipeline:
                 logger.info("🔒 Starting transactional publishing process...")
                 
                 # Step 6: Create TTS audio for today only
-                today = datetime.utcnow().date().isoformat()
+                today = now_utc().date().isoformat()
                 mp3_files_created = self._create_tts_audio_today_only(today)
                 
                 if not mp3_files_created:
@@ -464,7 +466,7 @@ class DailyPodcastPipeline:
             return False
         
         # Get episodes from the past 7 days that were already digested
-        seven_days_ago = datetime.utcnow() - timedelta(days=7)
+        seven_days_ago = now_utc() - timedelta(days=7)
         
         conn = sqlite3.connect(self.db_path)
         cursor = conn.cursor()
@@ -507,7 +509,7 @@ class DailyPodcastPipeline:
         logger.info("📅 Generating MONDAY catch-up digest...")
         
         # Calculate window: Previous Friday 6 AM to now
-        now = datetime.utcnow()
+        now = now_utc()
         
         # Find last Friday
         days_since_friday = (now.weekday() + 3) % 7  # Monday=0, Friday=4
@@ -867,12 +869,46 @@ def main():
     parser.add_argument('--test', action='store_true', help='Test individual components')
     parser.add_argument('--hours-back', type=int, help='Override feed lookback hours (default: uses FEED_LOOKBACK_HOURS env var)')
     parser.add_argument('--verbose', action='store_true', help='Enable verbose (DEBUG level) logging')
+    parser.add_argument('--dry-run', action='store_true', help='Dry run mode - no external API calls or costly operations')
+    parser.add_argument('--timeout', type=int, default=0, help='Timeout in seconds (0 = no timeout)')
     args = parser.parse_args()
     
+    # Set up dry-run and mock mode environment variables
+    if args.dry_run:
+        os.environ['DRY_RUN'] = '1'
+        os.environ['MOCK_OPENAI'] = '1'
+        if not os.getenv('CI_SMOKE'):
+            os.environ['CI_SMOKE'] = '1'
+    
+    # Set up timeout handling (Unix systems only)
+    if args.timeout > 0:
+        try:
+            import signal
+            def timeout_handler(signum, frame):
+                if 'logger' in globals():
+                    logger.error(f"⏰ Operation timed out after {args.timeout} seconds")
+                else:
+                    print(f"⏰ Operation timed out after {args.timeout} seconds")
+                sys.exit(124)  # Standard timeout exit code
+            signal.signal(signal.SIGALRM, timeout_handler)
+            signal.alarm(args.timeout)
+        except (ImportError, AttributeError):
+            # Windows or system without SIGALRM support
+            print(f"⚠️  Timeout not supported on this system (requested {args.timeout}s)")
+    
     # Set up centralized logging
-    from logging_setup import setup_logging
+    from utils.logging_setup import configure_logging
+    configure_logging()
     global logger
-    logger = setup_logging(verbose=args.verbose, logger_name=__name__)
+    logger = logging.getLogger(__name__)
+    
+    # Override log level if verbose
+    if args.verbose:
+        os.environ['LOG_LEVEL'] = 'DEBUG'
+        configure_logging()  # Reconfigure with DEBUG level
+    
+    if args.dry_run:
+        logger.info("🧪 DRY RUN MODE: No external API calls or costly operations will be performed")
     
     # Validate configuration and environment
     from config import config
@@ -988,6 +1024,64 @@ def main():
         except Exception as e:
             logger.error(f"❌ GITHUB ACTIONS workflow failed: {e}")
             exit(1)
+    
+    if args.dry_run:
+        # Dry run mode - perform validation and planning without expensive operations
+        logger.info("🧪 Starting DRY RUN mode...")
+        
+        # Create dry-run summary
+        dry_run_summary = {
+            "would_process": {},
+            "configuration": {},
+            "estimated_actions": []
+        }
+        
+        # Check feeds without downloading
+        try:
+            from utils.datetime_utils import cutoff_utc
+            cutoff = cutoff_utc(int(os.getenv('FEED_LOOKBACK_HOURS', '48')))
+            logger.info(f"🕐 Dry run cutoff: {cutoff.isoformat()}Z UTC")
+            
+            # Simulate feed checking
+            dry_run_summary["would_process"]["cutoff_time"] = cutoff.isoformat()
+            dry_run_summary["would_process"]["feeds_to_check"] = "RSS feeds would be checked"
+            dry_run_summary["estimated_actions"].append("Check RSS feeds for new episodes")
+            
+            # Check current database state
+            conn = sqlite3.connect(CONFIG['DB_PATH'])
+            cursor = conn.cursor()
+            cursor.execute("SELECT status, COUNT(*) FROM episodes GROUP BY status")
+            status_counts = dict(cursor.fetchall())
+            conn.close()
+            
+            dry_run_summary["would_process"]["current_episodes"] = status_counts
+            
+            if status_counts.get('transcribed', 0) > 0:
+                dry_run_summary["estimated_actions"].append(f"Generate digest from {status_counts['transcribed']} transcribed episodes")
+                dry_run_summary["estimated_actions"].append("Create TTS audio files")
+                dry_run_summary["estimated_actions"].append("Deploy to GitHub releases")
+                dry_run_summary["estimated_actions"].append("Update RSS feed")
+            
+            # Configuration check
+            dry_run_summary["configuration"]["openai_mock"] = os.getenv('MOCK_OPENAI') == '1'
+            dry_run_summary["configuration"]["ci_smoke"] = os.getenv('CI_SMOKE') == '1'
+            
+        except Exception as e:
+            logger.error(f"❌ Dry run validation failed: {e}")
+            exit(1)
+        
+        # Write dry-run summary
+        import json
+        summary_file = Path("dry_run_summary.json")
+        with open(summary_file, 'w') as f:
+            json.dump(dry_run_summary, f, indent=2, default=str)
+        
+        logger.info(f"✅ DRY RUN completed - summary saved to {summary_file}")
+        logger.info(f"📊 Would process: {len(dry_run_summary['estimated_actions'])} actions")
+        for action in dry_run_summary["estimated_actions"]:
+            logger.info(f"   • {action}")
+        
+        exit(0)
     
     # Default: show help and status
     parser.print_help()

@@ -8,6 +8,7 @@ import os
 import json
 import sqlite3
 from datetime import datetime, timezone
+from utils.datetime_utils import now_utc
 from xml.etree.ElementTree import Element, SubElement, tostring
 from xml.dom import minidom
 import hashlib
@@ -27,7 +28,7 @@ class PodcastRSSGenerator:
             "subcategory": "News",
             "artwork_url": f"{base_url}/podcast-artwork.jpg",
             "website": f"{base_url}/daily-digest",
-            "copyright": f"© {datetime.now().year} Paul Brown"
+            "copyright": f"© {now_utc().year} Paul Brown"
         }
     
     def get_recent_episodes(self, days=7):
@@ -50,7 +51,7 @@ class PodcastRSSGenerator:
                         episode_date = datetime.strptime(timestamp_str, "%Y%m%d_%H%M%S")
                         
                         # Calculate age in days
-                        age_days = (datetime.now() - episode_date).days
+                        age_days = (now_utc() - episode_date).days
                         
                         if age_days <= days:
                             file_size = file.stat().st_size

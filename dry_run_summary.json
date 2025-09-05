@@ -1,0 +1,24 @@
+{
+  "would_process": {
+    "cutoff_time": "2025-09-02T09:59:24.527569+00:00",
+    "feeds_to_check": "RSS feeds would be checked",
+    "current_episodes": {
+      "archived": 2,
+      "digested": 1,
+      "failed": 3,
+      "pre-download": 14,
+      "transcribed": 2
+    }
+  },
+  "configuration": {
+    "openai_mock": true,
+    "ci_smoke": true
+  },
+  "estimated_actions": [
+    "Check RSS feeds for new episodes",
+    "Generate digest from 2 transcribed episodes",
+    "Create TTS audio files",
+    "Deploy to GitHub releases",
+    "Update RSS feed"
+  ]
+}

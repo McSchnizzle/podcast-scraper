@@ -12,6 +12,7 @@ import time
 from pathlib import Path
 from datetime import datetime
 from typing import Dict, List, Optional, Tuple
+from utils.datetime_utils import now_utc
 import sqlite3
 import openai
 
@@ -27,7 +28,8 @@ from episode_summary_generator import EpisodeSummaryGenerator
 from telemetry_manager import telemetry
 from utils.sanitization import safe_digest_filename, scrub_secrets_from_text
 
-logging.basicConfig(level=logging.INFO)
+from utils.logging_setup import configure_logging
+configure_logging()
 logger = logging.getLogger(__name__)
 
 def approx_tokens(text: str) -> int:
@@ -248,12 +250,12 @@ class OpenAIDigestIntegration:
                         with open(topics_config_path, 'r', encoding='utf-8') as f:
                             topics_config = json.load(f)
                         topic_info = topics_config.get(topic, {})
-                        title = f"{topic_info.get('display_name', topic)} - {datetime.now().strftime('%B %d, %Y')}"
+                        title = f"{topic_info.get('display_name', topic)} - {now_utc().strftime('%B %d, %Y')}"
                     except (json.JSONDecodeError, Exception) as e:
                         logger.warning(f"Could not load topics config: {e}")
-                        title = f"{topic} - {datetime.now().strftime('%B %d, %Y')}"
+                        title = f"{topic} - {now_utc().strftime('%B %d, %Y')}"
                 else:
-                    title = f"{topic} - {datetime.now().strftime('%B %d, %Y')}"
+                    title = f"{topic} - {now_utc().strftime('%B %d, %Y')}"
                 
             except Exception as e:
                 logger.warning(f"Could not load instructions for {topic}: {e}")
@@ -379,7 +381,7 @@ Please analyze the following {len(transcripts)} podcast transcripts focused on {
 
 Create a comprehensive digest with the following structure:
 
-# {title} - {datetime.now().strftime('%B %d, %Y')}
+# {title} - {now_utc().strftime('%B %d, %Y')}
 
 ## 🌟 Key Highlights
 - List the 3-5 most important developments from these episodes
@@ -542,7 +544,7 @@ Format the output as clean Markdown suitable for publication. Focus on accuracy,
                 logger.info(f"✅ {topic} digest already had good prose quality")
             
             # Save topic-specific digest
-            timestamp = datetime.now().strftime('%Y%m%d_%H%M%S')
+            timestamp = now_utc().strftime('%Y%m%d_%H%M%S')
             digest_filename = safe_digest_filename(topic, timestamp)
             digest_path = Path('daily_digests') / digest_filename
             digest_path.parent.mkdir(exist_ok=True)
@@ -841,7 +843,7 @@ Create a flowing, conversational digest that synthesizes these insights."""
                 youtube_episodes.append(original_id)
         
         # Format date for database storage
-        digest_date = datetime.now().strftime('%Y-%m-%d')
+        digest_date = now_utc().strftime('%Y-%m-%d')
         
         # Update RSS episodes in main database
         if rss_episodes:

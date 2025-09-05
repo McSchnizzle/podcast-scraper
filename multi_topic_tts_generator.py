@@ -12,6 +12,7 @@ import requests
 import time
 from pathlib import Path
 from datetime import datetime
+from utils.datetime_utils import now_utc
 from typing import Dict, List, Optional, Tuple
 from utils.sanitization import create_topic_pattern, create_topic_mp3_filename
 
@@ -30,7 +31,8 @@ try:
 except ImportError:
     pass
 
-logging.basicConfig(level=logging.INFO)
+from utils.logging_setup import configure_logging
+configure_logging()
 logger = logging.getLogger(__name__)
 
 class MultiTopicTTSGenerator:
@@ -338,7 +340,7 @@ class MultiTopicTTSGenerator:
                     "timestamp": timestamp,
                     "date": digest_info['date'].isoformat(),
                     "voice_config": voice_config,
-                    "generated_at": datetime.now().isoformat(),
+                    "generated_at": now_utc().isoformat(),
                     "audio_file": f"{audio_filename}.mp3",
                     "markdown_file": md_file.name,
                     "tts_script_file": tts_script_path.name,
@@ -399,7 +401,7 @@ def main():
     
     # Set up logging (import here to avoid circular imports)
     try:
-        from logging_setup import set_httpx_quiet
+        from utils.logging_setup import set_httpx_quiet
         set_httpx_quiet()  # Quiet httpx logs by default
     except ImportError:
         pass

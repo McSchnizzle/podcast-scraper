@@ -248,3 +248,7 @@ daily_digests/*.txt
 
 # Repository zip files for sharing
 *.zip
+
+# Git cleanup tools - BFG Repo-Cleaner reports and git backups
+..bfg-report/
+.git-backup/

@@ -10,14 +10,16 @@ import logging
 from pathlib import Path
 from datetime import datetime, timedelta
 from typing import List, Tuple, Optional
+from utils.datetime_utils import now_utc
 
-logging.basicConfig(level=logging.INFO)
+from utils.logging_setup import configure_logging
+configure_logging()
 logger = logging.getLogger(__name__)
 
 class RetentionCleanup:
     def __init__(self, retention_days: int = 14):
         self.retention_days = retention_days
-        self.cutoff_date = datetime.now() - timedelta(days=retention_days)
+        self.cutoff_date = now_utc() - timedelta(days=retention_days)
         self.cutoff_timestamp = self.cutoff_date.timestamp()
         
         logger.info(f"🗑️  Initializing retention cleanup (keep last {retention_days} days)")

@@ -8,6 +8,7 @@ import os
 from pathlib import Path
 from music_integration import MusicIntegrator
 import logging
+from utils.logging_setup import configure_logging
 
 # Load environment variables
 try:
@@ -17,7 +18,7 @@ except ImportError:
     pass
 
 # Configure logging
-logging.basicConfig(level=logging.INFO)
+configure_logging()
 logger = logging.getLogger(__name__)
 
 # All topics from the digest system

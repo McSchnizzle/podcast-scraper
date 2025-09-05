@@ -8,6 +8,7 @@ import os
 import subprocess
 import glob
 from datetime import datetime
+from utils.datetime_utils import now_utc
 from pathlib import Path
 
 def get_latest_complete_digest():
@@ -41,7 +42,7 @@ def create_github_release(mp3_file):
         release_title = f"Daily Tech Digest - {episode_date.strftime('%B %d, %Y')}"
     except:
         # Fallback to today's date
-        today = datetime.now()
+        today = now_utc()
         release_tag = f"daily-{today.strftime('%Y-%m-%d')}"
         release_title = f"Daily Tech Digest - {today.strftime('%B %d, %Y')}"
     
@@ -53,7 +54,7 @@ def create_github_release(mp3_file):
 **Episode Details:**
 - Duration: ~{duration_min} minutes
 - Size: {file_size / 1024 / 1024:.1f}MB
-- Generated: {datetime.now().strftime('%Y-%m-%d %H:%M')}
+- Generated: {now_utc().strftime('%Y-%m-%d %H:%M')}
 - Topics: AI Tools, Creative Applications, Social Commentary
 
 **RSS Feed**: Available at https://podcast-scraper-kxxvl6bnx-paul-browns-projects-cf5d21b4.vercel.app/daily-digest.xml
