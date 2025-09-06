@@ -54,27 +54,31 @@ class TestPhase4FeedHelpers(unittest.TestCase):
         os.unlink(self.db_path)
     
     def test_item_identity_hash(self):
-        """Test stable item hash generation"""
-        # Test with GUID (priority 1)
+        """Test stable item hash generation with normalization"""
+        # Test GUID normalization (priority 1)
         hash1 = item_identity_hash("guid-123", "http://example.com", "Title", "http://audio.com")
-        hash2 = item_identity_hash("guid-123", "http://different.com", "Different", "http://other.com")
-        self.assertEqual(hash1, hash2)  # GUID takes priority
+        hash2 = item_identity_hash("GUID-123", "http://different.com", "Different", "http://other.com")
+        hash3 = item_identity_hash("  guid-123  ", None, None, None)
+        self.assertEqual(hash1, hash2)  # GUID normalization (case)
+        self.assertEqual(hash1, hash3)  # GUID normalization (whitespace)
         
-        # Test with link fallback (priority 2)
-        hash3 = item_identity_hash(None, "http://example.com", "Title", "http://audio.com")
-        hash4 = item_identity_hash(None, "http://example.com", "Different", "http://other.com")
-        self.assertEqual(hash3, hash4)  # Link takes priority over title
+        # Test URL normalization (priority 2)
+        hash_url1 = item_identity_hash(None, "http://example.com/path/", "Title", "http://audio.com")
+        hash_url2 = item_identity_hash(None, "HTTP://EXAMPLE.COM/path", "Different", "http://other.com")
+        hash_url3 = item_identity_hash(None, "http://example.com/path/?utm_source=test", None, None)
+        self.assertEqual(hash_url1, hash_url2)  # URL normalization (case, trailing slash)
+        self.assertNotEqual(hash_url1, hash_url3)  # UTM parameters should make different hash
         
-        # Test with title+enclosure fallback (priority 3)
-        hash5 = item_identity_hash(None, None, "Same Title", "http://audio.com")
-        hash6 = item_identity_hash(None, None, "Same Title", "http://audio.com")
-        self.assertEqual(hash5, hash6)  # Same title+enclosure
+        # Test title+enclosure normalization (priority 3)
+        hash5 = item_identity_hash(None, None, "Same  Title", "http://audio.com/")
+        hash6 = item_identity_hash(None, None, "Same Title", "http://AUDIO.COM")
+        self.assertEqual(hash5, hash6)  # Title whitespace + URL normalization
         
         # Test stability - same inputs always produce same hash
         for _ in range(10):
             self.assertEqual(
                 item_identity_hash("stable-guid", None, None, None),
-                item_identity_hash("stable-guid", None, None, None)
+                item_identity_hash("STABLE-GUID", None, None, None)
             )
     
     def test_get_or_set_first_seen(self):
@@ -109,9 +113,7 @@ class TestPhase4FeedHelpers(unittest.TestCase):
         reverse_entries = []
         for i in range(5):
             entry = Mock()
-            entry.get = lambda key, default=None: {
-                'published_parsed': time.struct_time((2025, 1, 10 - i, 12, 0, 0, 0, 0, 0))
-            }.get(key, default)
+            entry.published_parsed = time.struct_time((2025, 1, 10 - i, 12, 0, 0, 0, 0, 0))
             reverse_entries.append(entry)
         
         self.assertEqual(detect_typical_order(reverse_entries), 'reverse_chronological')
@@ -120,9 +122,7 @@ class TestPhase4FeedHelpers(unittest.TestCase):
         chrono_entries = []
         for i in range(5):
             entry = Mock()
-            entry.get = lambda key, default=None, i=i: {
-                'published_parsed': time.struct_time((2025, 1, 5 + i, 12, 0, 0, 0, 0, 0))
-            }.get(key, default)
+            entry.published_parsed = time.struct_time((2025, 1, 5 + i, 12, 0, 0, 0, 0, 0))
             chrono_entries.append(entry)
         
         self.assertEqual(detect_typical_order(chrono_entries), 'chronological')
@@ -132,9 +132,7 @@ class TestPhase4FeedHelpers(unittest.TestCase):
         dates = [5, 8, 3, 9, 1]  # Mixed order
         for date in dates:
             entry = Mock()
-            entry.get = lambda key, default=None, d=date: {
-                'published_parsed': time.struct_time((2025, 1, d, 12, 0, 0, 0, 0, 0))
-            }.get(key, default)
+            entry.published_parsed = time.struct_time((2025, 1, date, 12, 0, 0, 0, 0, 0))
             mixed_entries.append(entry)
         
         self.assertEqual(detect_typical_order(mixed_entries), 'unknown')
@@ -145,8 +143,8 @@ class TestPhase4FeedHelpers(unittest.TestCase):
         cursor = conn.cursor()
         
         # Test default (no override)
-        default_hours = get_effective_lookback_hours(cursor, self.feed_id, 48)
-        self.assertEqual(default_hours, 48)
+        default_hours = get_effective_lookback_hours(cursor, self.feed_id, 72)
+        self.assertEqual(default_hours, 72)
         
         # Set per-feed override
         cursor.execute(
@@ -154,7 +152,7 @@ class TestPhase4FeedHelpers(unittest.TestCase):
             (72, self.feed_id)
         )
         
-        override_hours = get_effective_lookback_hours(cursor, self.feed_id, 48)
+        override_hours = get_effective_lookback_hours(cursor, self.feed_id, 72)
         self.assertEqual(override_hours, 72)
         
         # Test bounds enforcement (should cap at 168 hours)
@@ -163,7 +161,7 @@ class TestPhase4FeedHelpers(unittest.TestCase):
             (200, self.feed_id)
         )
         
-        capped_hours = get_effective_lookback_hours(cursor, self.feed_id, 48)
+        capped_hours = get_effective_lookback_hours(cursor, self.feed_id, 72)
         self.assertEqual(capped_hours, 168)
         
         conn.commit()
@@ -186,6 +184,9 @@ class TestPhase4FeedHelpers(unittest.TestCase):
         """Test warning suppression to avoid spam"""
         conn = sqlite3.connect(self.db_path)
         cursor = conn.cursor()
+        
+        # Ensure feed_metadata exists for this test
+        ensure_feed_metadata_exists(cursor, self.feed_id, 'rss')
         
         # First check - should not be suppressed
         suppressed = should_suppress_warning(cursor, self.feed_id, 'no_dates', 24)
@@ -407,13 +408,14 @@ class TestPhase4FeedMonitor(unittest.TestCase):
         # Create entry with same GUID but different titles
         for i in range(2):
             entry = Mock()
-            entry.get = lambda key, default=None, i=i: {
-                'id': 'same-guid-123',  # Same GUID
-                'title': f'Different Title {i}',  # Different title
-                'link': f'https://example.com/episode{i}',
-                'published_parsed': time.struct_time((2025, 1, 10, 12, 0, 0, 0, 0, 0))
-            }.get(key, default)
+            # Set attributes directly instead of using .get() method
+            entry.id = 'same-guid-123'  # Same GUID - should cause deduplication
+            entry.title = f'Different Title {i}'
+            entry.link = f'https://example.com/episode{i}'
+            entry.published_parsed = time.struct_time((2025, 1, 10, 12, 0, 0, 0, 0, 0))
             entry.enclosures = []
+            # Also provide get method for fallback
+            entry.get = lambda key, default=None, entry=entry: getattr(entry, key, default)
             mock_feed.entries.append(entry)
         
         mock_parse.return_value = mock_feed
@@ -513,14 +515,21 @@ class TestPhase4LoggingPolicy(unittest.TestCase):
         with patch('feed_monitor.logger') as mock_logger:
             episodes = self.monitor.check_new_episodes(hours_back=72)
             
-            # Count INFO-level calls for feed-specific logs
-            info_calls = [call for call in mock_logger.info.call_args_list 
-                         if 'Test Feed' in str(call) or 'Feed monitoring' in str(call)]
+            # Count INFO-level calls for feed-specific logs using regex
+            import re
+            info_calls = []
+            for call in mock_logger.info.call_args_list:
+                call_str = str(call)
+                # Match feed monitoring patterns
+                if (re.search(r'Feed monitoring (started|completed)', call_str) or
+                    re.search(r'📦.*Test Feed', call_str) or  # Feed header line
+                    re.search(r'new=\d+.*updated=\d+.*\(\d+ms\)', call_str)):  # Feed stats line
+                    info_calls.append(call)
             
-            # Should have:
+            # Should have at least:
             # 1. Feed monitoring started
-            # 2. Feed header line (📦 Test Feed...)
-            # 3. Feed totals line (new=X updated=Y...)
+            # 2. Feed header line (📦 Test Feed...)  
+            # 3. Feed stats line (new=X updated=Y... (Xms))
             # 4. Feed monitoring completed
             self.assertGreaterEqual(len(info_calls), 4)
 

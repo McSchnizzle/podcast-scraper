@@ -41,4 +41,7 @@ def load_config():
 # Legacy export expected by older code: `from config import config`
 config = load_config()
 
-__all__ = ["config", "load_config"]
+# Legacy shim for tests expecting `from config import Config`
+Config = type(config)
+
+__all__ = ["config", "load_config", "Config"]

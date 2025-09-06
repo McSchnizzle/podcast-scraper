@@ -40,7 +40,7 @@ from utils.feed_helpers import (
 from config import config
 
 # Set up logging
-from utils.logging_setup import configure_logging
+from utils.logging_setup import configure_logging, format_feed_stats
 configure_logging()
 logger = logging.getLogger(__name__)
 

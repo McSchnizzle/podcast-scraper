@@ -94,6 +94,26 @@ def set_verbose(enabled: bool = True) -> None:
         root.info("🔇 Verbose logging disabled")
 
 
+def format_feed_stats(stats: dict) -> str:
+    """
+    Format feed statistics for consistent two-line logging.
+    
+    Args:
+        stats: Dictionary containing feed processing statistics
+        
+    Returns:
+        Formatted statistics string for the second line of feed logs
+    """
+    duration_ms = stats.get('duration_ms', 0)
+    new = stats.get('new', 0)
+    updated = stats.get('updated', 0)
+    duplicate = stats.get('duplicate', 0)
+    skipped = stats.get('skipped', 0)
+    errors = stats.get('errors', 0)
+    
+    # Format: new=X updated=Y duplicate=Z skipped=W errors=V (Xms)
+    return f"new={new} updated={updated} duplicate={duplicate} skipped={skipped} errors={errors} ({duration_ms}ms)"
+
 def quiet_noisy_libs() -> None:
     """
     Additional function to quiet specific libraries during operations.

@@ -73,7 +73,7 @@ class ProductionConfig:
             'backoff_base_delay': float(_env('BACKOFF_BASE_DELAY', '0.5')),
             
             # Phase 4: Enhanced robustness settings
-            'lookback_hours': max(1, min(168, int(_env('FEED_LOOKBACK_HOURS', '48')))),  # 1-168 hours (7 days max)
+            'lookback_hours': max(1, min(168, int(_env('FEED_LOOKBACK_HOURS', '72')))),  # 1-168 hours (7 days max)
             'grace_minutes': int(_env('FEED_GRACE_MINUTES', '15')),  # Avoid boundary flapping
             'max_feed_bytes': int(_env('MAX_FEED_BYTES', '5242880')),  # 5MB safety cap
             'politeness_delay_ms': int(_env('FETCH_POLITENESS_MS', '250')),  # Polite delay between requests
@@ -191,11 +191,21 @@ class ProductionConfig:
     @staticmethod
     def format_rss_date(dt: Optional[datetime] = None) -> str:
         """
-        RFC-822 style date for RSS, e.g., Thu, 04 Sep 2025 06:01:26 +0000
+        RFC-5322 compliant date for RSS using email.utils.format_datetime
         """
         if dt is None:
             dt = ProductionConfig.get_utc_now()
-        return dt.strftime("%a, %d %b %Y %H:%M:%S +0000")
+        
+        from email.utils import format_datetime
+        from utils.datetime_utils import to_utc
+        
+        # Ensure timezone awareness
+        if dt.tzinfo is None:
+            dt = dt.replace(tzinfo=timezone.utc)
+        else:
+            dt = to_utc(dt)
+            
+        return format_datetime(dt)
 
     @staticmethod
     def get_weekday_label(dt: Optional[datetime] = None) -> str:

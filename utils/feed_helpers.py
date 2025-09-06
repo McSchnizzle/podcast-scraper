@@ -22,7 +22,7 @@ logger = logging.getLogger(__name__)
 def item_identity_hash(guid: Optional[str], link: Optional[str], 
                       title: Optional[str], enclosure_url: Optional[str]) -> str:
     """
-    Generate stable hash for item deduplication
+    Generate stable hash for item deduplication with normalization
     
     Priority: guid > link > title+enclosure_url
     
@@ -35,15 +35,40 @@ def item_identity_hash(guid: Optional[str], link: Optional[str],
     Returns:
         SHA256 hash (64 chars hex)
     """
-    # Use guid if available (most reliable)
+    import re
+    from urllib.parse import urlparse, urlunparse
+    
+    # Use guid if available (most reliable) - trimmed and lowercased
     if guid and guid.strip():
-        key = guid.strip()
+        key = guid.strip().lower()
     elif link and link.strip():
-        key = link.strip()
+        # Normalize link URL: strip UTM, lowercase host, remove trailing slash
+        try:
+            parsed = urlparse(link.strip())
+            # Remove UTM parameters and other tracking
+            query_parts = []
+            if parsed.query:
+                for param in parsed.query.split('&'):
+                    if not param.lower().startswith(('utm_', 'fbclid', 'gclid')):
+                        query_parts.append(param)
+            
+            # Reconstruct with normalized components
+            normalized = urlunparse((
+                parsed.scheme.lower(),
+                parsed.netloc.lower(),
+                parsed.path.rstrip('/') if parsed.path != '/' else parsed.path,
+                parsed.params,
+                '&'.join(query_parts),
+                ''  # Remove fragment
+            ))
+            key = normalized
+        except Exception:
+            # Fallback to basic cleaning if URL parsing fails
+            key = link.strip().lower().rstrip('/')
     elif title and title.strip():
-        # Fallback to title + enclosure combination
-        title_clean = title.strip()
-        enclosure_clean = (enclosure_url or '').strip()
+        # Fallback to title + enclosure combination - both normalized
+        title_clean = re.sub(r'\s+', ' ', title.strip())  # Normalize whitespace
+        enclosure_clean = (enclosure_url or '').strip().lower().rstrip('/')
         key = f"{title_clean}|{enclosure_clean}"
     else:
         # Last resort - random string that will likely be unique
@@ -255,6 +280,64 @@ def update_warning_timestamp(cursor: sqlite3.Cursor, feed_id: int,
             "UPDATE feed_metadata SET last_no_date_warning = ? WHERE feed_id = ?",
             (current_time, feed_id)
         )
+
+def get_feed_cache_headers(cursor: sqlite3.Cursor, feed_id: int) -> Dict[str, Optional[str]]:
+    """
+    Get stored cache headers for a feed
+    
+    Args:
+        cursor: Database cursor
+        feed_id: Feed ID
+        
+    Returns:
+        Dictionary with etag and last_modified keys
+    """
+    cursor.execute(
+        "SELECT etag, last_modified_http FROM feed_metadata WHERE feed_id = ?",
+        (feed_id,)
+    )
+    result = cursor.fetchone()
+    
+    if result:
+        return {
+            'etag': result[0],
+            'last_modified': result[1]
+        }
+    else:
+        return {'etag': None, 'last_modified': None}
+
+def update_feed_cache_headers(cursor: sqlite3.Cursor, feed_id: int, 
+                            etag: Optional[str], last_modified: Optional[str]):
+    """
+    Update cache headers for a feed
+    
+    Args:
+        cursor: Database cursor
+        feed_id: Feed ID
+        etag: ETag header value
+        last_modified: Last-Modified header value
+    """
+    # Ensure feed_metadata record exists
+    ensure_feed_metadata_exists(cursor, feed_id, 'rss')
+    
+    cursor.execute(
+        "UPDATE feed_metadata SET etag = ?, last_modified_http = ? WHERE feed_id = ?",
+        (etag, last_modified, feed_id)
+    )
+
+def extract_http_cache_headers(response: requests.Response) -> Tuple[Optional[str], Optional[str]]:
+    """
+    Extract cache headers from HTTP response
+    
+    Args:
+        response: HTTP response object
+        
+    Returns:
+        Tuple of (etag, last_modified) values
+    """
+    etag = response.headers.get('ETag')
+    last_modified = response.headers.get('Last-Modified')
+    return etag, last_modified
 
 def handle_conditional_get(session: requests.Session, url: str, 
                           etag: Optional[str], last_modified: Optional[str],
