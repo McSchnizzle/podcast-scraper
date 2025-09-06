@@ -8,6 +8,7 @@ import os
 import json
 import logging
 import sqlite3
+from utils.db import get_connection
 import time
 from datetime import datetime
 from pathlib import Path
@@ -277,7 +278,7 @@ Provide scores as requested in the system prompt."""
         scored_count = 0
         
         try:
-            conn = sqlite3.connect(db_path)
+            conn = get_connection(db_path)
             cursor = conn.cursor()
             
             # Get episodes that need scoring
@@ -370,7 +371,7 @@ Provide scores as requested in the system prompt."""
         scored_count = 0
         
         try:
-            conn = sqlite3.connect(db_path)
+            conn = get_connection(db_path)
             cursor = conn.cursor()
             
             # Idempotent query - only score episodes that are transcribed and unscored
@@ -466,7 +467,7 @@ Provide scores as requested in the system prompt."""
             return []
         
         try:
-            conn = sqlite3.connect(db_path)
+            conn = get_connection(db_path)
             cursor = conn.cursor()
             
             if episode_id:

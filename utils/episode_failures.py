@@ -128,35 +128,35 @@ class FailureManager:
             if "no such table" in str(e):
                 self.logger.info("Creating episode_failures table...")
                 self._create_failures_table(cursor)
-                # Retry the insert
+                # Retry the insert with new schema (episode_pk)
                 cursor.execute("""
                     INSERT INTO episode_failures (
-                        episode_id, failure_reason, failure_category, 
+                        episode_pk, failure_reason, failure_category, 
                         traceback_info, failure_timestamp
                     ) VALUES (?, ?, ?, ?, datetime('now'))
-                """, (episode_id, failure_reason, failure_category, traceback_info))
+                """, (episode_pk, failure_reason, failure_category, traceback_info))
             else:
                 raise
     
     def _create_failures_table(self, cursor):
-        """Create episode_failures table for detailed failure tracking"""
+        """Create episode_failures table for detailed failure tracking - Option A schema"""
         cursor.execute("""
             CREATE TABLE IF NOT EXISTS episode_failures (
                 id INTEGER PRIMARY KEY AUTOINCREMENT,
-                episode_id TEXT NOT NULL,
+                episode_pk INTEGER NOT NULL,
                 failure_reason TEXT NOT NULL,
                 failure_category TEXT NOT NULL,
                 traceback_info TEXT,
                 failure_timestamp TIMESTAMP NOT NULL,
                 resolved BOOLEAN DEFAULT 0,
                 resolution_notes TEXT,
-                FOREIGN KEY (episode_id) REFERENCES episodes (episode_id)
+                FOREIGN KEY (episode_pk) REFERENCES episodes (id) ON DELETE CASCADE
             )
         """)
         
         cursor.execute("""
-            CREATE INDEX IF NOT EXISTS idx_episode_failures_episode_id 
-            ON episode_failures(episode_id)
+            CREATE INDEX IF NOT EXISTS idx_episode_failures_episode_pk 
+            ON episode_failures(episode_pk)
         """)
         
         cursor.execute("""
@@ -169,7 +169,7 @@ class FailureManager:
             ON episode_failures(failure_timestamp)
         """)
         
-        self.logger.info("✅ Created episode_failures table with indexes")
+        self.logger.info("✅ Created episode_failures table with Option A schema and indexes")
     
     def get_retry_candidates(self) -> List[Dict]:
         """Get episodes eligible for retry based on failure category and timing"""
@@ -273,12 +273,30 @@ class FailureManager:
             """, (episode_id,))
             
             # Mark failures as resolved in detailed tracking table
-            cursor.execute("""
-                UPDATE episode_failures 
-                SET resolved = 1,
-                    resolution_notes = ?
-                WHERE episode_id = ? AND resolved = 0
-            """, (recovery_notes, episode_id))
+            # First get the episode's internal ID for FK lookup
+            cursor.execute("SELECT id FROM episodes WHERE episode_id = ?", (episode_id,))
+            result = cursor.fetchone()
+            if result:
+                db_id = result[0]
+                # Try new schema first (episode_pk)
+                try:
+                    cursor.execute("""
+                        UPDATE episode_failures 
+                        SET resolved = 1,
+                            resolution_notes = ?
+                        WHERE episode_pk = ? AND resolved = 0
+                    """, (recovery_notes, db_id))
+                except sqlite3.OperationalError as e:
+                    if "no such column: episode_pk" in str(e):
+                        # Fall back to old schema (episode_id)
+                        cursor.execute("""
+                            UPDATE episode_failures 
+                            SET resolved = 1,
+                                resolution_notes = ?
+                            WHERE episode_id = ? AND resolved = 0
+                        """, (recovery_notes, episode_id))
+                    else:
+                        raise
             
             conn.commit()
             conn.close()

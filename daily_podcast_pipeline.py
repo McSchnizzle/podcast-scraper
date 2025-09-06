@@ -6,6 +6,7 @@ Single unified script that runs the complete daily workflow
 
 import os
 import sqlite3
+from utils.db import get_connection
 import subprocess
 import shutil
 import time
@@ -279,7 +280,7 @@ class DailyPodcastPipeline:
         
         logger.info(f"📊 Estimated total processing time: {total_estimated_time/60:.1f} minutes")
         
-        conn = sqlite3.connect(self.db_path)
+        conn = get_connection(self.db_path)
         cursor = conn.cursor()
         
         processed_files = 0
@@ -427,7 +428,7 @@ class DailyPodcastPipeline:
         logger.info("📝 Generating daily digest from RSS + YouTube transcripts...")
         
         # Check RSS transcribed episodes
-        conn = sqlite3.connect(self.db_path)
+        conn = get_connection(self.db_path)
         cursor = conn.cursor()
         
         cursor.execute("SELECT COUNT(*) FROM episodes WHERE status = 'transcribed'")
@@ -446,7 +447,7 @@ class DailyPodcastPipeline:
         youtube_db_path = "youtube_transcripts.db"
         if Path(youtube_db_path).exists():
             try:
-                conn = sqlite3.connect(youtube_db_path)
+                conn = get_connection(youtube_db_path)
                 cursor = conn.cursor()
                 
                 cursor.execute("SELECT COUNT(*) FROM episodes WHERE status = 'transcribed'")
@@ -494,7 +495,7 @@ class DailyPodcastPipeline:
         # Get episodes from the past 7 days that were already digested
         seven_days_ago = now_utc() - timedelta(days=7)
         
-        conn = sqlite3.connect(self.db_path)
+        conn = get_connection(self.db_path)
         cursor = conn.cursor()
         
         cursor.execute("""
@@ -511,7 +512,7 @@ class DailyPodcastPipeline:
         youtube_db_path = "youtube_transcripts.db"
         if Path(youtube_db_path).exists():
             try:
-                conn = sqlite3.connect(youtube_db_path)
+                conn = get_connection(youtube_db_path)
                 cursor = conn.cursor()
                 
                 cursor.execute("""
@@ -548,7 +549,7 @@ class DailyPodcastPipeline:
         logger.info(f"🕰️ Catch-up window: {last_friday_6am.strftime('%Y-%m-%d %H:%M')} to {now.strftime('%Y-%m-%d %H:%M')}")
         
         # Check for episodes in catch-up window
-        conn = sqlite3.connect(self.db_path)
+        conn = get_connection(self.db_path)
         cursor = conn.cursor()
         
         # Look for episodes published since Friday 6 AM that haven't been digested
@@ -566,7 +567,7 @@ class DailyPodcastPipeline:
         youtube_db_path = "youtube_transcripts.db"
         if Path(youtube_db_path).exists():
             try:
-                conn = sqlite3.connect(youtube_db_path)
+                conn = get_connection(youtube_db_path)
                 cursor = conn.cursor()
                 
                 cursor.execute("""
@@ -785,7 +786,7 @@ class DailyPodcastPipeline:
         logger.info("📋 Marking episodes as digested in both RSS and YouTube databases...")
         
         # Mark RSS episodes as digested
-        conn = sqlite3.connect(self.db_path)
+        conn = get_connection(self.db_path)
         cursor = conn.cursor()
         
         cursor.execute("UPDATE episodes SET status = 'digested' WHERE status = 'transcribed'")
@@ -799,7 +800,7 @@ class DailyPodcastPipeline:
         youtube_db_path = "youtube_transcripts.db"
         if Path(youtube_db_path).exists():
             try:
-                conn = sqlite3.connect(youtube_db_path)
+                conn = get_connection(youtube_db_path)
                 cursor = conn.cursor()
                 
                 cursor.execute("UPDATE episodes SET status = 'digested' WHERE status = 'transcribed'")
@@ -841,7 +842,7 @@ class DailyPodcastPipeline:
         # Process both RSS and YouTube databases
         for db_name, db_path in [("RSS", self.db_path), ("YouTube", "youtube_transcripts.db")]:
             try:
-                conn = sqlite3.connect(db_path)
+                conn = get_connection(db_path)
                 cursor = conn.cursor()
                 
                 # Get episode counts by status
@@ -1074,7 +1075,7 @@ def main():
             dry_run_summary["estimated_actions"].append("Check RSS feeds for new episodes")
             
             # Check current database state
-            conn = sqlite3.connect(CONFIG['DB_PATH'])
+            conn = get_connection(CONFIG['DB_PATH'])
             cursor = conn.cursor()
             cursor.execute("SELECT status, COUNT(*) FROM episodes GROUP BY status")
             status_counts = dict(cursor.fetchall())

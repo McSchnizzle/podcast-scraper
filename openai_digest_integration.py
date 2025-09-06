@@ -14,6 +14,7 @@ from datetime import datetime
 from typing import Dict, List, Optional, Tuple
 from utils.datetime_utils import now_utc
 import sqlite3
+from utils.db import get_connection
 import openai
 
 # Load environment variables from .env file
@@ -93,7 +94,7 @@ class OpenAIDigestIntegration:
         
         # Get RSS transcripts from main database
         try:
-            conn = sqlite3.connect(self.db_path)
+            conn = get_connection(self.db_path)
             cursor = conn.cursor()
             
             # Updated query to use relevance scores instead of digest_topic
@@ -173,7 +174,7 @@ class OpenAIDigestIntegration:
             try:
                 youtube_db_path = "youtube_transcripts.db"
                 if Path(youtube_db_path).exists():
-                    conn = sqlite3.connect(youtube_db_path)
+                    conn = get_connection(youtube_db_path)
                     cursor = conn.cursor()
                     
                     # Use the same query logic for YouTube database
@@ -441,7 +442,7 @@ Format the output as clean Markdown suitable for publication. Focus on accuracy,
         
         # Check RSS database
         try:
-            conn = sqlite3.connect(self.db_path)
+            conn = get_connection(self.db_path)
             cursor = conn.cursor()
             cursor.execute("""
                 SELECT topic_relevance_json 
@@ -468,7 +469,7 @@ Format the output as clean Markdown suitable for publication. Focus on accuracy,
         try:
             youtube_db_path = "youtube_transcripts.db"
             if Path(youtube_db_path).exists():
-                conn = sqlite3.connect(youtube_db_path)
+                conn = get_connection(youtube_db_path)
                 cursor = conn.cursor()
                 cursor.execute("""
                     SELECT topic_relevance_json 
@@ -753,7 +754,7 @@ Create a flowing, conversational digest that synthesizes these insights."""
         """Mark episodes as digested in both databases"""
         # Mark in RSS database
         try:
-            conn = sqlite3.connect(self.db_path)
+            conn = get_connection(self.db_path)
             cursor = conn.cursor()
             for episode_id in episode_ids:
                 if not episode_id.startswith('yt_'):  # RSS episode
@@ -771,7 +772,7 @@ Create a flowing, conversational digest that synthesizes these insights."""
         try:
             youtube_db_path = "youtube_transcripts.db"
             if Path(youtube_db_path).exists():
-                conn = sqlite3.connect(youtube_db_path)
+                conn = get_connection(youtube_db_path)
                 cursor = conn.cursor()
                 for episode_id in episode_ids:
                     if episode_id.startswith('yt_'):  # YouTube episode
@@ -891,7 +892,7 @@ Create a flowing, conversational digest that synthesizes these insights."""
         # Update RSS episodes in main database
         if rss_episodes:
             try:
-                conn = sqlite3.connect(self.db_path)
+                conn = get_connection(self.db_path)
                 cursor = conn.cursor()
                 
                 for episode_id in rss_episodes:
@@ -913,7 +914,7 @@ Create a flowing, conversational digest that synthesizes these insights."""
             try:
                 youtube_db_path = "youtube_transcripts.db"
                 if Path(youtube_db_path).exists():
-                    conn = sqlite3.connect(youtube_db_path)
+                    conn = get_connection(youtube_db_path)
                     cursor = conn.cursor()
                     
                     for episode_id in youtube_episodes:
