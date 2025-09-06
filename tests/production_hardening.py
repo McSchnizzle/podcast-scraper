@@ -166,6 +166,8 @@ class ProductionHardeningTests:
         }
 
         # Test RSS date formatting
+        from rss_generator_multi_topic import MultiTopicRSSGenerator
+
         generator = MultiTopicRSSGenerator()
         rss_date_format = datetime.now(timezone.utc).strftime(
             "%a, %d %b %Y %H:%M:%S %z"

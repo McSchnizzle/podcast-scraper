@@ -391,16 +391,18 @@ class ContentProcessor:
 
                 if transcript_data is None:
                     raise RuntimeError("YouTube API request failed")
-                
+
                 # Rate limiting protection: delay 5 seconds after YouTube API calls
                 import time
+
                 time.sleep(5)
             else:
                 # Normal fetch for local development
                 transcript_data = api.fetch(video_id, languages=["en"])
-                
+
                 # Rate limiting protection: delay 5 seconds after YouTube API calls
                 import time
+
                 time.sleep(5)
 
             # Check video length before processing

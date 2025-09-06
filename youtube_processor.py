@@ -128,7 +128,7 @@ class YouTubeProcessor:
     def process_pending_youtube_episodes(self) -> int:
         """Process pending YouTube episodes using YouTube Transcript API with smart throttling"""
         import time
-        
+
         conn = get_connection(self.youtube_db_path)
         cursor = conn.cursor()
 
@@ -157,12 +157,12 @@ class YouTubeProcessor:
         processed_count = 0
         consecutive_failures = 0
         failed_episodes = []
-        
+
         def process_episode(episode_data):
             """Process a single YouTube episode"""
             nonlocal processed_count, consecutive_failures
             episode_id, title, video_url, episode_guid = episode_data
-            
+
             try:
                 logger.info(f"📺 Processing: {title}")
 
@@ -174,7 +174,7 @@ class YouTubeProcessor:
                 if transcript:
                     # Reset consecutive failures on success
                     consecutive_failures = 0
-                    
+
                     # Save transcript file
                     transcript_path = self.content_processor._save_transcript(
                         episode_guid, transcript
@@ -231,7 +231,7 @@ class YouTubeProcessor:
 
                     processed_count += 1
                     logger.info(f"✅ Transcribed YouTube episode: {title}")
-                    
+
                     # Commit after each successful episode
                     conn.commit()
                     return True
@@ -239,36 +239,50 @@ class YouTubeProcessor:
                 else:
                     # Track throttling failures
                     consecutive_failures += 1
-                    logger.warning(f"❌ Failed to get transcript: {title} (failure #{consecutive_failures})")
-                    
+                    logger.warning(
+                        f"❌ Failed to get transcript: {title} (failure #{consecutive_failures})"
+                    )
+
                     # Don't mark as failed yet - might retry
                     failed_episodes.append(episode_data)
                     return False
 
             except Exception as e:
                 consecutive_failures += 1
-                logger.error(f"Error processing YouTube episode {episode_id}: {e} (failure #{consecutive_failures})")
+                logger.error(
+                    f"Error processing YouTube episode {episode_id}: {e} (failure #{consecutive_failures})"
+                )
                 failed_episodes.append(episode_data)
                 return False
 
         # Process episodes with smart throttling
         for i, episode_data in enumerate(pending_episodes):
             success = process_episode(episode_data)
-            
+
             if not success:
                 # After 5th consecutive failure, wait 60 seconds and retry failed episodes
                 if consecutive_failures >= 5:
-                    logger.warning(f"🚨 {consecutive_failures} consecutive failures - entering retry mode")
-                    logger.info("⏳ Waiting 60 seconds for YouTube API rate limit reset...")
+                    logger.warning(
+                        f"🚨 {consecutive_failures} consecutive failures - entering retry mode"
+                    )
+                    logger.info(
+                        "⏳ Waiting 60 seconds for YouTube API rate limit reset..."
+                    )
                     time.sleep(60)
-                    
+
                     # Retry failed episodes with longer delays
                     retry_count = 0
-                    logger.info(f"🔄 Retrying {len(failed_episodes)} failed episodes...")
-                    
-                    for retry_episode in failed_episodes[:]:  # Copy list to allow modification
-                        logger.info(f"🔄 Retry {retry_count + 1}/{len(failed_episodes)}: {retry_episode[1]}")
-                        
+                    logger.info(
+                        f"🔄 Retrying {len(failed_episodes)} failed episodes..."
+                    )
+
+                    for retry_episode in failed_episodes[
+                        :
+                    ]:  # Copy list to allow modification
+                        logger.info(
+                            f"🔄 Retry {retry_count + 1}/{len(failed_episodes)}: {retry_episode[1]}"
+                        )
+
                         if process_episode(retry_episode):
                             failed_episodes.remove(retry_episode)
                             retry_count += 1
@@ -278,16 +292,16 @@ class YouTubeProcessor:
                                 "UPDATE episodes SET status = ? WHERE id = ?",
                                 ("failed", retry_episode[0]),
                             )
-                            
+
                         # 5-second delay between retries
                         time.sleep(5)
-                    
+
                     # Reset for remaining episodes
                     consecutive_failures = 0
                     logger.info(f"✅ Retry complete: {retry_count} episodes recovered")
-            
+
             # Regular 5-second delay between episodes (already handled in content_processor)
-            
+
         # Mark any remaining failed episodes
         for episode_data in failed_episodes:
             cursor.execute(
