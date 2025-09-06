@@ -8,6 +8,7 @@ Please migrate to: from openai_scorer import OpenAITopicScorer
 """
 
 import warnings
+
 from openai_scorer import OpenAITopicScorer
 
 # Issue deprecation warning
@@ -15,7 +16,7 @@ warnings.warn(
     "OpenAIScorer is deprecated and will be removed in v2.0.0. "
     "Please use 'from openai_scorer import OpenAITopicScorer' instead.",
     DeprecationWarning,
-    stacklevel=2
+    stacklevel=2,
 )
 
 # Export with old name for compatibility

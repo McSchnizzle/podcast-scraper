@@ -4,6 +4,7 @@ import os
 # Load environment variables from .env file before importing config classes
 try:
     from dotenv import load_dotenv
+
     load_dotenv()
 except ImportError:
     # dotenv is optional - environment variables can be set directly
@@ -37,6 +38,7 @@ def load_config():
     raise RuntimeError(
         "No suitable config class found. Ensure config/production.py (or staging/development) exists."
     )
+
 
 # Legacy export expected by older code: `from config import config`
 config = load_config()

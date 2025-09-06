@@ -1,0 +1,481 @@
+[00:00] Welcome back to the AI daily brief.
+[00:02] Today we are talking about how to be an
+[00:05] AI leader, at least according to a new
+[00:08] guide from OpenAI. OpenAI just recently
+[00:11] published a report called staying ahead
+[00:13] in the age of AI, a leadership guide,
+[00:15] and it's part of a pattern where they
+[00:17] have been releasing a set of resources
+[00:19] at a fairly steady clip to help
+[00:21] organizations and enterprises think
+[00:23] about their AI strategy and
+[00:24] implementation and hopefully get some
+[00:26] tips that help them along the way. None
+[00:28] of these are meant to be super
+[00:29] comprehensive or replacements for big
+[00:31] deep strategy that's run internally. Nor
+[00:33] is it meant to replace the work that
+[00:35] consultants and partners and strategists
+[00:37] might do. Instead, these documents tend
+[00:39] to be tips and examples that OpenAI has
+[00:41] seen in their own work with their
+[00:42] customers and clients captured and
+[00:44] reshared for a broader audience. Now,
+[00:46] one quick note. Sometimes you will hear
+[00:48] me say that if you're not watching an
+[00:49] episode, you really should head over to
+[00:51] YouTube or Spotify to watch it as well.
+[00:53] This is kind of the opposite. This is
+[00:55] one of the more visually uninteresting
+[00:56] topics we've had because we're just
+[00:58] examining a report, but I do think
+[00:59] there's a lot to discuss here and I'm
+[01:01] excited to dig into it. Now, first of
+[01:03] all, from a context or setup
+[01:04] perspective, this is a subtle or not
+[01:07] really so subtle reminder that you are
+[01:09] really on one if you think things are
+[01:11] slowing down right now. I don't know
+[01:13] when they started working on this. It
+[01:14] was probably before the release of GPT5
+[01:17] and all of the hullaloo around that. It
+[01:18] was probably before the MIT study came
+[01:20] out. It was probably before the AI
+[01:22] bubble conversation started happening in
+[01:24] earnest, but it definitely smacks you
+[01:26] over the head with the idea that if you
+[01:27] are moving slowly because of any of
+[01:29] those things, you are not going to make
+[01:31] it. Indeed, the first thing that OpenAI
+[01:33] does is drop a bunch of stats to point
+[01:35] out how absolutely not slowing down this
+[01:38] thing is. The first full sentence in the
+[01:40] report is artificial intelligence is
+[01:42] accelerating on every front. And they
+[01:45] give four statistics to validate that
+[01:47] point. The first thing they argue is
+[01:49] that AI capabilities have grown 5.6x
+[01:52] when it comes to frontier models since
+[01:53] 2022. That's based on a study from Epic
+[01:56] AI called the pace of large scale model
+[01:58] releases is accelerating. Next, they
+[02:00] talk about cost. One of the things that
+[02:02] we've been talking about on the show
+[02:03] recently is why we should include cost
+[02:06] and efficiency of intelligence in part
+[02:08] of our calculations for how advanced
+[02:10] models are given that we're increasingly
+[02:12] on the frontier of wanting to use a lot
+[02:14] more tokens to unlock new use cases
+[02:16] because the cost of intelligence is
+[02:17] coming down. They point to a 280x
+[02:21] decrease in the cost of running a GBT
+[02:23] 3.5 class model in just 18 months. Now,
+[02:26] obviously that number is a very big
+[02:27] impressive number. I think the reality
+[02:29] is that the vast majority of use cases
+[02:31] that are in production today require at
+[02:33] the very least four and really more like
+[02:35] a 4.5 style capability, but those
+[02:37] numbers are frankly similarly
+[02:39] precipitous when it comes to how fast
+[02:41] they are decreasing. Lastly, they point
+[02:43] to the fact that not only is AI being
+[02:46] adopted faster than desktop internet
+[02:48] was, it's being adopted four times
+[02:50] faster. Now, those are the big banner
+[02:52] statistics, but buried just underneath
+[02:54] is one that I think might be even more
+[02:56] significant, at least for enterprises
+[02:58] who are reading this report. They
+[02:59] reference a BCG study called where is
+[03:01] the value in AI that found that
+[03:03] organizations that they designated as AI
+[03:05] early adopters were growing revenue 1.5
+[03:08] times faster than their peers. So,
+[03:10] that's the setup. Basically, they are
+[03:11] saying, like I say at every keynote
+[03:13] presentation I do, the speed of
+[03:14] disruption is faster than you think and
+[03:16] the magnitude of disruption is even
+[03:18] bigger than you think. So, that's the
+[03:20] setup. But what do they actually cover
+[03:22] in the next 12 or so pages of the
+[03:23] report? They've divided things into five
+[03:26] principles. Align, activate, amplify,
+[03:28] accelerate, and govern. You got to have
+[03:30] that alliteration in there. Would it
+[03:32] even be a corporate report without
+[03:33] alliteration? Now, still trying to zoom
+[03:36] out. I think that the subtext here is
+[03:38] that this is not a guide that's for some
+[03:41] super advanced organization. This is not
+[03:43] your 301 or 401 graduate level course on
+[03:46] how to be an AI leader inside your AI
+[03:48] enabled or AI native company. This is
+[03:51] instead the basics. And frankly, I think
+[03:54] there's a subtext here that's arguing
+[03:56] that right now at this stage, you don't
+[03:58] necessarily have to be a super advanced
+[04:00] AI user to be relatively speaking ahead
+[04:03] of the pack when it comes to using AI
+[04:05] across your organization. Effectively,
+[04:07] OpenAI is arguing that if you take these
+[04:09] basic steps, you will still be ahead.
+[04:11] Now, I will say, and we're going to get
+[04:13] into this quite a bit towards the end,
+[04:15] the whole thing does a little feel like
+[04:18] a 2024 pre-agentic pre-reasoning model
+[04:21] era kind of guide. Specifically,
+[04:23] pre-agentic is the one that I think is
+[04:25] notable, which as you will see, does not
+[04:26] mean that I think it's not useful. I
+[04:28] think it is, but it's missing this whole
+[04:30] big section of what it means to engage
+[04:32] with AI right now that I do think limits
+[04:35] its total applicability. However, like I
+[04:37] said, we're going to come back to that.
+[04:39] Overall, it attempts to be very
+[04:40] practical, giving specific advice and
+[04:42] specific examples. So, let's quickly go
+[04:44] through these sections and see what they
+[04:46] are recommending. The first section is
+[04:48] about alignment and getting employees
+[04:50] and managers on the same page when it
+[04:53] comes to AI. Now, this is something
+[04:54] you've probably heard me talk a lot
+[04:56] about. One of the big challenges for
+[04:58] enterprise AI adoption that has
+[04:59] absolutely nothing to do with model
+[05:01] capability is the often large gap
+[05:03] between how employees and managers are
+[05:05] thinking about AI strategy in every way
+[05:08] from how well articulated that strategy
+[05:10] is to how promp employee that strategy
+[05:12] is to whether employees are supported
+[05:14] enough in implementation of that
+[05:15] strategy and so on and so forth. So I
+[05:18] think broadly speaking thinking in terms
+[05:20] of alignment is absolutely a necessary
+[05:22] step can fully cosign based on
+[05:24] everything that we see at super
+[05:25] intelligent and everything that I hear
+[05:26] doing this podcast as well. The four
+[05:29] alignment practices that they discuss
+[05:31] are one executive storytelling to set
+[05:34] the vision, two setting a companywide AI
+[05:36] adoption goal, three leaders role
+[05:38] modeling AI use, and four functional
+[05:41] leader sessions, which is basically
+[05:43] leaders modeling AI use, but bringing it
+[05:45] down to the line of business level and
+[05:46] closer to the point of actual
+[05:48] implementation at the employee level.
+[05:50] Now, one thing I will note, and I will
+[05:51] warn you, if you do not want to be
+[05:52] shilled, press that fast forward button
+[05:54] maybe once or twice. A lot in here kind
+[05:57] of presumes that the use cases are known
+[05:59] going into the conversation. In other
+[06:01] words, that managers who are setting the
+[06:03] vision for AI know what they should be
+[06:05] using AI for. In my experience and in
+[06:08] our experience at Super Intelligent,
+[06:10] that actually tends to be a major
+[06:11] barrier that slows things down right at
+[06:13] the top. It's literally why we designed
+[06:15] these agent opportunity mapping audits
+[06:17] that we deploy to make it simpler to
+[06:19] actually understand which use cases
+[06:21] might be viable and useful for an
+[06:23] organization based on its own particular
+[06:25] unique characteristics. So as always, if
+[06:27] you are interested in those audits,
+[06:29] shoot me a note at NLWB.ai
+[06:31] and I will connect you to the right
+[06:32] people. Now moving back to OpenAI's
+[06:35] practices, in addition to just the best
+[06:37] practices that they're sharing, they
+[06:38] also in many cases share examples that
+[06:40] they've seen. One that they point to,
+[06:42] for example, is the CEO of MADNA
+[06:44] suggesting that their employees should
+[06:45] be using Chat GPT 20 times a day. As
+[06:48] we'll discuss in just a minute, there is
+[06:50] a big difference between saying that
+[06:51] should be the norm and actually holding
+[06:52] people accountable for that. But still,
+[06:54] I do think that this idea of getting
+[06:56] specific about AI adoption goals is
+[06:58] going to be really valuable. Now, one
+[07:00] more note in each of these sections
+[07:01] after the four best practices that they
+[07:03] share, they give a set of starter
+[07:05] questions and example actions. So, in
+[07:07] this case, one might be a question. Are
+[07:09] we transparently communicating our
+[07:10] progress and a suggested action of
+[07:12] maintaining and openly reviewing a
+[07:14] dashboard to clearly track AI progress?
+[07:17] The next practice area for this
+[07:18] leadership report they call activate.
+[07:21] They noticed that on the one hand almost
+[07:23] half of employees said that they lack
+[07:24] the training and support needed to
+[07:26] confidently and successfully use
+[07:28] generative AI despite the fact that they
+[07:30] rank training as the single most
+[07:32] important factor for actually adopting
+[07:34] AI and using it successfully. The four
+[07:37] best practices then that OpenAI points
+[07:38] to are launching a structured AI skills
+[07:41] program, establishing an AI champions
+[07:44] network, making experimentation routine,
+[07:46] and as they put it, making it count, or
+[07:48] maybe a more simple way to put it,
+[07:50] linking AI usage to performance. Now, I
+[07:53] want to talk specifically about these
+[07:54] last two, routinizing experimentation
+[07:56] and linking it performance. across a
+[07:58] huge percentage of the conversations
+[07:59] that we have and certainly the feedback
+[08:01] that I get when I'm at for example
+[08:03] executive sessions or doing keynotes
+[08:05] with big groups of AI practitioners is
+[08:07] the griping and belly aching about the
+[08:09] time that it takes to get good at AI and
+[08:12] how infrequently that time is actually
+[08:14] reflected in management's approaches to
+[08:16] AI adoption. In other words, it tends to
+[08:19] be the norm that even if leaders inside
+[08:20] a company have articulated some sort of
+[08:22] AI adoption goal, they haven't created
+[08:25] the actual time and space to allow the
+[08:27] people to do the hard work of getting
+[08:28] good at using these tools. Employees are
+[08:31] then just expected to find time around
+[08:33] the edges to additionally add on this
+[08:35] new layer of work, which is learning the
+[08:37] AI tools on top of doing everything else
+[08:39] that they do. OpenAI suggestion is to
+[08:41] give employees regular time to explore
+[08:43] AI tools. And I wanted to double click
+[08:45] on this because this is an easy one to
+[08:47] forget, but one of the most controllable
+[08:49] things that leaders can do inside an
+[08:51] organization. OpenAI goes on to suggest,
+[08:53] try dedicating the first Friday of each
+[08:55] month for teams to workshop how AI could
+[08:57] improve their work. And even something
+[08:59] as simple as this would make a
+[09:00] meaningful difference in many of the
+[09:02] organizations that we run into. Now, the
+[09:04] second thing that I wanted to point to
+[09:05] is this idea of directly linking AI
+[09:07] engagement to performance evaluations.
+[09:10] This is a major trend that we're seeing.
+[09:12] For the last couple of years, in many
+[09:14] organizations that really wanted to be
+[09:16] AI forward, they spent a bunch of
+[09:17] activation energy trying to get people
+[09:19] to adopt AI because they argued it was
+[09:21] going to be helpful for them. Basically,
+[09:23] the most aggressive AI organizations
+[09:25] were the ones who were regularly and
+[09:26] specifically encouraging AI use. Over
+[09:29] the last 6 months or so, we're seeing a
+[09:30] much more dramatic shift to just
+[09:32] mandating use. At this point, there are
+[09:34] increasingly use cases where you are
+[09:36] just frankly behind and not taking
+[09:38] advantage of the current tools of the
+[09:39] moment. if you are not using AI. And
+[09:41] increasingly, we're seeing companies who
+[09:42] are not just thinking about that as a
+[09:44] nice productivity enhancement, but as
+[09:46] something that's actually a problem if
+[09:47] you are not using it. Now, of course,
+[09:49] that's the negative side of linking AI
+[09:50] engagement to performance evaluations.
+[09:52] There's also the positive upside where
+[09:54] this could be a way to lever up and move
+[09:56] your career growth faster. But the point
+[09:57] that I wanted to add to the broader
+[09:59] conversation is that moving towards more
+[10:01] specific mandated usage is absolutely a
+[10:03] trend. The third practice area for
+[10:05] OpenAI's leadership guide is amplify, by
+[10:08] which they basically mean sharing
+[10:10] information across the organization.
+[10:12] They write the fastest way to scale AI
+[10:13] impact is to stop solving the same
+[10:15] problems in silos. Amplifying progress
+[10:17] means turning scattered into shared
+[10:19] knowledge, documenting successful
+[10:20] prompts, workflows, and use cases so
+[10:22] other teams can reuse, improve, and
+[10:24] build on them. The funny thing about
+[10:26] this is that this is actually exactly
+[10:27] what a previous version of Super
+[10:29] Intelligent was trying to be before we
+[10:30] moved off of it to focus on agents. But
+[10:32] I wholeheartedly agree that trying to
+[10:35] surface new use cases, new best
+[10:37] practices, and not force everyone into
+[10:39] this weird role of having to be a use
+[10:41] case discoverer is a key for successful
+[10:43] enterprise AI adoption. So what does
+[10:45] that look like in practice? Well, OpenAI
+[10:47] suggests it's things like launching a
+[10:48] centralized AI knowledge hub,
+[10:50] consistently sharing success stories,
+[10:52] building active internal communities,
+[10:53] and reinforcing wins at the team level.
+[10:56] Again, to me, this is an area that is
+[10:57] completely inside your control and is
+[10:59] just good AI leadership hygiene at this
+[11:01] point. Next up, OpenAI's idea of
+[11:04] acceleration is basically all about
+[11:05] removing friction and increasing the
+[11:07] speed of decision-m. Now, there is a
+[11:09] subtle thing here that I think is worth
+[11:11] calling out. We're still often at a
+[11:13] stage where companies are looking to do
+[11:14] things that make them feel like they're
+[11:16] making progress without really having to
+[11:18] figure out how to do things differently.
+[11:20] There's a certain contentment in doing
+[11:22] the AI workshop, but not actually being
+[11:24] held accountable to implement the new AI
+[11:26] workflow. This idea of acceleration is
+[11:29] all about actually really going and
+[11:30] doing it. So, the best practices that
+[11:32] they're calling out include things like
+[11:34] unblocking access to AI tools and data,
+[11:36] building a clear AI intake and
+[11:38] prioritization process so people who
+[11:40] want to use AI for new purposes don't
+[11:41] get stuck in bureaucracy, standing up a
+[11:44] cross functional AI council, and
+[11:46] importantly, actually giving it
+[11:47] authority to do things like unblock
+[11:49] projects that are surfaced through that
+[11:51] intake process, and finally connecting
+[11:53] this all to performance, rewarding
+[11:55] success when innovation is sped up. Now,
+[11:58] I actually want to connect the dots here
+[11:59] with OpenAI's last practice area, which
+[12:01] is govern, because it's also really just
+[12:03] the other side of reducing friction.
+[12:05] It's the side of reducing friction
+[12:06] that's about getting policies in place
+[12:08] so that that increased speed doesn't
+[12:10] create new types of issues down the
+[12:12] line. And frankly, these are areas that
+[12:14] are a lot easier to say than they are to
+[12:16] do well, but it's creating and sharing a
+[12:17] simple, responsible AI playbook and
+[12:19] running regular reviews of AI practices.
+[12:22] So, that's the guide. Like I said, the
+[12:24] subtext of all of this is that you do
+[12:26] not have to be some super advanced
+[12:28] organization to get a lot of value out
+[12:29] of AI. You can simply take these very
+[12:32] clear, obvious steps, and if you do them
+[12:34] well and systematically, you're going to
+[12:36] be out ahead. I do think, however, that
+[12:39] there are two big blinking things that
+[12:41] are missing here. The first, and I bet a
+[12:44] bunch of you are already thinking this,
+[12:45] is about agents. This is super focused
+[12:48] on individual users with assistant style
+[12:51] workflows. Now obviously this makes
+[12:53] sense given that we are talking about
+[12:54] chat GBT and that the product
+[12:56] specifically that they're thinking about
+[12:57] here or the product that provides their
+[12:59] context primarily is individual users
+[13:01] who are using chat GBT to do their work
+[13:04] better. But at this stage individual
+[13:06] employees using an assistant is only one
+[13:09] part of what successful AI
+[13:10] implementation actually means. One of my
+[13:13] big gripes with the upskilling side of
+[13:15] the industry right now is that it's not
+[13:16] supporting agentic implementation or not
+[13:19] helping people systematically think
+[13:20] about agent strategy. For example,
+[13:23] understanding what buckets of work
+[13:24] agents can do and how that relates to
+[13:26] what buckets of work employees want
+[13:28] agents to do. We don't have good systems
+[13:30] for helping companies figure out how to
+[13:32] integrate today's human employees with
+[13:33] future digital employees. We certainly
+[13:35] don't have good resources for supporting
+[13:37] employees as they figure out how to work
+[13:39] with and manage and orchestrate agents.
+[13:42] This is an area of AI upskilling that
+[13:43] basically still just doesn't exist. Now,
+[13:46] you can't do everything in every report.
+[13:48] And so, this is less of a critique and
+[13:49] more of an observation, but again, this
+[13:51] is deeply rooted in the assistant side,
+[13:53] not the agentic side of artificial
+[13:55] intelligence. The second thing that I
+[13:57] think is missing here is that this
+[13:59] report basically ignores all of that
+[14:01] unsexy work around data and
+[14:03] infrastructure that I've been arguing
+[14:04] recently is going to be core to the next
+[14:06] enterprise narratives. I'm on the record
+[14:08] saying that I think that 2026 is going
+[14:10] to be the year of context orchestration
+[14:12] and context engineering inside
+[14:13] enterprise AI as we give them cloud
+[14:16] cover to go do all of the messy
+[14:17] complicated data work that it's going to
+[14:19] take to get the next generation of
+[14:20] benefits once for example companies have
+[14:23] put all of these sort of practices into
+[14:24] play around the assistance there are
+[14:27] some little nods to data and data access
+[14:29] here but I think that if you are trying
+[14:30] to think holistically about AI
+[14:32] leadership inside your organization you
+[14:34] have to be considering context data and
+[14:36] the permissions that go with it as part
+[14:38] of this larger AI conversations. The
+[14:41] point for me is that if you did
+[14:42] everything on this list, you would be
+[14:44] doing better than many organizations
+[14:46] are. I still though think that we can
+[14:49] aspire to even more. I think that this
+[14:51] is very much a resource for getting
+[14:53] caught up to where things are or frankly
+[14:55] even were just a little while ago, which
+[14:58] is extremely necessary. Many
+[14:59] organizations are way way behind, but it
+[15:02] is not necessarily also skating to where
+[15:04] the puck is headed. So maybe OpenAI if
+[15:06] you guys are planning out your next set
+[15:07] of reports, part two of the leadership
+[15:10] report should be around agentic
+[15:12] management. If you did that, I will
+[15:13] scream it to the hills because that sort
+[15:15] of resource does not exist anywhere
+[15:17] right now and is sorely needed. But
+[15:20] still to wrap up, look, I think all of
+[15:21] these sort of resources are helpful. I
+[15:23] think them coming from the horse's
+[15:25] mouth, so to speak, is also helpful. It
+[15:27] provides a sort of instant credibility
+[15:29] that will help these lessons and best
+[15:30] practices stick more deeply when it
+[15:32] comes to being implemented. So hopefully
+[15:34] you found this useful. I'll include a
+[15:36] link to the report in the show notes.
+[15:38] For now, that's going to do it for
+[15:39] today's AI daily brief. Appreciate you
+[15:41] listening or watching as always. And
+[15:42] until next time, peace.

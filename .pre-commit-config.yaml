@@ -1,0 +1,67 @@
+repos:
+  # Python code formatting with black
+  - repo: https://github.com/psf/black
+    rev: 24.8.0
+    hooks:
+      - id: black
+        language_version: python3
+        args: ['--line-length=88', '--target-version=py39']
+
+  # Python import sorting with isort
+  - repo: https://github.com/pycqa/isort
+    rev: 5.13.2
+    hooks:
+      - id: isort
+        args: ['--profile=black', '--line-length=88']
+
+  # Python linting with flake8 (only critical errors)
+  - repo: https://github.com/pycqa/flake8
+    rev: 7.1.1
+    hooks:
+      - id: flake8
+        args: [
+          '--max-line-length=88',
+          '--extend-ignore=E203,W503,E501,W291,F401,C901,F541',  # Ignore cosmetic issues
+          '--select=E9,F63,F7,F82',  # Only syntax errors, undefined names, etc.
+          '--max-complexity=50'  # Relax complexity limit
+        ]
+
+  # Python security checking with bandit
+  - repo: https://github.com/pycqa/bandit
+    rev: 1.7.9
+    hooks:
+      - id: bandit
+        args: ['-r', '.', '-f', 'json']
+        exclude: ^tests/
+
+  # Shell script linting with shellcheck (skip if installation issues)
+  # - repo: https://github.com/shellcheck-py/shellcheck-py
+  #   rev: v0.10.0.1
+  #   hooks:
+  #     - id: shellcheck
+  #       args: ['--severity=warning']
+
+  # General file checks (relaxed for critical issues only)
+  - repo: https://github.com/pre-commit/pre-commit-hooks
+    rev: v4.6.0
+    hooks:
+      # Skip trailing-whitespace and end-of-file-fixer for now
+      - id: check-yaml
+      - id: check-json
+      - id: check-merge-conflict
+      - id: check-added-large-files
+        args: ['--maxkb=1000']  # Block files >1MB
+
+  # Python type checking with mypy (relaxed for critical errors only)
+  - repo: https://github.com/pre-commit/mirrors-mypy
+    rev: v1.11.2
+    hooks:
+      - id: mypy
+        additional_dependencies: [types-requests, types-python-dateutil]
+        args: [
+          '--ignore-missing-imports', 
+          '--no-strict-optional',
+          '--disable-error-code=import-untyped',
+          '--disable-error-code=var-annotated',
+          '--show-error-codes'
+        ]

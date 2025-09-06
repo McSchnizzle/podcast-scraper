@@ -37,15 +37,15 @@ log() {
 cleanup() {
     local exit_code=$?
     log "INFO" "YouTube cron job finished with exit code $exit_code"
-    
+
     # Keep only last 10 log files
     find "$LOG_DIR" -name "youtube_cron_*.log" -type f | sort -r | tail -n +11 | xargs rm -f 2>/dev/null || true
-    
+
     # Send healthcheck ping on failure
     if [[ $exit_code -ne 0 && -n "${HEALTHCHECK_URL_YT:-}" ]]; then
         curl -m 10 -fsS "$HEALTHCHECK_URL_YT/fail" >/dev/null 2>&1 || true
     fi
-    
+
     exit $exit_code
 }
 
@@ -56,13 +56,14 @@ main() {
     log "INFO" "Project Directory: $PROJECT_DIR"
     log "INFO" "Python Executable: $PYTHON_EXE"
     log "INFO" "Log Directory: $LOG_DIR"
-    
+
     # Process YouTube episodes from last 7 days (168 hours)
     log "INFO" "Starting YouTube transcript processing (168 hours lookback)"
-    
-    if "$PYTHON_EXE" youtube_processor.py --process-new --hours-back 168; then
+
+    # Redirect all Python output to log file for debugging
+    if "$PYTHON_EXE" youtube_processor.py --process-new --hours-back 168 2>&1 | tee -a "$LOG_FILE"; then
         log "INFO" "YouTube processing completed successfully"
-        
+
         # Run atomic push script
         log "INFO" "Running atomic Git push"
         if "$PROJECT_DIR/scripts/yt_push_atomic.sh"; then
@@ -75,7 +76,7 @@ main() {
         log "ERROR" "YouTube processing failed"
         exit 1
     fi
-    
+
     log "INFO" "YouTube cron job completed successfully"
 }
 

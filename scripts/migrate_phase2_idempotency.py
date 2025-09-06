@@ -4,11 +4,12 @@ Phase 2 Database Migration - Add Idempotency Tables
 Creates tables for storing OpenAI API results with proper constraints
 """
 
-import sqlite3
 import logging
+import sqlite3
 import sys
-from pathlib import Path
 from datetime import datetime
+from pathlib import Path
+
 from utils.datetime_utils import now_utc
 from utils.db import get_connection
 
@@ -126,176 +127,198 @@ CREATE INDEX IF NOT EXISTS idx_api_call_logs_component ON api_call_logs(componen
 CREATE INDEX IF NOT EXISTS idx_api_call_logs_created ON api_call_logs(created_at);
 """
 
+
 def migrate_database(db_path: str, db_name: str):
     """Migrate a single database with Phase 2 idempotency tables"""
     logger.info(f"🔄 Migrating {db_name} database: {db_path}")
-    
+
     try:
         with get_connection(db_path) as conn:
             # Enable foreign keys
             conn.execute("PRAGMA foreign_keys = ON")
-            
+
             # Execute migration SQL
             conn.executescript(MIGRATION_SQL)
-            
+
             # Verify tables were created
             cursor = conn.cursor()
-            cursor.execute("SELECT name FROM sqlite_master WHERE type='table' AND name LIKE '%summaries' OR name LIKE '%operations' OR name LIKE '%headers' OR name LIKE '%logs'")
+            cursor.execute(
+                "SELECT name FROM sqlite_master WHERE type='table' AND name LIKE '%summaries' OR name LIKE '%operations' OR name LIKE '%headers' OR name LIKE '%logs'"
+            )
             new_tables = [row[0] for row in cursor.fetchall()]
-            
-            logger.info(f"✅ Created tables in {db_name}: {', '.join(sorted(new_tables))}")
-            
+
+            logger.info(
+                f"✅ Created tables in {db_name}: {', '.join(sorted(new_tables))}"
+            )
+
             # Show table counts
             for table in new_tables:
                 cursor.execute(f"SELECT COUNT(*) FROM {table}")
                 count = cursor.fetchone()[0]
                 logger.info(f"   {table}: {count} rows")
-                
+
     except Exception as e:
         logger.error(f"❌ Failed to migrate {db_name}: {e}")
         raise
 
+
 def verify_migration(db_path: str, db_name: str):
     """Verify the migration was successful"""
     logger.info(f"🔍 Verifying {db_name} migration...")
-    
+
     expected_tables = [
-        'episode_summaries',
-        'digest_operations', 
-        'validation_operations',
-        'run_headers',
-        'api_call_logs'
+        "episode_summaries",
+        "digest_operations",
+        "validation_operations",
+        "run_headers",
+        "api_call_logs",
     ]
-    
+
     expected_indexes = [
-        'idx_episode_summaries_episode',
-        'idx_episode_summaries_model',
-        'idx_episode_summaries_idempotency',
-        'idx_digest_operations_episode',
-        'idx_digest_operations_topic',
-        'idx_digest_operations_model',
-        'idx_digest_operations_idempotency',
-        'idx_validation_operations_hash',
-        'idx_validation_operations_model',
-        'idx_validation_operations_idempotency',
-        'idx_run_headers_component',
-        'idx_run_headers_created',
-        'idx_api_call_logs_run_id',
-        'idx_api_call_logs_component',
-        'idx_api_call_logs_created'
+        "idx_episode_summaries_episode",
+        "idx_episode_summaries_model",
+        "idx_episode_summaries_idempotency",
+        "idx_digest_operations_episode",
+        "idx_digest_operations_topic",
+        "idx_digest_operations_model",
+        "idx_digest_operations_idempotency",
+        "idx_validation_operations_hash",
+        "idx_validation_operations_model",
+        "idx_validation_operations_idempotency",
+        "idx_run_headers_component",
+        "idx_run_headers_created",
+        "idx_api_call_logs_run_id",
+        "idx_api_call_logs_component",
+        "idx_api_call_logs_created",
     ]
-    
+
     try:
         with get_connection(db_path) as conn:
             cursor = conn.cursor()
-            
+
             # Verify tables
             cursor.execute("SELECT name FROM sqlite_master WHERE type='table'")
             actual_tables = [row[0] for row in cursor.fetchall()]
-            
+
             missing_tables = [t for t in expected_tables if t not in actual_tables]
             if missing_tables:
                 logger.error(f"❌ Missing tables in {db_name}: {missing_tables}")
                 return False
-                
+
             # Verify indexes
-            cursor.execute("SELECT name FROM sqlite_master WHERE type='index' AND name LIKE 'idx_%'")
+            cursor.execute(
+                "SELECT name FROM sqlite_master WHERE type='index' AND name LIKE 'idx_%'"
+            )
             actual_indexes = [row[0] for row in cursor.fetchall()]
-            
+
             missing_indexes = [i for i in expected_indexes if i not in actual_indexes]
             if missing_indexes:
                 logger.error(f"❌ Missing indexes in {db_name}: {missing_indexes}")
                 return False
-                
+
             # Test unique constraints by trying to insert duplicates
             test_episode_id = "test_episode_12345678"
-            
+
             # Test episode_summaries unique constraint
             try:
-                conn.execute("""
-                    INSERT INTO episode_summaries 
+                conn.execute(
+                    """
+                    INSERT INTO episode_summaries
                     (episode_id, chunk_index, char_start, char_end, summary, prompt_version, model, idempotency_key)
                     VALUES (?, 0, 0, 100, 'Test summary', 'v1.0', 'gpt-5-mini', 'test_key_1')
-                """, (test_episode_id,))
-                
+                """,
+                    (test_episode_id,),
+                )
+
                 # This should fail due to unique constraint
-                conn.execute("""
-                    INSERT INTO episode_summaries 
+                conn.execute(
+                    """
+                    INSERT INTO episode_summaries
                     (episode_id, chunk_index, char_start, char_end, summary, prompt_version, model, idempotency_key)
                     VALUES (?, 0, 100, 200, 'Different summary', 'v1.0', 'gpt-5-mini', 'test_key_2')
-                """, (test_episode_id,))
-                
-                logger.error(f"❌ Unique constraint not working in {db_name} episode_summaries")
+                """,
+                    (test_episode_id,),
+                )
+
+                logger.error(
+                    f"❌ Unique constraint not working in {db_name} episode_summaries"
+                )
                 return False
-                
+
             except sqlite3.IntegrityError:
-                logger.info(f"✅ Unique constraint working in {db_name} episode_summaries")
-                
+                logger.info(
+                    f"✅ Unique constraint working in {db_name} episode_summaries"
+                )
+
             # Clean up test data
-            conn.execute("DELETE FROM episode_summaries WHERE episode_id = ?", (test_episode_id,))
-            
+            conn.execute(
+                "DELETE FROM episode_summaries WHERE episode_id = ?", (test_episode_id,)
+            )
+
             logger.info(f"✅ {db_name} migration verification passed")
             return True
-            
+
     except Exception as e:
         logger.error(f"❌ Failed to verify {db_name}: {e}")
         return False
 
+
 def main():
     """Run Phase 2 database migration"""
     logging.basicConfig(
-        level=logging.INFO,
-        format='%(asctime)s - %(levelname)s - %(message)s'
+        level=logging.INFO, format="%(asctime)s - %(levelname)s - %(message)s"
     )
-    
+
     logger.info("🚀 Starting Phase 2 Database Migration")
-    
+
     databases = [
         ("podcast_monitor.db", "RSS Episodes"),
-        ("youtube_transcripts.db", "YouTube Episodes")
+        ("youtube_transcripts.db", "YouTube Episodes"),
     ]
-    
+
     success = True
-    
+
     for db_path, db_name in databases:
         if not Path(db_path).exists():
             logger.warning(f"⚠️  Database not found: {db_path}")
             continue
-            
+
         try:
             # Create backup
             backup_path = f"{db_path}.backup.{now_utc().strftime('%Y%m%d_%H%M%S')}"
             import shutil
+
             shutil.copy2(db_path, backup_path)
             logger.info(f"📦 Created backup: {backup_path}")
-            
+
             # Run migration
             migrate_database(db_path, db_name)
-            
+
             # Verify migration
             if not verify_migration(db_path, db_name):
                 success = False
-                
+
         except Exception as e:
             logger.error(f"❌ Migration failed for {db_name}: {e}")
             success = False
-    
+
     if success:
         logger.info("✅ Phase 2 database migration completed successfully")
-        
+
         # Show summary
         logger.info("\n📊 Migration Summary:")
         logger.info("   - Added episode_summaries table with idempotency")
-        logger.info("   - Added digest_operations table with idempotency") 
+        logger.info("   - Added digest_operations table with idempotency")
         logger.info("   - Added validation_operations table with idempotency")
         logger.info("   - Added run_headers table for observability")
         logger.info("   - Added api_call_logs table for debugging")
         logger.info("   - Created performance indexes on all tables")
         logger.info("   - Verified unique constraints are working")
-        
+
     else:
         logger.error("❌ Phase 2 database migration failed")
         sys.exit(1)
+
 
 if __name__ == "__main__":
     main()

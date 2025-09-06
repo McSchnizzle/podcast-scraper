@@ -33,15 +33,15 @@ trap cleanup EXIT INT TERM
 # Function to generate completion report
 generate_completion_report() {
     local report_file="$PROJECT_DIR/REVIEW_REPORT_${TIMESTAMP}.md"
-    
+
     log "INFO" "Generating completion report"
-    
+
     cat > "$report_file" << 'EOF'
 # Project Review Report
 
-**Generated:** {TIMESTAMP_PLACEHOLDER}  
-**Branch:** {BRANCH_PLACEHOLDER}  
-**Commit:** {COMMIT_PLACEHOLDER}  
+**Generated:** {TIMESTAMP_PLACEHOLDER}
+**Branch:** {BRANCH_PLACEHOLDER}
+**Commit:** {COMMIT_PLACEHOLDER}
 
 ## Phase 0 Implementation Status
 
@@ -123,7 +123,7 @@ generate_completion_report() {
 - File Size: {RSS_DB_SIZE}
 
 **YouTube Database (youtube_transcripts.db):**
-- Total Episodes: {YT_EPISODE_COUNT}  
+- Total Episodes: {YT_EPISODE_COUNT}
 - Schema Version: {YT_SCHEMA_VERSION}
 - File Size: {YT_DB_SIZE}
 
@@ -136,7 +136,7 @@ generate_completion_report() {
 - No backup strategy
 - Minimal error handling
 
-#### After Phase 0  
+#### After Phase 0
 - Hardened SQLite with WAL + busy timeout
 - Atomic YouTube operations with locking
 - Robust CI with concurrency control and monitoring
@@ -201,9 +201,9 @@ This review package includes:
 
 ---
 
-**Review prepared by:** Claude Code SuperClaude Framework  
-**Implementation date:** 2025-09-06  
-**Validation status:** Ready for 7-day operational validation  
+**Review prepared by:** Claude Code SuperClaude Framework
+**Implementation date:** 2025-09-06
+**Validation status:** Ready for 7-day operational validation
 EOF
 
     # Replace placeholders with actual values
@@ -211,26 +211,26 @@ EOF
     local commit_sha=$(git rev-parse HEAD 2>/dev/null || echo "unknown")
     local files_created=$(find . -name "*.sh" -o -name "*.md" -path "./scripts/*" -o -path "./docs/*" -o -path "./state/*" | grep -E "(scripts|docs|state)/" | wc -l | tr -d ' ')
     local files_modified=3  # utils/db.py, youtube_cron_job.sh, .github/workflows/daily-podcast-pipeline.yml
-    
+
     # Get database info
     local rss_episodes="unknown"
-    local yt_episodes="unknown" 
+    local yt_episodes="unknown"
     local rss_schema="unknown"
     local yt_schema="unknown"
-    
+
     if [[ -f "podcast_monitor.db" ]]; then
         rss_episodes=$(sqlite3 podcast_monitor.db "SELECT COUNT(*) FROM episodes;" 2>/dev/null || echo "unknown")
         rss_schema=$(sqlite3 podcast_monitor.db "PRAGMA user_version;" 2>/dev/null || echo "unknown")
     fi
-    
+
     if [[ -f "youtube_transcripts.db" ]]; then
         yt_episodes=$(sqlite3 youtube_transcripts.db "SELECT COUNT(*) FROM episodes;" 2>/dev/null || echo "unknown")
         yt_schema=$(sqlite3 youtube_transcripts.db "PRAGMA user_version;" 2>/dev/null || echo "unknown")
     fi
-    
+
     # Generate directory tree (limited depth)
     local dir_structure=$(tree -I '__pycache__|*.pyc|.git|*.log|*.mp3|*.wav|*.zip|node_modules' -L 3 2>/dev/null || find . -type d -not -path "./.git*" -not -path "./__pycache__*" | head -20)
-    
+
     # Replace placeholders
     sed -i '' "s/{TIMESTAMP_PLACEHOLDER}/$(date -u '+%Y-%m-%d %H:%M:%S UTC')/g" "$report_file"
     sed -i '' "s/{BRANCH_PLACEHOLDER}/$branch_name/g" "$report_file"
@@ -246,7 +246,7 @@ EOF
     sed -i '' "s/{RSS_DB_SIZE}/$(ls -lh podcast_monitor.db 2>/dev/null | awk '{print $5}' || echo 'N/A')/g" "$report_file"
     sed -i '' "s/{YT_DB_SIZE}/$(ls -lh youtube_transcripts.db 2>/dev/null | awk '{print $5}' || echo 'N/A')/g" "$report_file"
     sed -i '' "s/{ARCHIVE_NAME}/$ARCHIVE_NAME/g" "$report_file"
-    
+
     # Handle directory structure (use a simpler approach)
     if command -v tree >/dev/null 2>&1; then
         local tree_output=$(tree -I '__pycache__|*.pyc|.git|*.log|*.mp3|*.wav|*.zip|node_modules' -L 3 2>/dev/null | head -30)
@@ -256,30 +256,30 @@ EOF
     else
         sed -i '' 's/{DIRECTORY_STRUCTURE}/tree command not available/g' "$report_file"
     fi
-    
+
     echo "$report_file"
 }
 
 main() {
     cd "$PROJECT_DIR"
-    
+
     log "INFO" "Starting review preparation (timestamp: $TIMESTAMP)"
-    
+
     # Step 1: Commit and push changes
     log "INFO" "Step 1: Committing and pushing changes"
-    
+
     # Check if there are any changes to commit
     if ! git diff --quiet || ! git diff --cached --quiet || [[ -n "$(git status --porcelain)" ]]; then
         log "INFO" "Found changes to commit"
-        
+
         git add .
         git add -A  # Include any deleted files
-        
+
         local commit_message="Review prep: Phase 0 implementation complete - $(date -u +%Y-%m-%d)
 
 Phase 0 deliverables:
 - SQLite hardening with WAL and busy timeout
-- Atomic YouTube cron operations with locking  
+- Atomic YouTube cron operations with locking
 - CI workflow enhancements with concurrency control
 - Automated backup system with restore testing
 - Healthcheck integration for monitoring
@@ -288,16 +288,16 @@ Phase 0 deliverables:
 🤖 Generated with [Claude Code](https://claude.ai/code)
 
 Co-Authored-By: Claude <noreply@anthropic.com>"
-        
+
         if git commit -m "$commit_message"; then
             log "INFO" "Changes committed successfully"
-            
+
             # Push with retry
             local push_attempts=0
             local max_attempts=3
             while [[ $push_attempts -lt $max_attempts ]]; do
                 push_attempts=$((push_attempts + 1))
-                
+
                 if git push; then
                     log "INFO" "Changes pushed successfully"
                     break
@@ -318,27 +318,28 @@ Co-Authored-By: Claude <noreply@anthropic.com>"
     else
         log "INFO" "No changes to commit"
     fi
-    
+
     # Step 2: Generate completion report
     log "INFO" "Step 2: Generating completion report"
     local report_file=$(generate_completion_report)
     log "INFO" "Report generated: $(basename "$report_file")"
-    
+
     # Step 3: Create archive
     log "INFO" "Step 3: Creating project archive"
-    
+
     local temp_dir="/tmp/${ARCHIVE_NAME}"
     rm -rf "$temp_dir" 2>/dev/null || true
     mkdir -p "$temp_dir"
-    
+
     # Copy project files excluding specified patterns
     log "INFO" "Copying project files (excluding audio, archives, and .git)"
-    
+
     rsync -av \
         --exclude='*.mp3' \
         --exclude='*.wav' \
         --exclude='*.zip' \
         --exclude='.git/' \
+        --exclude='.gitbackup/' \
         --exclude='__pycache__/' \
         --exclude='*.pyc' \
         --exclude='.DS_Store' \
@@ -346,18 +347,18 @@ Co-Authored-By: Claude <noreply@anthropic.com>"
         --exclude='*.log' \
         --exclude='.env' \
         "$PROJECT_DIR/" "$temp_dir/"
-    
+
     # Add the report to the archive
     if [[ -f "$report_file" ]]; then
         cp "$report_file" "$temp_dir/"
     else
         log "WARN" "Report file not found at expected location: $report_file"
     fi
-    
+
     # Create the zip file
     local archive_path="$PROJECT_DIR/${ARCHIVE_NAME}.zip"
     cd "$(dirname "$temp_dir")"
-    
+
     if zip -r "$archive_path" "$(basename "$temp_dir")" >/dev/null; then
         local archive_size=$(ls -lh "$archive_path" | awk '{print $5}')
         log "INFO" "Archive created: ${ARCHIVE_NAME}.zip ($archive_size)"
@@ -365,13 +366,13 @@ Co-Authored-By: Claude <noreply@anthropic.com>"
         log "ERROR" "Failed to create archive"
         exit 1
     fi
-    
+
     # Cleanup temp directory
     rm -rf "$temp_dir"
-    
+
     # Step 4: Generate final summary
     log "INFO" "Step 4: Final summary"
-    
+
     echo ""
     echo "=========================================="
     echo "🎉 REVIEW PREPARATION COMPLETE"
@@ -385,7 +386,7 @@ Co-Authored-By: Claude <noreply@anthropic.com>"
     echo ""
     echo "📁 Archive contents:"
     echo "  • Complete source code (excluding audio files)"
-    echo "  • All documentation and runbooks"  
+    echo "  • All documentation and runbooks"
     echo "  • Configuration files and scripts"
     echo "  • Database schema (data excluded)"
     echo "  • Implementation report"
@@ -397,12 +398,12 @@ Co-Authored-By: Claude <noreply@anthropic.com>"
     echo ""
     echo "✅ Phase 0 implementation complete and ready for review!"
     echo ""
-    
+
     # Display git status
     local commit_sha=$(git rev-parse HEAD)
     local branch_name=$(git branch --show-current)
     echo "📝 Git status:"
-    echo "  • Branch: $branch_name"  
+    echo "  • Branch: $branch_name"
     echo "  • Latest commit: ${commit_sha:0:8}"
     echo "  • Working directory: clean"
     echo ""
@@ -417,7 +418,7 @@ case "${1:-}" in
         echo ""
         echo "Actions performed:"
         echo "  1. Commit and push any pending changes"
-        echo "  2. Generate comprehensive completion report"  
+        echo "  2. Generate comprehensive completion report"
         echo "  3. Create project archive (excluding *.mp3, *.wav, *.zip, .git/)"
         echo "  4. Provide review summary"
         echo ""

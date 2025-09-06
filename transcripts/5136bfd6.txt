@@ -1,0 +1,354 @@
+[00:00] Welcome back to the AI daily brief.
+[00:02] Today we are talking about a new
+[00:04] initiative from OpenAI where they are
+[00:06] launching jobs and certifications. Now
+[00:09] what makes this interesting is that
+[00:11] there are a variety of interpretations
+[00:13] and ways that people are looking at it
+[00:15] out there. Some are seeing it as OpenAI
+[00:17] deciding that they want to go compete
+[00:19] with LinkedIn. Others think it's a
+[00:21] response to growing anxiety around AI
+[00:24] related job loss. Then there's the
+[00:26] interpretation that people think that
+[00:27] OpenAI's valuation is too high and
+[00:29] they're just throwing things at the wall
+[00:30] and seeing what sticks. We're going to
+[00:32] break it down, talk about what they're
+[00:33] doing, get into some of those takes, and
+[00:35] ultimately try to figure out what this
+[00:37] says about where the company is headed.
+[00:39] So, first of all, let's talk about the
+[00:40] news. It was announced by new CEO for
+[00:42] applications, Fiji Simo. It was
+[00:44] announced with a blog post called
+[00:46] Expanding Economic Opportunity with AI.
+[00:48] Fiji writes, "Whenever I talk with
+[00:50] people about AI, one of the first
+[00:52] questions I get is, 'What is it going to
+[00:53] mean for my job, or how will it impact
+[00:55] my company?" I tell them, I believe AI
+[00:58] will unlock more opportunities for more
+[01:00] people than any technology in history.
+[01:02] It will help companies operate more
+[01:03] efficiently, give anyone the power to
+[01:05] turn their ideas into income, and create
+[01:07] jobs that don't even exist today. But AI
+[01:09] will also be disruptive. Jobs will look
+[01:11] different. Companies will have to adapt,
+[01:13] and all of us, from shift workers to
+[01:15] CEOs, will have to learn how to work in
+[01:17] new ways. At OpenAI, we can't eliminate
+[01:20] that disruption. But what we can do is
+[01:22] help more people become fluent in AI and
+[01:24] connect them with companies that need
+[01:25] their skills to give more people
+[01:27] economic opportunities. So what does
+[01:29] that look like in practice? Well, like I
+[01:30] said, they announced two initiatives.
+[01:32] The first is the OpenAI jobs platform.
+[01:35] SEMA writes, "If you're a business
+[01:37] looking to hire an AI savvy employee or
+[01:40] you just need help with a specific task,
+[01:42] finding the right person can be hit or
+[01:43] miss. The OpenAI jobs platform will have
+[01:45] knowledgeable, experienced candidates at
+[01:47] every level and opportunities for anyone
+[01:49] looking to put their skills to use. Simo
+[01:51] also says that this will not just be
+[01:53] prioritized for big companies. She
+[01:55] writes it will have a track dedicated to
+[01:57] helping local businesses compete and
+[01:59] local governments find the AI talent
+[02:01] they need to better serve their
+[02:02] constituents. Naturally, however, with
+[02:04] all these people applying for jobs
+[02:06] saying that they are AI savvy, how will
+[02:08] companies be able to tell if they're
+[02:10] actually AI fluent? Well, enter the
+[02:12] second product that was announced, AI
+[02:14] certifications.
+[02:15] This is sort of the natural extension of
+[02:17] the OpenAI Academy, which is their
+[02:19] online learning platform. Simo writes,
+[02:22] "We're going to expand the academy by
+[02:23] offering certifications for different
+[02:25] levels of AI fluency from the basics of
+[02:27] using AI at work all the way up to AI
+[02:29] custom jobs and prompt engineering.
+[02:31] We'll obviously use AI to teach AI.
+[02:33] Anyone will be able to prepare for the
+[02:35] certification in Chad GBT study mode and
+[02:37] become certified without leaving the
+[02:38] app. and companies will be able to make
+[02:40] it part of their own learning and
+[02:41] development programs. So that's the
+[02:43] announcement and like I said there is a
+[02:45] lot of interpretation going on around
+[02:47] this. The first line of discussion is
+[02:49] this idea that OpenAI is somehow now
+[02:52] trying to compete with LinkedIn. CNBC's
+[02:55] article about this was called OpenAI is
+[02:57] building an AI jobs platform that could
+[02:58] challenge Microsoft's LinkedIn. And this
+[03:01] article's whole thrust is all about how
+[03:03] this is yet another sign of the fraying
+[03:05] relationship between these two. This was
+[03:07] also a common theme on Twitter. Peter
+[03:09] Wilderford writes, "What does Microsoft
+[03:11] think about this? The Microsoft OpenAI
+[03:13] relationship continues to fray." I tend
+[03:16] to think that this narrative is
+[03:17] completely oversold and misses the mark
+[03:19] here. Basically, to the extent that
+[03:21] OpenAI ends up competing with LinkedIn
+[03:23] because of this initiative, I think that
+[03:25] will be incidental to whatever they were
+[03:27] trying to accomplish. First of all, as
+[03:29] high density as some jobs boards are, it
+[03:32] is not winner take all in the same way
+[03:33] that a social network is. If you just
+[03:35] look at the landscapes of jobs, they're
+[03:36] obviously much more fragmented.
+[03:38] Theoretically, if you could get everyone
+[03:40] in the same spot, it would be really
+[03:42] good for everyone, but in practice,
+[03:43] that's just not how it's played out.
+[03:45] Secondly, it is very normal at this
+[03:47] point for companies that are introducing
+[03:49] new types of software and new technology
+[03:52] to offer some amount of training on
+[03:53] their own tools. Salesforce has an
+[03:56] entire academy that has its own
+[03:57] certifications. Oracle has versions of
+[03:59] this. It's just kind of part of what you
+[04:01] do. Now, it is the case that Sam Alman
+[04:05] has talked about how he's interested in
+[04:06] building a social network and so maybe
+[04:08] that's inflaming this narrative and the
+[04:10] company did bring in an entire CEO of
+[04:12] applications in Fiji Simo. So, I don't
+[04:14] think it's totally off base, but I
+[04:16] mostly think that the people who are
+[04:17] talking about this are trying to read it
+[04:19] into a Shakespearean drama between
+[04:20] Microsoft and OpenAI because it makes
+[04:22] for interesting reading. Now, on the
+[04:25] other hand, the idea that this is a
+[04:27] response to growing job anxiety, I
+[04:29] think, is a little bit more legit.
+[04:31] Obviously, since they launched, AI
+[04:33] companies have been very attuned to this
+[04:35] particular concern. The farther away
+[04:37] we've moved from people's primary
+[04:38] considerations being robot takeovers,
+[04:40] the more that jobs really continues to
+[04:42] rear its head as the thing that people
+[04:44] are anxious about when it comes to AI.
+[04:46] And what's more, it definitely feels
+[04:48] like that concern is on an upswing right
+[04:50] now as we're starting to see studies
+[04:52] that show at least some evidence that
+[04:55] there may be an impact in certain
+[04:56] places. We talked a little bit about
+[04:59] this study from Stanford where they
+[05:01] argue that there are some indicators
+[05:02] that young people in jobs that are more
+[05:04] exposed to AI are seeing lower
+[05:06] employment rates than their peers. They
+[05:08] basically found that early career
+[05:10] workers between ages 22 and 25 who were
+[05:12] in what they considered the most AI
+[05:14] exposed occupations. Basically, they
+[05:16] organized all jobs into five categories
+[05:18] of how exposed to AI they were. They
+[05:21] said those young people in the most AI
+[05:23] exposed occupations have seen a 13%
+[05:26] relative decline in employment. Now,
+[05:28] they're very careful to point out that
+[05:29] it is not 100% that that is about AI.
+[05:32] There are a lot of other things going
+[05:34] on. There's some amount of resetting
+[05:36] after a big hiring postco and there are
+[05:38] certainly other potential explanations
+[05:40] as well, but it's enough of a signal
+[05:42] that people are sitting up and paying
+[05:43] attention. What's more, a second paper
+[05:45] from Harvard PhD students found similar
+[05:47] results by analyzing LinkedIn rumés and
+[05:50] job posting data. The paper was called
+[05:52] generative AI as seniority biased
+[05:54] technological change evidence from US
+[05:56] resume and job posting data and again
+[05:58] find some nent but compelling evidence
+[06:00] that early career folks are having a
+[06:02] harder time in this era of AI. Then on
+[06:04] top of all of this, we also this week
+[06:06] saw the release of a huge report from
+[06:08] the Gerald Huff Fund for Humanity
+[06:10] breaking down how many net jobs are
+[06:12] expected to be lost sector by sector. It
+[06:14] scored each industry on how fast they
+[06:16] would be disrupted and came to the
+[06:18] conclusion that a net of 45 million US
+[06:20] jobs are expected to be lost due to AI.
+[06:23] Now this was ultimately a very long
+[06:25] pitch for UBI, which is one of the big
+[06:26] things that this fund focuses on. So you
+[06:28] have to take it with that grain of salt.
+[06:30] But our point for the purposes of
+[06:32] understanding why OpenAI would do this
+[06:33] now is that this narrative is on the
+[06:36] rise. Of course though, AI won't just
+[06:38] take jobs, it will create new jobs. And
+[06:40] that's sort of the point that OpenAI is
+[06:41] trying to make with their jobs board.
+[06:43] Recently, LinkedIn founder Reed Hoffman
+[06:45] was discussing these studies and wrote,
+[06:47] "If you're entering the workforce today,
+[06:49] you have a unique advantage. You can
+[06:51] grow up working with co-pilots,
+[06:52] understanding the leverage they give you
+[06:53] as an employee, and help your companies
+[06:55] figure out how to integrate AI into
+[06:57] their work. The real test will be
+[06:59] whether we treat this moment as a
+[07:00] warning or an opening. I do think that
+[07:02] to some extent this is OpenAI trying to
+[07:04] get out ahead of that discussion. Now
+[07:07] connected to all of this is a political
+[07:08] dimension. Open AAI is explicit that
+[07:11] this is part of a response to the White
+[07:13] House's efforts to expand AI literacy.
+[07:15] In that announcement post, Simo wrote,
+[07:17] "We're launching these new initiatives
+[07:19] as part of our commitment to the White
+[07:20] House's efforts towards expanding AI
+[07:22] literacy." They also put a number goal
+[07:24] around the certification, saying that
+[07:25] they're committed to certifying 10
+[07:27] million Americans by 2030. Now, outside
+[07:29] of whether this was competition for
+[07:31] LinkedIn or just a straight response to
+[07:32] AI job anxiety, I saw really two
+[07:35] different types of interpretations. The
+[07:37] first was basically some version of,
+[07:39] "Wow, is this company ambitious and
+[07:41] they're coming for everything?" And the
+[07:43] other was, "This feels like kind of a
+[07:44] lack of focus and we're not sure how it
+[07:46] all fits together." Nlesh Trevetti, for
+[07:48] example, wrote, "Feels like a big anti-
+[07:50] signal." To be honest, I actually saw
+[07:52] enough variations of these that I
+[07:53] tweeted out a little poll asking whether
+[07:55] people thought it was a sign of ambition
+[07:57] or a sign of being lost in the sauce.
+[07:59] And while the sample size is very small,
+[08:01] a little under 100 respondents, it was
+[08:04] fairly evenly split. 53.6% said it was
+[08:07] ambitious, 46.4% said it was an
+[08:09] indication of them being lost. Abu from
+[08:12] datainsight.com writes, "To me it looks
+[08:13] like they're trying everything to be
+[08:14] profitable. Right now, their main income
+[08:16] is chat GBT and API, but they're clearly
+[08:19] moving down the application layer. AI
+[08:21] certifications, that could print money.
+[08:23] The jobs platform, not so sure. When you
+[08:25] scale, chasing every vertical isn't
+[08:27] always smart. They're even toying with
+[08:29] social media, but honestly, that's
+[08:30] unlikely to work. I saw some version of
+[08:33] this response a lot. And what I would
+[08:35] say about it is that I think it's a
+[08:36] little bit more nuanced. First of all,
+[08:38] OpenAI's revenue is growing extremely
+[08:41] fast. Not as fast as Anthropics right
+[08:43] now thanks to the coding applications,
+[08:45] but still extremely extremely quickly. I
+[08:48] think that they have very barely
+[08:49] scratched the surface on just how much
+[08:51] consumer and business/ API revenue there
+[08:53] is out there. At the same time, OpenAI
+[08:56] has always seemed to me to understand
+[08:58] that they are going to have to own the
+[09:00] relationships with their customers. I do
+[09:02] not think that they're content to just
+[09:04] build the platform that powers things
+[09:05] underneath. I think that they believe
+[09:06] that they are going to have to exist at
+[09:08] the interface with the customer to have
+[09:10] long-term durability and long-term
+[09:12] modes. Fiji coming in as the CEO of
+[09:15] applications I think is an indicator of
+[09:17] that. And there were some people who
+[09:19] absolutely groed that this could be a
+[09:21] very successful business line. Kevin
+[09:23] Yang wrote, "OpenAITs is a great idea.
+[09:26] This basically forces people to learn
+[09:27] chatgbt to get a job. the best lock in.
+[09:30] I would go further and say learning chat
+[09:32] GBT is already sort of a requirement to
+[09:34] get a job and it's a reasonable thing to
+[09:36] explore whether OpenAI wants to be the
+[09:37] ones who own the certifications or at
+[09:39] least the anchor certifications that
+[09:41] says someone is actually good at chatbt.
+[09:43] Wes Roth writes, "If the model works, AI
+[09:45] fluency could become the next must- have
+[09:47] line on every resume and open AI would
+[09:49] sit at the center of the talent
+[09:50] marketplace it's creating." Again, I
+[09:52] think already AI fluency is a must-have
+[09:55] line on most resumes. And again, the
+[09:57] only question to me is how much it makes
+[09:58] sense for the platforms themselves
+[10:00] versus third parties to be in the
+[10:02] certification game. We moved away from
+[10:04] it, but this is something we talked
+[10:05] about doing a lot when Super Intelligent
+[10:07] was in its earliest incarnations as a
+[10:09] learning platform. I think there's the
+[10:11] other piece of this which is worth
+[10:12] noting that OpenAI might just be legit
+[10:14] when they say they really want people to
+[10:16] have more economic opportunity in the
+[10:17] future. OpenAI's head of education,
+[10:19] Leabulski, posted on LinkedIn, "I've
+[10:21] spent the last decade of my career
+[10:22] building new pathways to jobs and
+[10:24] careers in partnerships with
+[10:25] universities throughout the world. Open
+[10:27] AI has rapidly become a top learning
+[10:29] destination and a place where people are
+[10:30] demonstrating their skills each and
+[10:31] every day. I'm excited to see a world
+[10:33] where Open AI can help credential those
+[10:35] who have built cutting edge skills and
+[10:36] connect them to the jobs of the future.
+[10:38] And having known Leah at various parts
+[10:40] of her career, which by the way have
+[10:41] always been at education companies, I
+[10:43] know at least for her, and of course
+[10:45] this doesn't necessarily speak for the
+[10:46] organization as a whole, those
+[10:48] motivations are exactly as she says,
+[10:51] ultimately this might just be one of
+[10:52] those times where good press meets good
+[10:54] business. OpenAI announced this
+[10:56] initiative with a bunch of partners,
+[10:57] including Walmart, and it strikes me
+[10:59] that this is sort of a worst case
+[11:01] scenario. This is a good corporate
+[11:03] citizen initiative and best case
+[11:05] scenario, it's a serious revenue line
+[11:06] for the future. In any case, I think a
+[11:08] super interesting moment and a super
+[11:10] interesting initiative. I'm excited to
+[11:11] see how both the jobs board and the
+[11:13] certifications roll out. For now though,
+[11:15] that is going to do it for today's AI
+[11:16] daily brief. Appreciate you listening or
+[11:18] watching as always and until next time,
+[11:20] peace.

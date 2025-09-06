@@ -1,0 +1,259 @@
+[00:00] Welcome back to the AI Daily Brief
+[00:01] headlines edition. All the daily AI news
+[00:03] you need in around 5 minutes. Could it
+[00:06] actually be happening? Are we actually
+[00:09] going to get a play from Apple on AI?
+[00:12] The Certino giant appears to have made a
+[00:15] call and will partner with Google on
+[00:17] their next AI offering. Bloomberg's
+[00:19] Apple insider Mark German reports that
+[00:21] the project will be an AI powered search
+[00:23] engine known internally as World
+[00:25] Knowledge Answers. Sources said that the
+[00:27] feature will be integrated into Siri and
+[00:29] that Apple are also considering building
+[00:30] it into Safari and their home screen
+[00:32] search widget spotlight. The feature is
+[00:34] expected to be ready by the spring as
+[00:36] part of a long overdue Siri overhaul.
+[00:39] Sources said that the idea is to
+[00:40] replicate the performance of Google's AI
+[00:42] overviews or Perplexity. The underlying
+[00:45] technology enabling the new Siri could
+[00:46] come in part from Google, Apple's
+[00:48] longtime partner in internet search. The
+[00:50] companies reached a formal agreement
+[00:52] this week for Apple to evaluate and test
+[00:54] a Google developed AI model to help
+[00:56] power the voice assistant. The reporting
+[00:58] also spoke to a much broader Siri
+[01:00] revision that's in the works. The new
+[01:01] Siri is intended to be able to tap into
+[01:03] personal data and on-screen content to
+[01:05] better fulfill queries. This was, of
+[01:07] course, the original idea of so-called
+[01:09] Apple intelligence to have the context
+[01:12] of your personal experience expressed
+[01:14] through mobile that would make AI better
+[01:16] for you. Now, of course, none of that
+[01:18] vision has come to fruition, but the
+[01:20] vision was something that many people
+[01:21] were interested in theoretically at
+[01:23] least. The reporting also suggests that
+[01:25] Siri will become a computer use agent
+[01:27] able to navigate an Apple device
+[01:28] according to voice instructions. Craig
+[01:30] Federigi, Apple's head of software
+[01:32] engineering and the executive in charge
+[01:33] of the Siri project said at a race in
+[01:35] all hands, "The work we've done on this
+[01:37] endto-end revamp of Siri has given us
+[01:39] the results we've needed. This has put
+[01:41] us in a position to not just deliver
+[01:42] what we announced, but to deliver a much
+[01:44] bigger upgrade than we envisioned. The
+[01:46] project has drawn in talent from
+[01:47] multiple teams including the AI division
+[01:49] and the Apple services unit helmed by
+[01:51] executive Eddie Q. You might recognize
+[01:53] that name as the person who has
+[01:54] reportedly been pushing for acquisitions
+[01:56] as a path for Apple to get back in the
+[01:58] AI competition. Although he has not been
+[02:00] successful in convincing his colleagues
+[02:02] around that series new architecture is
+[02:04] reportedly split into three components.
+[02:06] A planner, a search system, and a
+[02:08] summarizer to put it all together into
+[02:10] an output. Sources said that Apple is
+[02:12] leaning towards using a customuilt
+[02:13] version of Google's Gemini model as the
+[02:15] summarizer. It would need to be modified
+[02:17] to run on Apple's proprietary hardware
+[02:18] and the two companies are now
+[02:19] collaborating on fine-tuning and
+[02:21] testing. Apple is also considering using
+[02:23] Gemini for the planner, although
+[02:24] Anthropics Claude and Apple's own
+[02:26] in-house models are still being
+[02:27] considered as well. The reporting also
+[02:29] said that Gemini hasn't been ruled out
+[02:31] to drive the search system. In other
+[02:33] words, in 6 months time, we could have a
+[02:34] version of Siri built entirely on
+[02:36] Google's tech. Reportedly, Anthropic's
+[02:38] Claude actually outperformed Google in
+[02:40] the Siri bakeoff, but Anthropic demanded
+[02:42] too much money for the use of their
+[02:43] model. Sources said that they asked for
+[02:45] more than 1.5 billion a year while
+[02:47] Google was up to much more favorable
+[02:48] terms. Now, one unspoken part of the
+[02:51] reporting that I think is pretty
+[02:52] interesting is the fact that OpenAI is
+[02:53] nowhere in these conversations despite
+[02:55] the fact that Chat GPT was the first
+[02:57] third party AI app that Apple started
+[02:59] pushing on the iPhone in that
+[03:00] presentation about a year ago. I don't
+[03:02] know what happened with that
+[03:03] relationship, whether the fallout is
+[03:05] from a business or a technological
+[03:06] perspective, but it is notable that
+[03:08] OpenAI is nowhere to be seen here.
+[03:11] Still, I think at this point for most
+[03:12] people, just having Siri that actually
+[03:14] works, like anything even close to how
+[03:16] you would expect in 2025, will be a big
+[03:18] win. Speaking of OpenAI, there has
+[03:21] continued to be incredible demand for
+[03:23] shares in that company. They have
+[03:25] boosted their secondary share sale up to
+[03:27] 10 billion, an increase from the 6
+[03:29] billion reported last month. Current and
+[03:31] former employees who have held shares
+[03:32] for more than 2 years will have until
+[03:34] the end of the month to decide whether
+[03:35] they'll access that liquidity. The round
+[03:37] is expected to close in October. Now,
+[03:39] the round is noteworthy because it's the
+[03:41] first to test OpenAI at a 500 billion
+[03:43] valuation. Their last fundraising was,
+[03:46] of course, conducted at the start of the
+[03:47] year at 300 billion. Since then, the
+[03:49] company has doubled its revenue and
+[03:50] basically everything else, including
+[03:52] users. So, some big markup sort of makes
+[03:54] sense, although the numbers are eye
+[03:56] popping to some. Still, when push comes
+[03:58] to shove, we continue to see the trend
+[04:00] of demand for AI startup investments
+[04:02] vastly outstripping supply as the number
+[04:04] of shares that the market wants to
+[04:05] consume just seems to keep going up.
+[04:08] Another update on the AI fundraising
+[04:09] front. Mistral is set to finalize a€2
+[04:12] billion euro investment that would value
+[04:14] the company at roughly 14 billion. The
+[04:16] rumor from last month was that they were
+[04:18] seeking a billion in fundraising at a
+[04:20] $10 billion valuation. So quite a lot of
+[04:22] additional funding and a meaningful bump
+[04:23] in the valuation seems to have come
+[04:25] through. This will be the first round of
+[04:27] Mistral fundraising since June of last
+[04:28] year when they were valued at 5.8
+[04:30] billion. Now, not only does this mean
+[04:32] their valuation has doubled, but more
+[04:34] notably, it'll be the first time that
+[04:36] they've had access to such a significant
+[04:37] war chest. They've raised around a
+[04:39] billion in total in the 2 and 1/2 years
+[04:41] since they were founded. So, this would
+[04:43] be double that all in one fell swoop.
+[04:45] It's still not super clear to me exactly
+[04:47] where Mistl is going to fit in this
+[04:49] ecosystem, but it's clear that there's a
+[04:51] lot of folks who think that they have a
+[04:52] place somewhere. Quick update on talent
+[04:55] drama. XAI's CFO has left after just
+[04:58] three months on the job. The Wall Street
+[04:59] Journal reports that CFO Mike Liberator
+[05:01] left the company around the end of July
+[05:03] after commencing in April. Liberator
+[05:05] oversaw XAI's debt and equity raise in
+[05:07] June, which brought in 10 billion in
+[05:09] fresh capital for the company. SpaceX
+[05:11] contributed almost half of the equity
+[05:12] raised, which suggested to some that
+[05:14] demand from outside investors was
+[05:16] comparatively sparse, at least relative
+[05:18] to all these other rounds that we're
+[05:19] seeing. Now, while it's dangerous to
+[05:20] draw too many conclusions from a single
+[05:22] departure, this is the latest in a
+[05:24] recent trend. At the beginning of
+[05:25] August, XAI's general counsel, Robert
+[05:27] Keel, announced he was leaving after a
+[05:29] little more than a year on the job. In
+[05:30] his farewell post, he claimed he was
+[05:32] leaving to spend more time with his two
+[05:33] toddlers, something that any toddler
+[05:34] parent will understand, but also noted
+[05:36] that when it came to Elon Musk, quote,
+[05:38] "There's daylight between our
+[05:39] worldviews." Rahu Rao, a senior lawyer
+[05:41] who dealt with commercial affairs at the
+[05:43] company, left around the same time. And
+[05:45] then on August 13th, co-founder Igor
+[05:46] Pabushkin announced that he was leaving
+[05:48] to start his own venture firm. There was
+[05:50] of course also ex CEO Linda Yakarino
+[05:52] announcing her departure in July, a few
+[05:54] months after the social media platforms
+[05:55] merger with XAI. AAM's razor continues
+[05:58] to be that people in high impact jobs
+[06:00] move around a lot more than people where
+[06:01] the stakes are lower. But there's enough
+[06:03] happening there that for anyone who's
+[06:05] really interested in how much the
+[06:06] competition between all these labs is
+[06:08] going to increase the availability of
+[06:09] cool products for all of us, let's just
+[06:11] say it's worth paying at least a little
+[06:12] bit of attention to. Lastly, a sort of
+[06:15] messy one. Scale has sued rival data
+[06:18] labeling startup Merkor accusing the
+[06:19] firm of corporate espionage. In a
+[06:21] lawsuit filed on Wednesday, Scale
+[06:23] claimed that their former head of
+[06:24] engagement management Eugene Ling
+[06:26] downloaded more than 100 customer
+[06:27] strategy documents while in
+[06:28] communication with Merkor. He's accused
+[06:30] of meeting with Merkor CEO Brendan Foody
+[06:32] to discuss business strategy and product
+[06:34] while still in his role at scale. The
+[06:36] lawsuit claims that Ling was later hired
+[06:38] in order to build a relationship with
+[06:39] one of Scale's largest customers and
+[06:41] that the bulk of the documents relate to
+[06:42] that customer. Ling is allegedly still
+[06:44] assigned to this customer's account
+[06:46] while working at Merkore. Surya Midha, a
+[06:48] Murkor co-founder, responded to the
+[06:50] lawsuit stating, "While Merkor has hired
+[06:52] many people who departed Scale, we have
+[06:53] no interest in any of Scale's trade
+[06:55] secrets and in fact are intentionally
+[06:57] running our business in a different
+[06:58] way." Eugene informed us that he had old
+[07:00] documents in a personal Google Drive,
+[07:01] which we have never accessed and are now
+[07:03] investigating. We reached out to Scale 6
+[07:05] days ago, offering to have Eugene
+[07:06] destroy the files or reach a different
+[07:08] resolution, and we are now awaiting
+[07:09] their response. Now, of course, the
+[07:11] situation is made even messier due to
+[07:12] Meta's Aqua Hire deal with Scale. It has
+[07:15] been well reported that Scale lost
+[07:16] multiple major clients in the wake of
+[07:17] that deal, as rival AI Labs didn't
+[07:20] necessarily want to continue doing
+[07:21] business with them after Meta became a
+[07:22] major owner. Then of course there's the
+[07:24] fact that earlier this week it was
+[07:25] reported that Meta themselves had also
+[07:27] moved away from using scales data
+[07:29] labeling services adding rival providers
+[07:31] including Merkor. So I guess maybe the
+[07:33] takeaway that is if you are looking for
+[07:34] signs that AI is slowing down when it
+[07:36] comes to things like big company
+[07:38] competition, talent wars, fundraising or
+[07:42] basically any other vector. The answer
+[07:43] is most distinctly no. However, that's
+[07:46] going to do it for today's AI daily
+[07:47] brief headlines edition. Next up, the
+[07:48] main

@@ -1,0 +1,424 @@
+[00:03] Welcome to this week's episode of AI
+[00:05] News You Can Use special edition because
+[00:07] we're on our team retreat in Portugal.
+[00:10] But that doesn't change anything about
+[00:11] the fact that we have a ton of new AI
+[00:13] releases to cover this week and it's a
+[00:15] very practical one if I may say so
+[00:17] myself. We have a brand new app that
+[00:18] checks if your website is ready for the
+[00:20] AI era. GPD's most important feature is
+[00:23] now available to all free users. and so
+[00:25] much more in this week's episode of AI
+[00:27] news you can use the show that takes all
+[00:29] the AI releases of this week filters for
+[00:31] the most important ones and then I get
+[00:33] to present them back to you. Oh, and if
+[00:34] you're worried the entire video is going
+[00:36] to be presented from within the store,
+[00:38] don't be. Let's do this. So, I'm
+[00:40] actually really excited for the main
+[00:41] story this week because this is
+[00:43] something we've seen people request over
+[00:44] and over both in our community and all
+[00:46] across the internet. It's figuring out
+[00:48] if your website is AI ready. In other
+[00:51] words, if LLMs are going to index your
+[00:54] website and serve it up as an answer to
+[00:56] people's prompts. There have been some
+[00:57] approaches now, but I think this release
+[00:59] is the best thing I've seen so far for
+[01:01] this because it's a open-source app from
+[01:04] Firecrawl, which you might already know
+[01:06] as one of the most popular services to
+[01:08] search the web to check if your website
+[01:10] is AI ready. Now, in this tweet, you can
+[01:12] see the CEO of Firecrawl shared this on
+[01:14] Twitter a few days ago. It's actually
+[01:16] not getting a lot of attention, which
+[01:17] surprised me personally. And this app is
+[01:19] fully open source and available on
+[01:21] GitHub. Now the problem here is that you
+[01:23] would need to download this, install it
+[01:25] on your own machine, insert the API key,
+[01:27] and then run the app locally to do this,
+[01:30] which is a high barrier of entry. And as
+[01:33] we are on our weekly retreat here, and
+[01:35] we have the entire team, when we saw
+[01:36] this app, it immediately occurred to us
+[01:37] that hosting this on the web for the
+[01:39] viewers of the show would be a great
+[01:41] idea. So Durk, who's one of the most
+[01:43] active community members who's here with
+[01:45] us, did exactly that for you. want to
+[01:47] briefly join me, Durk? Okay, Derek. So,
+[01:49] just briefly tell us what did you do
+[01:51] here with this open source application?
+[01:53] Well, I enhanced it in a way so that you
+[01:55] can use it much more easily and it's
+[01:58] much more into your workflows. You can
+[02:01] not only see what the app tells you what
+[02:04] to improve, but it also gives you a
+[02:06] download for a markdown file that gives
+[02:08] you a complete actionable plan on what
+[02:10] to implement, how to implement it, and
+[02:12] you can also give this to your AI to let
+[02:15] it do that for you.
+[02:16] Yes. Exactly. And I think this is really
+[02:18] smart. So if you open up this website
+[02:20] that we hosted on Verscell, you can see
+[02:21] that it first asks for API keys which
+[02:23] I'm just going to put in here. So you
+[02:25] get these by creating OpenAI and
+[02:26] Firewall account and then it immediately
+[02:28] works and I could just go ahead and I
+[02:29] could just type in the URL of the
+[02:31] company website analyze site and as Turk
+[02:33] mentioned the basic app would give you
+[02:34] just this. It shows you hey you're 70%
+[02:37] of the way there and it gives the
+[02:39] details on the different points what you
+[02:40] did well and what's missing. So in this
+[02:42] case we should add a LLM text file, a
+[02:43] robots text file and a site map. But
+[02:45] what Durk did here is he added this
+[02:47] download report button, right? So you
+[02:49] could just press this and you get a
+[02:50] markdown file with all the instructions
+[02:53] for any AI assistant to actually do the
+[02:56] stuff that this app suggests. So as you
+[02:58] can see, it's the whole reports and then
+[03:00] in the end, I believe there's the
+[03:01] instructions here. Yeah. So if you give
+[03:03] this to something like plot code or
+[03:04] cursor and it has access to your
+[03:06] website, it can just do it and you don't
+[03:08] even have to hire a dev to get it done
+[03:10] for you. Matter of fact, after this
+[03:12] recording is done, I'll just run that
+[03:13] and I'll show you a screenshot of the
+[03:15] score of our website.
+[03:20] And also, one more thing, big
+[03:21] disclaimer, we kind of just hacked this
+[03:23] up in a day. So, no guarantees
+[03:24] whatsoever. We just took the onetoone
+[03:26] open source repo and hosted it for you.
+[03:28] But we're not charging for this or
+[03:30] guaranteeing that this works flawlessly.
+[03:32] Yet, I think this is something that
+[03:34] everybody should look into doing because
+[03:35] I can tell you if you look for certain
+[03:37] search terms in chat, some of my YouTube
+[03:39] videos actually rank there because
+[03:41] YouTube did a really good job with
+[03:43] optimizing the videos for LLMs and you
+[03:46] should do the same with your website.
+[03:47] Okay, good luck with the next story.
+[03:49] One quick follow-up to last week's video
+[03:50] is we talked about the new version of
+[03:52] the Google Translate app and as many of
+[03:54] you correctly pointed out, actually made
+[03:56] a mistake during my demo and I want to
+[03:58] remedy that in this video. So, it's very
+[04:00] subtle, but when you go to this
+[04:01] conversational feature, it's this AI
+[04:03] button here in the middle that allows
+[04:04] you to engage the new AI mode. To me, it
+[04:07] seems that the other mode also uses AI,
+[04:08] but this explicitly reads things out
+[04:10] loud and live translates with AI. So,
+[04:13] everything covered in last week's video
+[04:15] stands. It's just this little sparkle
+[04:16] button that you want to hit to try the
+[04:18] new feature. Very powerful. Been trying
+[04:20] it and it's quite good at live
+[04:21] translation. Make sure to update your
+[04:22] app and check it out. All right. So,
+[04:24] next up, I want to show you one of the
+[04:25] best ways to turn your ideas into real
+[04:28] apps. both mobile and desktop. That's
+[04:30] the key here. Using AI, and that is with
+[04:32] anything, the sponsor of today's video,
+[04:34] anything lets you create powerful mobile
+[04:36] apps and websites. And all you need is
+[04:38] one skill, communication. No coding
+[04:40] required at all. If you can imagine it
+[04:42] and put your ideas into words, anything
+[04:44] can transform those words into a real
+[04:46] app. And if you've ever used Chat GPT at
+[04:48] all, the platform will feel very
+[04:49] familiar. As you can see, there's not a
+[04:51] wall of code overwhelming you. Just a
+[04:53] simple chat interface. And the part that
+[04:55] I really want to highlight here is how
+[04:57] good they're at creating mobile apps.
+[04:58] So, if you're following this channel,
+[05:00] you might be familiar with many of the
+[05:01] workflows we covered, but usually the
+[05:03] focus is web apps and mobile apps are an
+[05:05] afterthought. That's not the case here.
+[05:06] You can build native mobile apps and web
+[05:09] apps with the same back end. You can see
+[05:11] instant previews of them on your phone
+[05:14] and they have a one-click submit to the
+[05:16] application store. Everything is
+[05:17] included here. front end, backend,
+[05:19] database, AI integrations, and you can
+[05:22] build it all with natural language, just
+[05:24] like you would be messaging a developer.
+[05:26] So, if you have an idea for a mobile
+[05:27] app, anything lets you go from idea to
+[05:29] live app in hours using just prompts. No
+[05:32] coding or extra tools required at all.
+[05:34] So, if that sounds good to you, go check
+[05:35] out anything today. Use the code AI
+[05:37] advantage to get $10 off your first
+[05:39] month. And now, let's get back to the
+[05:41] next piece of AI news that you can use.
+[05:42] Okay, so for the next story, I want you
+[05:44] to pay attention, especially if you're
+[05:46] not a paid user in chatb. I personally
+[05:48] think projects are the most powerful
+[05:49] feature they have ever shipped. It's the
+[05:51] best interface to manage context which
+[05:53] as you might know is the key to getting
+[05:54] good results from chatbt. Up until now
+[05:56] only the paid accounts had them. Now in
+[05:59] your free account you yourself can use
+[06:00] projects and we already have a video in
+[06:02] the pipeline teaching you how to set
+[06:04] them up for yourself how to compare to
+[06:06] memories custom instructions GPTs.
+[06:08] Subscribe if you want that. It's going
+[06:09] to be coming out soon. We just have to
+[06:10] rework it a little bit because in my
+[06:12] recording of that video, this was a
+[06:14] premium paid feature and a very powerful
+[06:16] one and now all the free users have it.
+[06:18] So if you're on a free account, go check
+[06:19] out projects instead of one for personal
+[06:20] chats, one for work chats. And if you
+[06:22] want more guidance, have a look at the
+[06:23] video that's coming soon. All right,
+[06:25] next up we have Genspark Clip Genius, a
+[06:27] new feature by the Agentic app that kind
+[06:29] of tries to do it all. At least that's
+[06:32] what I would conclude from the recent
+[06:33] releases. And this time they're trying
+[06:35] to do video editing. We tested this with
+[06:37] a few examples and compared it to some
+[06:39] of our manual editing efforts recently.
+[06:41] Concretely, what we did is give it a
+[06:42] lecture from our community on chatb
+[06:44] connectors that I held and we manual
+[06:46] edited a short/real from this which
+[06:48] turned out great. To compare, we also
+[06:50] gave Jensen Spark the same source video
+[06:52] and gave it the following prompt.
+[06:54] Understand the video, select one topic
+[06:55] or quote and create a vertical video
+[06:57] that is less than 60 seconds. And the
+[06:59] result, I wouldn't even show the whole
+[07:01] thing here cuz honestly, it's not worth
+[07:03] your time. First of all, it's not
+[07:04] vertical at all. It can re-edit 16 to9
+[07:06] to 16 to9 which would be fine by itself
+[07:09] but it just picked a segment of the
+[07:10] video that is first of all not even a
+[07:13] really good segment. I suppose if you're
+[07:14] just looking at the transcript it's
+[07:16] okayish which is what this tool does and
+[07:19] secondly it didn't even edit much. It
+[07:21] kind of just took out one part if I saw
+[07:23] this correctly. And in some other
+[07:25] testing we did it didn't even take out
+[07:26] one part. It kind of just clips
+[07:28] something and gives it to you and says
+[07:29] hey this is the edit that I came up
+[07:31] with. So, while this might be a
+[07:32] interesting category right now, you can
+[07:34] think of it as a automatic way to
+[07:37] transcribe something and then pick a few
+[07:39] parts of the transcript that might work
+[07:40] as a video, but reviewing that is
+[07:42] probably more work than just clipping
+[07:44] those things yourself right now.
+[07:46] We are not going to lose our job.
+[07:48] So, my editing team, which is actually
+[07:50] here helping with the recording right
+[07:52] now, guys, this is terrible. No need to
+[07:54] be afraid.
+[07:56] All right, let's move on to the next
+[07:57] one. Okay, next up, we have some updates
+[07:59] to Notebook LM. I always like featuring
+[08:01] these because this is one of the most
+[08:02] powerful apps in the entire AI space. If
+[08:04] you missed it, we uploaded a four-minute
+[08:06] tutorial that covers the entire app. How
+[08:07] to use it, what to use it for. So, make
+[08:09] sure to check that out if you're new to
+[08:11] it. If you're already familiar, then you
+[08:13] will want to see this new feature, which
+[08:14] are new formats for the audio overviews,
+[08:17] aka podcasts as many people call them.
+[08:19] Instead of just creating the typical
+[08:20] deep dive that you get with these
+[08:22] podcasts, you can also switch it to
+[08:24] brief, to a critique, or to a debate
+[08:26] format. One interesting thing to note
+[08:28] here is that all of these come with
+[08:30] separate voices too.
+[08:31] This is the brief on
+[08:33] welcome to the critique. Welcome to the
+[08:35] debate.
+[08:36] So if I just open one of my recent
+[08:37] notebooks, go to audio overviews, you
+[08:39] can see these new presets right here. If
+[08:41] I flip the preset to brief and I say,
+[08:43] tell me about hooks, then this audio
+[08:46] overview should reflect that and not be
+[08:48] a 5 10 15 minute file as it so often is
+[08:51] with the default preset. So here's the
+[08:52] little audio overview/podcast that we
+[08:54] got from the concise preset. This is the
+[08:56] brief on mastering clawed code, advanced
+[08:59] workflows and responsible vibe coding.
+[09:02] Okay, so it sounds good. Obviously,
+[09:04] we'll have the same problems the
+[09:05] original audio overviews had, which is
+[09:07] sometimes it just misses the mark on the
+[09:08] question you give it, but it's
+[09:10] definitely more concise. This is a
+[09:11] 2-minute video, and from multiple long
+[09:13] sources like this without the preset,
+[09:15] you could expect something multiple
+[09:16] times as long. Okay, for the next one,
+[09:18] we have a category that I particularly
+[09:20] like cuz it's video production related.
+[09:22] It's 11 laps sound effects now in
+[09:24] version 2. So, the announcement here is
+[09:26] relatively minor. The duration of the
+[09:28] clips you can generate went from 22
+[09:30] seconds to 30 seconds. The bit rate is
+[09:32] higher and you can create sound effects
+[09:34] that loop seamlessly, which can be nice.
+[09:36] Now, they presented it as a brand new
+[09:37] release. So, we went ahead and tested it
+[09:38] and compared it to some of the sound
+[09:40] effects that we generated with version
+[09:42] one. And the overall result, eh, it's
+[09:44] similar or not identical quality level
+[09:46] to the first version. And classic
+[09:48] professionally recorded sound effects
+[09:49] still sound better. But nevertheless,
+[09:51] let me give it a super quick test. So,
+[09:53] let's just follow what they recommend.
+[09:54] Go to animals. And how about a seal in
+[09:57] distress? I believe the children are our
+[10:00] future.
+[10:01] Okay, we got four.
+[10:07] What is that?
+[10:11] No.
+[10:14] [Laughter]
+[10:19] That's like a person impersonating a
+[10:21] seal in distress, not a actual seal. No.
+[10:27] So, I would say for the purpose of this
+[10:28] video, this worked exceptionally well.
+[10:30] If I needed that sound effect, no, just
+[10:32] no. And that's even the category they
+[10:34] recommended. So, let's just move on.
+[10:36] Okay, one more time, maybe.
+[10:38] [Music]
+[10:41] Oh my god. Okay, thank you, Eleven Labs.
+[10:44] Okay, next up, let's do this week's
+[10:46] quick hits. the stories that are worth
+[10:48] talking about, but maybe we don't need
+[10:49] to spend multiple minutes on them.
+[10:51] Starting out with updates to Mistral's
+[10:53] Lat. They're really expanding their
+[10:55] platform with some of the
+[10:56] state-of-the-art features like MCP
+[10:58] connectors. They added memories to the
+[11:00] entire application and I would argue
+[11:02] that these two are actually the most
+[11:04] important features you can have in a
+[11:05] platform like this and they even allow
+[11:06] you to do custom MCPS. Now, then also we
+[11:08] have Chach adding parental controls into
+[11:11] Chachib. So, this isn't rolling out yet,
+[11:13] but some new lawsuits in the US where
+[11:16] parents blame OpenAI for manipulating
+[11:18] their children into certain behaviors
+[11:20] are happening right now, and this seems
+[11:22] like a direct reaction to that. And I
+[11:24] guess it makes sense. I personally more
+[11:26] interested in this trend here that
+[11:28] they're going to be adding more guard
+[11:29] rails and manual controls on how all of
+[11:31] this can be used, starting with parental
+[11:33] controls. So, we'll keep you posted once
+[11:35] that is actually implemented. Next up,
+[11:36] we have a new model coming out of Grock
+[11:38] focused on coding, uh, fast coding, that
+[11:40] is. It's literally called rock code fast
+[11:42] one. And I think this graph says it all.
+[11:44] It's very cheap with high tokens per
+[11:46] second, but obviously you're not getting
+[11:48] state-of-the-art quality here.
+[11:49] Interesting for some niche developer use
+[11:51] cases. And then we have some new models
+[11:53] from Microsoft called MAI as in
+[11:55] Microsoft AI, I believe. Preview and
+[11:57] MAI1 voice. Honestly, these are nothing
+[12:00] special and they're just slowly
+[12:01] releasing them to certain people. They
+[12:03] even include wording in their blog post
+[12:04] that, hey, don't judge these too
+[12:06] harshly. We're developing these. But I
+[12:08] do want to note that these are
+[12:10] integrated in copilot which for many
+[12:11] enterprises is the only choice. And as
+[12:14] we kind of reviewed copilot for this
+[12:16] story, we noticed a lot of interesting
+[12:18] updates including one that I wanted to
+[12:19] highlight which is a daily news roundup
+[12:22] automatically generated for you within
+[12:24] Copilot. This is something we don't see
+[12:26] in other LLM platforms. And I like to
+[12:27] highlight features like that because
+[12:29] eventually you'll see them trickle down
+[12:30] into chat GPT if they catch on. And I
+[12:33] personally found that even more
+[12:34] interesting than the new models here.
+[12:36] But yeah, now you know about both. In
+[12:37] the AI video world, Hicksfield also
+[12:39] released two new features. None of them
+[12:40] revolutionary, but both interesting. One
+[12:42] of them is draw toedit uh interactive
+[12:44] canvas where you can use the new
+[12:46] nanobana model and you can edit and
+[12:48] animate allin-one visual interface. It
+[12:50] also allows you to really easily use
+[12:51] multiple models. So if you do that,
+[12:53] check this out as an option. And
+[12:54] secondly, they released Speak 2.0, which
+[12:57] is something similar to Hen both in the
+[12:59] functionality and the quality. I think
+[13:00] Hen calls this avatar IV where you just
+[13:02] upload an image and it turns it into a
+[13:04] video. You can do the same with
+[13:06] Hicksfield now. And you just select one
+[13:07] of their voices, give it a script or
+[13:09] generate one, and then you get an
+[13:10] okayish AI video. And that's really
+[13:12] everything for this week. I hope you
+[13:14] found something that was useful or
+[13:15] inspirative to you. Recently, we
+[13:17] uploaded a lot of high-quality
+[13:18] educational videos. So, if you want a
+[13:19] 80-minute course on cloud code or a
+[13:22] 4-minute intro to Notebook LM, you can
+[13:24] check them out right here. And if you're
+[13:25] enjoying this content, don't forget to
+[13:26] subscribe. And with that being said, my
+[13:28] name is Igor and I will see you next

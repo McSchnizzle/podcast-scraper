@@ -1,0 +1,317 @@
+[00:00] Imagine typing in one sentence and
+[00:01] getting a full clean slide deck. Images,
+[00:05] charts, icons, layouts ready to present.
+[00:07] Today, I'll show you something that does
+[00:09] exactly that. Genpark AI slides uses a
+[00:12] powerful super agent to turn your ideas
+[00:15] and even your files if you want into
+[00:17] polished, sharable presentations. It can
+[00:19] do deep research for references, analyze
+[00:21] content, and assemble slides with smart
+[00:24] icons, stylish visuals, and clean
+[00:26] layouts, and even charts, audio, and
+[00:28] video. It's a design team inside your
+[00:31] browser. This video is sponsored by Gen
+[00:33] Sparks. As always, you'll see a real
+[00:36] unedited demo so you can see if this
+[00:38] fits your workflow. So, step one, let's
+[00:40] build a tech explainer deck. We're going
+[00:43] to start with the AI slides. As you can
+[00:45] see here, there are hundreds of free
+[00:48] templates available. You can use any of
+[00:50] these or later once you create your own,
+[00:52] you can save them as my templates. We're
+[00:54] going to start with this. Create a 10
+[00:56] slide deck that explains what are AI
+[00:58] agents. For a non-technical audience,
+[01:01] include a simple diagram, a timeline of
+[01:03] milestones and one slide of pros and
+[01:06] cons. Keep the tone friendly and visuals
+[01:08] minimal. And let's hit go. All right.
+[01:11] So, as you can see here, it's going to
+[01:13] work using various tools to read the
+[01:15] internet such as Amazon, IBM, Google,
+[01:18] etc. The slides will appear here on the
+[01:20] right side once they're generated. All
+[01:23] right. So after we hit generate and it
+[01:25] goes through the deep research phase
+[01:28] getting all the materials together now
+[01:31] it starts jaring the slides. Genspark
+[01:34] researches drafts titles and bullets and
+[01:36] lays out all the slides with the icons
+[01:38] and supporting visuals. The clean grid
+[01:41] keeps everything aligned. We've got
+[01:43] structure. We've got the title slide.
+[01:45] What is an AI agents? How do they work?
+[01:47] Overviews, diagrams, timelines, and the
+[01:52] pros and cons. Just like we asked. All
+[01:54] the edits are made with natural
+[01:56] language. We prompted here. I'm going to
+[01:58] add design a structural page layout with
+[02:01] clean grid but playful symmetry. Bold
+[02:03] title zones, wide text on one side,
+[02:06] large visuals or charts on the other.
+[02:08] Use subtle accent color blocks behind
+[02:10] key sections for energy without clutter.
+[02:13] We're going to make this look good. I
+[02:15] like how it is now. Very clean. But
+[02:17] let's see if we can spice it up a little
+[02:19] bit. So, it's slowly beginning to redo
+[02:21] each and every single slide. So, it's
+[02:23] still working on six, etc. Six, seven,
+[02:27] eight, and looks like it's actually just
+[02:29] got finished with all of them. So, let's
+[02:30] take a look. The structural page layout
+[02:33] is exactly what we were looking for.
+[02:36] That's exactly what I asked for.
+[02:38] Definitely makes it pop a little bit.
+[02:39] Makes it a little bit asymmetrical with
+[02:42] little visuals that are popping out from
+[02:43] the sides. So, definitely has got a
+[02:45] little zing to it. But let's change the
+[02:48] color scheme a little bit. Right, we're
+[02:49] going to say make the theme more tech
+[02:51] oriented. Use green, black, and white as
+[02:53] the primary colors. And here are our
+[02:56] results. It's looking great. That's
+[02:58] exactly what I was looking for. It's got
+[03:00] the greens, black, white background.
+[03:03] Perfect. I love it. Definitely seems a
+[03:06] little bit more techoriented, I would
+[03:08] say. I'm liking the look of this. Now,
+[03:10] Genparks allows you to save your
+[03:13] templates. So, you can keep reusing this
+[03:14] in the future. If you like a certain
+[03:16] layout or look, just save it as save it
+[03:19] into my templates and then reuse it
+[03:21] whenever you want to. One thing to keep
+[03:23] in mind is that if something is not to
+[03:25] your liking, you can always hit advanced
+[03:27] edit. This is actually going to allow
+[03:29] you to do those minor tweaks and manual
+[03:32] edits. You don't like this green
+[03:34] floating thing here, it's gone. You want
+[03:36] to change some text, you can do that as
+[03:38] well. Pretty cool. Cool. I just noticed
+[03:40] they used the robboto theme to make it a
+[03:43] little bit more tech oriented, which is
+[03:45] pretty cool. Now, really fast, let's say
+[03:46] we wanted to add an image to one of the
+[03:49] pages. We're going to say add an AI or
+[03:51] agent image the first page. Now, we
+[03:54] could have prompted it in the beginning
+[03:55] to add more images by saying something
+[03:57] like use a more of a like a infographic
+[04:00] thing or a magazine layout, which would
+[04:03] naturally contain more images. We
+[04:05] specified that we wanted to be a little
+[04:06] bit more simple, less visuals. So now
+[04:09] let's just add one image to the
+[04:11] beginning to see how that works. As you
+[04:14] can see here, it's generating a GPT
+[04:16] image. All right, it generated that
+[04:18] image for us. And now it's going to add
+[04:20] it to the first slide. And boom, there
+[04:24] it is. Looking pretty good. If we wanted
+[04:27] to change it to a custom image, that's
+[04:28] super simple. Let's click the advanced
+[04:30] edit and click the image. You have a
+[04:33] number of options here, including, you
+[04:35] know, dragging it to make it bigger or
+[04:37] replacing it. replace it by uploading or
+[04:40] image URL. I have this image from
+[04:42] MidJourney. Let's try it out. And I
+[04:44] click to replace the image. And there it
+[04:46] is. Let's just make sure it's
+[04:48] positioned. And maybe make it a little
+[04:50] bit larger like that. The whole thing
+[04:53] gets automatically saved. And just like
+[04:55] that, we have a cool looking AI agent
+[04:58] image on the first page. Easy. Next,
+[05:01] we're going to do a file to deck flow.
+[05:03] I'm going to upload a PDF document and
+[05:06] an Excel spreadsheet. These contain
+[05:08] quarterly numbers for a fictional
+[05:10] business. And for the prompt, we'll say,
+[05:12] "Build a 12 slide client proposal
+[05:15] summarizing the PDF. Use the Excel for a
+[05:17] trend chart. Keep it boardroom ready.
+[05:20] Showcase important insights about the
+[05:21] business and easy to understand
+[05:23] visuals." So, Jen Sparks went deep into
+[05:26] the documents, went through the two
+[05:28] documents that we uploaded that that had
+[05:29] quite a bit of information in there
+[05:31] about a fictional business called Moss
+[05:35] Eley Cantina. If that doesn't ring a
+[05:37] bell, it's a bar on the planet of
+[05:40] Tatooine containing some of the most
+[05:42] villainous scum in the galaxy. So, I
+[05:44] created a fictional quarterly sales,
+[05:47] etc. So, as you can see here, Gen Sparks
+[05:49] managed to put it together into a very
+[05:51] nice looking presentation. It pulls
+[05:53] headlines, the key points from
+[05:56] everything that I've uploaded. It
+[05:57] creates images and autogenerates a very
+[06:00] clean agenda. Executive summary, revenue
+[06:03] trends, experience optimizations, risk
+[06:06] and compliance. You get it. Notice
+[06:09] everything is looking very, very good.
+[06:11] The charts are very nice. Everything is
+[06:14] very clean. Notice it doesn't screw up
+[06:16] the currency. Keeps everything in
+[06:18] credits. It shows yearover-year growth
+[06:21] and trends. They notice a 30% reduction
+[06:24] incidence rates. So decrease in
+[06:26] incidents per thousand patrons through
+[06:28] standardized security staffing. Smart.
+[06:31] All right, but let's make some changes
+[06:33] to it. So we're going to say shorten all
+[06:34] slide titles to under four words.
+[06:37] Replace any filler text with action
+[06:39] verbs. So I type my edits in here and
+[06:42] click go. And notice we can save it to
+[06:44] notion. All of this can be exported in
+[06:46] whatever format we want. We are also
+[06:48] able to see the code. So this is the
+[06:51] HTML behind it. So that you're able to
+[06:53] just use the code if you want. just
+[06:54] export that. You're also able to share
+[06:56] this entire project with whomever you
+[06:58] want through email. Notice that most of
+[07:00] the edits will have its own save points.
+[07:03] As you can see here, almost every minute
+[07:05] it seems like it's saving and has a
+[07:07] separate save point. So, if you want to
+[07:09] go back if something screwed up, you can
+[07:11] go back with a lot of precision. So,
+[07:13] trimmed the fluff. It reduced the
+[07:15] headlines to under four words. which
+[07:17] looks like most of them are now too you
+[07:18] know performance over you revenue growth
+[07:20] and it replaced any filler text with
+[07:23] action verb like achieved consistent
+[07:25] growth and projecting this delivered
+[07:28] that. So perfect looking very corporate
+[07:31] friendly now. Now it's still finishing
+[07:32] up the last few slides but the next edit
+[07:34] we're going to make is this. We're going
+[07:35] to say add a case study slide with a
+[07:38] three item stat strip. So it creates a
+[07:41] brand new slide. It shows it's thinking
+[07:43] for a while about what needs to be get
+[07:45] done. Everything seems very smart, very
+[07:48] reasonable, and then starts cranking out
+[07:50] the code to create the slide. Here's the
+[07:52] preview. If you're wondering what a
+[07:54] three item stat strip is. Here's what
+[07:57] that's looking like. So, this is a
+[07:59] success case study. Bif band night
+[08:01] initiative. And basically, as you can
+[08:04] see here, everything worked out. Great
+[08:06] ROI. The three stats statistics are
+[08:09] highlighted here across the top. This is
+[08:12] perfect. Theme changes are super simple.
+[08:15] We're going to say let's switch to dark
+[08:16] theme. So if you don't recall the
+[08:18] cantina from the movie, it was a dark
+[08:20] place, but it had these earthy sandy
+[08:23] colors. So we're going to try to kind of
+[08:25] capture that within our presentation.
+[08:28] We're going to say switch to dark theme
+[08:29] with some earthy sandy colors. And we're
+[08:32] going to say use sentence case for
+[08:34] titles. Right? So usually titles uh are
+[08:36] capitalized, all letters are
+[08:38] capitalized. Sentence case is the
+[08:40] regular sort of, you know, first letter
+[08:42] capitalized, the rest non-c capitalized.
+[08:44] So, we're making two big changes,
+[08:46] including a pretty big thematic change.
+[08:49] So, let's see how well it handles that.
+[08:51] Keep in mind, this is unedited other
+[08:54] than like if I mess up, if I say
+[08:56] something wrong, then maybe I'll say
+[08:58] I'll edit that part out. But, um, these
+[09:01] are not cherrypicked. These are kind of
+[09:04] a almost live presentation. I'm doing
+[09:06] this as we're going live. as far as I
+[09:07] can tell so far is is everything's
+[09:10] perfect and everything is grounded to
+[09:13] the documents that I've that I've
+[09:15] uploaded and everything is accurate.
+[09:19] Everything responds as you would expect
+[09:21] it to respond and so far it's looking
+[09:23] good. Hey, that's looking pretty good, I
+[09:27] got to say. Now, one thing to notice
+[09:28] here is that you you can go granular,
+[09:32] right? So, you can tweak the font, the
+[09:33] size, the color, the alignment. You can
+[09:35] do it manually or with the AI, but the
+[09:38] really good thing is you don't have to.
+[09:40] What's interesting is I think it noticed
+[09:43] the fact that ah yes, the slides now
+[09:45] have a sophisticated desert cantina
+[09:48] aesthetic that perfectly matches the
+[09:49] Moss Eley theme. So, it caught on to the
+[09:52] fact of of of what we're doing, which is
+[09:54] which is nice because I never explained
+[09:57] what the cantina is. So, it picked it up
+[09:59] in a context. And as you can see here as
+[10:02] it's building it out, the theme I got to
+[10:05] say this is kind of exactly what we
+[10:08] wanted. Uh the contrasting colors,
+[10:11] everything's very good. It's certainly a
+[10:13] dark theme. I love it. Some of these
+[10:16] charts are looking a little bit low
+[10:17] contrast. So we're going to say for
+[10:19] charts and graphs, let's use very high
+[10:22] contrast colors and add some 3D
+[10:24] elements. All right, let's see what it's
+[10:26] coming up with. Boom. W Okay, that's
+[10:29] very cool. It's got a little bit of a
+[10:31] skewed element to it. Definitely very
+[10:34] high contrast that's really popping out.
+[10:37] Here's the other one. Yeah, as you can
+[10:39] see, it's definitely has a little bit of
+[10:40] a 3D element to it. All these things are
+[10:43] popping up. Notice when I hover over
+[10:45] these points, there's some more details
+[10:47] that pop up. There's some transparency.
+[10:49] I mean, it's looking really, really
+[10:51] good. We got these charts and graphs.
+[10:53] Yeah, these are looking great. Very high
+[10:56] contrast colors, and you can see all of
+[10:58] the segments separated. So we can hover
+[11:00] over each segment individually. When
+[11:02] you're done with your slide deck, you
+[11:04] can record your walkthrough or export
+[11:07] it. You can export it as a PDF or as a
+[11:10] PowerPoint presentation. If you share
+[11:12] the PowerPoint presentation, others can
+[11:14] continue to create their own PowerPoint
+[11:17] based on your conversation. But the
+[11:19] point is you can focus on the story.
+[11:22] Genpark handles all the visuals. So
+[11:25] here's who this is for. For tech
+[11:28] creators, you can ship explainer decks
+[11:30] to pair with your videos. For educators,
+[11:33] you can turn lesson plans or PDF into
+[11:35] clean slides fast. For startup teams,
+[11:38] you can do proposals, road maps, or
+[11:40] investor updates in minutes. And for
+[11:43] analysts and marketers, just paste your
+[11:46] findings and data to create a clean,
+[11:48] polished, client ready deck. So, if your
+[11:51] bottleneck is creating the slides and
+[11:53] not telling the story, Genparks AI
+[11:56] slides is a gamecher. Try using my link
+[11:58] in the first line of the description.
+[12:01] Big thanks to Genparks for sponsoring
+[12:03] this video. If you want to see a
+[12:04] follow-up where I build your slide deck
+[12:06] live, drop your topic down below in the
+[12:09] comments. I'm Wes. Subscribe for more
+[12:11] practical AI tools like this one, and
+[12:13] I'll see you in the next

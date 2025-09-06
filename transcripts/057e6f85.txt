@@ -1,0 +1,235 @@
+[00:00] There's been a few important AI
+[00:01] announcements that we're going to cover
+[00:02] here in rapid fire fashion. Number one,
+[00:04] remember DeepSeek? They've been kind of
+[00:06] quiet, but we're finally hearing what
+[00:08] they've been cooking up this whole time.
+[00:10] It seems like they're going to be
+[00:11] releasing an AI agent this year that's
+[00:13] going to compete with Open AI. In other
+[00:15] news, News Research releases Husky Holde
+[00:19] Bench. It's a benchmark where scripted
+[00:21] bots play Texas Holde poker, but here's
+[00:23] the twist. Those bots are written by
+[00:26] large language models. Kind of a plot
+[00:28] twist. I'll show you why in a second.
+[00:30] Also, Salesforce CEO Mark Benov saying
+[00:33] that there's going to be 4,000 layoffs
+[00:35] because he needs less heads with AI.
+[00:38] According to the information.com, his
+[00:40] words triggered a little bit of an AI
+[00:42] crisis narrative. But fear not, OpenAI
+[00:45] has a solution. Expanding economic
+[00:47] opportunity with AI from OpenAI. Also,
+[00:50] there's this. We'll get to that in just
+[00:53] a second. So, you might have been
+[00:54] hearing a lot of news about DeepSeek.
+[00:56] has been laying in wait for a little
+[00:58] bit. So, rumors were that Deepseek
+[01:01] delayed one of its models because of
+[01:03] some difficulty training it on Huawei
+[01:06] chips. According to the Financial Times,
+[01:08] Deepseek next AI model delayed by
+[01:09] attempting to use Chinese chips. This
+[01:12] was from August 14th. Seems like they
+[01:14] switched over to Nvidia's keeping the
+[01:16] Huawei chips in reserve for inference
+[01:18] and maybe some future projects, but
+[01:21] seems like the Chinese chips aren't
+[01:23] quite there yet. not quite competitive
+[01:25] with Nvidia and this delayed the
+[01:27] project. According to Bloomberg, Deep
+[01:30] Seek is building AI model designed to
+[01:32] carry out multi-step actions on a
+[01:33] person's behalf with minimal direction.
+[01:36] The system is also meant to learn and
+[01:38] prove based on its prior actions. So,
+[01:40] this is a little bit vague. Could
+[01:41] learning from past actions mean memory?
+[01:44] Maybe this is kind of like the layman's
+[01:46] way of referring to reinforcement
+[01:47] learning, or is it something much more
+[01:49] advanced? We don't yet know. The the
+[01:52] first part is pretty clear. There's
+[01:53] going to be a new AI model, less like a
+[01:55] chatbot and more like an AI agent
+[01:57] capable of carrying out multi-step
+[01:59] functions, long horizon tasks to be more
+[02:01] competitive with open AI and the Western
+[02:05] Frontier AI labs. Expect to see that in
+[02:07] 2025 this year. Meanwhile, in other
+[02:10] news, not that long ago, some of our
+[02:12] smartest researchers like Nome Brown,
+[02:14] currently at OpenAI, were building AIs
+[02:16] that beat humans at poker. Here's
+[02:18] Gnome's profile. So he created
+[02:21] co-created Pluribus which defeated top
+[02:23] human poker professionals in human
+[02:24] versus machine competitions. So people
+[02:27] would create AI that would beat humans
+[02:30] at poker. The article healings is from
+[02:33] 2019 just to give you kind of a
+[02:35] timeline. And now what five six years
+[02:38] later it's kind of flipped on its head.
+[02:40] Now we have a benchmark that measures
+[02:41] how well AI models large language models
+[02:44] can build poker playing bots. It's by
+[02:47] Noose Research, who've recently released
+[02:49] Hermes 4, and it's called Husky Holde
+[02:52] Bench. LMS develop poker bots and
+[02:55] compete. It's a benchmark that moves
+[02:57] beyond code generation to test strategic
+[02:59] thinking and creative problem solving
+[03:00] through competitive poker bot
+[03:02] development. Bots from each model
+[03:04] compete in six-handed tables against all
+[03:07] possible opponent combinations, starting
+[03:08] with $10,000 per table and playing 1,000
+[03:12] hands. Rankings are determined by
+[03:14] cumulative winnings. Currently the clads
+[03:17] are sitting at the top. Claude sonnet 4
+[03:20] is at 3600 delta money. So it made $3672
+[03:25] right. So if it started with 10,000 and
+[03:27] increased its holdings by 3672 so was at
+[03:30] 36%
+[03:32] increase on what it started with. Then
+[03:33] we have claude opus 4.1 at 3100. Gemini
+[03:37] 2.5 pro at just under 3100. Gro 4 at
+[03:41] 937. GPT5 high at 396.
+[03:46] Gemini 2.5 flash at 111. Hermes 45
+[03:51] billion. So that's news researchers
+[03:53] that's that's their model, their recent
+[03:56] model at -1200. And the rest of the
+[03:59] models including some of the famous
+[04:02] open- source models are in a negative. I
+[04:05] am not surprised to see various cloud
+[04:08] models somewhere near the top or at the
+[04:10] top. I'm surprised how orly Grock and
+[04:13] GPT5 High did here. I think this is
+[04:16] going to warrant its very own video
+[04:18] because I would love to break down and
+[04:21] see why such a such a big difference
+[04:23] between those two models and even Grok 4
+[04:26] does pretty well on other challenges.
+[04:28] Although Grock 4 was never a coding
+[04:30] model, but I got to say the benchmarks
+[04:33] we're seeing are getting more and more
+[04:34] interesting because we're no longer just
+[04:36] seeing how well these models answer
+[04:37] various test questions. more and more
+[04:40] we're forcing them to compete against
+[04:42] one another, not just in answering a
+[04:45] question, but like long-term tasks that
+[04:48] require strategic thinking. This is also
+[04:50] involving coding and writing up bots
+[04:52] that play poker. This is just a a
+[04:54] brilliant benchmark. And once again, yet
+[04:57] another phenomenal benchmark to add to
+[05:00] the new and exciting novel benchmarks
+[05:03] that we can have because these large
+[05:04] language models are getting so so good.
+[05:07] words escape me. Marco Beanov, the
+[05:10] Salesforce CEO, inadvertently stokes AI
+[05:13] crisis narrative according to the
+[05:14] information now. He's been beating that
+[05:17] drum for quite a while. It's important
+[05:19] to understand that kind of critics of
+[05:21] his stance are saying, well, he's trying
+[05:24] to sell everybody on this idea of AI
+[05:26] agents. So, he might be kind of talking
+[05:28] his own book. So, maybe take it with a
+[05:30] grain of salt. But here's yet another
+[05:32] person saying that potentially we're
+[05:34] going to be seeing less and less jobs as
+[05:36] AI takes over. Again, not everyone's
+[05:39] seeing eye to eye on it, but OpenAI
+[05:42] might have a solution. So, here's their
+[05:44] recent blog post, expanding economic
+[05:46] opportunity with AI. Fiji Simo, CEO of
+[05:48] applications, one of the recent hires.
+[05:51] And they start off with one of the first
+[05:53] questions they get is, "What's AI going
+[05:55] to mean for my job? How it's going to
+[05:57] impact my company?" The answer is AI
+[05:59] will be disruptive. Jobs will look
+[06:02] different. Companies will have to adapt
+[06:04] and all of us from shift workers to CEOs
+[06:06] will have to learn to work in new ways.
+[06:09] So the goal at OpenAI, they're saying we
+[06:11] can't eliminate the disruption, but they
+[06:13] can help more people be more fluent in
+[06:16] AI. So I'll kind of skip to the chase
+[06:19] here. They're saying that, you know, if
+[06:20] you're a business looking to hire AI
+[06:22] savvy people, finding the right person
+[06:23] might be hit or miss. The OpenAI jobs
+[06:26] platform. So that's one. Number two is
+[06:29] OpenAI certification. Basically, as far
+[06:32] as I can tell, this is maybe part online
+[06:35] certification for AI jobs. Early this
+[06:37] year, they launched OpenAI Academy, a
+[06:39] free online learning platform. So the
+[06:41] idea is to upskill employees and then
+[06:45] help employers hire those upskilled
+[06:48] employees that are now AI savvy. So
+[06:51] obviously a lot of this is really going
+[06:53] to be dependent on the execution, how
+[06:55] well they execute. this could be a great
+[06:57] thing or something that maybe doesn't
+[06:59] have much of an impact. But let me know
+[07:00] what you think about this. So, OpenAI is
+[07:03] providing some of the most used AI
+[07:06] models. They're going to be providing it
+[07:08] sounds like free certifications for
+[07:11] people to upscale and learn AI. So, Open
+[07:13] AI Academy, it's a free learning
+[07:15] platform to learn AI. Who's teaching you
+[07:18] how to use AI? Well, it's AI. So, we
+[07:21] obviously use AI to teach AI. anybody
+[07:23] will be able to prepare for the
+[07:24] certification in Chad GPT's study mode
+[07:27] and become certified without leaving the
+[07:29] app. So, they're teaching people to use
+[07:31] AI. And it sounds like on top of this,
+[07:33] there's going to be some sort of an
+[07:34] OpenAI jobs platform that's going to
+[07:37] help connect businesses that want to
+[07:39] hire these certified AI savvy employees.
+[07:42] But let me know what you think about
+[07:43] this. Do you think OpenAI should be in
+[07:45] charge of this? Will anyone do a great
+[07:47] job of upskilling people as some of the
+[07:50] jobs are replaced so that they're able
+[07:52] to find new jobs using AI? Let me know.
+[07:55] I'm very curious to know how this is
+[07:56] going to work out. Obviously, the the
+[07:58] make it or break it is going to be in
+[07:59] the execution. I'm I'm curious to know
+[08:01] what people think about this thing. In
+[08:03] other news, Ilia Sutsk made a tweet. He
+[08:06] does not tweet a lot, but when he does,
+[08:08] it's about this Ilia merch. And
+[08:10] apparently, this is the Ilia merch. You
+[08:13] can buy one today. Shipped globally.
+[08:15] shipped worldwide. To show your support
+[08:17] for Ilia Saskcover, what did I see? He
+[08:20] saw this. If you're wondering where you
+[08:22] can buy this, I would take a look at the
+[08:24] bottom right of the image. That little
+[08:26] symbol there means that this was very
+[08:28] likely generated by Google's Nano
+[08:30] Banana. Somebody took a picture of a
+[08:32] hat, a picture of Ilia's head, put it
+[08:34] into Nanobanana, and said combined. But
+[08:37] Ilia loves it, saying, "A revolutionary
+[08:40] breakthrough if I've ever seen one." My
+[08:42] question is, can you imagine if he
+[08:44] starts tweeting? Can you imagine if he
+[08:46] starts trolling people on X? We live in
+[08:49] one of the most entertaining timelines
+[08:52] possible. At least until one of them
+[08:53] builds super intelligence, at which
+[08:55] point, well, no one knows. If you made
+[08:58] it this far, thank you so much for
+[08:59] watching. My name is Wes Roth and I'll
+[09:00] see you in the next

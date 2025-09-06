@@ -341,3 +341,18 @@ Parakeet MLX performance varies by file. Use `RobustTranscriber.estimate_transcr
 - ffmpeg required for RSS audio format conversion  
 - GitHub token required for deployment and release features
 - ElevenLabs API key required for TTS MP3 generation
+
+### macOS Timeout Command
+**CRITICAL**: macOS does not have native `timeout` command. Must use GNU coreutils:
+```bash
+# Install coreutils for timeout functionality
+brew install coreutils
+
+# Use gtimeout instead of timeout on macOS
+gtimeout 600 python3 script.py  # 10-minute timeout
+gtimeout 30s command            # 30-second timeout
+gtimeout 5m command            # 5-minute timeout
+
+# Syntax: gtimeout [DURATION] [COMMAND] [ARGS...]
+# Duration formats: s (seconds), m (minutes), h (hours)
+```

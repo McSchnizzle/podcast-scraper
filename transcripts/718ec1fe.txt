@@ -1,0 +1,440 @@
+[00:00] The idea is that the user can upload an
+[00:02] image of a celebrity and themsel to get
+[00:04] back a selfie image with the celebrity.
+[00:06] Okay, so this was so good, right? So
+[00:08] take a look at this. Look at this. I
+[00:11] think it's perfect. Uh a feature called
+[00:14] fake holiday. So this is a fake gram
+[00:16] feature. So here you can see these are
+[00:19] all the generated photos of me in Tokyo.
+[00:22] We are at this famous crossing here.
+[00:24] Okay. So, a lot of you uh gave me some
+[00:26] feedback on the previous Nano Banana API
+[00:28] video I created and the app you can see
+[00:30] here. So, this is going to be part two
+[00:32] where we're going to build out some more
+[00:34] features because people asked if I can
+[00:36] do that and just tell me a bit about how
+[00:38] I do that and yeah, just to show you
+[00:41] kind of how I think about adding new
+[00:43] features and how I do it using cloud
+[00:45] code or codeex. So, uh you can see I
+[00:48] have already done uh the feature here.
+[00:50] We're going to I'm going to show you how
+[00:51] that works and then we're going to do
+[00:53] two more features together. Uh so if you
+[00:55] didn't watch part one, you can just find
+[00:58] that link in my page if you want to be
+[01:01] yeah start from the beginning since it's
+[01:02] going to be part two. Okay. So I want to
+[01:05] see if I can use nano banana to kind of
+[01:07] generate components like for an UI like
+[01:10] this. So in this app here you can kind
+[01:12] of see we have um this is a component
+[01:15] right? We have the original image and
+[01:17] the component is kind of uploading the
+[01:19] image and of course for this component
+[01:21] since this is react we have a component
+[01:23] called okay so that was very small so
+[01:25] let me zoom in a bit we have a component
+[01:27] called image uploader right so I wanted
+[01:30] to see if we can use nano banana to kind
+[01:32] of yeah create a new component for us so
+[01:36] uh the way I wanted to do this uh I
+[01:38] think I'm just going to show you how
+[01:39] this works now so we're going to upload
+[01:41] an screenshot of the component right so
+[01:45] I have this. So this was the screenshot
+[01:48] of this component, right? Uh okay, but
+[01:51] we got to do it here in the new feature,
+[01:53] right? So I'm just going to upload this
+[01:55] image of the component. Then I'm going
+[01:57] to add in of course the code too from
+[02:01] this component, right? Paste it in here.
+[02:03] And then I'm going to say something here
+[02:05] uh how I want this component to look
+[02:07] now, right? So let's just do something
+[02:09] like uh give the component a hardcore
+[02:12] matrix style '90s retro font. Okay.
+[02:16] Right. So, we have uploaded the code. We
+[02:18] have uh give the design and we have the
+[02:20] image. So, hopefully now we're going to
+[02:21] get a prototype. And then I'm going to
+[02:23] kind of show you how this works. So, I'm
+[02:25] just going to click on prototype. So,
+[02:27] now Nano Banana is going to take this
+[02:29] image and of course uh this prompt and
+[02:32] create like a draft for GT5 to create
+[02:35] the code for the component we are going
+[02:38] to use in our app. Right. So, the
+[02:40] preview was something like this. That
+[02:42] looks pretty cool. We have the matrix
+[02:44] rain and some kind of Yeah, I think
+[02:46] that's pretty cool. So, let's see now.
+[02:48] So, now we have something approve or we
+[02:52] can roll, right? But now we're going to
+[02:55] approve this. I think this looks good.
+[02:57] So, what's happening now is that we are
+[02:59] sending this image and the original code
+[03:02] to GT5 and GP5 is going to generate a
+[03:05] new type uh TypeScript code or component
+[03:08] code here for us. and we can just paste
+[03:10] into our app and we're going to see how
+[03:12] that works. Right? Uh this takes some
+[03:14] time but I'll be back when this is done.
+[03:16] Okay. So you can see now down here we
+[03:18] have a generated tsx. So now in theory I
+[03:21] could just copy this. Okay. So we have a
+[03:23] button here too but I'm just going to
+[03:25] copy this code. I'm going to go back
+[03:27] here. I'm going to select my image
+[03:28] uploader component. I'm just going to
+[03:31] switch out the code. Save it. Right. Uh
+[03:34] let's see. Uh did something happen? We
+[03:37] need to reload.
+[03:39] Ooh. Okay. So, you can see it's not the
+[03:41] same as the image. So, the image was
+[03:43] just an inspiration, right? But, uh,
+[03:46] it's something, right?
+[03:50] So, it did something and it kind of
+[03:53] looks like this retro. So, I'm pretty
+[03:56] happy with it. I think it's worked out
+[03:57] pretty good. And what was pretty cool is
+[03:59] that this was almost like a oneshot fix.
+[04:03] So, I kind of want to show you the
+[04:04] prompt I use for this because people
+[04:06] might think this is a lot of uh work to
+[04:09] get going this feature. But the only
+[04:12] thing I did for this feature, I'm going
+[04:13] to read out the prompt I use now. So, if
+[04:15] you want to skip ahead, that's fine. So,
+[04:17] uh here is the newest feature we are
+[04:19] going to build for the app. Uh it's
+[04:21] called UI designer. The idea is that the
+[04:23] user uploads an image of a TSX component
+[04:25] plus the code in a text box. In the
+[04:28] prompt input field, the user can type.
+[04:30] For example, make this component look
+[04:32] more like a retro terminal. The image
+[04:35] plus the prompt should be first sent to
+[04:36] the Nana banana API to create a
+[04:39] prototype view. You remember that of the
+[04:41] component. The user can click approve or
+[04:44] reroll. Rroll will of course try again.
+[04:46] If the user approves, then send the
+[04:47] approved image plus the old component
+[04:50] TSX code to GP5 with a hardcoded prompt.
+[04:54] something like generate tsx code to
+[04:56] replicate exactly the image you
+[04:57] received. Output the tsx code in the
+[05:00] same format only return the code as the
+[05:02] users want to copy it. Your task now is
+[05:05] to generate this new feature in the app.
+[05:07] Start with reading the documentation. So
+[05:09] I added that into this existing app. And
+[05:12] that was the only prompt I use. Right.
+[05:14] And GP5 and codeex here did a really
+[05:17] good job of implementing this. Just made
+[05:19] some final touches at the end and we
+[05:22] ended up with this feature here in our
+[05:25] nano banana app. Right. And I think this
+[05:27] is pretty cool. I tried it with Candy
+[05:29] Crush or something like that. We can do
+[05:31] one more example. So if I go back now
+[05:34] and you can see now I reloaded and now
+[05:37] we are back to our original. So let me
+[05:39] just do uh I'm just going to do the same
+[05:42] but let's do a different prompt here.
+[05:45] So, let's do give the component a
+[05:47] Pokemon style high contrast colors. So,
+[05:50] I'm just going to send that and I'm
+[05:51] going to show you the preview and I'm
+[05:53] going to show you the final product.
+[05:54] Okay. So, you can see the preview here.
+[05:56] Uh, I think we should see the preview.
+[05:58] Uh, okay. That was not too good.
+[06:01] I'm not so happy with that. So, I'm
+[06:03] going to click on roll. To be honest,
+[06:04] when I look at it again, I think it's
+[06:06] pretty cool to be honest because it's a
+[06:08] Pokeball light. Uh, okay. That's fine.
+[06:11] But let's wait for a new one then. Okay.
+[06:13] So, that was fine. Uh, it's not perfect,
+[06:15] right? But it looks pretty cool. So, I'm
+[06:17] going to paste in my TSX code here, and
+[06:20] I'm going to send this. To be honest, I
+[06:21] should have picked the other one. But,
+[06:23] let's uh try to approve this. And yeah,
+[06:25] we probably will not get the gaming
+[06:27] background and stuff here, but let's see
+[06:29] what we end up with here. Okay, so we
+[06:30] have the code here. So, I'm just going
+[06:32] to grab that, right? Pick this code.
+[06:35] This go there. Uh, go back here and just
+[06:40] swap it, right? Save. Uh, okay. So, we
+[06:43] did compile. Let me do a refresh.
+[06:47] All right. That's pretty good, right?
+[06:50] Kind of is this Pokemon style. You can
+[06:51] see we change the font. And yeah, kind
+[06:54] of like it. Still the function is
+[06:56] working. So, yeah, think this is a
+[06:59] pretty cool feature. Uh, let me know
+[07:01] what you think in the comments. But now
+[07:02] we're going to do two more I have an
+[07:04] idea for. So, let's do that together in
+[07:07] codeex. And yeah, let's do it. Okay.
+[07:10] Okay. So, it doesn't really matter if
+[07:11] you use claw code or codeex. Lately,
+[07:13] I've been testing more codec. So, I'm
+[07:15] just going to go into my um yeah uh my
+[07:19] uh base here. So, you can see we are on
+[07:21] nano banana. So, I have it in it. So,
+[07:24] I'm just going to do something like uh
+[07:27] read agent MD. So, just to get up on the
+[07:32] code base since we have already done
+[07:33] that slash in it. Uh but that doesn't
+[07:36] matter too much if you're not into this.
+[07:38] So, I'm just going to let the agent read
+[07:41] uh our um our codebase now. And uh let's
+[07:45] do a feature. So, the feature I want to
+[07:48] do is actually a celebrity safe safety
+[07:52] celebrity selfie feature. That is my ID.
+[07:55] So, it says here are the contacts. You
+[07:57] want a quick summary? So, I'm just going
+[07:59] to say no. Uh so, I have some
+[08:00] documentation. You can see here uh I
+[08:03] have documentation for OpenAI, Vision,
+[08:06] Nano, Banana, and Clink. So I want the
+[08:08] model to read these three uh
+[08:11] documentation here. Start by reading and
+[08:14] I'm going to do uh at OpenAI at OpenAI
+[08:18] vision and at uh what did I call it?
+[08:22] Nano Banana. So I'm just going to read
+[08:24] the documentation and then we're going
+[08:26] to do the prompting for the the new
+[08:29] feature we're going to do. Okay. So this
+[08:31] is the idea I have. Again, this is going
+[08:33] to be a bit of a long one to go through.
+[08:35] So, if you want to skip ahead, that's
+[08:37] fine. But I think I just need to read
+[08:39] out this full prompt here because this
+[08:41] is the kind of way I think about when I
+[08:43] want to add new features into an app and
+[08:45] kind of the way I instruct the LLM or
+[08:48] the agent in this case. So, I'm going we
+[08:51] are adding a new feature uh to the app
+[08:53] called Celeb Selfie. The idea is that
+[08:56] the user can upload an image of a
+[08:58] celebrity and themsel to get back a
+[09:00] selfie image with the celebrity. to
+[09:03] generate things. Uh this I think the
+[09:05] best plan is as follows. The feature has
+[09:08] two upload image windows. One for the
+[09:11] celebrity image and one for themselves.
+[09:13] We also of course need to display the
+[09:15] generated self image. For the back end
+[09:17] part, I think this is a good solution.
+[09:20] Uh for the uploaded celebrity image and
+[09:22] the user image, start by removing the
+[09:24] background uh with a hard-coded prompt.
+[09:27] Remove background from this image only.
+[09:30] Keep the person. This is for both
+[09:32] images. Don't display this, of course,
+[09:35] because they are the images sent to the
+[09:37] API to be merged into the selfie. Uh we
+[09:41] need to hardcode a prompt that just
+[09:43] picks a random scene where the selfie is
+[09:45] taken like at a concert, coffee shop,
+[09:48] New York street, etc. Uh all the images
+[09:51] uh is of course in the selfie style,
+[09:53] handheld mobile image. Uh to to repeat
+[09:56] this, the pipeline is as follows.
+[09:58] Celebrity image upload. User image
+[10:00] upload. Remove background from both.
+[10:02] Merge the image with background removed.
+[10:04] Uh plus the random scene prompt. Display
+[10:06] the generated image selfie. Option to
+[10:09] download. Create this feature uh for our
+[10:11] app, please. I'm just going to send
+[10:13] this. So, this is the way I kind of
+[10:16] instruct the agent here. Uh this is the
+[10:19] way I always done it. Like I'm specific,
+[10:22] but I'm not like insane specific for
+[10:24] these small tasks. Uh but let's see how
+[10:26] it goes. I haven't tried this to be
+[10:29] honest, so this might not work, but
+[10:31] we'll see. So, I'm just going to let
+[10:33] this run and I'll be right back. Okay,
+[10:36] so let's test this together. Now, you
+[10:37] can see uh what I added. We have a new
+[10:40] API route, right? Uh we have a new
+[10:42] component, celeb uh selfie uploader.tsx.
+[10:46] Okay, that's pretty cool. We have some
+[10:48] new integrations. How it works? Upload.
+[10:51] Yeah, background removal.
+[10:54] Uh looks pretty good, but will it work
+[10:56] though? So let's see. So uh okay, we
+[11:01] have uh 200 here. So don't look at Path
+[11:05] of Exile. Now let's refresh this.
+[11:09] Okay, so we have the new mode here.
+[11:10] Celebrity selfie.
+[11:13] Uh so I'm going to upload a celebrity
+[11:15] photo here. Yeah, I only have this
+[11:17] Taylor Swift photo from the last video.
+[11:20] So and I have this image of me. Yeah,
+[11:23] maybe not the best. So, let's see what
+[11:25] happens now if we click on generate
+[11:27] celebrity selfie. Okay, so it is
+[11:29] running. That's good. What's going to
+[11:31] happen? I have no idea. So, I think
+[11:34] we're just going to have to wait for the
+[11:35] result here. And we might get something
+[11:38] strange or we might get something good.
+[11:41] So, yeah, let's just wait it out. Okay,
+[11:43] so I saw the result. I think it's pretty
+[11:45] good to be honest. So, let's see it. So,
+[11:48] look at this.
+[11:50] Uh, I'm still in my chair though. But
+[11:52] other than that, ah, that's pretty good,
+[11:54] right? We are at a football game, I
+[11:56] think. And yeah, she's looking pretty
+[11:59] good. And you can see her arm here. Wow,
+[12:01] that's great. I don't know why I'm in my
+[12:03] chair, though. That's a bit strange. Uh,
+[12:06] but let's try it one more time. So, I
+[12:08] can just send it again. And let's see
+[12:10] what uh the the next result is going to
+[12:12] be. And then we're going to do try some
+[12:14] other celebrity here because that was
+[12:16] pretty cool, right? Okay. Okay, so while
+[12:18] we wait for that, you can see I added
+[12:20] here include a text box where the user
+[12:22] optional can suggest additional info to
+[12:25] the prompt about uh the merge selfie
+[12:27] image. So let's see if we can do that.
+[12:29] So this could give the user a bit more
+[12:31] control over where the image is taken
+[12:34] and some other details. So yeah, let's
+[12:37] try that and see uh how that works. But
+[12:39] now let's check out the next selfie. So
+[12:42] we got this. This was not as good. You
+[12:45] can see this was not perfect. So yeah,
+[12:48] you can see it's far from perfect. But
+[12:50] let's try the new. You can see we have a
+[12:52] new details for the prompt here. So let
+[12:54] me try that. But now let's find a
+[12:56] different image here. So I'm just going
+[12:59] to replace
+[13:01] and I did download an image of Sam
+[13:04] Altman. Uh let me come up with a tit
+[13:08] like a instruction here. So let's do
+[13:10] holding a sign that reads I love Nano
+[13:13] Banana Sam Altman. So, let's try that
+[13:16] and see how that works. So, I don't
+[13:19] think the chair image of me here maybe
+[13:21] was the best, but let's see what
+[13:23] happens. Okay, so this was so good,
+[13:25] right? So, take a look at this. Look at
+[13:27] this. I think it's perfect. So, we kind
+[13:31] of have a New York skyline and I love
+[13:34] Nano Banana Sam Alton, not Altman.
+[13:38] That's pretty good. And I'm smiling. I'm
+[13:40] still in my chair. That's pretty funny.
+[13:42] Uh, so I'm really happy with this. So, I
+[13:45] did download that. Maybe that's going to
+[13:47] be um the thumbnail, but let's do one
+[13:50] more time. I want to try it one more
+[13:51] time and see how this uh ends up. Uh, so
+[13:55] after this, we're going to do one more
+[13:57] feature I have, but I'm just going to do
+[13:58] the feature. Uh, it's basically going to
+[14:00] be the same workflow as we did before.
+[14:02] And let's take a look at it. Okay, so
+[14:04] now we got this one. This was pretty
+[14:06] good, too. He's a bit serious, though.
+[14:08] But I love Nano Banana Sam Altman. Now,
+[14:10] the text was correct. Uh but yeah uh
+[14:13] this is a fun one. So uh now let's do uh
+[14:17] our final feature for the app uh for
+[14:20] today and that is going to be uh a
+[14:22] feature called fake holiday. So this is
+[14:24] a fake gram feature. Uh the user uploads
+[14:27] a image of themsel, puts in a
+[14:29] destination, and the idea is that the
+[14:32] app now should generate four realistic
+[14:34] images of themsel at this destination so
+[14:38] they could take a holiday on Instagram
+[14:41] or something. So let's see how this
+[14:43] goes. So uh Codex is working on this
+[14:45] feature now. And yeah, it looks like
+[14:48] it's ready actually. So let's try it
+[14:49] out. Okay, so let's refresh this. You
+[14:52] can see at the end here we have a fake
+[14:54] holiday feature. So, yeah, nothing
+[14:56] special here. Uh, but I'm going to
+[14:58] upload the image of me again, right?
+[15:03] And yeah, I'm just going to type in a
+[15:05] destination. So, where do I want to go?
+[15:07] I think I want to go to Tokyo. This is
+[15:10] kind of my uh dream destination.
+[15:13] Generate a fake images. So, it's going
+[15:16] to be four photos, two selfies, two
+[15:19] normal mobile shots from famous places
+[15:21] in your destination. Right. So let's see
+[15:24] how that turns out. So here you can see
+[15:27] these are all the generated photos of me
+[15:29] in Tokyo. We are at this famous crossing
+[15:32] here uh at this temple right that's the
+[15:35] two selfie images and here I am standing
+[15:38] at the Tokyo Tower and here I am
+[15:41] someplace uh some people some uh might
+[15:44] be like another temple or something uh
+[15:47] but yeah that was pretty cool right so
+[15:49] that's another feature uh let me quickly
+[15:52] try uh another destination here let's
+[15:55] try Amazon jungle just to see what
+[15:58] happens right so before we look at this
+[16:00] uh if you want access to the full app
+[16:03] now I have done some updates on the uh
+[16:06] YouTube members GitHub so I just pushed
+[16:09] the updates we did today so uh if you
+[16:12] want to just plug and play you can
+[16:14] become a member of the channel if you
+[16:16] already are a member I'm going to leave
+[16:18] a link in the description below so you
+[16:20] can start playing around and building
+[16:21] out more features yourself or just
+[16:23] editing the features I have done right
+[16:26] so yeah uh check out the link in the
+[16:28] description below
+[16:30] and um become a member if you want to
+[16:33] and if you want to get more uh content
+[16:35] like this uh that helps support me and
+[16:38] also you can give the video a like here
+[16:39] if you want to do that. So let's see
+[16:42] here now. Okay, so that's pretty good.
+[16:44] Yeah, I'm happy with this. So here I am
+[16:46] at some temple in the jungle. This was
+[16:48] pretty good. This was really bad. That
+[16:51] looks very fake, right? And here I am
+[16:55] pointing at some kind of fountain. And
+[16:57] here I am at a tower with looking over
+[17:00] the Amazon. I don't know what that is.
+[17:02] Uh I like my uh clothing here. That was
+[17:05] pretty cool. This looks like a holiday
+[17:08] image. So yeah, that's a pretty cool
+[17:10] feature. I'm going to test it out a bit
+[17:12] more after uh I've done this video. So
+[17:16] uh I just hope this gave you some
+[17:17] inspiration. There's so much you can do
+[17:19] now by just using simple tools like
+[17:21] codecs, using APIs like banana and yeah,
+[17:25] just play around with your creativity.
+[17:27] That's what I like about this. So, how
+[17:30] many features have we added now? 1 2 3 4
+[17:32] 5 6 7 eight features. Is it eight
+[17:36] features already? And someone has to do
+[17:39] coding. I think that was pretty neat to
+[17:41] be honest. But the other ones were fun,
+[17:42] too. So, yeah. Thank you for tuning in.
+[17:44] Hope you enjoyed it. And be baked again
