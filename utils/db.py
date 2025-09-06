@@ -87,6 +87,7 @@ class DatabaseConnectionFactory:
         # Performance and durability settings
         conn.execute("PRAGMA journal_mode = WAL")  # Better concurrency
         conn.execute("PRAGMA synchronous = NORMAL")  # Balance durability/performance
+        conn.execute("PRAGMA busy_timeout = 30000")  # 30 seconds for concurrent access
         
         # Additional performance settings
         conn.execute("PRAGMA cache_size = -64000")  # 64MB cache

@@ -26,6 +26,11 @@ permissions:
   contents: write  # Allow the workflow to push changes
   packages: read   # Allow reading packages if needed
 
+# Prevent overlapping runs
+concurrency:
+  group: daily-digest-${{ github.ref }}
+  cancel-in-progress: false
+
 jobs:
   smoke-test:
     runs-on: ubuntu-latest
@@ -88,7 +93,7 @@ jobs:
 
   daily-podcast-digest:
     runs-on: ubuntu-latest
-    timeout-minutes: 60
+    timeout-minutes: 90
     needs: smoke-test
     env:
       TZ: UTC
@@ -153,35 +158,113 @@ jobs:
           echo "📆 REGULAR WEEKDAY: Standard daily processing"
         fi
         
-    - name: Set up environment variables
+    - name: Fast-fail environment validation
+      timeout-minutes: 2
       env:
         ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
         OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
         ELEVENLABS_API_KEY: ${{ secrets.ELEVENLABS_API_KEY }}
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        HEALTHCHECK_URL_RSS: ${{ secrets.HEALTHCHECK_URL_RSS }}
+        HEALTHCHECK_URL_YT: ${{ secrets.HEALTHCHECK_URL_YT }}
       run: |
-        # Validate required API keys are present before setting
+        echo "🔍 Fast-fail environment validation"
+        
+        # Critical secrets validation
         if [ -z "$ANTHROPIC_API_KEY" ]; then
-          echo "❌ ANTHROPIC_API_KEY secret is not set or empty"
+          echo "❌ ANTHROPIC_API_KEY secret is required but not set"
           exit 1
         fi
-        if [ -n "$ANTHROPIC_API_KEY" ]; then
-          echo "✅ ANTHROPIC_API_KEY is set (length: ${#ANTHROPIC_API_KEY})"
+        
+        if [ -z "$GITHUB_TOKEN" ]; then
+          echo "❌ GITHUB_TOKEN secret is required but not set"
+          exit 1
         fi
         
-        if [ -n "$OPENAI_API_KEY" ]; then
-          echo "✅ OPENAI_API_KEY is set (length: ${#OPENAI_API_KEY})"
-        else
-          echo "⚠️ OPENAI_API_KEY secret is not set - topic scoring will be skipped"
+        # Optional secrets validation with warnings
+        if [ -z "$OPENAI_API_KEY" ]; then
+          echo "⚠️ OPENAI_API_KEY not set - topic scoring will be skipped"
         fi
         
+        if [ -z "$ELEVENLABS_API_KEY" ]; then
+          echo "⚠️ ELEVENLABS_API_KEY not set - TTS will be skipped"
+        fi
+        
+        if [ -z "$HEALTHCHECK_URL_RSS" ]; then
+          echo "⚠️ HEALTHCHECK_URL_RSS not set - RSS healthcheck disabled"
+        fi
+        
+        if [ -z "$HEALTHCHECK_URL_YT" ]; then
+          echo "⚠️ HEALTHCHECK_URL_YT not set - YouTube healthcheck disabled"
+        fi
+        
+        echo "✅ Environment validation passed"
+        
+        # Set environment variables for subsequent steps
         echo "ANTHROPIC_API_KEY=$ANTHROPIC_API_KEY" >> $GITHUB_ENV
         echo "OPENAI_API_KEY=$OPENAI_API_KEY" >> $GITHUB_ENV
         echo "ELEVENLABS_API_KEY=$ELEVENLABS_API_KEY" >> $GITHUB_ENV
         echo "GITHUB_TOKEN=$GITHUB_TOKEN" >> $GITHUB_ENV
+        echo "HEALTHCHECK_URL_RSS=$HEALTHCHECK_URL_RSS" >> $GITHUB_ENV
+        echo "HEALTHCHECK_URL_YT=$HEALTHCHECK_URL_YT" >> $GITHUB_ENV
         
         # Set podcast base URL for deployment
         echo "PODCAST_BASE_URL=https://podcast.paulrbrown.org" >> $GITHUB_ENV
+        
+    - name: Read YouTube watermark for traceability
+      timeout-minutes: 1
+      run: |
+        echo "📄 Reading YouTube watermark for traceability"
+        
+        if [ -f "state/yt_last_push.json" ]; then
+          echo "✅ YouTube watermark file found"
+          
+          # Parse watermark for key info
+          RUN_ID=$(jq -r '.run_id // "unknown"' state/yt_last_push.json)
+          COMMIT_SHA=$(jq -r '.commit_sha // "unknown"' state/yt_last_push.json)
+          PUSHED_AT=$(jq -r '.pushed_at // "unknown"' state/yt_last_push.json)
+          STATUS=$(jq -r '.status // "unknown"' state/yt_last_push.json)
+          EPISODES=$(jq -r '.episodes_processed // 0' state/yt_last_push.json)
+          
+          echo "🎯 Last YouTube sync:"
+          echo "  Run ID: $RUN_ID"
+          echo "  Commit: ${COMMIT_SHA:0:8}"
+          echo "  Pushed at: $PUSHED_AT"
+          echo "  Status: $STATUS"
+          echo "  Episodes: $EPISODES"
+          
+          # Check if watermark is stale (>8 hours old)
+          if command -v date >/dev/null 2>&1; then
+            if [ "$PUSHED_AT" != "unknown" ] && [ "$PUSHED_AT" != "" ]; then
+              PUSHED_EPOCH=$(date -d "$PUSHED_AT" +%s 2>/dev/null || echo "0")
+              NOW_EPOCH=$(date +%s)
+              AGE_HOURS=$(( (NOW_EPOCH - PUSHED_EPOCH) / 3600 ))
+              
+              if [ $AGE_HOURS -gt 8 ]; then
+                echo "⚠️ YouTube watermark is stale (${AGE_HOURS} hours old)"
+                echo "STALE_WATERMARK=true" >> $GITHUB_ENV
+              else
+                echo "✅ YouTube watermark is fresh (${AGE_HOURS} hours old)"
+              fi
+            fi
+          fi
+          
+          # Add to job summary
+          echo "## 📄 YouTube Sync Status" >> $GITHUB_STEP_SUMMARY
+          echo "- **Last Run ID:** \`$RUN_ID\`" >> $GITHUB_STEP_SUMMARY
+          echo "- **Commit SHA:** \`${COMMIT_SHA:0:8}\`" >> $GITHUB_STEP_SUMMARY
+          echo "- **Pushed:** $PUSHED_AT" >> $GITHUB_STEP_SUMMARY
+          echo "- **Status:** $STATUS" >> $GITHUB_STEP_SUMMARY
+          echo "- **Episodes Processed:** $EPISODES" >> $GITHUB_STEP_SUMMARY
+          
+        else
+          echo "⚠️ YouTube watermark file not found - first run or missing state"
+          echo "MISSING_WATERMARK=true" >> $GITHUB_ENV
+          
+          echo "## ⚠️ YouTube Sync Status" >> $GITHUB_STEP_SUMMARY
+          echo "- **Status:** Missing watermark file" >> $GITHUB_STEP_SUMMARY
+          echo "- **Note:** This may be the first run or the YouTube cron job hasn't pushed state yet" >> $GITHUB_STEP_SUMMARY
+        fi
         
     - name: Validate critical configuration
       run: |
@@ -346,6 +429,7 @@ jobs:
         
     - name: Update RSS feed (using multi-topic generator)
       if: success() && github.event.inputs.mode != 'test-run'
+      timeout-minutes: 10
       run: |
         echo "📡 Generating RSS feed with multi-topic support..."
         python3 rss_generator_multi_topic.py
@@ -357,4 +441,88 @@ jobs:
             git commit -m "Update RSS feed with multi-topic digest episodes - $(date -u +%Y-%m-%d)" daily-digest.xml || echo "Failed to commit RSS feed"
             git push || echo "Failed to push RSS feed"
           fi
+        fi
+    
+    - name: Send success healthcheck ping
+      if: success() && github.event.inputs.mode != 'test-run'
+      timeout-minutes: 2
+      run: |
+        if [ -n "${HEALTHCHECK_URL_RSS:-}" ]; then
+          echo "📊 Sending success healthcheck ping"
+          
+          # Count episodes processed (estimate from digest files)
+          EPISODES_COUNT=0
+          if [ -d "daily_digests" ]; then
+            EPISODES_COUNT=$(find daily_digests -name "*_digest_*.md" -type f | wc -l | tr -d ' ')
+          fi
+          
+          # Calculate workflow duration (approximate)
+          WORKFLOW_DURATION=$(( $(date +%s) - $(date -d "${{ github.event.created_at }}" +%s 2>/dev/null || echo $(date +%s)) ))
+          
+          # Create healthcheck payload
+          PAYLOAD=$(jq -n \
+            --arg episodes "$EPISODES_COUNT" \
+            --arg duration "$WORKFLOW_DURATION" \
+            --arg status "success" \
+            --arg run_id "${{ github.run_id }}" \
+            '{
+              episodes_processed: ($episodes | tonumber),
+              duration_seconds: ($duration | tonumber),
+              status: $status,
+              github_run_id: $run_id
+            }')
+          
+          if curl -m 10 -fsS "$HEALTHCHECK_URL_RSS" \
+            -H "Content-Type: application/json" \
+            -d "$PAYLOAD" >/dev/null 2>&1; then
+            echo "✅ Healthcheck ping sent successfully"
+          else
+            echo "⚠️ Failed to send healthcheck ping (non-blocking)"
+          fi
+        else
+          echo "ℹ️ No healthcheck URL configured, skipping ping"
+        fi
+    
+    - name: Upload failure artifacts
+      if: failure()
+      uses: actions/upload-artifact@v4
+      with:
+        name: failure-artifacts-${{ github.run_number }}
+        path: |
+          podcast_monitor.db
+          youtube_transcripts.db
+          daily_digests/
+          transcripts/
+          state/yt_last_push.json
+          **/*.log
+        retention-days: 14
+        if-no-files-found: warn
+    
+    - name: Create job summary
+      if: always()
+      run: |
+        echo "## 📊 Daily Digest Pipeline Summary" >> $GITHUB_STEP_SUMMARY
+        echo "- **Trigger:** ${{ github.event_name }}" >> $GITHUB_STEP_SUMMARY
+        echo "- **Mode:** ${{ github.event.inputs.mode || 'scheduled' }}" >> $GITHUB_STEP_SUMMARY
+        echo "- **Run ID:** \`${{ github.run_id }}\`" >> $GITHUB_STEP_SUMMARY
+        echo "- **Commit:** \`${{ github.sha }}\`" >> $GITHUB_STEP_SUMMARY
+        echo "- **Status:** ${{ job.status }}" >> $GITHUB_STEP_SUMMARY
+        
+        # Add digest counts if available
+        if [ -d "daily_digests" ]; then
+          DIGEST_COUNT=$(find daily_digests -name "*_digest_*.md" -type f | wc -l | tr -d ' ')
+          AUDIO_COUNT=$(find daily_digests -name "*_digest_*.mp3" -type f | wc -l | tr -d ' ')
+          echo "- **Digest Files Created:** $DIGEST_COUNT" >> $GITHUB_STEP_SUMMARY
+          echo "- **Audio Files Created:** $AUDIO_COUNT" >> $GITHUB_STEP_SUMMARY
+        fi
+        
+        # Add database status
+        if [ -f "podcast_monitor.db" ]; then
+          RSS_COUNT=$(sqlite3 podcast_monitor.db "SELECT COUNT(*) FROM episodes;" 2>/dev/null || echo "unknown")
+          echo "- **RSS Episodes in DB:** $RSS_COUNT" >> $GITHUB_STEP_SUMMARY
+        fi
+        
+        if [ -f "youtube_transcripts.db" ]; then
+          YT_COUNT=$(sqlite3 youtube_transcripts.db "SELECT COUNT(*) FROM episodes;" 2>/dev/null || echo "unknown")
+          echo "- **YouTube Episodes in DB:** $YT_COUNT" >> $GITHUB_STEP_SUMMARY
         fi
