@@ -1,7 +1,12 @@
 #!/usr/bin/env python3
 """
-Podcast & YouTube Feed Monitor
-Monitors RSS feeds and YouTube channels for new content in the last 24 hours
+Podcast & YouTube Feed Monitor (Phase 4 Enhanced)
+Monitors RSS feeds and YouTube channels with enhanced robustness:
+- Per-feed lookback controls with grace periods
+- HTTP caching (ETag/Last-Modified)
+- Deterministic handling of date-less items
+- Structured 2-line INFO logging per feed
+- Telemetry integration
 """
 
 import os
@@ -10,11 +15,25 @@ import sqlite3
 import json
 import requests
 import logging
+import time
+import hashlib
 from datetime import datetime, timedelta, UTC
-from utils.datetime_utils import now_utc, cutoff_utc, parse_entry_to_utc, to_utc
+from typing import Optional, Dict, Any, List, Tuple
 from urllib.parse import urlparse
 from youtube_transcript_api import YouTubeTranscriptApi
 import re
+
+# Import utilities
+from utils.datetime_utils import now_utc, cutoff_utc, parse_entry_to_utc, to_utc
+from utils.feed_helpers import (
+    item_identity_hash, content_hash, get_or_set_first_seen,
+    detect_typical_order, get_effective_lookback_hours, compute_cutoff_with_grace,
+    should_suppress_warning, update_warning_timestamp,
+    handle_conditional_get, extract_http_cache_headers,
+    update_feed_cache_headers, get_feed_cache_headers,
+    ensure_feed_metadata_exists, cleanup_old_item_seen_records,
+    format_feed_stats
+)
 
 # Import configuration
 from config import config
@@ -28,12 +47,16 @@ class FeedMonitor:
     def __init__(self, db_path="podcast_monitor.db"):
         self.db_path = db_path
         self.feed_settings = config.FEED_SETTINGS
+        # Create HTTP session with connection pooling
+        self.session = requests.Session()
+        self.session.headers.update({'User-Agent': self.feed_settings['user_agent']})
         self.init_database()
     
     def init_database(self):
-        """Initialize SQLite database for tracking feeds and episodes"""
+        """Initialize SQLite database for tracking feeds and episodes (Phase 4 Enhanced)"""
         conn = sqlite3.connect(self.db_path)
         cursor = conn.cursor()
+        conn.execute("PRAGMA foreign_keys = ON")
         
         # Feeds table
         cursor.execute('''
@@ -65,8 +88,72 @@ class FeedMonitor:
             )
         ''')
         
+        # Phase 4: Feed metadata table for enhanced features
+        cursor.execute('''
+            CREATE TABLE IF NOT EXISTS feed_metadata (
+                feed_id INTEGER PRIMARY KEY,
+                has_dates BOOLEAN DEFAULT 1,
+                typical_order TEXT CHECK(typical_order IN ('reverse_chronological','chronological','unknown')) DEFAULT 'reverse_chronological',
+                last_no_date_warning TIMESTAMP NULL,
+                lookback_hours_override INTEGER NULL,
+                etag TEXT NULL,
+                last_modified_http TEXT NULL,
+                notes TEXT NULL,
+                created_at TIMESTAMP DEFAULT (datetime('now', 'UTC')),
+                updated_at TIMESTAMP DEFAULT (datetime('now', 'UTC')),
+                FOREIGN KEY (feed_id) REFERENCES feeds (id) ON DELETE CASCADE
+            )
+        ''')
+        
+        # Phase 4: Item tracking for deduplication and date-less handling
+        cursor.execute('''
+            CREATE TABLE IF NOT EXISTS item_seen (
+                feed_id INTEGER NOT NULL,
+                item_id_hash TEXT NOT NULL,
+                first_seen_utc TIMESTAMP NOT NULL,
+                last_seen_utc TIMESTAMP NOT NULL,
+                content_hash TEXT NULL,
+                guid TEXT NULL,
+                link TEXT NULL,
+                title TEXT NULL,
+                enclosure_url TEXT NULL,
+                created_at TIMESTAMP DEFAULT (datetime('now', 'UTC')),
+                PRIMARY KEY (feed_id, item_id_hash),
+                FOREIGN KEY (feed_id) REFERENCES feeds (id) ON DELETE CASCADE
+            )
+        ''')
+        
+        # Create indexes for performance
+        self._create_indexes(cursor)
+        
+        # Create triggers
+        cursor.execute('''
+            CREATE TRIGGER IF NOT EXISTS feed_metadata_updated_at 
+            AFTER UPDATE ON feed_metadata
+            BEGIN
+                UPDATE feed_metadata SET updated_at = datetime('now', 'UTC') WHERE feed_id = NEW.feed_id;
+            END
+        ''')
+        
         conn.commit()
         conn.close()
+        
+    def _create_indexes(self, cursor):
+        """Create performance indexes for Phase 4 tables"""
+        indexes = [
+            "CREATE INDEX IF NOT EXISTS ix_item_seen_feed_last_seen ON item_seen(feed_id, last_seen_utc)",
+            "CREATE INDEX IF NOT EXISTS ix_item_seen_first_seen ON item_seen(first_seen_utc)",
+            "CREATE INDEX IF NOT EXISTS ix_item_seen_content_hash ON item_seen(feed_id, content_hash)",
+            "CREATE INDEX IF NOT EXISTS ix_feed_metadata_lookback ON feed_metadata(lookback_hours_override)",
+            "CREATE INDEX IF NOT EXISTS ix_feed_metadata_etag ON feed_metadata(etag)",
+        ]
+        
+        for index_sql in indexes:
+            try:
+                cursor.execute(index_sql)
+            except sqlite3.OperationalError:
+                # Index might already exist
+                pass
     
     def add_rss_feed(self, url, topic_category, title=None):
         """Add RSS feed to monitoring list"""
@@ -185,22 +272,21 @@ class FeedMonitor:
         return None
     
     def check_new_episodes(self, hours_back=None, feed_types=None):
-        """Check feeds for new episodes in the last N hours
+        """Check feeds for new episodes with Phase 4 enhanced robustness
+        
+        Features:
+        - Per-feed lookback controls with grace periods
+        - HTTP caching (ETag/Last-Modified)
+        - Deterministic handling of date-less items
+        - 2-line INFO logging per feed
+        - Telemetry integration
         
         Args:
-            hours_back: How many hours to look back for new episodes.
-                       If None, uses FEED_LOOKBACK_HOURS env var (default 48)
+            hours_back: Global lookback override (feed-specific overrides take precedence)
             feed_types: List of feed types to check ('rss', 'youtube'). 
                        If None, checks all types. In GitHub Actions, should be ['rss']
         """
-        # Use environment variable if hours_back not specified
-        if hours_back is None:
-            hours_back = int(os.getenv("FEED_LOOKBACK_HOURS", "48"))
-        
-        # Use UTC for cutoff time to match database storage
-        cutoff_time = cutoff_utc(hours_back)
-        print(f"🕐 Looking for episodes newer than {cutoff_time.isoformat()}Z UTC ({hours_back}h lookback)")
-        new_episodes = []
+        start_time = time.time()
         
         # Check if running in GitHub Actions
         is_github_actions = os.getenv('GITHUB_ACTIONS') == 'true'
@@ -208,144 +294,364 @@ class FeedMonitor:
         # In GitHub Actions, only check RSS feeds (YouTube processed locally)
         if is_github_actions and feed_types is None:
             feed_types = ['rss']
-            print("🔧 GitHub Actions mode: Only checking RSS feeds (YouTube processed locally)")
+            logger.info("🔧 GitHub Actions mode: Only checking RSS feeds")
+        
+        # Global settings
+        grace_minutes = self.feed_settings['grace_minutes']
+        enable_http_caching = self.feed_settings['enable_http_caching']
+        global_lookback = hours_back or self.feed_settings['lookback_hours']
+        
+        logger.info(f"🕐 Feed monitoring started: global_lookback={global_lookback}h grace={grace_minutes}m caching={enable_http_caching}")
         
         conn = sqlite3.connect(self.db_path)
+        conn.execute("PRAGMA foreign_keys = ON")
         cursor = conn.cursor()
         
-        # Build query with feed type filter if specified
+        try:
+            # Cleanup old item_seen records
+            cleanup_old_item_seen_records(cursor, self.feed_settings['item_seen_retention_days'])
+            
+            # Get feeds to process
+            feeds = self._get_feeds_to_process(cursor, feed_types)
+            
+            new_episodes = []
+            feed_stats = {
+                'total_feeds': len(feeds),
+                'processed_feeds': 0,
+                'new_episodes': 0,
+                'http_cache_hits': 0,
+                'errors': 0
+            }
+            
+            for feed_id, url, title, feed_type, topic_category in feeds:
+                feed_start_time = time.time()
+                
+                try:
+                    # Ensure feed metadata exists
+                    ensure_feed_metadata_exists(cursor, feed_id, feed_type)
+                    
+                    # Get effective lookback for this feed
+                    effective_lookback = get_effective_lookback_hours(cursor, feed_id, global_lookback)
+                    cutoff_time = compute_cutoff_with_grace(effective_lookback, grace_minutes)
+                    
+                    # Process feed with enhanced features
+                    feed_result = self._process_single_feed(
+                        cursor, feed_id, url, title, feed_type, topic_category,
+                        cutoff_time, effective_lookback, enable_http_caching
+                    )
+                    
+                    # Collect results
+                    new_episodes.extend(feed_result['episodes'])
+                    feed_stats['processed_feeds'] += 1
+                    feed_stats['new_episodes'] += feed_result['stats']['new']
+                    if feed_result['cached']:
+                        feed_stats['http_cache_hits'] += 1
+                    
+                except Exception as e:
+                    feed_stats['errors'] += 1
+                    logger.error(f"❌ Error processing {title}: {e}")
+                    # Emit structured error log
+                    self._log_feed_error(title, feed_type, str(e))
+                
+                # Add politeness delay between feeds
+                if self.feed_settings['politeness_delay_ms'] > 0:
+                    time.sleep(self.feed_settings['politeness_delay_ms'] / 1000.0)
+            
+            conn.commit()
+            
+            # Summary logging and telemetry
+            total_duration_ms = int((time.time() - start_time) * 1000)
+            logger.info(
+                f"🎉 Feed monitoring completed: "
+                f"feeds={feed_stats['processed_feeds']}/{feed_stats['total_feeds']} "
+                f"new={feed_stats['new_episodes']} "
+                f"cached={feed_stats['http_cache_hits']} "
+                f"errors={feed_stats['errors']} "
+                f"duration_ms={total_duration_ms}"
+            )
+            
+            # Emit telemetry
+            self._emit_run_telemetry(feed_stats, total_duration_ms)
+            
+            return new_episodes
+            
+        finally:
+            conn.close()
+    
+    def _get_feeds_to_process(self, cursor: sqlite3.Cursor, feed_types: Optional[List[str]]) -> List[Tuple]:
+        """Get list of active feeds to process"""
         if feed_types:
             placeholders = ', '.join('?' for _ in feed_types)
-            query = f'SELECT id, url, title, type, topic_category FROM feeds WHERE active = 1 AND type IN ({placeholders})'
+            query = f'SELECT id, url, title, type, topic_category FROM feeds WHERE active = 1 AND type IN ({placeholders}) ORDER BY id'
             cursor.execute(query, feed_types)
         else:
-            cursor.execute('SELECT id, url, title, type, topic_category FROM feeds WHERE active = 1')
-            
-        feeds = cursor.fetchall()
+            cursor.execute('SELECT id, url, title, type, topic_category FROM feeds WHERE active = 1 ORDER BY id')
         
-        for feed_id, url, title, feed_type, topic_category in feeds:
-            print(f"Checking {title}...")
-            
-            try:
-                # Use network utilities with retries
-                from utils.network import get_with_backoff
+        return cursor.fetchall()
+    
+    def _process_single_feed(self, cursor: sqlite3.Cursor, feed_id: int, url: str, 
+                           title: str, feed_type: str, topic_category: str,
+                           cutoff_time: datetime, lookback_hours: int, 
+                           enable_caching: bool) -> Dict[str, Any]:
+        """Process a single feed with Phase 4 enhancements"""
+        start_time = time.time()
+        stats = {'new': 0, 'updated': 0, 'duplicate': 0, 'skipped': 0, 'errors': 0, 'nodate': 0}
+        cached = False
+        
+        try:
+            # HTTP caching logic
+            if enable_caching:
+                cache_headers = get_feed_cache_headers(cursor, feed_id)
+                response, cached = handle_conditional_get(
+                    self.session, url, 
+                    cache_headers['etag'], 
+                    cache_headers['last_modified'],
+                    self.feed_settings['request_timeout']
+                )
                 
+                if cached:
+                    # 304 Not Modified - no new content
+                    duration_ms = int((time.time() - start_time) * 1000)
+                    logger.info(f"📦 {title} items=0 dated=0 nodate=0 cutoff={cutoff_time.strftime('%Y-%m-%dT%H:%M:%S')}Z lookback={lookback_hours}h etag_hit=true")
+                    logger.info(f"   {format_feed_stats(dict(stats, duration_ms=duration_ms))}")
+                    
+                    # Update last checked time
+                    cursor.execute('UPDATE feeds SET last_checked = datetime("now", "UTC") WHERE id = ?', (feed_id,))
+                    
+                    return {'episodes': [], 'stats': stats, 'cached': True}
+                
+                # Update cache headers for successful responses
+                new_headers = extract_http_cache_headers(response)
+                update_feed_cache_headers(cursor, feed_id, new_headers['etag'], new_headers['last_modified'])
+                
+                # Check response size
+                if len(response.content) > self.feed_settings['max_feed_bytes']:
+                    raise ValueError(f"Feed too large: {len(response.content)} bytes > {self.feed_settings['max_feed_bytes']}")
+                
+                feed_data = feedparser.parse(response.content)
+                
+            else:
+                # Non-cached request
+                from utils.network import get_with_backoff
                 response = get_with_backoff(
                     url,
                     tries=self.feed_settings['max_retries'],
                     base_delay=self.feed_settings['backoff_base_delay'],
                     timeout=self.feed_settings['request_timeout']
                 )
-                feed = feedparser.parse(response.content)
                 
-                # Apply feed item limits to reduce processing
-                max_items = self.feed_settings['max_episodes_per_feed']
-                entries_to_process = feed.entries[:max_items] if max_items > 0 else feed.entries
+                if len(response.content) > self.feed_settings['max_feed_bytes']:
+                    raise ValueError(f"Feed too large: {len(response.content)} bytes")
                 
-                # INFO: Header line per feed
-                print(f"▶ {title} (entries={len(entries_to_process)}/{len(feed.entries)}, limit={max_items}, cutoff={cutoff_time.strftime('%Y-%m-%d %H:%M:%S')}Z)")
+                feed_data = feedparser.parse(response.content)
+            
+            # Process feed entries
+            episodes = self._process_feed_entries(
+                cursor, feed_id, feed_data, cutoff_time, title, feed_type, topic_category, stats
+            )
+            
+            # Update feed metadata if auto-detection enabled
+            if self.feed_settings['detect_feed_order'] and len(feed_data.entries) >= 3:
+                typical_order = detect_typical_order(feed_data.entries)
+                cursor.execute(
+                    "UPDATE feed_metadata SET typical_order = ? WHERE feed_id = ?",
+                    (typical_order, feed_id)
+                )
+            
+            # Update last checked time
+            cursor.execute('UPDATE feeds SET last_checked = datetime("now", "UTC") WHERE id = ?', (feed_id,))
+            
+            # Log results (Phase 4: 2-line format)
+            duration_ms = int((time.time() - start_time) * 1000)
+            total_items = len(feed_data.entries)
+            dated_items = total_items - stats['nodate']
+            
+            logger.info(
+                f"📦 {title} items={total_items} dated={dated_items} nodate={stats['nodate']} "
+                f"cutoff={cutoff_time.strftime('%Y-%m-%dT%H:%M:%S')}Z lookback={lookback_hours}h etag_hit={cached}"
+            )
+            logger.info(f"   {format_feed_stats(dict(stats, duration_ms=duration_ms))}")
+            
+            # Check for feed-level warnings (suppressed to avoid spam)
+            self._check_feed_warnings(cursor, feed_id, title, feed_data.entries, stats)
+            
+            return {'episodes': episodes, 'stats': stats, 'cached': cached}
+            
+        except requests.exceptions.RequestException as e:
+            stats['errors'] += 1
+            raise Exception(f"HTTP error: {e}")
+        except Exception as e:
+            stats['errors'] += 1
+            raise
+    
+    def _process_feed_entries(self, cursor: sqlite3.Cursor, feed_id: int, 
+                            feed_data, cutoff_time: datetime, title: str, 
+                            feed_type: str, topic_category: str, 
+                            stats: Dict[str, int]) -> List[Dict[str, Any]]:
+        """Process individual feed entries with Phase 4 enhancements"""
+        episodes = []
+        current_time = now_utc()
+        
+        # Apply item limits
+        max_items = self.feed_settings['max_episodes_per_feed']
+        entries_to_process = feed_data.entries[:max_items] if max_items > 0 else feed_data.entries
+        
+        for entry in entries_to_process:
+            try:
+                # Extract basic info
+                entry_title = entry.get('title', '(untitled)')
+                entry_guid = entry.get('id') or entry.get('guid')
+                entry_link = entry.get('link')
                 
-                # Track processing stats
-                pub_dates = []
-                old_skipped = 0
-                dup_count = 0 
-                new_count = 0
-                no_date_count = 0
-                
-                for i, entry in enumerate(entries_to_process, 1):
-                    # Parse publication date and normalize to UTC
-                    pub_date = self._parse_date_to_utc(entry)
-                    
-                    # Extract episode information for logging
-                    episode_title = entry.get('title', '(untitled)')
-                    
-                    # Skip with debug logging
-                    if not pub_date:
-                        logger.debug(f"SKIP no-date: {title} :: {episode_title}")
-                        no_date_count += 1
-                        continue
-                    
-                    pub_dates.append(pub_date)  # Track for newest calculation
-                    
-                    if pub_date < cutoff_time:
-                        old_skipped += 1
-                        logger.debug(f"SKIP old-entry: {title} :: {episode_title} ({pub_date.isoformat()} < {cutoff_time.isoformat()})")
-                        
-                        # Break on old if enabled and feed appears to be reverse-chronological
-                        if self.feed_settings['break_on_old'] and old_skipped == 1:
-                            print(f"  🚀 Early break: {title} appears reverse-chronological, stopping scan")
+                # Get enclosure URL
+                enclosure_url = None
+                if hasattr(entry, 'enclosures') and entry.enclosures:
+                    for enclosure in entry.enclosures:
+                        if 'audio' in enclosure.get('type', ''):
+                            enclosure_url = enclosure.get('href')
                             break
-                        continue
-                    
-                    # Create episode ID
-                    raw_episode_id = entry.get('id') or entry.get('guid') or entry.get('link')
-                    import hashlib
-                    episode_id = hashlib.md5(raw_episode_id.encode()).hexdigest()[:8]
-                    
-                    # Get audio URL first for duplicate detection
-                    audio_url = None
-                    if hasattr(entry, 'enclosures') and entry.enclosures:
-                        for enclosure in entry.enclosures:
-                            if 'audio' in enclosure.get('type', ''):
-                                audio_url = enclosure.get('href')
-                                break
-                    
-                    # For YouTube, audio URL is the video URL
-                    if feed_type == 'youtube':
-                        video_id = self._extract_video_id_from_entry(entry)
-                        if video_id:
-                            audio_url = f"https://www.youtube.com/watch?v={video_id}"
-                    
-                    # Robust duplicate detection with composite checks
-                    if self._is_duplicate_episode(cursor, episode_id, audio_url, episode_title, pub_date):
-                        dup_count += 1
-                        logger.debug(f"SKIP duplicate episode: {episode_id} :: {episode_title}")
-                        continue
-                    
-                    # Add new episode with pre-download status
-                    cursor.execute('''
-                        INSERT INTO episodes (feed_id, episode_id, title, published_date, audio_url, status)
-                        VALUES (?, ?, ?, ?, ?, 'pre-download')
-                    ''', (feed_id, episode_id, episode_title, pub_date.isoformat(), audio_url))
-                    
-                    new_count += 1
-                    logger.debug(f"Added new episode: {episode_title} ({pub_date.isoformat()})")
-                    
-                    new_episodes.append({
-                        'feed_title': title,
-                        'topic_category': topic_category,
-                        'episode_title': episode_title,
-                        'published_date': pub_date,
-                        'audio_url': audio_url,
-                        'type': feed_type
-                    })
                 
-                # INFO: Totals line per feed
-                print(f"   totals: new={new_count} dup={dup_count} older={old_skipped} no_date={no_date_count}")
+                # For YouTube, use video URL as enclosure
+                if feed_type == 'youtube':
+                    video_id = self._extract_video_id_from_entry(entry)
+                    if video_id:
+                        enclosure_url = f"https://www.youtube.com/watch?v={video_id}"
                 
-                # Show feed freshness
-                if pub_dates:
-                    newest_seen = max(pub_dates)
-                    print(f"  📅 Newest in {title}: {newest_seen.isoformat()}Z UTC")
-                    
-                    # Check for stale feeds
-                    stale_threshold = now_utc() - timedelta(days=self.feed_settings['stale_feed_days'])
-                    if newest_seen < stale_threshold:
-                        print(f"  ⚠️  STALE FEED WARNING: {title} - newest episode is {(now_utc() - newest_seen).days} days old (threshold: {self.feed_settings['stale_feed_days']} days)")
+                # Generate stable item hash
+                item_hash = item_identity_hash(entry_guid, entry_link, entry_title, enclosure_url)
+                
+                # Parse publication date
+                pub_date, _ = parse_entry_to_utc(entry)
+                
+                if not pub_date:
+                    # Handle date-less items with deterministic timestamps
+                    pub_date = get_or_set_first_seen(
+                        cursor, feed_id, item_hash, entry_title, 
+                        entry_guid or '', entry_link or '', enclosure_url or '', current_time
+                    )
+                    stats['nodate'] += 1
+                    logger.debug(f"SYNTHETIC DATE: {title} :: {entry_title} -> {pub_date.isoformat()}Z")
                 else:
-                    # INFO: Single line for feeds with no dates (avoiding spam)
-                    print(f"⚠️ {title}: no dated entries (skipped gracefully)")
+                    # Update last_seen for existing items
+                    cursor.execute(
+                        "UPDATE item_seen SET last_seen_utc = ? WHERE feed_id = ? AND item_id_hash = ?",
+                        (current_time.isoformat() + 'Z', feed_id, item_hash)
+                    )
                 
-                # Update last checked time
-                cursor.execute('UPDATE feeds SET last_checked = datetime("now") WHERE id = ?', (feed_id,))
+                # Check cutoff time
+                if pub_date < cutoff_time:
+                    stats['skipped'] += 1
+                    logger.debug(f"SKIP OLD: {title} :: {entry_title} ({pub_date.isoformat()})")
+                    continue
+                
+                # Check for duplicates using enhanced detection
+                if self._is_enhanced_duplicate(cursor, feed_id, item_hash, entry_title, pub_date):
+                    stats['duplicate'] += 1
+                    logger.debug(f"SKIP DUP: {title} :: {entry_title}")
+                    continue
+                
+                # Create episode ID for episodes table (legacy compatibility)
+                episode_id = hashlib.md5((entry_guid or entry_link or entry_title).encode()).hexdigest()[:8]
+                
+                # Insert new episode
+                cursor.execute('''
+                    INSERT INTO episodes (feed_id, episode_id, title, published_date, audio_url, status)
+                    VALUES (?, ?, ?, ?, ?, 'pre-download')
+                ''', (feed_id, episode_id, entry_title, pub_date.isoformat() + 'Z', enclosure_url))
+                
+                stats['new'] += 1
+                logger.debug(f"NEW: {title} :: {entry_title} ({pub_date.isoformat()}Z)")
+                
+                episodes.append({
+                    'feed_title': title,
+                    'topic_category': topic_category,
+                    'episode_title': entry_title,
+                    'published_date': pub_date,
+                    'audio_url': enclosure_url,
+                    'type': feed_type
+                })
                 
             except Exception as e:
-                print(f"Error checking feed {title}: {e}")
+                stats['errors'] += 1
+                logger.debug(f"ERROR processing entry in {title}: {e}")
         
-        conn.commit()
-        conn.close()
+        return episodes
+    
+    def _is_enhanced_duplicate(self, cursor: sqlite3.Cursor, feed_id: int, 
+                             item_hash: str, title: str, pub_date: datetime) -> bool:
+        """Enhanced duplicate detection using item_seen table"""
+        # Check item_seen table first (most reliable)
+        cursor.execute(
+            "SELECT 1 FROM item_seen WHERE feed_id = ? AND item_id_hash = ?",
+            (feed_id, item_hash)
+        )
+        if cursor.fetchone():
+            return True
         
-        return new_episodes
+        # Fallback: check episodes table for legacy compatibility
+        cursor.execute(
+            "SELECT 1 FROM episodes WHERE feed_id = ? AND title = ? AND date(published_date) = ?",
+            (feed_id, title, pub_date.strftime('%Y-%m-%d'))
+        )
+        return bool(cursor.fetchone())
+    
+    def _check_feed_warnings(self, cursor: sqlite3.Cursor, feed_id: int, 
+                           title: str, entries: List, stats: Dict[str, int]):
+        """Check and emit feed-level warnings with suppression"""
+        # Stale feed warning
+        if entries and stats['nodate'] == 0:
+            # Only check for staleness if we have dated entries
+            newest_dates = []
+            for entry in entries[:10]:  # Check first 10 entries
+                pub_date, _ = parse_entry_to_utc(entry)
+                if pub_date:
+                    newest_dates.append(pub_date)
+            
+            if newest_dates:
+                newest = max(newest_dates)
+                stale_threshold = now_utc() - timedelta(days=self.feed_settings['stale_feed_days'])
+                
+                if newest < stale_threshold:
+                    days_old = (now_utc() - newest).days
+                    if not should_suppress_warning(cursor, feed_id, 'stale_feed', 24):
+                        logger.warning(
+                            f"⚠️ STALE FEED: {title} - newest episode is {days_old} days old "
+                            f"(threshold: {self.feed_settings['stale_feed_days']} days)"
+                        )
+                        # Note: We don't update stale warning timestamp as it's different from no_date
+        
+        # No-date warning with suppression
+        if len(entries) > 0 and stats['nodate'] == len(entries):
+            if not should_suppress_warning(cursor, feed_id, 'no_dates', 24):
+                logger.warning(f"⚠️ NO DATES: {title} - all {len(entries)} entries lack dates")
+                update_warning_timestamp(cursor, feed_id, 'no_dates')
+    
+    def _emit_run_telemetry(self, stats: Dict[str, Any], duration_ms: int):
+        """Emit telemetry metrics for the feed monitoring run"""
+        try:
+            from utils.telemetry_manager import get_telemetry_manager
+            telemetry = get_telemetry_manager()
+            
+            run_id = f"feed_monitor_{int(time.time())}"
+            
+            # Emit counters
+            telemetry.record_metric("ingest.feeds.total.count", stats['total_feeds'], run_id=run_id)
+            telemetry.record_metric("ingest.feeds.processed.count", stats['processed_feeds'], run_id=run_id)
+            telemetry.record_metric("ingest.feeds.errors.count", stats['errors'], run_id=run_id)
+            telemetry.record_metric("ingest.episodes.new.count", stats['new_episodes'], run_id=run_id)
+            telemetry.record_metric("ingest.http.cache_hits.count", stats['http_cache_hits'], run_id=run_id)
+            
+            # Emit duration
+            telemetry.record_metric("ingest.run.duration.ms", duration_ms, run_id=run_id)
+            
+        except Exception as e:
+            logger.debug(f"Telemetry emission failed: {e}")
+    
+    def _log_feed_error(self, title: str, feed_type: str, error: str):
+        """Log structured error information"""
+        logger.error(
+            f"FEED_ERROR feed=\"{title}\" type={feed_type} error=\"{error}\""
+        )
     
     def _is_duplicate_episode(self, cursor, episode_id: str, audio_url: str, title: str, pub_date: datetime) -> bool:
         """

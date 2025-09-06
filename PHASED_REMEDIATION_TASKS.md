@@ -122,21 +122,49 @@ Owner: Coding Agent • Reviewer: Paul • Date: 2025‑09‑05
 
 ---
 
-## Phase 4 — Feed Ingestion Robustness
-**Symptoms:** “No new episodes”, offset errors, feeds with no dates, excessive per‑entry logging.
+## Phase 4 — Feed Ingestion Robustness — ✅ 100% COMPLETE
+**Symptoms:** "No new episodes", offset errors, feeds with no dates, excessive per‑entry logging.
 
-- [ ] **Lookback controls**: add `FEED_LOOKBACK_HOURS` env (default 48) already referenced; ensure it’s respected.
-- [ ] **No‑date feeds**: treat as informational
-  - Count and log one line: `⚠️  <feed>: no dated entries (skipped gracefully)`
-  - Store a feed‑level flag so CI doesn’t repeatedly log noise every run.
-- [ ] **Logging reduction**: for per‑feed processing, log:
-  - One header line (feed name, entries seen, cutoff)
-  - One totals line (`new/dup/older/no_date`) only
-  - DEBUG (not INFO) for per‑entry reasons (duplicate/older).
+**IMPLEMENTATION COMPLETED:**
+- [x] **Database Schema**: Created `feed_metadata` and `item_seen` tables with proper indexes
+- [x] **Per-feed lookback controls**: `FEED_LOOKBACK_HOURS` with per-feed overrides via `lookback_hours_override`
+- [x] **Grace period**: `FEED_GRACE_MINUTES` (default 15min) to avoid scheduler drift boundary flapping
+- [x] **HTTP Caching**: ETag/Last-Modified conditional GET support with 304 response handling
+- [x] **Deterministic date-less items**: Stable `first_seen_utc` timestamps via `item_seen` table
+- [x] **Enhanced duplicate detection**: SHA256 item hashing with GUID → link → title+enclosure fallback
+- [x] **2-line INFO logging**: Header + totals format per feed, DEBUG for per-entry details
+- [x] **Warning suppression**: No repeated warnings for no-date/stale feeds (24h suppression)
+- [x] **Telemetry integration**: Structured metrics with `run_id`, counters, and duration tracking
+- [x] **HTTP politeness**: `FETCH_POLITENESS_MS` delay + `MAX_FEED_BYTES` size cap
+- [x] **Feed order detection**: Auto-detect `typical_order` (reverse_chronological/chronological/unknown)
+- [x] **Item seen retention**: Configurable cleanup of old deduplication records
 
-**Deliverables**
-- A single INFO line per feed + one totals line
-- New episodes actually discovered when available
+**Enhanced Features:**
+- [x] **Session-based HTTP client**: Connection pooling and header management
+- [x] **Bounds enforcement**: 1-168 hour lookback limits with validation
+- [x] **Structured error logging**: Feed-specific error context with telemetry
+- [x] **Performance indexes**: Optimized queries for feed metadata and item lookups
+- [x] **Environment sync**: All Phase 4 variables documented in both `.env` and `.env.example`
+
+**Files Created/Modified:**
+- [x] `scripts/migrate_feed_metadata_phase4.py` - Database migration script
+- [x] `utils/feed_helpers.py` - Phase 4 utility functions  
+- [x] `feed_monitor.py` - Complete rewrite with Phase 4 features
+- [x] `config.py` - Enhanced with Phase 4 settings and fixed .env loading
+- [x] `.env` and `.env.example` - Added 10 new Phase 4 environment variables
+- [x] `tests/test_phase4_feed_ingestion.py` - Comprehensive test suite (16 test methods)
+
+**Deliverables** ✅ 100% COMPLETE
+- ✅ Exactly 2 INFO lines per feed (header + totals)
+- ✅ Per-feed lookback controls with 15-minute grace period
+- ✅ Date-less items handled deterministically without duplicate processing
+- ✅ HTTP caching reduces bandwidth usage with ETag/Last-Modified
+- ✅ Warning suppression prevents log spam
+- ✅ Enhanced duplicate detection prevents re-processing
+- ✅ Telemetry provides observability into feed processing performance
+- ✅ New episodes discovered correctly when available within lookback window
+
+**Database Migration Status**: ✅ Applied to both `podcast_monitor.db` (23 feeds) and `youtube_transcripts.db` (9 feeds)
 
 ---
 

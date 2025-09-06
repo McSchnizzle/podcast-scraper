@@ -12,7 +12,9 @@ import logging
 # Load environment variables
 try:
     from dotenv import load_dotenv
-    load_dotenv()
+    # Load from the same directory as config.py
+    env_path = Path(__file__).parent / '.env'
+    load_dotenv(dotenv_path=env_path)
 except ImportError:
     pass
 
@@ -43,7 +45,7 @@ class Config:
             'check_same_thread': False
         }
         
-        # Feed monitoring settings
+        # Feed monitoring settings (Phase 4 Enhanced)
         self.FEED_SETTINGS = {
             'check_interval_hours': 24,
             'max_episodes_per_feed': int(os.getenv('FEED_MAX_ITEMS_PER_FEED', '50')),
@@ -53,7 +55,16 @@ class Config:
             'user_agent': 'PodcastDigest/2.0 (+https://github.com/McSchnizzle/podcast-scraper)',
             'request_timeout': int(os.getenv('REQUEST_TIMEOUT', '30')),
             'max_retries': int(os.getenv('MAX_RETRIES', '4')),
-            'backoff_base_delay': float(os.getenv('BACKOFF_BASE_DELAY', '0.5'))
+            'backoff_base_delay': float(os.getenv('BACKOFF_BASE_DELAY', '0.5')),
+            
+            # Phase 4: Enhanced robustness settings
+            'lookback_hours': max(1, min(168, int(os.getenv('FEED_LOOKBACK_HOURS', '48')))),  # 1-168 hours (7 days max)
+            'grace_minutes': int(os.getenv('FEED_GRACE_MINUTES', '15')),  # Avoid boundary flapping
+            'max_feed_bytes': int(os.getenv('MAX_FEED_BYTES', '5242880')),  # 5MB safety cap
+            'politeness_delay_ms': int(os.getenv('FETCH_POLITENESS_MS', '250')),  # Polite delay between requests
+            'enable_http_caching': os.getenv('ENABLE_HTTP_CACHING', '1') == '1',  # ETag/Last-Modified support
+            'detect_feed_order': os.getenv('DETECT_FEED_ORDER', '1') == '1',  # Auto-detect typical_order
+            'item_seen_retention_days': int(os.getenv('ITEM_SEEN_RETENTION_DAYS', '30')),  # Cleanup old item_seen records
         }
         
         # Content processing settings

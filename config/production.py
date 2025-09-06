@@ -60,7 +60,7 @@ class ProductionConfig:
     SELECTOR_THRESHOLD: float = 0.65
 
     def __post_init__(self):
-        # Feed monitoring settings
+        # Feed monitoring settings (Phase 4 Enhanced)
         self.FEED_SETTINGS = {
             'check_interval_hours': 24,
             'max_episodes_per_feed': int(_env('FEED_MAX_ITEMS_PER_FEED', '50')),
@@ -70,7 +70,16 @@ class ProductionConfig:
             'user_agent': 'PodcastDigest/2.0 (+https://github.com/McSchnizzle/podcast-scraper)',
             'request_timeout': int(_env('REQUEST_TIMEOUT', '30')),
             'max_retries': int(_env('MAX_RETRIES', '4')),
-            'backoff_base_delay': float(_env('BACKOFF_BASE_DELAY', '0.5'))
+            'backoff_base_delay': float(_env('BACKOFF_BASE_DELAY', '0.5')),
+            
+            # Phase 4: Enhanced robustness settings
+            'lookback_hours': max(1, min(168, int(_env('FEED_LOOKBACK_HOURS', '48')))),  # 1-168 hours (7 days max)
+            'grace_minutes': int(_env('FEED_GRACE_MINUTES', '15')),  # Avoid boundary flapping
+            'max_feed_bytes': int(_env('MAX_FEED_BYTES', '5242880')),  # 5MB safety cap
+            'politeness_delay_ms': int(_env('FETCH_POLITENESS_MS', '250')),  # Polite delay between requests
+            'enable_http_caching': _env('ENABLE_HTTP_CACHING', '1') == '1',  # ETag/Last-Modified support
+            'detect_feed_order': _env('DETECT_FEED_ORDER', '1') == '1',  # Auto-detect typical_order
+            'item_seen_retention_days': int(_env('ITEM_SEEN_RETENTION_DAYS', '30')),  # Cleanup old item_seen records
         }
         # Provide complete OPENAI_SETTINGS structure expected by the codebase
         self.OPENAI_SETTINGS = {
