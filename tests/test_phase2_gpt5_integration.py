@@ -14,6 +14,7 @@ import hashlib
 from pathlib import Path
 from unittest.mock import Mock, patch, MagicMock
 from datetime import datetime
+from utils.datetime_utils import now_utc
 
 # Add parent directory to path for imports
 sys.path.append(str(Path(__file__).parent.parent))
@@ -355,7 +356,7 @@ class TestOpenAIDigestIntegrationGPT5(unittest.TestCase):
                 youtube_db_path=self.db_path
             )
             
-            result = digester.generate_digest_for_topic("AI News", datetime.now())
+            result = digester.generate_digest_for_topic("AI News", now_utc())
             
             self.assertIsNotNone(result)
             self.assertIn('topic', result)
@@ -540,7 +541,7 @@ class TestEndToEndIntegration(unittest.TestCase):
                 youtube_db_path=self.db_path
             )
             
-            digest_result = digester.generate_digest_for_topic("AI News", datetime.now())
+            digest_result = digester.generate_digest_for_topic("AI News", now_utc())
             self.assertIsNotNone(digest_result)
             
             # 3. Test Prose Validation

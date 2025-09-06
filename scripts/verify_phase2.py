@@ -13,6 +13,7 @@ import json
 from pathlib import Path
 from typing import Dict, List, Any, Tuple
 from datetime import datetime
+from utils.datetime_utils import now_utc
 
 # Add parent directory to path for imports
 sys.path.append(str(Path(__file__).parent.parent))
@@ -25,7 +26,7 @@ class Phase2Verifier:
     def __init__(self):
         self.project_root = Path(__file__).parent.parent
         self.results = {
-            'timestamp': datetime.now().isoformat(),
+            'timestamp': now_utc().isoformat(),
             'overall_status': 'unknown',
             'categories': {},
             'summary': {},
@@ -478,7 +479,7 @@ class Phase2Verifier:
     def save_results(self, output_file: str = None):
         """Save verification results to file"""
         if output_file is None:
-            timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
+            timestamp = now_utc().strftime("%Y%m%d_%H%M%S")
             output_file = f"phase2_verification_{timestamp}.json"
             
         output_path = self.project_root / output_file

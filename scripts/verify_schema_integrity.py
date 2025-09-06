@@ -15,6 +15,7 @@ import sys
 import json
 import logging
 from datetime import datetime
+from utils.datetime_utils import now_utc
 from pathlib import Path
 from typing import Dict, List, Tuple, Any, Optional
 
@@ -42,7 +43,7 @@ class SchemaIntegrityVerifier:
         self.db_path = Path(db_path)
         self.results = {
             'database': str(self.db_path),
-            'timestamp': datetime.utcnow().isoformat() + 'Z',
+            'timestamp': now_utc().isoformat(),
             'checks': {},
             'overall_status': 'unknown',
             'errors': [],
@@ -396,7 +397,7 @@ class SchemaIntegrityVerifier:
         """Save verification results to JSON file"""
         
         if output_path is None:
-            timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
+            timestamp = now_utc().strftime("%Y%m%d_%H%M%S")
             output_path = f"schema_integrity_report_{self.db_path.stem}_{timestamp}.json"
         
         with open(output_path, 'w') as f:
@@ -451,7 +452,7 @@ def main():
         
         # Save report
         if output_dir:
-            report_path = output_dir / f"schema_integrity_report_{Path(db_path).stem}_{datetime.now().strftime('%Y%m%d_%H%M%S')}.json"
+            report_path = output_dir / f"schema_integrity_report_{Path(db_path).stem}_{now_utc().strftime('%Y%m%d_%H%M%S')}.json"
             verifier.save_results(str(report_path))
         elif output_path:
             verifier.save_results(output_path)

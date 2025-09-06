@@ -9,6 +9,7 @@ import logging
 import sys
 from pathlib import Path
 from datetime import datetime
+from utils.datetime_utils import now_utc
 
 # Add parent directory to path for config import
 sys.path.append(str(Path(__file__).parent.parent))
@@ -262,7 +263,7 @@ def main():
             
         try:
             # Create backup
-            backup_path = f"{db_path}.backup.{datetime.now().strftime('%Y%m%d_%H%M%S')}"
+            backup_path = f"{db_path}.backup.{now_utc().strftime('%Y%m%d_%H%M%S')}"
             import shutil
             shutil.copy2(db_path, backup_path)
             logger.info(f"📦 Created backup: {backup_path}")

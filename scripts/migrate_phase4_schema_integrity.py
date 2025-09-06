@@ -14,6 +14,7 @@ import shutil
 import logging
 import sys
 from datetime import datetime
+from utils.datetime_utils import now_utc
 from pathlib import Path
 from typing import Dict, List, Tuple, Optional
 
@@ -95,7 +96,7 @@ class Phase4SchemaMigrator:
     
     def _create_backup(self) -> None:
         """Create timestamped backup of database file"""
-        timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
+        timestamp = now_utc().strftime("%Y%m%d_%H%M%S")
         self.backup_path = self.db_path.parent / f"{self.db_path.stem}.backup_pre_migration_{timestamp}"
         
         shutil.copy2(self.db_path, self.backup_path)
