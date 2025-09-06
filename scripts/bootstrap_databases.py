@@ -13,6 +13,7 @@ from utils.datetime_utils import now_utc
 from utils.logging_setup import configure_logging
 import logging
 from config import Config
+from utils.db import get_connection
 
 # Setup logging
 configure_logging()
@@ -29,7 +30,7 @@ class DatabaseBootstrap:
         logger.info(f"🚀 Bootstrapping RSS database: {self.rss_db_path}")
         
         try:
-            conn = sqlite3.connect(self.rss_db_path)
+            conn = get_connection(self.rss_db_path)
             cursor = conn.cursor()
             
             # Create feeds table
@@ -113,7 +114,7 @@ class DatabaseBootstrap:
         logger.info(f"🚀 Bootstrapping YouTube database: {self.youtube_db_path}")
         
         try:
-            conn = sqlite3.connect(self.youtube_db_path)
+            conn = get_connection(self.youtube_db_path)
             cursor = conn.cursor()
             
             # Create feeds table - YouTube feeds only
@@ -205,7 +206,7 @@ class DatabaseBootstrap:
                 logger.info("No RSS feeds found in configuration")
                 return True
             
-            conn = sqlite3.connect(self.rss_db_path)
+            conn = get_connection(self.rss_db_path)
             cursor = conn.cursor()
             
             added_count = 0
@@ -246,7 +247,7 @@ class DatabaseBootstrap:
                 logger.info("No YouTube feeds found in configuration")
                 return True
             
-            conn = sqlite3.connect(self.youtube_db_path)
+            conn = get_connection(self.youtube_db_path)
             cursor = conn.cursor()
             
             added_count = 0
@@ -279,7 +280,7 @@ class DatabaseBootstrap:
         logger.info(f"🔍 Verifying database integrity: {db_path}")
         
         try:
-            conn = sqlite3.connect(db_path)
+            conn = get_connection(db_path)
             cursor = conn.cursor()
             
             # Check required tables exist

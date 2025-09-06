@@ -453,9 +453,9 @@ class Config:
     
     def sync_feeds_to_database(self, db_path: str = "podcast_monitor.db", force_update: bool = False):
         """Sync feed configuration to database (database is source of truth)"""
-        import sqlite3
+        from utils.db import get_connection
         
-        conn = sqlite3.connect(db_path)
+        conn = get_connection(db_path)
         cursor = conn.cursor()
         
         # Get current feeds from database
@@ -481,10 +481,10 @@ class Config:
     
     def get_active_feeds_from_db(self, db_path: str = "podcast_monitor.db") -> list:
         """Get active feeds from database (single source of truth)"""
-        import sqlite3
+        from utils.db import get_connection
         
         try:
-            conn = sqlite3.connect(db_path)
+            conn = get_connection(db_path)
             cursor = conn.cursor()
             
             cursor.execute('''
@@ -513,10 +513,10 @@ class Config:
     def add_feed_to_db(self, url: str, title: str, feed_type: str, topic_category: str, 
                        db_path: str = "podcast_monitor.db") -> bool:
         """Add new feed to database"""
-        import sqlite3
+        from utils.db import get_connection
         
         try:
-            conn = sqlite3.connect(db_path)
+            conn = get_connection(db_path)
             cursor = conn.cursor()
             
             cursor.execute('''
@@ -534,10 +534,10 @@ class Config:
     
     def remove_feed_from_db(self, feed_id: int, db_path: str = "podcast_monitor.db") -> bool:
         """Remove feed from database"""
-        import sqlite3
+        from utils.db import get_connection
         
         try:
-            conn = sqlite3.connect(db_path)
+            conn = get_connection(db_path)
             cursor = conn.cursor()
             
             # Get feed info before deletion for logging

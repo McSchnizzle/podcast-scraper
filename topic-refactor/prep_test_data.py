@@ -5,6 +5,7 @@ import shutil
 import sqlite3
 from datetime import datetime
 from utils.datetime_utils import now_utc
+from utils.db import get_connection
 def backup_db(path):
     ts = now_utc().strftime("%Y%m%d-%H%M%S")
     dst = f"{path}.backup.{ts}.db"
@@ -13,7 +14,7 @@ def backup_db(path):
     return dst
 
 def exec_sql(db_path, sql, params=()):
-    conn = sqlite3.connect(db_path)
+    conn = get_connection(db_path)
     try:
         cur = conn.cursor()
         if isinstance(sql, (list, tuple)):
@@ -26,7 +27,7 @@ def exec_sql(db_path, sql, params=()):
         conn.close()
 
 def query(db_path, sql):
-    conn = sqlite3.connect(db_path)
+    conn = get_connection(db_path)
     try:
         cur = conn.cursor()
         cur.execute(sql)

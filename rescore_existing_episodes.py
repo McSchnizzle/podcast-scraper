@@ -9,6 +9,7 @@ import sqlite3
 import sys
 from pathlib import Path
 from utils.logging_setup import configure_logging
+from utils.db import get_connection
 
 # Import the topic scorer
 from openai_scorer import OpenAITopicScorer
@@ -19,7 +20,7 @@ logger = logging.getLogger(__name__)
 def rescore_database_episodes(db_path: str, scorer: OpenAITopicScorer) -> int:
     """Re-score all episodes in a database regardless of status"""
     try:
-        conn = sqlite3.connect(db_path)
+        conn = get_connection(db_path)
         cursor = conn.cursor()
         
         # Get all episodes with transcripts
@@ -118,7 +119,7 @@ def main():
     for db_name in [rss_db, youtube_db]:
         if Path(db_name).exists():
             try:
-                conn = sqlite3.connect(db_name)
+                conn = get_connection(db_name)
                 cursor = conn.cursor()
                 cursor.execute("SELECT status, COUNT(*) FROM episodes GROUP BY status")
                 results = cursor.fetchall()

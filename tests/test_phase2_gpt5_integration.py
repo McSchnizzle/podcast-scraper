@@ -13,6 +13,7 @@ import json
 import hashlib
 from pathlib import Path
 from unittest.mock import Mock, patch, MagicMock
+from utils.db import get_connection
 from datetime import datetime
 from utils.datetime_utils import now_utc
 
@@ -173,7 +174,7 @@ class TestDatabaseIdempotency(unittest.TestCase):
         
         # Run migration on temporary database
         from scripts.migrate_phase2_idempotency import MIGRATION_SQL
-        with sqlite3.connect(self.db_path) as conn:
+        with get_connection(self.db_path) as conn:
             conn.executescript(MIGRATION_SQL)
             
     def tearDown(self):
@@ -181,7 +182,7 @@ class TestDatabaseIdempotency(unittest.TestCase):
         
     def test_episode_summaries_unique_constraint(self):
         """Test episode_summaries unique constraint"""
-        with sqlite3.connect(self.db_path) as conn:
+        with get_connection(self.db_path) as conn:
             # Insert first summary
             conn.execute("""
                 INSERT INTO episode_summaries 
@@ -199,7 +200,7 @@ class TestDatabaseIdempotency(unittest.TestCase):
                 
     def test_digest_operations_unique_constraint(self):
         """Test digest_operations unique constraint"""
-        with sqlite3.connect(self.db_path) as conn:
+        with get_connection(self.db_path) as conn:
             # Insert first digest
             conn.execute("""
                 INSERT INTO digest_operations 
@@ -217,7 +218,7 @@ class TestDatabaseIdempotency(unittest.TestCase):
                 
     def test_validation_operations_unique_constraint(self):
         """Test validation_operations unique constraint"""
-        with sqlite3.connect(self.db_path) as conn:
+        with get_connection(self.db_path) as conn:
             content_hash = hashlib.md5(b"test content").hexdigest()
             
             # Insert first validation
@@ -245,7 +246,7 @@ class TestEpisodeSummaryGeneratorGPT5(unittest.TestCase):
         
         # Initialize with test database
         from scripts.migrate_phase2_idempotency import MIGRATION_SQL
-        with sqlite3.connect(self.db_path) as conn:
+        with get_connection(self.db_path) as conn:
             conn.executescript(MIGRATION_SQL)
             
     def tearDown(self):
@@ -315,7 +316,7 @@ class TestOpenAIDigestIntegrationGPT5(unittest.TestCase):
         
         # Initialize with test database and sample data
         from scripts.migrate_phase2_idempotency import MIGRATION_SQL
-        with sqlite3.connect(self.db_path) as conn:
+        with get_connection(self.db_path) as conn:
             conn.executescript(MIGRATION_SQL)
             
             # Create episodes table structure
@@ -345,7 +346,7 @@ class TestOpenAIDigestIntegrationGPT5(unittest.TestCase):
         
         try:
             # Insert test episode
-            with sqlite3.connect(self.db_path) as conn:
+            with get_connection(self.db_path) as conn:
                 conn.execute("""
                     INSERT INTO episodes (episode_id, title, transcript_path, status, topic_relevance_json)
                     VALUES ('test123', 'Test Episode', ?, 'transcribed', '{"AI News": 0.85}')
@@ -488,7 +489,7 @@ class TestEndToEndIntegration(unittest.TestCase):
         
         # Initialize with full database structure
         from scripts.migrate_phase2_idempotency import MIGRATION_SQL
-        with sqlite3.connect(self.db_path) as conn:
+        with get_connection(self.db_path) as conn:
             conn.executescript(MIGRATION_SQL)
             
             # Create episodes table
@@ -518,7 +519,7 @@ class TestEndToEndIntegration(unittest.TestCase):
         
         try:
             # Insert test episode
-            with sqlite3.connect(self.db_path) as conn:
+            with get_connection(self.db_path) as conn:
                 conn.execute("""
                     INSERT INTO episodes (episode_id, title, transcript_path, status, topic_relevance_json)
                     VALUES ('test123', 'AI Test Episode', ?, 'transcribed', '{"AI News": 0.85}')
@@ -550,7 +551,7 @@ class TestEndToEndIntegration(unittest.TestCase):
             self.assertTrue(success)
             
             # 4. Verify database records
-            with sqlite3.connect(self.db_path) as conn:
+            with get_connection(self.db_path) as conn:
                 cursor = conn.cursor()
                 
                 # Check run_headers

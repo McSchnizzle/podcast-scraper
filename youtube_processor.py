@@ -16,6 +16,7 @@ from utils.logging_setup import configure_logging
 from typing import List, Dict
 from config import Config
 from content_processor import ContentProcessor
+from utils.db import get_connection
 
 configure_logging()
 logger = logging.getLogger(__name__)
@@ -37,7 +38,7 @@ class YouTubeProcessor:
     
     def _init_youtube_database(self):
         """Initialize YouTube-specific database with same schema"""
-        conn = sqlite3.connect(self.youtube_db_path)
+        conn = get_connection(self.youtube_db_path)
         cursor = conn.cursor()
         
         # Feeds table - YouTube feeds only
@@ -79,7 +80,7 @@ class YouTubeProcessor:
     
     def sync_youtube_feeds(self):
         """Sync YouTube feeds from config to YouTube database"""
-        conn = sqlite3.connect(self.youtube_db_path)
+        conn = get_connection(self.youtube_db_path)
         cursor = conn.cursor()
         
         # Get YouTube feeds from config
@@ -113,7 +114,7 @@ class YouTubeProcessor:
     
     def process_pending_youtube_episodes(self) -> int:
         """Process pending YouTube episodes using YouTube Transcript API (no download needed)"""
-        conn = sqlite3.connect(self.youtube_db_path)
+        conn = get_connection(self.youtube_db_path)
         cursor = conn.cursor()
         
         # Get pending YouTube episodes (only 'pre-download' status)
@@ -193,7 +194,7 @@ class YouTubeProcessor:
     
     def get_youtube_stats(self) -> Dict:
         """Get YouTube processing statistics"""
-        conn = sqlite3.connect(self.youtube_db_path)
+        conn = get_connection(self.youtube_db_path)
         cursor = conn.cursor()
         
         cursor.execute('''
@@ -221,7 +222,7 @@ class YouTubeProcessor:
     
     def cleanup_old_episodes(self, days_old: int = 7):
         """Clean up old failed/processed YouTube episodes"""
-        conn = sqlite3.connect(self.youtube_db_path)
+        conn = get_connection(self.youtube_db_path)
         cursor = conn.cursor()
         
         cutoff_date = now_utc() - timedelta(days=days_old)

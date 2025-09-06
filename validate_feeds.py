@@ -6,12 +6,13 @@ Validates all feeds in the database and reports any issues
 
 import sqlite3
 from config import config
+from utils.db import get_connection
 
 def validate_all_feeds():
     """Validate all active feeds in the database"""
     print("🔍 Validating all feeds in database...")
     
-    conn = sqlite3.connect("podcast_monitor.db")
+    conn = get_connection("podcast_monitor.db")
     cursor = conn.cursor()
     
     cursor.execute("""
@@ -50,7 +51,7 @@ def cleanup_broken_feeds():
     """Remove feeds that fail validation"""
     print("\n🧹 Checking for broken feeds to remove...")
     
-    conn = sqlite3.connect("podcast_monitor.db")
+    conn = get_connection("podcast_monitor.db")
     cursor = conn.cursor()
     
     cursor.execute("""

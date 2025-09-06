@@ -15,6 +15,7 @@ from pathlib import Path
 sys.path.insert(0, str(Path(__file__).parent.parent))
 
 from utils.datetime_utils import now_utc, to_utc, parse_entry_to_utc
+from utils.db import get_connection
 
 
 def migrate_database(db_path: str, dry_run: bool = False) -> dict:
@@ -41,7 +42,7 @@ def migrate_database(db_path: str, dry_run: bool = False) -> dict:
     }
     
     try:
-        conn = sqlite3.connect(db_path)
+        conn = get_connection(db_path)
         cursor = conn.cursor()
         
         # Get all tables

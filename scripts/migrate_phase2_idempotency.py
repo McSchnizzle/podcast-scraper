@@ -10,6 +10,7 @@ import sys
 from pathlib import Path
 from datetime import datetime
 from utils.datetime_utils import now_utc
+from utils.db import get_connection
 
 # Add parent directory to path for config import
 sys.path.append(str(Path(__file__).parent.parent))
@@ -130,7 +131,7 @@ def migrate_database(db_path: str, db_name: str):
     logger.info(f"🔄 Migrating {db_name} database: {db_path}")
     
     try:
-        with sqlite3.connect(db_path) as conn:
+        with get_connection(db_path) as conn:
             # Enable foreign keys
             conn.execute("PRAGMA foreign_keys = ON")
             
@@ -185,7 +186,7 @@ def verify_migration(db_path: str, db_name: str):
     ]
     
     try:
-        with sqlite3.connect(db_path) as conn:
+        with get_connection(db_path) as conn:
             cursor = conn.cursor()
             
             # Verify tables

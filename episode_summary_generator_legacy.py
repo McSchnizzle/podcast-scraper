@@ -15,6 +15,7 @@ from typing import Optional, Dict, List, Tuple
 from datetime import datetime
 import logging
 from utils.datetime_utils import now_utc
+from utils.db import get_connection
 
 # Load environment variables from .env file
 try:
@@ -90,7 +91,7 @@ class EpisodeSummaryGenerator:
     def _init_cache_db(self):
         """Initialize SQLite database for caching summaries with idempotency"""
         try:
-            with sqlite3.connect(self.cache_db_path) as conn:
+            with get_connection(self.cache_db_path) as conn:
                 # Enhanced summaries table with idempotency support
                 conn.execute("""
                     CREATE TABLE IF NOT EXISTS episode_summaries (
@@ -149,7 +150,7 @@ class EpisodeSummaryGenerator:
     def _get_cached_summary(self, content_hash: str) -> Optional[str]:
         """Retrieve cached summary if available"""
         try:
-            with sqlite3.connect(self.cache_db_path) as conn:
+            with get_connection(self.cache_db_path) as conn:
                 cursor = conn.execute(
                     "SELECT summary FROM episode_summaries WHERE content_hash = ?",
                     (content_hash,)
@@ -166,7 +167,7 @@ class EpisodeSummaryGenerator:
         """Cache generated summary"""
         try:
             word_count = len(content.split())
-            with sqlite3.connect(self.cache_db_path) as conn:
+            with get_connection(self.cache_db_path) as conn:
                 conn.execute("""
                     INSERT OR REPLACE INTO episode_summaries 
                     (content_hash, topic, timestamp, summary, word_count)
@@ -355,7 +356,7 @@ class EpisodeSummaryGenerator:
     def get_summary_stats(self) -> Dict:
         """Get statistics about cached summaries"""
         try:
-            with sqlite3.connect(self.cache_db_path) as conn:
+            with get_connection(self.cache_db_path) as conn:
                 cursor = conn.execute("""
                     SELECT 
                         COUNT(*) as total_summaries,

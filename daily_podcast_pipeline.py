@@ -934,6 +934,10 @@ def main():
         os.environ['LOG_LEVEL'] = 'DEBUG'
         configure_logging()  # Reconfigure with DEBUG level
     
+    # Run startup preflight checks (PID-guarded, runs once per process)
+    from utils.startup_preflight import run_startup_preflight
+    run_startup_preflight()
+    
     if args.dry_run:
         logger.info("🧪 DRY RUN MODE: No external API calls or costly operations will be performed")
     

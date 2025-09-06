@@ -17,6 +17,7 @@ from datetime import datetime
 from utils.datetime_utils import now_utc
 from pathlib import Path
 from typing import Dict, List, Tuple, Optional
+from utils.db import get_connection
 
 # Add utils to path for imports
 sys.path.append(str(Path(__file__).parent.parent))
@@ -105,7 +106,7 @@ class Phase4SchemaMigrator:
     def _validate_preconditions(self) -> None:
         """Validate database state and data quality before migration"""
         
-        with sqlite3.connect(self.db_path) as conn:
+        with get_connection(self.db_path) as conn:
             cursor = conn.cursor()
             
             # Check if required tables exist
@@ -189,7 +190,7 @@ class Phase4SchemaMigrator:
     def _is_migration_complete(self) -> bool:
         """Check if migration has already been applied"""
         
-        with sqlite3.connect(self.db_path) as conn:
+        with get_connection(self.db_path) as conn:
             cursor = conn.cursor()
             
             # Check schema version
@@ -217,7 +218,7 @@ class Phase4SchemaMigrator:
     def _execute_migration(self) -> bool:
         """Execute the actual migration in a transaction"""
         
-        with sqlite3.connect(self.db_path) as conn:
+        with get_connection(self.db_path) as conn:
             try:
                 cursor = conn.cursor()
                 

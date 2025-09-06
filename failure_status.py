@@ -7,6 +7,7 @@ Shows failure statistics and retry candidates without dependencies
 import sqlite3
 from pathlib import Path
 from utils.episode_failures import FailureManager
+from utils.db import get_connection
 
 def show_failure_status():
     """Show comprehensive failure status for both databases"""
@@ -21,7 +22,7 @@ def show_failure_status():
             
         try:
             # Get basic episode counts
-            conn = sqlite3.connect(db_path)
+            conn = get_connection(db_path)
             cursor = conn.cursor()
             
             cursor.execute("""

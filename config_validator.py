@@ -232,8 +232,8 @@ def validate_critical_config(warn_only: bool = False) -> bool:
     for db_file in db_files:
         if Path(db_file).exists():
             try:
-                import sqlite3
-                conn = sqlite3.connect(db_file)
+                from utils.db import get_connection
+                conn = get_connection(db_file)
                 conn.execute("SELECT 1")
                 conn.close()
                 print(f"✅ {db_file}: accessible")

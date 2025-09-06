@@ -1,0 +1,109 @@
+{
+  "checks": {
+    "data_integrity": {
+      "description": "Data should meet basic integrity requirements",
+      "issues": [],
+      "status": "passed"
+    },
+    "foreign_key_enforcement": {
+      "description": "Foreign key enforcement must be enabled",
+      "expected": 1,
+      "status": "passed",
+      "value": 1
+    },
+    "foreign_key_integrity": {
+      "description": "No foreign key violations should exist",
+      "status": "passed",
+      "violations": []
+    },
+    "orphaned_records": {
+      "description": "No orphaned records should exist",
+      "orphan_counts": {
+        "orphaned_episode_failures": 0,
+        "orphaned_episodes": 0,
+        "orphaned_feed_metadata": 0,
+        "orphaned_item_seen": 0
+      },
+      "status": "passed",
+      "total_orphans": 0
+    },
+    "required_indexes": {
+      "description": "Required indexes must exist for performance",
+      "existing_indexes": [
+        "idx_episodes_digest",
+        "idx_episode_summaries_episode",
+        "idx_episode_summaries_model",
+        "idx_episode_summaries_idempotency",
+        "idx_digest_operations_episode",
+        "idx_digest_operations_topic",
+        "idx_digest_operations_model",
+        "idx_digest_operations_idempotency",
+        "idx_validation_operations_hash",
+        "idx_validation_operations_model",
+        "idx_validation_operations_idempotency",
+        "idx_run_headers_component",
+        "idx_run_headers_created",
+        "idx_api_call_logs_run_id",
+        "idx_api_call_logs_component",
+        "idx_api_call_logs_created",
+        "ix_item_seen_feed_last_seen",
+        "ix_item_seen_first_seen",
+        "ix_item_seen_content_hash",
+        "ix_feed_metadata_lookback",
+        "ix_feed_metadata_etag",
+        "idx_episode_failures_episode_pk",
+        "idx_episode_failures_category",
+        "idx_episode_failures_timestamp",
+        "idx_episodes_feed_id",
+        "idx_feed_metadata_feed_id",
+        "idx_item_seen_feed_id",
+        "idx_item_seen_first_seen",
+        "idx_episodes_status",
+        "idx_episodes_published_date",
+        "ux_episodes_episode_id",
+        "ux_item_seen_feed_hash"
+      ],
+      "missing_indexes": [],
+      "status": "passed"
+    },
+    "required_tables": {
+      "description": "All required tables must exist",
+      "existing_tables": [
+        "run_headers",
+        "digest_operations",
+        "episode_summaries",
+        "sqlite_sequence",
+        "validation_operations",
+        "item_seen",
+        "episode_failures",
+        "episodes",
+        "api_call_logs",
+        "feed_metadata",
+        "feeds"
+      ],
+      "missing_optional": [],
+      "missing_required": [],
+      "status": "passed"
+    },
+    "schema_version": {
+      "current": 2,
+      "description": "Schema version should be 2",
+      "expected": 2,
+      "status": "passed"
+    },
+    "unique_constraints": {
+      "description": "Unique constraints should exist for data integrity",
+      "existing_unique_constraints": [
+        "ux_episodes_episode_id",
+        "ux_item_seen_feed_hash"
+      ],
+      "missing_unique_constraints": [],
+      "status": "passed"
+    }
+  },
+  "database": "youtube_transcripts.db",
+  "errors": [],
+  "overall_status": "passed",
+  "timestamp": "2025-09-06T01:49:26.463238+00:00",
+  "warnings": []
+}

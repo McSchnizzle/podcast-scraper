@@ -15,6 +15,7 @@ from pathlib import Path
 from typing import Dict, List, Optional, Tuple, Any
 from openai_scorer import OpenAITopicScorer
 import argparse
+from utils.db import get_connection
 
 configure_logging()
 logger = logging.getLogger(__name__)
@@ -46,7 +47,7 @@ class TopicModerator:
                 continue
             
             try:
-                conn = sqlite3.connect(db_path)
+                conn = get_connection(db_path)
                 cursor = conn.cursor()
                 
                 # Get transcribed episodes that haven't been digested
@@ -217,7 +218,7 @@ class TopicModerator:
                 continue
                 
             try:
-                conn = sqlite3.connect(db_path)
+                conn = get_connection(db_path)
                 cursor = conn.cursor()
                 
                 # Check if episode exists
@@ -259,7 +260,7 @@ class TopicModerator:
                 continue
                 
             try:
-                conn = sqlite3.connect(db_path)
+                conn = get_connection(db_path)
                 cursor = conn.cursor()
                 
                 if topic:
@@ -327,7 +328,7 @@ class TopicModerator:
                 continue
                 
             try:
-                conn = sqlite3.connect(db_path)
+                conn = get_connection(db_path)
                 cursor = conn.cursor()
                 
                 cursor.execute("""

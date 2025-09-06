@@ -10,6 +10,7 @@ import sqlite3
 import sys
 from pathlib import Path
 from utils.logging_setup import configure_logging
+from utils.db import get_connection
 
 # Add parent directory to path to import modules
 sys.path.insert(0, str(Path(__file__).parent.parent))
@@ -61,7 +62,7 @@ def main():
         
         # Check RSS database
         if Path(rss_db).exists():
-            conn = sqlite3.connect(rss_db)
+            conn = get_connection(rss_db)
             cursor = conn.cursor()
             cursor.execute("SELECT status, COUNT(*) FROM episodes GROUP BY status")
             rss_status = cursor.fetchall()
@@ -70,7 +71,7 @@ def main():
         
         # Check YouTube database
         if Path(youtube_db).exists():
-            conn = sqlite3.connect(youtube_db)
+            conn = get_connection(youtube_db)
             cursor = conn.cursor()
             cursor.execute("SELECT status, COUNT(*) FROM episodes GROUP BY status")
             youtube_status = cursor.fetchall()

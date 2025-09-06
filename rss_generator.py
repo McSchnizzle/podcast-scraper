@@ -8,6 +8,7 @@ import os
 import json
 import sqlite3
 from datetime import datetime, timezone
+from utils.db import get_connection
 from utils.datetime_utils import now_utc
 from xml.etree.ElementTree import Element, SubElement, tostring
 from xml.dom import minidom
@@ -33,7 +34,7 @@ class PodcastRSSGenerator:
     
     def get_recent_episodes(self, days=7):
         """Get digest episodes from the last 7 days"""
-        conn = sqlite3.connect(self.db_path)
+        conn = get_connection(self.db_path)
         conn.row_factory = sqlite3.Row
         
         try:

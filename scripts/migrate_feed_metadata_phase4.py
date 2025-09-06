@@ -16,6 +16,7 @@ sys.path.insert(0, str(Path(__file__).parent.parent))
 
 from utils.logging_setup import configure_logging
 from utils.datetime_utils import now_utc
+from utils.db import get_connection
 
 configure_logging()
 logger = logging.getLogger(__name__)
@@ -68,7 +69,7 @@ class FeedMetadataMigration:
             logger.error(f"Database not found: {db_path}")
             return False
         
-        conn = sqlite3.connect(db_path)
+        conn = get_connection(db_path)
         # Disable foreign key checking during migration
         conn.execute("PRAGMA foreign_keys = OFF")
         cursor = conn.cursor()
@@ -296,7 +297,7 @@ class FeedMetadataMigration:
             logger.error(f"Database not found: {db_path}")
             return False
         
-        conn = sqlite3.connect(db_path)
+        conn = get_connection(db_path)
         cursor = conn.cursor()
         
         try:

@@ -13,6 +13,7 @@ from datetime import datetime
 from utils.datetime_utils import now_utc
 from utils.logging_setup import configure_logging
 from typing import Dict, List, Optional, Tuple
+from utils.db import get_connection
 import sqlite3
 import tempfile
 
@@ -41,7 +42,7 @@ class ClaudeHeadlessIntegration:
     def get_transcripts_for_analysis(self) -> List[Dict]:
         """Get transcripts ready for Claude Code analysis"""
         try:
-            conn = sqlite3.connect(self.db_path)
+            conn = get_connection(self.db_path)
             cursor = conn.cursor()
             
             # Only get episodes with status='transcribed' to match pipeline behavior

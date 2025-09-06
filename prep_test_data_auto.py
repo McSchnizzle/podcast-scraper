@@ -5,6 +5,7 @@ import shutil
 import sqlite3
 from datetime import datetime
 from utils.datetime_utils import now_utc
+from utils.db import get_connection
 DATE_CANDIDATES = ["published_date", "pub_date", "created_at", "added_at", "date", "ingested_at"]
 
 def backup_db(path):
@@ -15,7 +16,7 @@ def backup_db(path):
     return dst
 
 def exec_sql(db_path, sql, params=()):
-    conn = sqlite3.connect(db_path)
+    conn = get_connection(db_path)
     try:
         cur = conn.cursor()
         if isinstance(sql, (list, tuple)):
@@ -28,7 +29,7 @@ def exec_sql(db_path, sql, params=()):
         conn.close()
 
 def query(db_path, sql, params=()):
-    conn = sqlite3.connect(db_path)
+    conn = get_connection(db_path)
     try:
         cur = conn.cursor()
         cur.execute(sql, params)
@@ -38,7 +39,7 @@ def query(db_path, sql, params=()):
         conn.close()
 
 def get_episode_columns(db_path):
-    conn = sqlite3.connect(db_path)
+    conn = get_connection(db_path)
     try:
         cur = conn.cursor()
         cur.execute("PRAGMA table_info(episodes)")

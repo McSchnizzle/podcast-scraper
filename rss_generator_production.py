@@ -18,6 +18,7 @@ import re
 import logging
 from typing import List, Dict, Optional, Any
 import os
+from utils.db import get_connection
 
 # Import production configuration
 from config.production import production_config, get_stable_guid, format_rss_date, get_utc_now
@@ -196,7 +197,7 @@ class ProductionRSSGenerator:
             
             for db_name in ['podcast_monitor.db', 'youtube_transcripts.db']:
                 if Path(db_name).exists():
-                    with sqlite3.connect(db_name) as conn:
+                    with get_connection(db_name) as conn:
                         cursor = conn.cursor()
                         
                         # Get episodes from the same day that were digested

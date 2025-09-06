@@ -11,6 +11,7 @@ from pathlib import Path
 from datetime import datetime, timedelta
 from typing import List, Tuple, Optional
 from utils.datetime_utils import now_utc
+from utils.db import get_connection
 
 from utils.logging_setup import configure_logging
 configure_logging()
@@ -107,7 +108,7 @@ class RetentionCleanup:
         logger.info(f"🗄️  Cleaning heavy fields in {db_path}")
         
         try:
-            conn = sqlite3.connect(db_path)
+            conn = get_connection(db_path)
             cursor = conn.cursor()
             
             # Find episodes older than retention period with heavy fields
@@ -166,7 +167,7 @@ class RetentionCleanup:
             logger.info(f"🧹 Running VACUUM on {db_path}")
             
             try:
-                conn = sqlite3.connect(db_path)
+                conn = get_connection(db_path)
                 
                 # Check database size before vacuum
                 cursor = conn.cursor()

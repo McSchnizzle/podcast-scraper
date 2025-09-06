@@ -13,6 +13,7 @@ import json
 from pathlib import Path
 from typing import Dict, List, Any, Tuple
 from datetime import datetime
+from utils.db import get_connection
 from utils.datetime_utils import now_utc
 
 # Add parent directory to path for imports
@@ -254,7 +255,7 @@ class Phase2Verifier:
                 continue
                 
             try:
-                with sqlite3.connect(str(full_path)) as conn:
+                with get_connection(str(full_path)) as conn:
                     cursor = conn.cursor()
                     
                     # Check for Phase 2 tables

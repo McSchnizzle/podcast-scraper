@@ -15,6 +15,7 @@ from typing import Optional, Dict, List, Tuple, Any
 from datetime import datetime
 import logging
 from utils.datetime_utils import now_utc
+from utils.db import get_connection
 
 # Load environment variables from .env file
 try:
@@ -90,7 +91,7 @@ class EpisodeSummaryGenerator:
     def _init_cache_db(self):
         """Initialize SQLite database for caching summaries with idempotency"""
         try:
-            with sqlite3.connect(self.cache_db_path) as conn:
+            with get_connection(self.cache_db_path) as conn:
                 # Enhanced summaries table with idempotency support
                 conn.execute("""
                     CREATE TABLE IF NOT EXISTS episode_summaries (
@@ -182,7 +183,7 @@ class EpisodeSummaryGenerator:
     def _get_cached_chunk_summary(self, episode_id: str, chunk_index: int) -> Optional[Dict]:
         """Retrieve cached chunk summary if available"""
         try:
-            with sqlite3.connect(self.cache_db_path) as conn:
+            with get_connection(self.cache_db_path) as conn:
                 cursor = conn.execute("""
                     SELECT summary, tokens_used, model, char_start, char_end 
                     FROM episode_summaries 
@@ -214,7 +215,7 @@ class EpisodeSummaryGenerator:
                 summary_data["summary"]
             )
             
-            with sqlite3.connect(self.cache_db_path) as conn:
+            with get_connection(self.cache_db_path) as conn:
                 conn.execute("""
                     INSERT OR REPLACE INTO episode_summaries 
                     (content_hash, episode_id, chunk_index, char_start, char_end, topic, 
@@ -242,7 +243,7 @@ class EpisodeSummaryGenerator:
     def _record_run_header(self, run_id: str, episode_id: str, chunk_count: int, failures: int, wall_ms: int):
         """Record run header for observability"""
         try:
-            with sqlite3.connect(self.cache_db_path) as conn:
+            with get_connection(self.cache_db_path) as conn:
                 conn.execute("""
                     INSERT OR REPLACE INTO run_headers
                     (run_id, component, started_at, finished_at, model, reasoning_effort, 

@@ -16,6 +16,7 @@ from datetime import datetime, timedelta
 from utils.datetime_utils import now_utc
 from utils.logging_setup import configure_logging
 import logging
+from utils.db import get_connection
 
 # Add parent directory to path
 sys.path.append(str(Path(__file__).parent.parent))
@@ -88,7 +89,7 @@ class SystemVerificationSuite:
         # A.1: Path + status flow (RSS)
         try:
             # Check database for RSS episodes and their paths
-            conn = sqlite3.connect(self.config.DB_PATH)
+            conn = get_connection(self.config.DB_PATH)
             cursor = conn.cursor()
             
             cursor.execute("""
@@ -421,7 +422,7 @@ class SystemVerificationSuite:
         try:
             if Path("bootstrap_databases.py").exists():
                 # Check database schema
-                conn = sqlite3.connect(self.config.DB_PATH)
+                conn = get_connection(self.config.DB_PATH)
                 cursor = conn.cursor()
                 
                 # Get table info for episodes table
@@ -726,7 +727,7 @@ class SystemVerificationSuite:
             
             # Check database status
             if Path(self.config.DB_PATH).exists():
-                conn = sqlite3.connect(self.config.DB_PATH)
+                conn = get_connection(self.config.DB_PATH)
                 cursor = conn.cursor()
                 cursor.execute("SELECT status, COUNT(*) FROM episodes GROUP BY status")
                 status['rss_episodes'] = dict(cursor.fetchall())
@@ -735,7 +736,7 @@ class SystemVerificationSuite:
             # Check YouTube database
             youtube_db = Path("youtube_transcripts.db")
             if youtube_db.exists():
-                conn = sqlite3.connect(str(youtube_db))
+                conn = get_connection(str(youtube_db))
                 cursor = conn.cursor()
                 cursor.execute("SELECT status, COUNT(*) FROM episodes GROUP BY status")
                 status['youtube_episodes'] = dict(cursor.fetchall())

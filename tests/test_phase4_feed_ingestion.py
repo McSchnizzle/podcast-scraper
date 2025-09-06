@@ -13,6 +13,7 @@ import time
 from datetime import datetime, timedelta
 from unittest.mock import Mock, patch, MagicMock
 from pathlib import Path
+from utils.db import get_connection
 
 # Add project root to path
 sys.path.insert(0, str(Path(__file__).parent.parent))
@@ -40,7 +41,7 @@ class TestPhase4FeedHelpers(unittest.TestCase):
         self.monitor = FeedMonitor(self.db_path)
         
         # Create test feed
-        conn = sqlite3.connect(self.db_path)
+        conn = get_connection(self.db_path)
         cursor = conn.cursor()
         cursor.execute('''
             INSERT INTO feeds (url, title, type, topic_category, active)
@@ -83,7 +84,7 @@ class TestPhase4FeedHelpers(unittest.TestCase):
     
     def test_get_or_set_first_seen(self):
         """Test deterministic timestamp generation for date-less items"""
-        conn = sqlite3.connect(self.db_path)
+        conn = get_connection(self.db_path)
         cursor = conn.cursor()
         
         current_time = now_utc()
@@ -139,7 +140,7 @@ class TestPhase4FeedHelpers(unittest.TestCase):
     
     def test_effective_lookback_hours(self):
         """Test per-feed lookback controls"""
-        conn = sqlite3.connect(self.db_path)
+        conn = get_connection(self.db_path)
         cursor = conn.cursor()
         
         # Test default (no override)
@@ -182,7 +183,7 @@ class TestPhase4FeedHelpers(unittest.TestCase):
     
     def test_warning_suppression(self):
         """Test warning suppression to avoid spam"""
-        conn = sqlite3.connect(self.db_path)
+        conn = get_connection(self.db_path)
         cursor = conn.cursor()
         
         # Ensure feed_metadata exists for this test
@@ -204,7 +205,7 @@ class TestPhase4FeedHelpers(unittest.TestCase):
     
     def test_cleanup_old_item_seen(self):
         """Test cleanup of old item_seen records"""
-        conn = sqlite3.connect(self.db_path)
+        conn = get_connection(self.db_path)
         cursor = conn.cursor()
         
         # Insert old and new records
@@ -262,7 +263,7 @@ class TestPhase4HTTPCaching(unittest.TestCase):
     
     def test_cache_header_storage(self):
         """Test storing and retrieving cache headers"""
-        conn = sqlite3.connect(self.db_path)
+        conn = get_connection(self.db_path)
         cursor = conn.cursor()
         
         # Insert test feed
@@ -347,7 +348,7 @@ class TestPhase4FeedMonitor(unittest.TestCase):
     
     def test_database_initialization(self):
         """Test that Phase 4 tables are created properly"""
-        conn = sqlite3.connect(self.db_path)
+        conn = get_connection(self.db_path)
         cursor = conn.cursor()
         
         # Check feed_metadata table
@@ -366,7 +367,7 @@ class TestPhase4FeedMonitor(unittest.TestCase):
     
     def test_feed_metadata_creation(self):
         """Test automatic feed metadata creation"""
-        conn = sqlite3.connect(self.db_path)
+        conn = get_connection(self.db_path)
         cursor = conn.cursor()
         
         # Insert test feed
@@ -421,7 +422,7 @@ class TestPhase4FeedMonitor(unittest.TestCase):
         mock_parse.return_value = mock_feed
         
         # Add feed to database
-        conn = sqlite3.connect(self.db_path)
+        conn = get_connection(self.db_path)
         cursor = conn.cursor()
         cursor.execute('''
             INSERT INTO feeds (url, title, type, topic_category, active)
@@ -502,7 +503,7 @@ class TestPhase4LoggingPolicy(unittest.TestCase):
         mock_parse.return_value = mock_feed
         
         # Add feed to database
-        conn = sqlite3.connect(self.db_path)
+        conn = get_connection(self.db_path)
         cursor = conn.cursor()
         cursor.execute('''
             INSERT INTO feeds (url, title, type, topic_category, active)

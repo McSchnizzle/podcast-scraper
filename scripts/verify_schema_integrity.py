@@ -13,6 +13,7 @@ Comprehensive validation of database schema integrity for Phase 4+.
 import sqlite3
 import sys
 import json
+from utils.db import get_connection
 import logging
 from datetime import datetime
 from utils.datetime_utils import now_utc
@@ -70,7 +71,7 @@ class SchemaIntegrityVerifier:
             return False
         
         try:
-            with sqlite3.connect(self.db_path) as conn:
+            with get_connection(self.db_path) as conn:
                 # Enable foreign keys for testing
                 conn.execute("PRAGMA foreign_keys = ON")
                 cursor = conn.cursor()
