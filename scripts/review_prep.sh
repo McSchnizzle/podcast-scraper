@@ -247,15 +247,15 @@ EOF
     sed -i '' "s/{YT_DB_SIZE}/$(ls -lh youtube_transcripts.db 2>/dev/null | awk '{print $5}' || echo 'N/A')/g" "$report_file"
     sed -i '' "s/{ARCHIVE_NAME}/$ARCHIVE_NAME/g" "$report_file"
     
-    # Handle directory structure (multiline replacement is tricky with sed)
-    python3 -c "
-import re
-with open('$report_file', 'r') as f:
-    content = f.read()
-content = content.replace('{DIRECTORY_STRUCTURE}', '''$dir_structure''')
-with open('$report_file', 'w') as f:
-    f.write(content)
-" 2>/dev/null || echo "# Directory structure generation failed" >> "$report_file"
+    # Handle directory structure (use a simpler approach)
+    if command -v tree >/dev/null 2>&1; then
+        local tree_output=$(tree -I '__pycache__|*.pyc|.git|*.log|*.mp3|*.wav|*.zip|node_modules' -L 3 2>/dev/null | head -30)
+        sed -i '' "s/{DIRECTORY_STRUCTURE}/$(echo "$tree_output" | sed 's/[[\.*^$()+?{|]/\\&/g')/g" "$report_file" 2>/dev/null || {
+            sed -i '' 's/{DIRECTORY_STRUCTURE}/Directory tree generation failed/g' "$report_file"
+        }
+    else
+        sed -i '' 's/{DIRECTORY_STRUCTURE}/tree command not available/g' "$report_file"
+    fi
     
     echo "$report_file"
 }
@@ -348,7 +348,11 @@ Co-Authored-By: Claude <noreply@anthropic.com>"
         "$PROJECT_DIR/" "$temp_dir/"
     
     # Add the report to the archive
-    cp "$report_file" "$temp_dir/"
+    if [[ -f "$report_file" ]]; then
+        cp "$report_file" "$temp_dir/"
+    else
+        log "WARN" "Report file not found at expected location: $report_file"
+    fi
     
     # Create the zip file
     local archive_path="$PROJECT_DIR/${ARCHIVE_NAME}.zip"
