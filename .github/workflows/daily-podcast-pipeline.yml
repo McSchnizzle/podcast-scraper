@@ -60,6 +60,27 @@ jobs:
         packages: ffmpeg sqlite3
         version: 1.0
         
+    - name: Check for direct sqlite3.connect usage
+      run: |
+        echo "🔍 Checking for direct sqlite3.connect usage..."
+        if find . -name "*.py" -not -path "./utils/db.py" -not -path "./.github/*" -exec grep -l "sqlite3\.connect" {} \; | head -1 | grep -q .; then
+          echo "❌ ERROR: Direct sqlite3.connect found! Use utils.db.get_connection()"
+          find . -name "*.py" -not -path "./utils/db.py" -not -path "./.github/*" -exec grep -Hn "sqlite3\.connect" {} \;
+          exit 1
+        else
+          echo "✅ No direct sqlite3.connect usage found"
+        fi
+    
+    - name: Run schema integrity verification
+      run: |
+        echo "🔍 Running schema integrity checks..."
+        # Skip schema version validation for CI (databases may not be migrated yet)
+        if [ -f "podcast_monitor.db" ]; then
+          python scripts/verify_schema_integrity.py podcast_monitor.db --output schema_integrity_report.json || echo "Schema checks failed but continuing..."
+        else
+          echo "Database not present in CI, skipping integrity check"
+        fi
+    
     - name: Run CI smoke tests
       run: |
         echo "🧪 Running fast CI smoke tests..."

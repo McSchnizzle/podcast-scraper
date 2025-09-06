@@ -13,6 +13,7 @@ import json
 from pathlib import Path
 from datetime import datetime
 from youtube_transcript_api import YouTubeTranscriptApi
+from utils.db import get_connection
 import re
 import hashlib
 from openai_scorer import OpenAITopicScorer
@@ -181,7 +182,7 @@ class ContentProcessor:
     
     def process_episode(self, episode_id):
         """Process a single episode: download audio, extract transcript, analyze content"""
-        conn = sqlite3.connect(self.db_path)
+        conn = get_connection(self.db_path)
         cursor = conn.cursor()
         
         # Get episode info with feed details
@@ -434,7 +435,7 @@ class ContentProcessor:
     def _update_episode_status(self, episode_id, status, error_reason=None):
         """Update episode status in database with proper logging"""
         try:
-            conn = sqlite3.connect(self.db_path)
+            conn = get_connection(self.db_path)
             cursor = conn.cursor()
             
             if error_reason:
@@ -871,7 +872,7 @@ class ContentProcessor:
             
             if is_skip:
                 # For skips, update status directly without using retry system
-                conn = sqlite3.connect(self.db_path)
+                conn = get_connection(self.db_path)
                 cursor = conn.cursor()
                 cursor.execute("""
                     UPDATE episodes 
@@ -1049,7 +1050,7 @@ class ContentProcessor:
     
     def process_all_pending(self):
         """Process all episodes awaiting transcription (pending/pre-download status)"""
-        conn = sqlite3.connect(self.db_path)
+        conn = get_connection(self.db_path)
         cursor = conn.cursor()
         
         cursor.execute('SELECT id FROM episodes WHERE status IN (\'pending\', \'pre-download\')')
@@ -1066,7 +1067,7 @@ class ContentProcessor:
     
     def get_transcribed_episodes(self, min_priority=0.3):
         """Get transcribed episodes above minimum priority threshold"""
-        conn = sqlite3.connect(self.db_path)
+        conn = get_connection(self.db_path)
         cursor = conn.cursor()
         
         cursor.execute('''
@@ -1096,7 +1097,7 @@ class ContentProcessor:
     
     def get_processing_stats(self):
         """Get statistics on episode processing"""
-        conn = sqlite3.connect(self.db_path)
+        conn = get_connection(self.db_path)
         cursor = conn.cursor()
         
         # Count by processing status

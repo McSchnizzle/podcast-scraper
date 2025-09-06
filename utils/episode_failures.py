@@ -10,6 +10,7 @@ import logging
 from datetime import datetime, timedelta
 from typing import List, Dict, Optional, Tuple
 from utils.datetime_utils import now_utc
+from utils.db import get_connection
 from pathlib import Path
 
 # Configuration - removed dependency on config module to avoid conflicts
@@ -40,10 +41,10 @@ class FailureManager:
                            traceback_info: str = None) -> bool:
         """Log episode failure with categorization and retry tracking"""
         try:
-            conn = sqlite3.connect(self.db_path, timeout=DB_TIMEOUT)
+            conn = get_connection(self.db_path)
             cursor = conn.cursor()
             
-            # Get current failure info
+            # Get current failure info - using episode.id for proper FK relationship
             cursor.execute("""
                 SELECT id, retry_count, failure_reason, status 
                 FROM episodes 
@@ -78,7 +79,8 @@ class FailureManager:
             """, (full_reason, new_retry_count, final_status, db_id))
             
             # Log failure to episode_failures table for detailed tracking
-            self._log_detailed_failure(cursor, episode_id, failure_reason, 
+            # Pass the integer db_id for proper FK relationship
+            self._log_detailed_failure(cursor, db_id, failure_reason, 
                                      failure_category, traceback_info)
             
             conn.commit()
@@ -93,16 +95,34 @@ class FailureManager:
             self.logger.error(f"Failed to log episode failure: {e}")
             return False
     
-    def _log_detailed_failure(self, cursor, episode_id: str, failure_reason: str, 
+    def _log_detailed_failure(self, cursor, episode_pk: int, failure_reason: str, 
                              failure_category: str, traceback_info: str = None):
         """Log detailed failure information to episode_failures table"""
         try:
+            # Try new schema first (episode_pk column)
             cursor.execute("""
                 INSERT INTO episode_failures (
-                    episode_id, failure_reason, failure_category, 
+                    episode_pk, failure_reason, failure_category, 
                     traceback_info, failure_timestamp
                 ) VALUES (?, ?, ?, ?, datetime('now'))
-            """, (episode_id, failure_reason, failure_category, traceback_info))
+            """, (episode_pk, failure_reason, failure_category, traceback_info))
+        except sqlite3.OperationalError as e:
+            if "no such column: episode_pk" in str(e):
+                # Fall back to old schema (episode_id column) - get episode_id from episode_pk
+                cursor.execute("SELECT episode_id FROM episodes WHERE id = ?", (episode_pk,))
+                result = cursor.fetchone()
+                if result:
+                    episode_id = result[0]
+                    cursor.execute("""
+                        INSERT INTO episode_failures (
+                            episode_id, failure_reason, failure_category, 
+                            traceback_info, failure_timestamp
+                        ) VALUES (?, ?, ?, ?, datetime('now'))
+                    """, (episode_id, failure_reason, failure_category, traceback_info))
+                else:
+                    raise RuntimeError(f"Cannot find episode with id {episode_pk} for failure logging")
+            else:
+                raise
             
         except sqlite3.OperationalError as e:
             if "no such table" in str(e):
@@ -154,7 +174,7 @@ class FailureManager:
     def get_retry_candidates(self) -> List[Dict]:
         """Get episodes eligible for retry based on failure category and timing"""
         try:
-            conn = sqlite3.connect(self.db_path, timeout=DB_TIMEOUT)
+            conn = get_connection(self.db_path)
             cursor = conn.cursor()
             
             retry_candidates = []
@@ -241,7 +261,7 @@ class FailureManager:
     def mark_episode_recovered(self, episode_id: str, recovery_notes: str = None) -> bool:
         """Mark episode as recovered and update failure tracking"""
         try:
-            conn = sqlite3.connect(self.db_path, timeout=DB_TIMEOUT)
+            conn = get_connection(self.db_path)
             cursor = conn.cursor()
             
             # Clear failure information from episodes table
@@ -273,7 +293,7 @@ class FailureManager:
     def get_failure_statistics(self, days_back: int = 7) -> Dict:
         """Get comprehensive failure statistics for monitoring"""
         try:
-            conn = sqlite3.connect(self.db_path, timeout=DB_TIMEOUT)
+            conn = get_connection(self.db_path)
             cursor = conn.cursor()
             
             cutoff_date = now_utc() - timedelta(days=days_back)
@@ -330,7 +350,7 @@ class FailureManager:
     def cleanup_old_failures(self, days_old: int = 30) -> int:
         """Clean up old resolved failures to keep database manageable"""
         try:
-            conn = sqlite3.connect(self.db_path, timeout=DB_TIMEOUT)
+            conn = get_connection(self.db_path)
             cursor = conn.cursor()
             
             cutoff_date = now_utc() - timedelta(days=days_old)
@@ -542,7 +562,7 @@ def ensure_failures_table_exists(db_path: str):
     failure_manager = FailureManager(db_path)
     
     try:
-        conn = sqlite3.connect(db_path, timeout=DB_TIMEOUT)
+        conn = get_connection(db_path)
         cursor = conn.cursor()
         failure_manager._create_failures_table(cursor)
         conn.commit()

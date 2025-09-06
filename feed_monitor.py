@@ -18,6 +18,7 @@ import logging
 import time
 import hashlib
 from datetime import datetime, timedelta, UTC
+from utils.db import get_connection
 from typing import Optional, Dict, Any, List, Tuple
 from urllib.parse import urlparse
 from youtube_transcript_api import YouTubeTranscriptApi
@@ -54,7 +55,7 @@ class FeedMonitor:
     
     def init_database(self):
         """Initialize SQLite database for tracking feeds and episodes (Phase 4 Enhanced)"""
-        conn = sqlite3.connect(self.db_path)
+        conn = get_connection(self.db_path)
         cursor = conn.cursor()
         conn.execute("PRAGMA foreign_keys = ON")
         
@@ -157,7 +158,7 @@ class FeedMonitor:
     
     def add_rss_feed(self, url, topic_category, title=None):
         """Add RSS feed to monitoring list"""
-        conn = sqlite3.connect(self.db_path)
+        conn = get_connection(self.db_path)
         cursor = conn.cursor()
         
         try:
@@ -197,7 +198,7 @@ class FeedMonitor:
     
     def add_youtube_channel(self, channel_url, topic_category, title=None, channel_id=None):
         """Add YouTube channel to monitoring list"""
-        conn = sqlite3.connect(self.db_path)
+        conn = get_connection(self.db_path)
         cursor = conn.cursor()
         
         try:
@@ -303,8 +304,7 @@ class FeedMonitor:
         
         logger.info(f"🕐 Feed monitoring started: global_lookback={global_lookback}h grace={grace_minutes}m caching={enable_http_caching}")
         
-        conn = sqlite3.connect(self.db_path)
-        conn.execute("PRAGMA foreign_keys = ON")
+        conn = get_connection(self.db_path)
         cursor = conn.cursor()
         
         try:
@@ -741,7 +741,7 @@ class FeedMonitor:
     
     def list_feeds(self):
         """List all monitored feeds grouped by topic"""
-        conn = sqlite3.connect(self.db_path)
+        conn = get_connection(self.db_path)
         cursor = conn.cursor()
         
         cursor.execute('''
@@ -766,7 +766,7 @@ class FeedMonitor:
     
     def get_topic_categories(self):
         """Get list of current topic categories and feed counts"""
-        conn = sqlite3.connect(self.db_path)
+        conn = get_connection(self.db_path)
         cursor = conn.cursor()
         
         cursor.execute('''
